@@ -130,6 +130,13 @@ select:-webkit-autofill:focus {
         color: $errors !important;
     }
 }
+.graycross-icon {
+    color: $gray !important;
+    &:hover,
+    &:focus {
+        color: $errors !important;
+    }
+}
 
 .dashed-borderedbtn {
     border-style: dashed;

@@ -12,5 +12,6 @@ export default {
     SYSTEM: "System Manager",
     FACULTY: "Faculty Department",
     WEBSITE: "Website Manager",
-    VALIDATOR: "Validator"
+    VALIDATOR: "Validator",
+    HRMS: 'HR Manager',
 };

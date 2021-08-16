@@ -116,7 +116,8 @@ export default (props) => {
                                     <Menu.Item key={val.path} className="menu-item" icon={<DashboardIcon2 />}>
                                         <Link to={val.path}>{val.menu}</Link>
                                     </Menu.Item>
-                                    <Menu.Item disabled key="campus" className='static-menu'>CAMPUS</Menu.Item>         
+                                    {val.menu == 'Dashbaord' && 
+                                    <Menu.Item disabled key="hrms" className='static-menu'>HUMAN RESOURCE</Menu.Item>}
                                     </>
                                 }
                             </>

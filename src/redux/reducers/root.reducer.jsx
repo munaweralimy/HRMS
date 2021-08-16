@@ -14,6 +14,8 @@ import calendar from '../../app/modules/AQA/AcademicCalendar/ducks/reducers';
 import global from '../../app/modules/Application/ducks/reducers';
 import students from '../../app/modules/Registry/Students/ducks/reducers';
 import scholarship from '../../app/modules/Registry/Scholarships/ducks/reducers';
+//HRMS
+import policy from '../../app/modules/HRMS/Policy/ducks/reducers';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -30,7 +32,9 @@ const rootReducer = combineReducers({
   request,
   calendar,
   students,
-  scholarship
+  scholarship,
+  //hrms
+  policy
 });
 
 export default rootReducer;

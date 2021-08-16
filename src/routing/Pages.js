@@ -6,6 +6,7 @@ import Dashboard from '../app/pages/Dashboard';
 import QualityAssurance from '../app/pages/QualityAssurance';
 import Marketing from '../app/pages/Marketing';
 import Registry from '../app/pages/Registry';
+import HumanResource from '../app/pages/HumanResource';
 import NoPage from '../app/modules/Login/NoPage';
 
 // Pages
@@ -15,7 +16,8 @@ const compList = {
   Dashboard,
   QualityAssurance,
   Marketing,
-  Registry
+  Registry,
+  HumanResource
 }
 
 const Pages = () => {
