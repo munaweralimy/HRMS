@@ -1,0 +1,38 @@
+.custom-table {
+    .ant-table-thead>tr>th,
+    .ant-table-tbody>tr>td {
+        font-weight: 300;
+        line-height: 1;
+        padding-right: 8px;
+    }
+}
+
+.table-header-highlight {
+    .ant-table-thead>tr>th {
+        color: $based-color;
+    }
+    .ant-table-tbody>tr>td {
+        color: $gray;
+    }
+}
+
+.radio-tabs {
+    display: flex;
+    width: 100%;
+    padding: 5px;
+    background-color: #0E0E0E;
+    border-radius: 12px;
+    .ant-radio-button-wrapper {
+        color: $gray;
+        width: 100%;
+        border-radius: 8px;
+        border: 0;
+        text-align: center;
+        &:not(:first-child)::before {
+            content: none
+        }
+        &:hover {
+            color: #fff;
+        }
+    }
+}

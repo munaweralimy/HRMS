@@ -1,0 +1,41 @@
+.circleProgress {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 6.5em;
+
+    .ant-progress-inner {
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+
+.percent-text {
+    font-size: 34px;
+    font-weight: 500;
+
+    span {
+        font-size: 15px;
+        font-weight: 400;
+    }
+}
+
+.percent-numb {
+    font-size: 15px;
+    font-weight: 400;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.card-text {
+    padding: 20px;
+    background-color: $black-shade;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+}
