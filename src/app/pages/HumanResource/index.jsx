@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
 import Dashboard from '../../templates/Dashboard';
 import Policy from '../../modules/HRMS/Policy';
+import Tasks from '../../modules/HRMS/Tasks';
+import TaskDetail from '../../modules/HRMS/Tasks/TaskDetail';
+import Advancement from '../../modules/HRMS/Advancement';
+import Employment from '../../modules/HRMS/Employment';
+import AddEmployment from '../../modules/HRMS/Employment/AddEmployment';
+import EditEmployment from '../../modules/HRMS/Employment/EditEmployment';
+import TeamDetails from '../../modules/HRMS/Employment/TeamDetails';
+
 
 const Components = { 
+  Advancement,
+  Tasks,
+  TaskDetail,
   Policy, 
+  Employment, 
+  AddEmployment, 
+  EditEmployment, 
+  TeamDetails,
 };
 
 export default (props) => {

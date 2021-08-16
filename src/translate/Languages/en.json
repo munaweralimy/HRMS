@@ -56,5 +56,11 @@
     "LanguageSwitcher.ms": "Malay",
 
     "Request.Registry.Tab1": "Pending Requests",
-    "Request.Registry.Tab2": "Archive"
+    "Request.Registry.Tab2": "Archive",
+
+    "HRMS.Advancement.title1":"Overall Fit Index",
+    "HRMS.Advancement.title2":"Acquisitions",
+
+    "HRMS.Employment.title1":"Overall Employment",
+    "HRMS.Employment.title2":"Team List"
 }
