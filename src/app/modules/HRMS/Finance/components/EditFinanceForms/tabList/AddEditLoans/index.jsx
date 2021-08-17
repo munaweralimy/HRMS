@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Form, Breadcrumb } from 'antd';
 import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../../../molecules/ListCard';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { closeAllOpenForms } from '../../../../ducks/action';
 const loanCol = [
   {
     title: 'Loan Date',
@@ -34,29 +35,30 @@ const loanCol = [
 
 const AddEditLoans = () => {
   const { control, errors, handleSubmit } = useForm();
+  const dispatch = useDispatch();
   const [viewLoanForm, setViewLoanForm] = useState(false);
+  const tabVal = useSelector((state) => state.finance.tabClose);
+
+  const onFormViewer = () => {
+    dispatch(closeAllOpenForms(true));
+    setViewLoanForm(true);
+  };
+
   return (
     <Row gutter={[24, 30]} align="bottom">
-      {viewLoanForm ? (
+      {viewLoanForm && tabVal ? (
         <Form layout="vertical" scrollToFirstError={true}>
           <Breadcrumb className="mb-1 c-gray">
             <Breadcrumb.Item onClick={() => setViewLoanForm(false)}>{`< Loan List`}</Breadcrumb.Item>
           </Breadcrumb>
-          {/* <ContractForm control={control} errors={errors} /> */}
-          <Row gutter={24} justify="end">
-            <Col>
-              <Button size="large" type="primary" htmlType="submit" className="green-btn save-btn">
-                Save Changes
-              </Button>
-            </Col>
-          </Row>
+          {/* render add loans form*/}
         </Form>
       ) : (
         <Col span={24}>
           <ListCard title="Loan List" ListCol={loanCol} ListData={[]} pagination={true} />
           <Row gutter={24} justify="end">
             <Col>
-              <Button size="large" type="primary" onClick={() => setViewLoanForm(true)}>
+              <Button size="large" type="primary" onClick={onFormViewer}>
                 + Add New Loan
               </Button>
             </Col>

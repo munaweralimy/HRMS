@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Form, Breadcrumb } from 'antd';
 import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../../../molecules/ListCard';
+import { useSelector, useDispatch } from 'react-redux';
+import { closeAllOpenForms } from '../../../../ducks/action';
 
 const salayAdvCol = [
   {
@@ -34,29 +36,30 @@ const salayAdvCol = [
 
 const AddEditSalaryAdvance = () => {
   const { control, errors, handleSubmit } = useForm();
+  const dispatch = useDispatch();
   const [viewSalaryAdvanceForm, setviewSalaryAdvanceForm] = useState(false);
+  const tabVal = useSelector((state) => state.finance.tabClose);
+
+  const onFormViewer = () => {
+    dispatch(closeAllOpenForms(true));
+    setviewSalaryAdvanceForm(true);
+  };
+
   return (
     <Row gutter={[24, 30]} align="bottom">
-      {viewSalaryAdvanceForm ? (
+      {viewSalaryAdvanceForm && tabVal ? (
         <Form layout="vertical" scrollToFirstError={true}>
           <Breadcrumb className="mb-1 c-gray">
             <Breadcrumb.Item onClick={() => setviewSalaryAdvanceForm(false)}>{`< Salary Advance List`}</Breadcrumb.Item>
           </Breadcrumb>
-          {/* <ContractForm control={control} errors={errors} /> */}
-          <Row gutter={24} justify="end">
-            <Col>
-              <Button size="large" type="primary" htmlType="submit" className="green-btn save-btn">
-                Save Changes
-              </Button>
-            </Col>
-          </Row>
+          {/*render add salary form*/}
         </Form>
       ) : (
         <Col span={24}>
           <ListCard title="Salary Advance List" ListCol={salayAdvCol} ListData={[]} pagination={true} />
           <Row gutter={24} justify="end">
             <Col>
-              <Button size="large" type="primary" onClick={() => setviewSalaryAdvanceForm(true)}>
+              <Button size="large" type="primary" onClick={onFormViewer}>
                 + Add New Advance
               </Button>
             </Col>

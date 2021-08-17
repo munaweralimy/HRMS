@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import userReducer from "../../features/userSlice";
-import feeds from '../../app/molecules/Feeds/ducks/reducers'
+import { combineReducers } from 'redux';
+import userReducer from '../../features/userSlice';
+import feeds from '../../app/molecules/Feeds/ducks/reducers';
 import faculty from '../../app/modules/AQA/Faculty/ducks/reducers';
-import modules from '../../app/modules/AQA/Modules/ducks/reducers'
+import modules from '../../app/modules/AQA/Modules/ducks/reducers';
 import programme from '../../app/modules/AQA/Programme/ducks/reducers';
 import marketing from '../../app/modules/Marketing/ducks/reducers';
 import forms from '../../app/modules/AQA/Forms/ducks/reducers';
@@ -17,6 +17,7 @@ import scholarship from '../../app/modules/Registry/Scholarships/ducks/reducers'
 //HRMS
 import policy from '../../app/modules/HRMS/Policy/ducks/reducers';
 import tasks from '../../app/modules/HRMS/Tasks/ducks/reducers';
+import finance from '../../app/modules/HRMS/Finance/ducks/reducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -36,7 +37,8 @@ const rootReducer = combineReducers({
   scholarship,
   //hrms
   policy,
-  tasks
+  tasks,
+  finance,
 });
 
 export default rootReducer;

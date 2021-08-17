@@ -3,8 +3,14 @@ import { Row, Col, Button, Form, Breadcrumb } from 'antd';
 import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../../../molecules/ListCard';
 import SalaryInformation from './AccountSalaryForms/SalaryInformation';
+import { closeAllOpenForms } from '../../../../ducks/action';
+import { useSelector, useDispatch } from 'react-redux';
+
 const AddEditAccountSalary = () => {
   const { control, errors, handleSubmit } = useForm();
+  const dispatch = useDispatch();
+  const tabVal = useSelector((state) => state.finance.tabClose);
+  console.log({ tabVal });
   const [viewSpecificForm, setViewSpecificForm] = useState({
     accountForm: false,
     allowanceForm: false,
@@ -79,7 +85,7 @@ const AddEditAccountSalary = () => {
     },
   ];
   function onFormViewHandler(form) {
-    console.log({ form });
+    dispatch(closeAllOpenForms(true));
     let viewFormObj = {
       ...viewSpecificForm,
       accountForm: false,
@@ -93,14 +99,14 @@ const AddEditAccountSalary = () => {
   }
   return (
     <Row gutter={[24, 30]} align="bottom">
-      {viewSpecificForm.accountForm ? (
+      {viewSpecificForm.accountForm && tabVal ? (
         <Form layout="vertical" scrollToFirstError={true}>
           <Breadcrumb className="mb-1">
             <Breadcrumb.Item onClick={() => onFormViewHandler('')}>{`< Account List`}</Breadcrumb.Item>
           </Breadcrumb>
           {/*render ammount form*/}
         </Form>
-      ) : viewSpecificForm.allowanceForm ? (
+      ) : viewSpecificForm.allowanceForm && tabVal ? (
         <Col span={24}>
           <Breadcrumb className="mb-1">
             <Breadcrumb.Item onClick={() => onFormViewHandler('')}>{`< Allowence List`}</Breadcrumb.Item>

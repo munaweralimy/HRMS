@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Row, Col, Card, Typography, Tabs, Space, Button } from 'antd';
 import { useDispatch } from 'react-redux';
 import * as TabCards from './tabList';
+import { closeAllOpenForms } from '../../ducks/action';
+
 const tabs = [
   {
     name: 'Account & Salary',
@@ -24,11 +26,17 @@ const tabs = [
 const EditFinanceForms = (props) => {
   const { Title } = Typography;
   const { TabPane } = Tabs;
+  const dispatch = useDispatch();
+
+  const onTabChangeHandler = (e) => {
+    dispatch(closeAllOpenForms(false));
+  };
+
   return (
     <Card bordered={false} className="uni-card h-auto">
       <Row gutter={[30, 20]}>
         <Col span={24}>
-          <Tabs defaultActiveKey="2" type="card" className="custom-tabs -space30">
+          <Tabs defaultActiveKey="2" type="card" className="custom-tabs -space30" onChange={onTabChangeHandler}>
             {tabs.map((item, index) => {
               const Cardi = TabCards[item.Comp];
               return (
