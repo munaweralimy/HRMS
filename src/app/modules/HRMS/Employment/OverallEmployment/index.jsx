@@ -9,7 +9,7 @@ const OverallEmployment = (props) => {
       {data &&
         data.map((value, key) => (
           <Col key={key} span={8}>
-            <RequestCard key={key} data={value} link={`/hrms/employment/edit/${123}`} />
+            <RequestCard key={key} data={value} link={`/employment/${123}`} />
           </Col>
         ))}
     </Row>

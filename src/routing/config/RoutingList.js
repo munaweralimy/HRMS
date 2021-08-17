@@ -81,7 +81,7 @@ export default [
   },
   {
     component: 'EditEmployment',
-    path: '/employment/edit/:id',
+    path: '/employment/:id',
     title: titles.HRMS,
     permission: hrms,
     key: 'employment',

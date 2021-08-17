@@ -49,10 +49,9 @@ const Employment = () => {
       },
     },
     {
-      text: 'Add New Employment',
-      icon: <PlusOutlined />,
-      class: 'green-btn',
-      action: () => history.push('/hrms/employment/addnew'),
+      text: '+ Add New Employment',
+      classes: 'green-btn',
+      action: () => history.push('/employment/addnew'),
     },
   ];
 

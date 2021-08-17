@@ -16,7 +16,7 @@ const TeamList = () => {
           type="text"
           className="p-0"
           onClick={() => {
-            history.push('/hrms/employment/teamdetails');
+            history.push('/employment/teamdetails');
           }}
         >
           {text}
