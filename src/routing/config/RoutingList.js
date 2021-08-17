@@ -1,3 +1,4 @@
+import Finance from '../../app/modules/HRMS/Finance';
 import Roles from './Roles';
 
 const marketing = [Roles.ADMIN, Roles.MARKETING];
@@ -108,6 +109,16 @@ export default [
     menu: 'Finance',
     icon: 'ApplicationsIcon',
     parent: true,
+  },
+  {
+    component: 'EditFinance',
+    path: '/finance/:id',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'finance',
+    menu: 'Finance',
+    icon: 'ApplicationIcon',
+    parent: false,
   },
   {
     component: 'Policy',

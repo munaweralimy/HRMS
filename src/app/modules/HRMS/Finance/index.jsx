@@ -158,7 +158,7 @@ const Finance = () => {
         <HeadingChip title={t('HRMS.Finance.title1')} />
       </Col>
       <Col span={24}>
-        <CardView data={data} link="/finance/edit" />
+        <CardView data={data} link="/finance" />
       </Col>
       <Col span={24}>
         <TableView
