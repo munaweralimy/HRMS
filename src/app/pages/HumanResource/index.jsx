@@ -8,21 +8,21 @@ import Employment from '../../modules/HRMS/Employment';
 import AddEmployment from '../../modules/HRMS/Employment/AddEmployment';
 import EditEmployment from '../../modules/HRMS/Employment/EditEmployment';
 import TeamDetails from '../../modules/HRMS/Employment/TeamDetails';
+import Finance from '../../modules/HRMS/Finance';
 
-
-const Components = { 
+const Components = {
   Advancement,
   Tasks,
   TaskDetail,
-  Policy, 
-  Employment, 
-  AddEmployment, 
-  EditEmployment, 
+  Policy,
+  Employment,
+  AddEmployment,
+  EditEmployment,
   TeamDetails,
+  Finance,
 };
 
 export default (props) => {
-
   const [loading, setLoading] = useState(false);
   const HRMSComp = Components[props.Comp];
 

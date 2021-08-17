@@ -100,6 +100,16 @@ export default [
     parent: false,
   },
   {
+    component: 'Finance',
+    path: '/finance',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'Finance',
+    menu: 'Finance',
+    icon: 'ApplicationsIcon',
+    parent: true,
+  },
+  {
     component: 'Policy',
     path: '/policy',
     title: titles.HRMS,
