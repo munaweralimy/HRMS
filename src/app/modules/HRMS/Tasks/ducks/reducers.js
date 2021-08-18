@@ -2,8 +2,8 @@ import * as action_types from "./constants";
 
 const initialState = {
     overallTaskData: [],
-    overallTaskDataWithStatus: [],
-    teamTaskData: [],
+    overallTaskDataWithStatus: {},
+    teamTaskData: {},
     teamTaskDataWithStatus: [],
     myTaskData: [],
     myProjectData: [],
@@ -30,6 +30,9 @@ export default (state = initialState, action) => {
             return {...state, myAddProjectData: data };
         case action_types.SINGLE_TASK_DETAIL:
             return {...state, singleTaskData: data };
+        case action_types.EMPTY_TASKS:
+            return initialState;
+            
         default:
             return state;
     }

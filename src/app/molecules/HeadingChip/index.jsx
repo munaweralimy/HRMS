@@ -5,11 +5,11 @@ const { Title } = Typography;
 
 export default (props) => {
 
-    const { routes, title, subTitle, btnList } = props;
+    const { routes, title, subTitle, btnList, classes } = props;
 
     return (
         <PageHeader
-            className="site-page-header"
+            className={`site-page-header ${classes ? classes : ''}`}
             title={<Title level={3} className='mb-0'>{title}</Title>}
             breadcrumb={routes ? routes : null }
             subTitle={subTitle ? subTitle : null}
