@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Row, Col } from 'antd';
 import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
