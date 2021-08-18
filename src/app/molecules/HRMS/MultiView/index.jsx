@@ -12,57 +12,47 @@ export default (props) => {
     const { iProps } = props;
     const history = useHistory();
     const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns } = iProps;
-    const [filterVal, setFilterVal] = useState(filters[0].label);
+    const [filterVal, setFilterVal] = useState(filters && filters[0]?.label);
     const [page, setPage] = useState(1);
     const [limit,setLimit] = useState(6);
     const [view, setView] = useState('card');
     const [sorting, setSorting] = useState('');
+    const [searchVal, setSearchVal] = useState(null);
 
     useEffect(() => {
-        updateApi(filterVal, page, limit, '', '', view);
+        updateApi(filterVal, page, limit, '', '', view, null);
     }, []);
 
-    const onFilter = (e) => {
-        setFilterVal(e.target.value);
-        updateApi(e.target.value, 1, 10, '', '', view)
-    };
 
-    const onSearch = (val) => { console.log('-----', val)};
+    // Card Pagination
+    const onPageChange = (pg) => {
+        setPage(pg);
+        updateApi(filterVal, pg , 6, sorting, '', view, null);
+    }
 
-    const onClickRow = (record) => {
-    return {
-        onClick: () => {
-        history.push(`${link}${record?.employee_id}`);
-        },
-    };
-    };
+    const onSorting = () => {
+        if(sorting == 'ASC') {
+            setSorting('DESC')
+            updateApi(filterVal, page , limit, 'DESC', '', view, null);
+        } else {
+            setSorting('ASC');
+            updateApi(filterVal, page , limit, 'ASC', '', view, null);
+        }
+    }
+
+    // Switching Views
 
     const onViewChange = (e) => {
         setView(e.target.value);
         setPage(1);
         if(e.target.value == 'list') {
             setLimit(10);
-            updateApi(filterVal, 1, 10, '', '', e.target.value);
+            updateApi(filterVal, 1, 10, '', '', e.target.value, null);
         } else {
             setLimit(6);
-            updateApi(filterVal, 1, 6, '', '', e.target.value);
+            updateApi(filterVal, 1, 6, '', '', e.target.value, null);
         }
     }
-
-    const onPageChange = (pg) => {
-        setPage(pg);
-        updateApi(filterVal, pg , 6, sorting, '', view);
-    }
-
-    const onSorting = () => {
-        if(sorting == 'ASC') {
-            setSorting('DESC')
-            updateApi(filterVal, page , limit, 'DESC', '', view);
-        } else {
-            setSorting('ASC');
-            updateApi(filterVal, page , limit, 'ASC', '', view);
-        }
-    } 
 
     const SwitchView = () => {
     
@@ -84,16 +74,36 @@ export default (props) => {
         )
     }
 
+    // List/ Table Function
+
+    const onFilter = (e) => {
+        setFilterVal(e.target.value);
+        updateApi(e.target.value, 1, 10, '', '', view, null)
+    };
+
+    const onSearch = (val) => {
+        setSearchVal(val);
+        updateApi(e.target.value, 1, 10, '', '', view, val)
+    };
+
+    const onClickRow = (record) => {
+        return {
+            onClick: () => {
+            history.push(`${link}${record?.employee_id}`);
+            },
+        };
+    };
+
       
-      const onTableChange = (pagination, filters, sorter) => {
+    const onTableChange = (pagination, filters, sorter) => {
         setPage(pagination.current);
         setLimit(pagination.pageSize);
         if (sorter.order) {
-          updateApi(filterVal, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, view);
+          updateApi(filterVal, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, view, searchVal);
         } else {
-            updateApi(filterVal, pagination.current, pagination.pageSize, '', '', view);
+            updateApi(filterVal, pagination.current, pagination.pageSize, '', '', view, searchVal);
         }
-      }
+    }
 
     return (
         <>
@@ -101,7 +111,7 @@ export default (props) => {
         {view == 'list' ? 
         <ListCard
           onRow={onClickRow}
-          filters={filters}
+          filters={filters && filters}
           Search={Search && Search}
           onSearch={Search && onSearch}
           filterValue={filterVal}

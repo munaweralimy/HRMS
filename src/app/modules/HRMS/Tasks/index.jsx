@@ -153,7 +153,7 @@ export default (props) => {
   const teamTaskData = useSelector(state => state.tasks.teamTaskData);
   const teamTaskDataList = useSelector(state => state.tasks.teamTaskDataWithStatus);
 
-  const onOverallAction = (filter, page, limit, sort, sortby, type) => {
+  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     // dispatch(emptyOverall());
     if (type == 'list') {
       dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby))
@@ -162,7 +162,7 @@ export default (props) => {
     }
   }
 
-  const onTeamAction = (filter, page, limit, sort, sortby, type) => {
+  const onTeamAction = (filter, page, limit, sort, sortby, type, searching) => {
     if (type == 'list') {
       dispatch(getTeamTasksWithStatus('Development', filter, page, limit, sort, sortby))
     } else {
@@ -175,6 +175,7 @@ export default (props) => {
       title: 'Overall Tasks',
       key: 'overall',
       count: overallData?.count || overallDataList?.count || 0,
+      Comp: MultiView,
       iProps : {
         carddata: overallData?.rows || [],
         cardcount: overallData?.count || 0,
@@ -191,7 +192,6 @@ export default (props) => {
           field3: [{label: 'All', value: 'All'}],
         }
       },
-      Comp: MultiView,
     },
     {
       title: 'Team Tasks',

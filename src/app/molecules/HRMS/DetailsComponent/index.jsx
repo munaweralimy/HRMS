@@ -7,7 +7,7 @@ const {Title} = Typography;
 
 export default (props) => {
   
-  const { setRowDetail, backbtnTitle, btn1title, btn2title, onAction1, onAction2, data, mainTitle } = props;
+  const { setRowDetail, backbtnTitle, btn1title, btn2title, onAction1, onAction2, data, mainTitle, btnClass1, btnClass2 } = props;
 
   return (
       <Row gutter={[20, 30]}>
@@ -24,14 +24,12 @@ export default (props) => {
               ))}
             </Descriptions>
         </Col>
-          {onAction1 || onAction2 && (
           <Col span={24}>
             <Row gutter={[20, 20]} justify="end">
-              {onAction1 && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='button' className='w-100 black-btn' onClick={onAction1}>{btn1title}</Button></Col>}
-              {onAction1 && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='submit' className='w-100 green-btn' onClick={onAction2}>{btn2title}</Button></Col>}
+              {onAction1 && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='button' className={`w-100 ${btnClass1 ? btnClass1 : ''}`} onClick={onAction1}>{btn1title}</Button></Col>}
+              {onAction2 && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='submit' className={`w-100 ${btnClass2 ? btnClass2 : ''}`} onClick={onAction2}>{btn2title}</Button></Col>}
             </Row>
           </Col>
-          )}
       </Row>
   );
 };
