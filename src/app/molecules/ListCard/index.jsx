@@ -4,7 +4,23 @@ import { Row, Col, Card, Table, Radio, Typography, Space } from 'antd';
 const { Text, Title } = Typography;
 
 export default (props) => {
-  const { ListCol, ListData, filterData, pagination, onFilter, filterValue, filters, Search, onSearch, onRow, total, totaltitle, title, onChange } = props;
+  const {
+    ListCol,
+    ListData,
+    filterData,
+    pagination,
+    onFilter,
+    filterValue,
+    filters,
+    Search,
+    onSearch,
+    onRow,
+    total,
+    totaltitle,
+    title,
+    onChange,
+    listClass,
+  } = props;
 
   const searchProps = {
     field1: props.field1,
@@ -13,19 +29,23 @@ export default (props) => {
   };
 
   return (
-    <Card bordered={false} className="uni-card">
+    <Card bordered={false} className={`uni-card ${listClass ? listClass : ''}`}>
       <Row gutter={[30, 20]}>
-        {title && 
-          <Col span={24}><Title level={4} className='c-default mb-0'>{title}</Title></Col>
-        }
-        {total && 
+        {title && (
           <Col span={24}>
-            <Space direction='vertical' size={0}>
-              <Text className='c-gray'>Total</Text>
-              <Title level={3} className='ag-fontSize24 mb-0'>{`${total} ${totaltitle}`}</Title>
+            <Title level={4} className="c-default mb-0">
+              {title}
+            </Title>
+          </Col>
+        )}
+        {total && (
+          <Col span={24}>
+            <Space direction="vertical" size={0}>
+              <Text className="c-gray">Total</Text>
+              <Title level={3} className="ag-fontSize24 mb-0">{`${total} ${totaltitle}`}</Title>
             </Space>
           </Col>
-        }
+        )}
         {onFilter && (
           <Col span={24}>
             <Radio.Group
