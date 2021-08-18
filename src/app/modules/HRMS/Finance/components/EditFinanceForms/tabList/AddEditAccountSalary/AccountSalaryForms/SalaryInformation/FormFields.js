@@ -1,0 +1,65 @@
+const salaryInformation = [
+  {
+    type: 'select',
+    name: 'currency_typeSalary',
+    label: ' Ammount',
+    placeholder: '',
+    twocol: true,
+    options: [{}],
+  },
+  {
+    type: 'input',
+    name: 'salary_ammount',
+    label: '',
+    placeholder: '',
+    twocol: true,
+  },
+  {
+    type: 'select',
+    name: 'payment_method',
+    label: 'Payment Method',
+    placeholder: '',
+    twocol: true,
+    options: [{}],
+  },
+  {
+    type: 'select',
+    name: 'payment_frequency',
+    label: 'Payment Frequency',
+    placeholder: '',
+    twocol: true,
+    options: [{}],
+  },
+  {
+    type: 'select',
+    name: 'payment_type',
+    label: 'Payment Type',
+    placeholder: '',
+    twocol: true,
+    options: [{}],
+  },
+  {
+    type: 'date',
+    name: 'effecative_date',
+    label: 'Effective Date',
+    placeholder: 'Please Select',
+    twocol: true,
+  },
+  {
+    type: 'select',
+    name: 'tax_currency_type',
+    label: 'Tax Ammount',
+    placeholder: '',
+    twocol: true,
+    options: [{}],
+  },
+  {
+    type: 'input',
+    name: 'tax_ammount',
+    label: '',
+    placeholder: '',
+    twocol: true,
+  },
+];
+
+export { salaryInformation };
