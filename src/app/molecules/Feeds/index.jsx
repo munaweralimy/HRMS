@@ -23,9 +23,10 @@ const defaultImage =
     
     
     const rolesParams = {
-        mlist: [
-            "AQA",
-            "Marketing"
+        data: [
+            "HR Manager",
+            "HR User",
+            "Employee"
         ]
     }
     

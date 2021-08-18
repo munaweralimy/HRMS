@@ -6,6 +6,7 @@ import {getRolesList} from '../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiresource } from '../../../../../configs/constants';
 import axios from '../../../../../services/axiosInterceptor';
+import { uniquiFileName, getSingleUpload } from '../../../../../features/utility';
 
 const { Title, Text } = Typography;
 
@@ -66,12 +67,13 @@ export default (props) => {
                 })
             })
         }
+        
         const json = {
             data: {
                 policy_title: val?.policy_title,
-                attachment: '/private/files/CMS2_03_AQA_Flowchart.pdf',
+                //attachment: '/private/files/CMS2_03_AQA_Flowchart.pdf',
                 doctype: "HRMS Policy",
-                policy_user_group: userRole
+                //policy_user_group: userRole
             }
         }
         console.log('json', json)
@@ -79,9 +81,41 @@ export default (props) => {
         let url = `${apiresource}/HRMS Policy`;
         
         try {
-            await axios.post(url, json);
-            message.success('Policy Successfully Added');
-            setTimeout(() => onUpdate, 1000)
+            const resp = await axios.post(url, json);
+
+            if (resp?.status == 200) {
+                console.log('resp', resp)
+                const policyName = resp['data']?.data.name;
+                let policyAttatchment = [];
+                if (val?.attachment) {
+                    let modifiedName = uniquiFileName(val.attachment?.file?.originFileObj.name)
+                    let res = await getSingleUpload(modifiedName, 'pdf',  val.attachment?.file?.originFileObj, 'HRMS Policy', policyName);
+                    policyAttatchment = res?.file_url;
+                }
+
+                const payLoad = {
+                    data: {
+                        policy_title: val?.policy_title,
+                        attachment: policyAttatchment,
+                        doctype: "HRMS Policy",
+                        name: policyName,
+                        policy_user_group: userRole
+                    }
+                }
+
+                let url2 = `${apiresource}/HRMS Policy/${policyName}`;
+                try {
+                    await axios.put(url2, payLoad);
+                    message.success('Policy Successfully Added');
+                    setTimeout(() => onClose, 1000)
+                    setTimeout(() => onUpdate, 1200)
+                } catch(e) {
+                    const { response } = e;
+                    message.error(response?.data?.message);
+                }
+            }
+
+            
         } catch(e) {
             const { response } = e;
             message.error(response?.data?.message);

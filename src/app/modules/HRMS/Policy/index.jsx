@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, message } from 'antd';
 import { useTranslate } from 'Translate';
 import PolicyCard from '../../../atoms/HRMS/PolicyCard';
 import HeadingChip from '../../../molecules/HeadingChip';
@@ -18,7 +18,6 @@ export default (props) => {
   const dispatch = useDispatch();
   const policyListData = useSelector((state) => state.policy.policyListData);
   const [visible, setVisible] = useState(false);
-
   const callList = () => dispatch(getPolicyList());
   
   const btnList = [
@@ -61,8 +60,28 @@ export default (props) => {
     }
   };
 
-  const onView = (name) => {
+  const onView = async (data) => {
+    const attachment = data?.attachment;
+    attachment && window.open(`http://cms2dev.limkokwing.net${attachment}`, "_blank");
+
+    console.log('data', data)
+    const json = {
+        data: {
+          name: data?.name,
+          policy_status: "Viewed"
+        }
+    }
+    console.log('json', json)
+
+    let url = `${apiresource}/HRMS Policy/${data?.name}`;
     
+    try {
+        await axios.put(url, json);
+        dispatch(getPolicyList());
+    } catch(e) {
+        const { response } = e;
+        message.error(response?.data?.message);
+    }
   }
 
   return (
@@ -71,13 +90,13 @@ export default (props) => {
         <Col span={24}>
           <HeadingChip title="Policy" btnList={btnList} />
         </Col>
-        {policyListData && policyListData?.policy_list?.map((resp, i) => (
-              <Fragment key={i}>
-                <Col span={24}>
-                  <PolicyCard data={resp} onDelete={onDelete} onView={onView} />
-                </Col>
-              </Fragment>
-            ))}
+        {policyListData && policyListData?.rows?.length > 0 && policyListData?.rows[0]?.map((resp, i) => (
+          <Fragment key={i}>
+            <Col span={24}>
+              <PolicyCard data={resp} onDelete={onDelete} onView={onView} />
+            </Col>
+          </Fragment>
+        ))} 
       </Row>
       <Popup {...popup} />
     </>
