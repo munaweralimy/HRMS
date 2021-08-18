@@ -46,8 +46,9 @@ export default (props) => {
         )}
         <Col span={24}>
           <Table
+            scroll={{x: 1000}}
             onRow={onRow}
-            className="custom-table"
+            className={`custom-table ${props.classes ? props.classes : ''}`}
             bordered={false}
             columns={ListCol}
             dataSource={filterData != null ? filterData : ListData}

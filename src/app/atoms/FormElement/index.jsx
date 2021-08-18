@@ -6,6 +6,7 @@ import Select from 'react-select';
 import { dummyRequest } from '../../../features/utility';
 
 const { Text } = Typography;
+const { RangePicker } = DatePicker;
 
 export const InputField = (props) => {
   const { fieldname, label, control, iProps, rules, initValue, isRequired, validate, validMessage } = props;
@@ -146,6 +147,17 @@ export const DateField = (props) => {
           defaultValue={initValue ? initValue : ''}
           rules={rules}
           render={({ value, onChange }) => (
+            props.type == 'range' ? (
+              <RangePicker
+                style={{ width: '100%' }}
+                value={value}
+                onChange={(e) => {
+                  onChange(e);
+                  props.onChange && props.onChange(e);
+                }}
+                {...iProps}
+              />)
+            :
             <DatePicker
               style={{ width: '100%' }}
               value={value}

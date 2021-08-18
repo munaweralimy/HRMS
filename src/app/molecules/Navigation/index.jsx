@@ -48,7 +48,7 @@ export default (props) => {
     const subkey = location.split('/')[1];
     const dataPending = useSelector((state) => state.request.requestListPending);
     const pendingList = useSelector((state) => state.students.pendingList);
-    const selected = location.split('/').length > 2 ? `/${location.split('/')[1]}/${location.split('/')[2]}` : location;
+    const selected = location.split('/').length > 1 ? `/${location.split('/')[1]}` : location;
 
     useEffect(() => {
         ModifyJson(allowedRoutes(RoutingList));
