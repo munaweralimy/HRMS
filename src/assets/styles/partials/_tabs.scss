@@ -92,11 +92,11 @@
 
 .tab-badge {
     .ant-badge-count {
-        width: 40px;
+        padding: 0 15px;
         height: 30px;
         font-size: 15px;
         line-height: 30px;
-        background-color: $errors;
+        background-color: $menu-gray;
         color: #fff;
     }
 }
@@ -114,6 +114,7 @@
 }
 
 .tab-bold {
+    position: relative;
     > .ant-tabs-nav {
         .ant-tabs-tab  {
             border: 0;
@@ -143,6 +144,11 @@
                 color: #fff;
                 font-size: 24px;
                 font-weight: 400;
+            }
+            .tab-badge {
+                .ant-badge-count {
+                    background-color: $errors;
+                }
             }
         }
     }
@@ -179,4 +185,22 @@
         
     } 
         
+}
+
+.optionsTabs {
+    position: absolute;
+    top:13px;
+    right:0;
+    .ant-radio-button-wrapper {
+        border: 0;
+        font-size: 16px;
+        line-height: 2;
+        background-color: $container-color;
+    }
+    .ant-radio-button-wrapper:first-child {
+        border: 0;
+    }
+    .ant-radio-button-wrapper:not(:first-child)::before {
+        content: none;
+    }
 }
