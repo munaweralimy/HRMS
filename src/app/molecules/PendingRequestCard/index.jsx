@@ -8,7 +8,7 @@ const { Title, Text } = Typography;
 
 export default (props) => {
 
-    const {data, title, count, link, label, status, innerlink} = props;
+    const {data, title, count, link, label, status, innerlink, level, spacing} = props;
     const countStatus = {
         value: count,
         title: label,
@@ -18,12 +18,12 @@ export default (props) => {
 
     return (
         <Card bordered={false} className={`uni-card dashboard-card main-card-hover ${status ? '' : 'no-listspace'}`}>
-            <Space size={20} direction='vertical' className='w-100'>
-                {title && <Title level={5} className='c-default mb-0'>{title}</Title>}
-                <FigureChips data={countStatus} link={link} />
+            <Space size={spacing ? spacing : 20} direction='vertical' className='w-100'>
+                {title && <Title level={level ? level : 5} className='c-default mb-0'>{title}</Title>}
+                {label && <FigureChips data={countStatus} link={link} />}
                 <List
                     itemLayout="horizontal"
-                    className='icon-list'
+                    className={`icon-list ${!label ? 'withoutFigure' : ''}`}
                     dataSource={data && data}
                     renderItem={item => (
                     <List.Item key={item.name} className='w-100'>
