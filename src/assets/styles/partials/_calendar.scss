@@ -1,0 +1,68 @@
+.custom-calendar {
+
+    .ant-picker-calendar-header {
+        display: none;
+    }
+
+    .ant-picker-panel {
+        .ant-picker-calendar-date {
+            margin: 2.5px;
+            padding: 10px 5px;
+            border-top: 0;
+            border-radius: 8px;
+            text-align: center;
+            height: 53px;
+            font-size: 18px;
+            vertical-align: middle;
+            color: #fff;
+        }
+        .ant-picker-cell {
+            .ant-picker-calendar-date {
+                color: transparent;
+            }
+        }
+        .ant-picker-calendar-date-content {
+            display: none;
+            height: 0;
+            line-height: 1;
+            text-align: center;
+        }
+        .ant-picker-cell-selected 
+        .ant-picker-calendar-date 
+        .ant-picker-calendar-date-value, 
+        .ant-picker-cell-selected:hover 
+        .ant-picker-calendar-date 
+        .ant-picker-calendar-date-value, 
+        .ant-picker-cell-selected 
+        .ant-picker-calendar-date-today 
+        .ant-picker-calendar-date-value, 
+        .ant-picker-cell-selected:hover 
+        .ant-picker-calendar-date-today 
+        .ant-picker-calendar-date-value {
+            color: #fff;
+        }
+        .ant-picker-cell-in-view {
+            .ant-picker-calendar-date {
+                color: #fff;
+            }
+        }
+        .ant-picker-cell-in-view.ant-picker-cell-disabled {
+            .ant-picker-calendar-date {
+                color: $gray;
+            }
+        }
+        .ant-picker-body {
+            th {
+                width: auto;
+                height: auto;
+                color: $gray;
+                font-size: 12px;
+                text-align: center;
+                padding: 0 0 10px;
+            }
+        }
+    }
+}
+
+
+
