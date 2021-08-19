@@ -182,10 +182,10 @@ export default (props) => {
         listdata: overallDataList?.rows || [],
         listcount: overallDataList?.count || 0,
         listCol: ListColOverall,
-        Search: Search,
         link: '/tasks/',
         filters: filtersOverall,
         updateApi: onOverallAction,
+        Search: Search,
         searchDropdowns: {
           field1: [{label: 'All', value: 'All'}],
           field2: [{label: 'All', value: 'All'}],
