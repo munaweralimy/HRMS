@@ -150,4 +150,14 @@ export default [
     icon: 'ApplicationsIcon',
     parent: true,
   },
+  {
+    component: 'SetUp',
+    path: '/setup',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'setup',
+    menu: 'Setup',
+    icon: 'ApplicationsIcon',
+    parent: true,
+  },
 ];

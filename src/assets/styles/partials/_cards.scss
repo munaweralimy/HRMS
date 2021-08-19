@@ -292,6 +292,21 @@
   }
 }
 
+
+.uni-card-small-active {
+  height: 100%;
+  border-radius: 8px;
+  background-color: $blue;
+  color: #fff;
+  .ant-card-body {
+    padding: 20px;
+  }
+  .anticon {
+    font-size: 20px;
+  }
+}
+
+
 .figures-card {
   transition: 0.2s;
   .ant-card-body {

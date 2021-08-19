@@ -11,6 +11,7 @@ import EditEmployment from '../../modules/HRMS/Employment/EditEmployment';
 import TeamDetails from '../../modules/HRMS/Employment/TeamDetails';
 import Finance from '../../modules/HRMS/Finance';
 import EditFinance from '../../modules/HRMS/Finance/EditFinance';
+import SetUp from '../../modules/HRMS/SetUp';
 const Components = {
   Advancement,
   Tasks,
@@ -23,6 +24,7 @@ const Components = {
   Finance,
   EditFinance,
   Attendance,
+  SetUp
 };
 
 export default (props) => {
