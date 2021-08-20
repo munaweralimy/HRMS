@@ -53,6 +53,9 @@ select:-webkit-autofill:focus {
 .justify-right {
     justify-content: flex-end;
 }
+.justify-cetner {
+    justify-content: center;
+}
 
 .p-0 {
     padding: 0 !important;
@@ -67,7 +70,7 @@ select:-webkit-autofill:focus {
 }
 
 .mb-10PX {
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 .mt-0 {
@@ -179,6 +182,10 @@ select:-webkit-autofill:focus {
 
 .b-black {
     background-color: $black-shade;
+}
+
+.b-dark-gray {
+    background-color: $element-color;
 }
 
 .b-gray {
