@@ -20,6 +20,7 @@ export default (props) => {
     title,
     onChange,
     listClass,
+    blackCard,
   } = props;
 
   const searchProps = {
@@ -29,7 +30,7 @@ export default (props) => {
   };
 
   return (
-    <Card bordered={false} className={`uni-card ${listClass ? listClass : ''}`}>
+    <Card bordered={false} className={`uni-card ${blackCard ? blackCard : ''}  ${listClass ? listClass : ''}`}>
       <Row gutter={[30, 20]}>
         {title && (
           <Col span={24}>
@@ -66,7 +67,7 @@ export default (props) => {
         )}
         <Col span={24}>
           <Table
-            scroll={{x: 1000}}
+            scroll={{ x: 1000 }}
             onRow={onRow}
             className={`custom-table ${props.classes ? props.classes : ''}`}
             bordered={false}
