@@ -54,6 +54,7 @@ export default (props) => {
                 level={4}
                 space={10}
                 status='none'
+                reverse={true}
                 />
             </Col>
             <Col flex='1 0 398px'>

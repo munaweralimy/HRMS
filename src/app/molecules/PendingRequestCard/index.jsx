@@ -8,7 +8,7 @@ const { Title, Text } = Typography;
 
 export default (props) => {
 
-    const {data, title, count, link, label, status, innerlink, level, spacing} = props;
+    const {data, title, count, link, label, status, innerlink, level, spacing, reverse} = props;
     const countStatus = {
         value: count,
         title: label,
@@ -34,8 +34,17 @@ export default (props) => {
                             <Space size={17} className='w-100'>
                                 <Avatar size={40} src={item?.user_image && `http://cms2dev.limkokwing.net${item?.user_image}`} />
                                 <Space size={0} direction='vertical'>
-                                    <Text className='c-gray'>{item.name}</Text>
-                                    <Text className='titlename'>{item.applicant_name}</Text>
+                                    {reverse ? 
+                                    <>
+                                    <Text className='titlename'>{item.name}</Text>
+                                    <Text className='c-gray'>{item.applicant_name}</Text>
+                                    </>
+                                    :
+                                    <>
+                                        <Text className='c-gray'>{item.name}</Text>
+                                        <Text className='titlename'>{item.applicant_name}</Text>
+                                    </>
+                                    }
                                 </Space>
                             </Space>
                         </Link>
