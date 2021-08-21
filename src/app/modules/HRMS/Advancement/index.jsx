@@ -18,7 +18,7 @@ const data = [
     project: 'CMS2',
     hours: 9,
     date: '2021-07-28',
-    status: 'Pending',
+    status: 'Missed',
     tasks: 'Testing Marketing APIs',
   },
   {
@@ -28,7 +28,7 @@ const data = [
     project: 'CMS2',
     hours: 9,
     date: '2021-07-28',
-    status: 'Pending',
+    status: 'Missed',
     tasks: 'Testing Marketing APIs',
   },
   {
@@ -38,7 +38,7 @@ const data = [
     project: 'CMS2',
     hours: 9,
     date: '2021-07-28',
-    status: 'Pending',
+    status: 'Missed',
     tasks: 'Testing Marketing APIs',
   },
   {
@@ -48,7 +48,7 @@ const data = [
     project: 'CMS2',
     hours: 9,
     date: '2021-07-28',
-    status: 'Pending',
+    status: 'Missed',
     tasks: 'Testing Marketing APIs',
   },
   {
@@ -58,7 +58,7 @@ const data = [
     project: 'CMS2',
     hours: 9,
     date: '2021-07-28',
-    status: 'Pending',
+    status: 'Missed',
     tasks: 'Testing Marketing APIs',
   },
   {
@@ -68,7 +68,7 @@ const data = [
     project: 'CMS2',
     hours: 9,
     date: '2021-07-28',
-    status: 'Pending',
+    status: 'Missed',
     tasks: 'Testing Marketing APIs',
   },
 ];
@@ -199,7 +199,7 @@ const Advancement = () => {
         listcount: (tableData && tableData?.count) || 0,
         listCol: colName,
         Search: Search,
-        link: '/finance/',
+        link: '/advancement/',
         filters: filters,
         updateApi: () => {},
         searchDropdowns: {
