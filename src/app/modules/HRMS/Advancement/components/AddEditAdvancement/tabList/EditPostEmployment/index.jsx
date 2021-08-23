@@ -1,8 +1,10 @@
-import React from 'react';
-import { Row, Col, Button, Typography } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Button, Typography, Form } from 'antd';
+import { useForm } from 'react-hook-form';
+import { LeftOutlined } from '@ant-design/icons';
 import ListCard from '../../../../../../../molecules/ListCard';
 import { PopupSuccess } from '../../../../../../../atoms/Popup';
-
+import ContractForm from '../../../../../Employment/components/EmployeeForm/tabList/Contract';
 const popup = {
   closable: false,
   className: 'black-modal',
@@ -118,48 +120,89 @@ const eligibility_data = [
     fitindex: '68%',
   },
 ];
-const onClickRow = () => {};
+
 const onChangePoistionHandler = () => {
   PopupSuccess(popup);
 };
+
 const EditPostEmployment = () => {
   const { Title } = Typography;
+  const { control, errors, handleSubmit } = useForm();
+  const [viewForm, setViewForm] = useState(false);
+  const [id, setID] = useState();
+
+  const onClickRow = (record) => {
+    return {
+      onClick: () => {
+        console.log({ record });
+        setViewForm(true);
+      },
+    };
+  };
+
+  const onViewFormHandler = () => {
+    setViewForm(false);
+  };
+
   return (
-    <>
-      <Row gutter={[24, 30]} align="bottom">
-        <Col span={24}>
-          <Title level={4} className="mb-0">
-            Employment History
-          </Title>
-        </Col>
-        <Col span={24}>
-          <ListCard
-            ListCol={colName}
-            ListData={data}
-            title="Job Openings"
-            onRow={onClickRow}
-            blackCard="nospace-card"
-          />
-        </Col>
-        <Col span={24}>
-          <Title level={4} className="mb-0">
-            Eligibility for Open Position
-          </Title>
-        </Col>
-        <Col span={24}>
-          <Row gutter={[20, 30]} justify="end">
-            <Col span={24}>
-              <ListCard ListCol={eligibility_col} ListData={eligibility_data} blackCard="black-nospace-card" />
-            </Col>
-            <Col>
-              <Button size="large" type="primary" className="green-btn" onClick={onChangePoistionHandler}>
-                Change Position
-              </Button>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </>
+    <Row gutter={[24, 30]} align="bottom">
+      {!viewForm ? (
+        <>
+          <Col span={24}>
+            <Title level={4} className="mb-0">
+              Employment History
+            </Title>
+          </Col>
+          <Col span={24}>
+            <ListCard ListCol={colName} ListData={data} onRow={onClickRow} blackCard="nospace-card" />
+          </Col>
+          <Col span={24}>
+            <Title level={4} className="mb-0">
+              Eligibility for Open Position
+            </Title>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[20, 30]} justify="end">
+              <Col span={24}>
+                <ListCard ListCol={eligibility_col} ListData={eligibility_data} blackCard="black-nospace-card" />
+              </Col>
+              <Col>
+                <Button size="large" type="primary" className="green-btn" onClick={onChangePoistionHandler}>
+                  Change Position
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </>
+      ) : (
+        <>
+          <Col span={24}>
+            <Button type="link" className="mb-0 p-0 c-gray-linkbtn" icon={<LeftOutlined />} onClick={onViewFormHandler}>
+              Employment History
+            </Button>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[20, 30]} justify="end">
+              <Col span={24}>
+                <Form layout="vertical" scrollToFirstError={true}>
+                  <ContractForm control={control} errors={errors} />
+                </Form>
+              </Col>
+              <Col>
+                <Button size="large" type="primary" className="red-btn">
+                  Terminate Employee
+                </Button>
+              </Col>
+              <Col>
+                <Button size="large" type="primary" className="green-btn">
+                  Save Changes
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </>
+      )}
+    </Row>
   );
 };
 

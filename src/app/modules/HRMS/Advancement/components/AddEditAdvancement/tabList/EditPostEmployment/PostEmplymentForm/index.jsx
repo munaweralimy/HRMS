@@ -1,7 +1,7 @@
 import React from 'react';
-
-const index = () => {
+import { Row, Col, Card, Typography, Button } from 'antd';
+const PostEmploymentForm = () => {
   return <div></div>;
 };
 
-export default index;
+export default PostEmploymentForm;
