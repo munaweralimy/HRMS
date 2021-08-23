@@ -83,6 +83,7 @@ export default (props) => {
 
     const onSearch = (val) => {
         setSearchVal(val);
+        setPage(1);
         updateApi(e.target.value, 1, 10, '', '', view, val)
     };
 
