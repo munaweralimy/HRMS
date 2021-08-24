@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button, Form, Breadcrumb } from 'antd';
 import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeAllOpenForms } from '../../../../ducks/action';
+import { LeftOutlined } from '@ant-design/icons';
+import AddAsset from './AddAssest';
+
 const assetsCol = [
   {
     title: 'Asset No',
@@ -46,16 +49,30 @@ const AddEditAssets = () => {
   return (
     <Row gutter={[24, 30]} align="bottom">
       {viewAssetsForm && tabVal ? (
-        <Form layout="vertical" scrollToFirstError={true}>
-          <Breadcrumb className="mb-1 c-gray">
-            <Breadcrumb.Item onClick={() => setViewAssetsForm(false)}>{`< Assets in Possession`}</Breadcrumb.Item>
-          </Breadcrumb>
-          {/* render add assets form */}
-        </Form>
+        <Col span={24}>
+          <Button
+            type="link"
+            htmlType="button"
+            className="mb-1 p-0 c-gray-linkbtn"
+            icon={<LeftOutlined />}
+            onClick={() => setViewAssetsForm(false)}
+          >
+            Assets in Possession
+          </Button>
+          <AddAsset />
+        </Col>
       ) : (
         <Col span={24}>
-          <ListCard title="Assets in Position" ListCol={assetsCol} ListData={[]} pagination={true} />
-          <Row gutter={24} justify="end">
+          <Row gutter={[20, 30]} justify="end">
+            <Col span={24}>
+              <ListCard
+                listClass="nospace-card"
+                title="Assets in Position"
+                ListCol={assetsCol}
+                ListData={[]}
+                pagination={true}
+              />
+            </Col>
             <Col>
               <Button size="large" type="primary" onClick={onFormViewer}>
                 + Add New Asset

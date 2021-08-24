@@ -1,11 +1,13 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Button, Form, Breadcrumb } from 'antd';
+import React, { useState } from 'react';
+import { Row, Col, Button, Breadcrumb } from 'antd';
 import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../../../molecules/ListCard';
-import SalaryInformation from './AccountSalaryForms/SalaryInformation';
 import { closeAllOpenForms } from '../../../../ducks/action';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { LeftOutlined } from '@ant-design/icons';
+import SalaryInformation from './AccountSalaryForms/SalaryInformation';
+import AddAccount from './AccountSalaryForms/AddAccount';
+import AddAllowence from './AccountSalaryForms/AddAllowances';
 const AddEditAccountSalary = () => {
   const { control, errors, handleSubmit } = useForm();
   const dispatch = useDispatch();
@@ -100,29 +102,44 @@ const AddEditAccountSalary = () => {
   return (
     <Row gutter={[24, 30]} align="bottom">
       {viewSpecificForm.accountForm && tabVal ? (
-        <Form layout="vertical" scrollToFirstError={true}>
-          <Breadcrumb className="mb-1">
-            <Breadcrumb.Item onClick={() => onFormViewHandler('')}>{`< Account List`}</Breadcrumb.Item>
-          </Breadcrumb>
-          {/*render ammount form*/}
-        </Form>
+        <Col span={24}>
+          <Button
+            type="link"
+            htmlType="button"
+            className="mb-1 p-0 c-gray-linkbtn"
+            icon={<LeftOutlined />}
+            onClick={() => onFormViewHandler('')}
+          >
+            Account List
+          </Button>
+          <AddAccount />
+        </Col>
       ) : viewSpecificForm.allowanceForm && tabVal ? (
         <Col span={24}>
-          <Breadcrumb className="mb-1">
-            <Breadcrumb.Item onClick={() => onFormViewHandler('')}>{`< Allowence List`}</Breadcrumb.Item>
-          </Breadcrumb>
-          {/*render allowance form*/}
+          <Button
+            type="link"
+            htmlType="button"
+            className="mb-1 p-0 c-gray-linkbtn"
+            icon={<LeftOutlined />}
+            onClick={() => onFormViewHandler('')}
+          >
+            Allowances List
+          </Button>
+          <AddAllowence />
         </Col>
       ) : (
-        <Fragment>
+        <>
           <Col span={24}>
-            <ListCard
-              title={empEditRecords[0].heading}
-              ListCol={empEditRecords[0].empHistoryCol}
-              ListData={[]}
-              pagination={true}
-            />
-            <Row gutter={24} justify="end">
+            <Row gutter={[20, 30]} justify="end">
+              <Col span={24}>
+                <ListCard
+                  listClass="nospace-card"
+                  title={empEditRecords[0].heading}
+                  ListCol={empEditRecords[0].empHistoryCol}
+                  ListData={[]}
+                  pagination={true}
+                />
+              </Col>
               <Col>{empEditRecords[0].btnAcation}</Col>
             </Row>
           </Col>
@@ -130,17 +147,20 @@ const AddEditAccountSalary = () => {
             <SalaryInformation />
           </Col>
           <Col span={24}>
-            <ListCard
-              title={empEditRecords[1].heading}
-              ListCol={empEditRecords[1].empHistoryCol}
-              ListData={[]}
-              pagination={true}
-            />
-            <Row gutter={24} justify="end">
+            <Row gutter={[20, 30]} justify="end">
+              <Col span={24}>
+                <ListCard
+                  listClass="nospace-card"
+                  title={empEditRecords[1].heading}
+                  ListCol={empEditRecords[1].empHistoryCol}
+                  ListData={[]}
+                  pagination={true}
+                />
+              </Col>
               <Col>{empEditRecords[1].btnAcation}</Col>
             </Row>
           </Col>
-        </Fragment>
+        </>
       )}
     </Row>
   );

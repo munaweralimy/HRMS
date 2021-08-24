@@ -5,6 +5,7 @@ import Tasks from '../../modules/HRMS/Tasks';
 import Attendance from '../../modules/HRMS/Attendance';
 import TaskDetail from '../../modules/HRMS/Tasks/TaskDetail';
 import Advancement from '../../modules/HRMS/Advancement';
+import EditAdvancement from '../../modules/HRMS/Advancement/EditAdvancement';
 import Employment from '../../modules/HRMS/Employment';
 import AddEmployment from '../../modules/HRMS/Employment/AddEmployment';
 import EditEmployment from '../../modules/HRMS/Employment/EditEmployment';
@@ -14,6 +15,7 @@ import EditFinance from '../../modules/HRMS/Finance/EditFinance';
 import SetUp from '../../modules/HRMS/SetUp';
 const Components = {
   Advancement,
+  EditAdvancement,
   Tasks,
   TaskDetail,
   Policy,

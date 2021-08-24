@@ -1,20 +1,21 @@
 import React from 'react';
 import { Row, Col, Typography, Form, Button } from 'antd';
 import { useForm } from 'react-hook-form';
-import { addAccount } from './FormFileds';
-import FormGroup from '../../../../../../../../../molecules/FormGroup';
-const AddAccount = () => {
-  const { Title } = Typography;
+import FormGroup from '../../../../../../../../molecules/FormGroup';
+import { addAsset } from './FormFields';
+
+const AddAsset = () => {
   const { control, errors, handleSubmit } = useForm();
+  const { Title } = Typography;
   return (
     <Form layout="vertical" scrollToFirstError={true}>
       <Row gutter={[24, 30]} align="bottom">
         <Col span={24}>
           <Title level={4} className="mb-0">
-            Account Details
+            Asset Details
           </Title>
         </Col>
-        {addAccount.map((value, key) => (
+        {addAsset.map((value, key) => (
           <FormGroup key={key} item={value} control={control} errors={errors} />
         ))}
         <Col span={24}>
@@ -36,4 +37,4 @@ const AddAccount = () => {
   );
 };
 
-export default AddAccount;
+export default AddAsset;

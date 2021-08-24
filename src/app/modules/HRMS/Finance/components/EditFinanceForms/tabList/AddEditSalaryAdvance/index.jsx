@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeAllOpenForms } from '../../../../ducks/action';
-
+import { LeftOutlined } from '@ant-design/icons';
+import AddSalaryAdvance from './AddSalaryAdvance';
 const salayAdvCol = [
   {
     title: 'Date Applied',
@@ -48,16 +49,30 @@ const AddEditSalaryAdvance = () => {
   return (
     <Row gutter={[24, 30]} align="bottom">
       {viewSalaryAdvanceForm && tabVal ? (
-        <Form layout="vertical" scrollToFirstError={true}>
-          <Breadcrumb className="mb-1 c-gray">
-            <Breadcrumb.Item onClick={() => setviewSalaryAdvanceForm(false)}>{`< Salary Advance List`}</Breadcrumb.Item>
-          </Breadcrumb>
-          {/*render add salary form*/}
-        </Form>
+        <Col span={24}>
+          <Button
+            type="link"
+            htmlType="button"
+            className="mb-1 p-0 c-gray-linkbtn"
+            icon={<LeftOutlined />}
+            onClick={() => setviewSalaryAdvanceForm(false)}
+          >
+            Salary Advance List
+          </Button>
+          <AddSalaryAdvance />
+        </Col>
       ) : (
         <Col span={24}>
-          <ListCard title="Salary Advance List" ListCol={salayAdvCol} ListData={[]} pagination={true} />
-          <Row gutter={24} justify="end">
+          <Row gutter={[20, 30]} justify="end">
+            <Col span="24">
+              <ListCard
+                listClass="nospace-card"
+                title="Loan List"
+                ListCol={salayAdvCol}
+                ListData={[]}
+                pagination={true}
+              />
+            </Col>
             <Col>
               <Button size="large" type="primary" onClick={onFormViewer}>
                 + Add New Advance
