@@ -43,7 +43,7 @@ const AddEditJob = (props) => {
               </Title>
             </Col>
             <Col span={24}>
-              <ListCard ListCol={colName} ListData={data} blackCard="black-nospace-card" />
+              <ListCard ListCol={colName} ListData={data} listClass="small-card8 b-black" />
             </Col>
           </>
         ) : (
