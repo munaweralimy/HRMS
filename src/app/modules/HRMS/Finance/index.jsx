@@ -1,36 +1,70 @@
 import React, { useState } from 'react';
-import { Row, Col, Button } from 'antd';
-import { useHistory } from 'react-router-dom';
-import HeadingChip from '../../../molecules/HeadingChip';
+import { Row, Col } from 'antd';
 import { useTranslate } from 'Translate';
-import CardView from '../../../molecules/CardView';
-import TableView from '../../../molecules/ListCard';
 import Search from './components/Search';
+import MultiView from '../../../molecules/HRMS/MultiView';
+import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
+
 const data = [
   {
-    name: 'Walter Gibson',
-    student: '123686234',
-    form_name: 'Low Fit Index',
-    status: 'Pending Request',
-    onClick: () => history.push,
+    employee_id: 'HR-EMP-00001',
+    employee_name: 'sheeraz kaleem',
+    row_name: '8f36e8e809',
+    project: 'CMS2',
+    hours: 9,
+    date: '2021-07-28',
+    status: 'Pending',
+    tasks: 'Testing Marketing APIs',
   },
   {
-    name: 'Walter Gibson',
-    student: '123686234',
-    form_name: 'Low Fit Index',
-    status: 'Pending Request',
+    employee_id: 'HR-EMP-00001',
+    employee_name: 'sheeraz kaleem',
+    row_name: '8f36e8e809',
+    project: 'CMS2',
+    hours: 9,
+    date: '2021-07-28',
+    status: 'Pending',
+    tasks: 'Testing Marketing APIs',
   },
   {
-    name: 'Walter Gibson',
-    student: '123686234',
-    form_name: 'Low Fit Index',
-    status: 'Pending Request',
+    employee_id: 'HR-EMP-00001',
+    employee_name: 'sheeraz kaleem',
+    row_name: '8f36e8e809',
+    project: 'CMS2',
+    hours: 9,
+    date: '2021-07-28',
+    status: 'Pending',
+    tasks: 'Testing Marketing APIs',
   },
   {
-    name: 'Walter Gibson',
-    student: '123686234',
-    form_name: 'Low Fit Index',
-    status: 'Pending Request',
+    employee_id: 'HR-EMP-00001',
+    employee_name: 'sheeraz kaleem',
+    row_name: '8f36e8e809',
+    project: 'CMS2',
+    hours: 9,
+    date: '2021-07-28',
+    status: 'Pending',
+    tasks: 'Testing Marketing APIs',
+  },
+  {
+    employee_id: 'HR-EMP-00001',
+    employee_name: 'sheeraz kaleem',
+    row_name: '8f36e8e809',
+    project: 'CMS2',
+    hours: 9,
+    date: '2021-07-28',
+    status: 'Pending',
+    tasks: 'Testing Marketing APIs',
+  },
+  {
+    employee_id: 'HR-EMP-00001',
+    employee_name: 'sheeraz kaleem',
+    row_name: '8f36e8e809',
+    project: 'CMS2',
+    hours: 9,
+    date: '2021-07-28',
+    status: 'Pending',
+    tasks: 'Testing Marketing APIs',
   },
 ];
 const colName = [
@@ -126,12 +160,12 @@ const tableData = [
 const filters = [
   {
     label: 'Acative Employee',
-    value: 'active_employee',
+    value: 'Acative Employee',
   },
 
   {
     label: 'Archive',
-    value: 'archive',
+    value: 'Archive',
   },
 ];
 const Finance = () => {
@@ -139,37 +173,38 @@ const Finance = () => {
   const [girdView, setGridView] = useState('2');
   const { t } = il8n;
   const [filterVal, setFilterVal] = useState(filters[0].value);
-
-  const btnList = [
-    {
-      type: 'GridViewChanger',
-      action: (key) => {
-        setGridView(key);
-      },
-    },
-  ];
   const onFilter = (e) => {
     setFilterVal(e.target.value);
   };
-  const onSearch = () => {};
+
+  const tabs = [
+    {
+      title: 'Overall Finance',
+      key: 'overall',
+      count: data?.count || tableData?.count || 6,
+      Comp: MultiView,
+      iProps: {
+        carddata: data || [],
+        cardcount: (data && data?.count) || 10,
+        listdata: tableData || [],
+        listcount: (tableData && tableData?.count) || 0,
+        listCol: colName,
+        Search: Search,
+        link: '/finance/',
+        filters: filters,
+        updateApi: () => {},
+        searchDropdowns: {
+          field1: [{ label: 'All', value: 'All' }],
+          field2: [{ label: 'All', value: 'All' }],
+          field3: [{ label: 'All', value: 'All' }],
+        },
+      },
+    },
+  ];
   return (
     <Row gutter={[24, 30]}>
       <Col span={24}>
-        <HeadingChip title={t('HRMS.Finance.title1')} />
-      </Col>
-      <Col span={24}>
-        <CardView data={data} link="/finance" />
-      </Col>
-      <Col span={24}>
-        <TableView
-          Search={Search}
-          filters={filters}
-          ListCol={colName}
-          ListData={tableData}
-          onFilter={onFilter}
-          filterValue={filterVal}
-          onSearch={onSearch}
-        />
+        <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
       </Col>
     </Row>
   );

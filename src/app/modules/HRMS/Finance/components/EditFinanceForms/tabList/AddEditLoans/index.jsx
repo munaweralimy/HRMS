@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeAllOpenForms } from '../../../../ducks/action';
+import { LeftOutlined } from '@ant-design/icons';
+import AddLoan from './AddLoan';
 const loanCol = [
   {
     title: 'Loan Date',
@@ -47,16 +49,24 @@ const AddEditLoans = () => {
   return (
     <Row gutter={[24, 30]} align="bottom">
       {viewLoanForm && tabVal ? (
-        <Form layout="vertical" scrollToFirstError={true}>
-          <Breadcrumb className="mb-1 c-gray">
-            <Breadcrumb.Item onClick={() => setViewLoanForm(false)}>{`< Loan List`}</Breadcrumb.Item>
-          </Breadcrumb>
-          {/* render add loans form*/}
-        </Form>
+        <Col span={24}>
+          <Button
+            type="link"
+            htmlType="button"
+            className="mb-1 p-0 c-gray-linkbtn"
+            icon={<LeftOutlined />}
+            onClick={() => setViewLoanForm(false)}
+          >
+            Loan List
+          </Button>
+          <AddLoan />
+        </Col>
       ) : (
         <Col span={24}>
-          <ListCard title="Loan List" ListCol={loanCol} ListData={[]} pagination={true} />
-          <Row gutter={24} justify="end">
+          <Row gutter={[20, 30]} justify="end">
+            <Col span="24">
+              <ListCard listClass="nospace-card" title="Loan List" ListCol={loanCol} ListData={[]} pagination={true} />
+            </Col>
             <Col>
               <Button size="large" type="primary" onClick={onFormViewer}>
                 + Add New Loan

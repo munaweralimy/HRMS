@@ -61,6 +61,16 @@ export default [
     parent: true,
   },
   {
+    component: 'EditAdvancement',
+    path: '/advancement/:id',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'advancement',
+    menu: 'Advancement',
+    icon: 'ApplicationsIcon',
+    parent: false,
+  },
+  {
     component: 'Employment',
     path: '/employment',
     title: titles.HRMS,
