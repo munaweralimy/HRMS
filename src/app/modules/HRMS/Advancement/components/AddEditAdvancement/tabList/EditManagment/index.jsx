@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
-import { Row, Col, Typography, Radio, Space, Rate, Card, Form } from 'antd';
+import React, { useState } from 'react';
+import { Row, Col, Typography, Radio, Space, Tag, Card, Form, Button } from 'antd';
 import StatsCard from '../../../../components/Stats';
 import EmployerStaus from '../../../../components/development';
-import { customIcon } from '../../../../components/SkillsRating';
+import { customIcon } from '../../../../components/Rating';
 import { RateField } from '../../../../components/FormElement';
-import { useForm } from 'react-hook-form';
+import Aptitudes from '../../../../components/Aptitudes';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { CloseCircleFilled } from '@ant-design/icons';
 let arr = [
   { percent: 65, jobRole: 'Front-end Developer' },
@@ -55,11 +56,23 @@ const jobRelated = [
     value2: 4,
   },
 ];
+const otherJobSkills = [
+  'Figma',
+  'Procreate',
+  'Adobe in Design',
+  'Microsoft PowerPoint',
+  'Microsoft Word',
+  'Microsoft Excel',
+];
 
 const EditManagment = () => {
   const { Title, Text } = Typography;
   const [ratingBox, setRatingBox] = useState([]);
-  const { control } = useForm();
+  const { control, errors } = useForm();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'employee_children',
+  });
   const setIndexing = (index = { target: { value: 2 } }) => {
     const checked = [];
     for (let i = 1; i <= index.target.value; i++) {
@@ -125,10 +138,10 @@ const EditManagment = () => {
       ))}
       <Col span={24}>
         <Space size={8} direction="vertical" className="w-100" align="start">
-          <Title level={4} className={`mb-0`}>
+          <Title level={4} className="mb-0">
             Job Releated Skills
           </Title>
-          <Text className="c-gray">Graphics Desinger</Text>
+          <Text className="c-white">Graphics Desinger</Text>
         </Space>
       </Col>
       <Col span={24}>
@@ -172,6 +185,33 @@ const EditManagment = () => {
                 </Card>
               </Col>
             ))}
+            <Col span={24}>
+              <Text className="c-white">Other Job Related Skills</Text>
+            </Col>
+            <Col span={24}>
+              <Row gutter={20}>
+                {otherJobSkills.map((value, index) => (
+                  <Col key={index}>
+                    <Tag className="info-tag w-100">{value}</Tag>
+                  </Col>
+                ))}
+              </Row>
+            </Col>
+            <Col span={24}>
+              <Row gutter={20} justify="end">
+                <Col>
+                  <Button className="green-btn w-100">Save Changes</Button>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={24}>
+              <Title level={4} className="mb-0">
+                Aptitudes
+              </Title>
+            </Col>
+            <Col span={24}>
+              <Aptitudes control={control} errors={errors} />
+            </Col>
           </Row>
         </Form>
       </Col>
