@@ -56,6 +56,7 @@ const jobRelated = [
     value2: 4,
   },
 ];
+
 const otherJobSkills = [
   'Figma',
   'Procreate',
@@ -64,32 +65,25 @@ const otherJobSkills = [
   'Microsoft Word',
   'Microsoft Excel',
 ];
-
+const initQ = {
+  name: '',
+  status: '',
+  department: '',
+  remarks: false,
+};
 const EditManagment = () => {
   const { Title, Text } = Typography;
-  const [ratingBox, setRatingBox] = useState([]);
   const { control, errors } = useForm();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'employee_children',
+    name: 'other skills',
   });
-  const setIndexing = (index = { target: { value: 2 } }) => {
-    const checked = [];
-    for (let i = 1; i <= index.target.value; i++) {
-      checked.push(<Radio value={index.target.value}></Radio>);
-    }
-    for (let j = index.target.value + 1; j <= 5; j++) {
-      checked.push(<Radio value={j}></Radio>);
-    }
-    return checked;
-  };
 
-  const createCheckBox = (e) => {
-    if (e) {
-      setRatingBox(setIndexing(e));
-    } else {
-      setRatingBox(setIndexing());
-    }
+  const onAdd = () => {
+    append(initQ);
+  };
+  const onRemove = (name, index) => {
+    remove(index);
   };
 
   return (
@@ -158,8 +152,15 @@ const EditManagment = () => {
                             {value.title}
                           </Title>
                         </Col>
-                        <Col>
-                          <CloseCircleFilled />
+                        <Col flex="40px">
+                          <Button
+                            type="link"
+                            size="large"
+                            className="cross-iconbtn"
+                            htmlType="button"
+                            icon={<CloseCircleFilled />}
+                            onClick={() => onRemove(item.name, index)}
+                          />
                         </Col>
                       </Row>
                     </Col>
@@ -200,7 +201,75 @@ const EditManagment = () => {
             <Col span={24}>
               <Row gutter={20} justify="end">
                 <Col>
-                  <Button className="green-btn w-100">Save Changes</Button>
+                  <Button type="primary" className="green-btn w-100">
+                    Save Changes
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={24}>
+              <Title level={4} className="mb-0">
+                Other Skills
+              </Title>
+            </Col>
+            <Col span={24}>
+              <Space direction="vertical" size={15} className="w-100">
+                {fields.map((item, index) => (
+                  <Card className="small-card8 b-black" bordered={false}>
+                    <Row gutter={[24, 30]} align="middle" justify="space-between">
+                      <Col span={24}>
+                        <Row gutter={[20, 30]} align="middle" justify="space-between">
+                          <Col>
+                            <Title level={4} className="mb-0">
+                              Rating Component
+                            </Title>
+                          </Col>
+                          <Col flex="40px">
+                            <Button
+                              type="link"
+                              size="large"
+                              className="cross-iconbtn"
+                              htmlType="button"
+                              icon={<CloseCircleFilled />}
+                              onClick={() => onRemove(item.name, index)}
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+                      <Col>
+                        <RateField
+                          fieldname="rate"
+                          label="Supervisor Assessment"
+                          control={control}
+                          initValue=""
+                          iProps={{ character: ({ index }) => customIcon[index + 1] }}
+                        />
+                      </Col>
+                      <Col>
+                        <RateField
+                          fieldname="rate"
+                          label="Staff Self Assessment"
+                          control={control}
+                          initValue=""
+                          iProps={{ character: ({ index }) => customIcon[index + 1] }}
+                        />
+                      </Col>
+                    </Row>
+                  </Card>
+                ))}
+              </Space>
+            </Col>
+            <Col span={24}>
+              <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={onAdd}>
+                + Add other Skills
+              </Button>
+            </Col>
+            <Col span={24}>
+              <Row gutter={20} justify="end">
+                <Col>
+                  <Button type="primary" className="green-btn w-100">
+                    Save Changes
+                  </Button>
                 </Col>
               </Row>
             </Col>
@@ -211,6 +280,15 @@ const EditManagment = () => {
             </Col>
             <Col span={24}>
               <Aptitudes control={control} errors={errors} />
+            </Col>
+            <Col span={24}>
+              <Row gutter={20} justify="end">
+                <Col>
+                  <Button type="primary" className="green-btn w-100">
+                    Save Changes
+                  </Button>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Form>
