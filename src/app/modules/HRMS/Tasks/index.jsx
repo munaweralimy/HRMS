@@ -226,5 +226,5 @@ export default (props) => {
         <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
       </Col>
     </Row>
-  );
-};
+    )
+}
