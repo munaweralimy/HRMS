@@ -18,6 +18,7 @@ import scholarship from '../../app/modules/Registry/Scholarships/ducks/reducers'
 import policy from '../../app/modules/HRMS/Policy/ducks/reducers';
 import tasks from '../../app/modules/HRMS/Tasks/ducks/reducers';
 import finance from '../../app/modules/HRMS/Finance/ducks/reducer';
+import advancement from '../../app/modules/HRMS/Advancement/dcuks/reducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   policy,
   tasks,
   finance,
+  advancement,
 });
 
 export default rootReducer;

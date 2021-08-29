@@ -292,6 +292,21 @@
   }
 }
 
+
+.uni-card-small-active {
+  height: 100%;
+  border-radius: 8px;
+  background-color: $blue;
+  color: #fff;
+  .ant-card-body {
+    padding: 20px;
+  }
+  .anticon {
+    font-size: 20px;
+  }
+}
+
+
 .figures-card {
   transition: 0.2s;
   .ant-card-body {
@@ -342,11 +357,11 @@
 
 .app-collapse {
   background-color: transparent;
-  width:100%;
+  width: 100%;
   .ant-collapse-item {
     border: 0;
-    >.ant-collapse-header {
-      padding:0 40px 30px 0;
+    > .ant-collapse-header {
+      padding: 0 40px 30px 0;
     }
     > .ant-collapse-content {
       .ant-collapse-content-box {
@@ -354,14 +369,14 @@
       }
     }
     &:last-child {
-      >.ant-collapse-header {
-        padding:0 40px 0 0;
+      > .ant-collapse-header {
+        padding: 0 40px 0 0;
       }
       > .ant-collapse-content {
         .ant-collapse-content-box {
           padding: 30px 0 0;
         }
-      } 
+      }
     }
     .ant-collapse-arrow svg {
       transform: rotate(90deg) !important;
@@ -381,12 +396,26 @@
   margin: -15px -15px 0px 0px;
   background-color: transparent !important;
   .ant-avatar {
-      width: 30px;
-      height: 30px;
-      background-color: $container-color;
-      border-radius: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: $container-color;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.nospace-card {
+  background: transparent;
+  width: 100%;
+  .ant-card-body {
+    padding: 0;
+  }
+}
+.black-nospace-card {
+  background-color: $black-shade;
+  width: 100%;
+  .ant-card-body {
+    padding: 14px;
   }
 }
