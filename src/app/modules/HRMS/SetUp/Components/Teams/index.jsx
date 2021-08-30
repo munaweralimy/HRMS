@@ -1,21 +1,33 @@
 import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddPopup from './Components/AddPopup';
 import Search from './Components/Search';
 import {CloseCircleFilled} from '@ant-design/icons';
+import {getTeamList} from '../../ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiresource } from '../../../../../../configs/constants';
+import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const dispatch = useDispatch();
+  const teamListData = useSelector((state) => state.setup.teamsListData);
+
+  useEffect(() => {
+    dispatch(getTeamList(page,pageSize));
+  }, []);
 
   const ListCol = [
     {
       title: 'Team Name',
-      dataIndex: 'TeamName',
-      key: 'TeamName',
-      sorted: (a, b) => a.TeamName - b.TeamName,
+      dataIndex: 'team_name',
+      key: 'team_name',
+      sorted: (a, b) => a.team_name - b.team_name,
     },
     {
       title: 'Company',
@@ -25,15 +37,15 @@ export default (props) => {
     },
     {
       title: 'Team Leader',
-      dataIndex: 'TeamLeader',
-      key: 'TeamLeader',
-      sorted: (a, b) => a.TeamLeader - b.TeamLeader,
+      dataIndex: 'team_leader_name',
+      key: 'team_leader_name',
+      sorted: (a, b) => a.team_leader_name - b.team_leader_name,
     },
     {
       title: 'Team Member',
-      dataIndex: 'TeamMember',
-      key: 'TeamMember',
-      sorted: (a, b) => a.TeamMember - b.TeamMember,
+      dataIndex: 'total_staff_count',
+      key: 'total_staff_count',
+      sorted: (a, b) => a.total_staff_count - b.total_staff_count,
       align: 'center',
     },
     {
@@ -43,90 +55,10 @@ export default (props) => {
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links">
+        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
           <CloseCircleFilled />
         </Button>
       ),
-    },
-  ];
-
-  const ListData = [
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
-    },
-    {
-      TeamName: 'Development',
-      company: 'Centre For Content Creation Sdn. Bhd.',
-      TeamLeader: 'Rose Chavez',
-      TeamMember: '20',
-      Action: 'Cancel'
     },
   ];
 
@@ -150,6 +82,21 @@ export default (props) => {
     onCancel: () => setVisible(false),
   };
 
+  const deleteRecord = async (record) => {
+    //props.setLoading(true);
+    let url = `${apiresource}/HRMS Teams/${record.name}`;
+    try {
+      await axios.delete(url);
+      message.success('Record Successfully Deleted');
+      //props.setLoading(false);
+      dispatch(getTeamList(page,pageSize));
+    } catch (e) {
+      //props.setLoading(false);
+      const { response } = e;
+      message.error('Something went wrong');
+    }
+  }
+
   const onClickRow = (record) => {
     return {
       onClick: () => { },
@@ -158,6 +105,11 @@ export default (props) => {
 
   const onSearch = (value) => {
     console.log('check values', value);
+  }
+
+  const onPageChange = (pg) => {
+    setPage(pg);
+    dispatch(getTeamList(pg,pageSize));
   }
 
   return (
@@ -172,9 +124,18 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={ListData}
-            pagination={true}
+            ListData={teamListData?.rows}
+            pagination={false}
           />
+          <div className='w-100 text-right mt-2'>
+              <Pagination
+                pageSize={pageSize}
+                current={page}
+                hideOnSinglePage={true}
+                onChange={onPageChange}
+                total={teamListData?.count}
+              />
+          </div>
         </Col>
       </Row>
       <Popup {...popup} />
