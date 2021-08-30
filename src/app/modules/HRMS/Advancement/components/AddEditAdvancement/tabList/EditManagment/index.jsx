@@ -1,13 +1,17 @@
-import React, { useMemo, useState } from 'react';
-import { Card, Row, Col, Typography, Rate, Radio, Space, Tag } from 'antd';
-import ButtonRadio from '../../../../../../../../assets/img/radio-on-button.svg';
-import SmallStatusCard from '../../../../../../../atoms/SmallStatusCard';
-
+import React, { useState } from 'react';
+import { Row, Col, Typography, Radio, Space, Tag, Card, Form, Button } from 'antd';
+import StatsCard from '../../../../components/Stats';
+import EmployerStaus from '../../../../components/development';
+import { customIcon } from '../../../../components/Rating';
+import { RateField } from '../../../../components/FormElement';
+import Aptitudes from '../../../../components/Aptitudes';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { CloseCircleFilled } from '@ant-design/icons';
 let arr = [
-  { perentage: '65%', text: 'Front-end Developer', status: 'success' },
-  { perentage: '48%', text: 'Project Manager', status: 'pending' },
-  { perentage: '42%', text: 'Sales', status: 'pending' },
-  { perentage: '37%', text: 'Animator', status: 'pending' },
+  { percent: 65, jobRole: 'Front-end Developer' },
+  { percent: 48, jobRole: 'Project Manager' },
+  { percent: 42, jobRole: 'Sales' },
+  { percent: 10, jobRole: 'Animator' },
 ];
 let tenure = [
   {
@@ -25,53 +29,67 @@ const eligibal = [
     status: 'Current Positon',
     iColor: 'info-tag w-100',
     title: 'Junior Executive',
-    text: '0-3 Years of Tenureship',
+    experience: '0-3 Years of Tenureship',
   },
   {
     status: 'Eligible',
     iColor: 'info-tag b-success w-100',
     title: 'Senior Executive',
-    text: '3-7 Years of Tenureship',
+    experience: '3-7 Years of Tenureship',
   },
 ];
 
+const jobRelated = [
+  {
+    title: 'Adobe Photoshop',
+    value1: 4,
+    value2: 5,
+  },
+  {
+    title: 'Adobe Illustrator',
+    value1: 3,
+    value2: 4,
+  },
+  {
+    title: 'Adobe XD',
+    value1: 2,
+    value2: 4,
+  },
+];
+
+const otherJobSkills = [
+  'Figma',
+  'Procreate',
+  'Adobe in Design',
+  'Microsoft PowerPoint',
+  'Microsoft Word',
+  'Microsoft Excel',
+];
+const initQ = {
+  name: '',
+  status: '',
+  department: '',
+  remarks: false,
+};
 const EditManagment = () => {
   const { Title, Text } = Typography;
-  const [ratingBox, setRatingBox] = useState([]);
+  const { control, errors } = useForm();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'other skills',
+  });
 
-  const setIndexing = (index = { target: { value: 2 } }) => {
-    const checked = [];
-    for (let i = 1; i <= index.target.value; i++) {
-      checked.push(<Radio value={index.target.value}></Radio>);
-    }
-    for (let j = index.target.value + 1; j <= 5; j++) {
-      checked.push(<Radio value={j}></Radio>);
-    }
-    return checked;
+  const onAdd = () => {
+    append(initQ);
   };
-
-  const createCheckBox = (e) => {
-    if (e) {
-      setRatingBox(setIndexing(e));
-    } else {
-      setRatingBox(setIndexing());
-    }
+  const onRemove = (name, index) => {
+    remove(index);
   };
 
   return (
-    <Row gutter={[24, 30]} align="bottom">
+    <Row gutter={[24, 30]}>
       <Col span={24}>
-        <Card className="small-card8 b-black" bordered={false}>
-          <Space size={5} direction="vertical" className="w-100" align="center">
-            <Title level={2} className="mb-0 c-success">
-              76%
-            </Title>
-            <Text className="c-gray">Fit Index</Text>
-            <Title level={4} className="mb-0 c-white">
-              Graphic Designer
-            </Title>
-          </Space>
-        </Card>
+        <StatsCard mainHeading={true} percent={76} jobRole="Graphic Designer" />
       </Col>
       <Col span={24}>
         <Title level={4} className="mb-0">
@@ -79,15 +97,8 @@ const EditManagment = () => {
         </Title>
       </Col>
       {arr.map((value, key) => (
-        <Col span={6} key={key}>
-          <Card className="small-card8 b-black" bordered={false}>
-            <Space size={8} direction="vertical" className="w-100" align="center">
-              <Title level={3} className={`mb-0 ${value.status === 'success' ? 'c-success' : 'c-pending'}`}>
-                {value.perentage}
-              </Title>
-              <Text className="c-gray">{value.text}</Text>
-            </Space>
-          </Card>
+        <Col flex="1 0 150px" key={key}>
+          <StatsCard percent={value.percent} jobRole={value.jobRole} />
         </Col>
       ))}
       <Col span={24}>
@@ -111,27 +122,176 @@ const EditManagment = () => {
       </Col>
       {eligibal.map((value, key) => (
         <Col span={12} key={key}>
-          <Card className="small-card8 b-black" bordered={false}>
-            <Space size={8} direction="vertical" className="w-100" align="center">
-              <Tag className={value.iColor}>{value.status}</Tag>
-              <Title level={5} className={`mb-0 c-white`}>
-                {value.title}
-              </Title>
-              <Text className="c-gray">{value.text}</Text>
-            </Space>
-          </Card>
+          <EmployerStaus
+            iColor={value.iColor}
+            status={value.status}
+            title={value.title}
+            experience={value.experience}
+          />
         </Col>
       ))}
       <Col span={24}>
         <Space size={8} direction="vertical" className="w-100" align="start">
-          <Title level={4} className={`mb-0`}>
+          <Title level={4} className="mb-0">
             Job Releated Skills
           </Title>
-          <Text className="c-gray">Graphics Desinger</Text>
+          <Text className="c-white">Graphics Desinger</Text>
         </Space>
       </Col>
       <Col span={24}>
-        <Radio.Group onChange={createCheckBox}>{ratingBox.length > 0 ? ratingBox : setIndexing()}</Radio.Group>
+        <Form layout="vertical">
+          <Row gutter={[24, 30]}>
+            {jobRelated.map((value, index) => (
+              <Col span={24} key={index}>
+                <Card className="small-card8 b-black" bordered={false}>
+                  <Row gutter={[24, 30]} align="middle" justify="space-between">
+                    <Col span={24}>
+                      <Row gutter={[20, 30]} align="middle" justify="space-between">
+                        <Col>
+                          <Title level={4} className="mb-0">
+                            {value.title}
+                          </Title>
+                        </Col>
+                        <Col flex="40px">
+                          <Button
+                            type="link"
+                            size="large"
+                            className="cross-iconbtn"
+                            htmlType="button"
+                            icon={<CloseCircleFilled />}
+                            onClick={() => onRemove(item.name, index)}
+                          />
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col>
+                      <RateField
+                        fieldname="rate"
+                        label="Supervisor Assessment"
+                        control={control}
+                        initValue={value.value1}
+                        iProps={{ character: ({ index }) => customIcon[index + 1] }}
+                      />
+                    </Col>
+                    <Col>
+                      <RateField
+                        fieldname="rate"
+                        label="Staff Self Assessment"
+                        control={control}
+                        initValue={value.value2}
+                        iProps={{ character: ({ index }) => customIcon[index + 1] }}
+                      />
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+            ))}
+            <Col span={24}>
+              <Text className="c-white">Other Job Related Skills</Text>
+            </Col>
+            <Col span={24}>
+              <Row gutter={20}>
+                {otherJobSkills.map((value, index) => (
+                  <Col key={index}>
+                    <Tag className="info-tag w-100">{value}</Tag>
+                  </Col>
+                ))}
+              </Row>
+            </Col>
+            <Col span={24}>
+              <Row gutter={20} justify="end">
+                <Col>
+                  <Button type="primary" className="green-btn w-100">
+                    Save Changes
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={24}>
+              <Title level={4} className="mb-0">
+                Other Skills
+              </Title>
+            </Col>
+            <Col span={24}>
+              <Space direction="vertical" size={15} className="w-100">
+                {fields.map((item, index) => (
+                  <Card className="small-card8 b-black" bordered={false}>
+                    <Row gutter={[24, 30]} align="middle" justify="space-between">
+                      <Col span={24}>
+                        <Row gutter={[20, 30]} align="middle" justify="space-between">
+                          <Col>
+                            <Title level={4} className="mb-0">
+                              Rating Component
+                            </Title>
+                          </Col>
+                          <Col flex="40px">
+                            <Button
+                              type="link"
+                              size="large"
+                              className="cross-iconbtn"
+                              htmlType="button"
+                              icon={<CloseCircleFilled />}
+                              onClick={() => onRemove(item.name, index)}
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+                      <Col>
+                        <RateField
+                          fieldname="rate"
+                          label="Supervisor Assessment"
+                          control={control}
+                          initValue=""
+                          iProps={{ character: ({ index }) => customIcon[index + 1] }}
+                        />
+                      </Col>
+                      <Col>
+                        <RateField
+                          fieldname="rate"
+                          label="Staff Self Assessment"
+                          control={control}
+                          initValue=""
+                          iProps={{ character: ({ index }) => customIcon[index + 1] }}
+                        />
+                      </Col>
+                    </Row>
+                  </Card>
+                ))}
+              </Space>
+            </Col>
+            <Col span={24}>
+              <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={onAdd}>
+                + Add other Skills
+              </Button>
+            </Col>
+            <Col span={24}>
+              <Row gutter={20} justify="end">
+                <Col>
+                  <Button type="primary" className="green-btn w-100">
+                    Save Changes
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={24}>
+              <Title level={4} className="mb-0">
+                Aptitudes
+              </Title>
+            </Col>
+            <Col span={24}>
+              <Aptitudes control={control} errors={errors} />
+            </Col>
+            <Col span={24}>
+              <Row gutter={20} justify="end">
+                <Col>
+                  <Button type="primary" className="green-btn w-100">
+                    Save Changes
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Form>
       </Col>
     </Row>
   );

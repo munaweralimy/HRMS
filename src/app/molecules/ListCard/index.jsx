@@ -30,7 +30,7 @@ export default (props) => {
   };
 
   return (
-    <Card bordered={false} className={`uni-card ${blackCard ? blackCard : ''}  ${listClass ? listClass : ''}`}>
+    <Card bordered={false} className={`uni-card ${listClass ? listClass : ''}`}>
       <Row gutter={[30, 20]}>
         {title && (
           <Col span={24}>
