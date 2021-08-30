@@ -1,47 +1,57 @@
 import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, message } from 'antd';
+import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddPopup from './Components/AddPopup';
 import Search from './Components/Search';
+import {CloseCircleFilled} from '@ant-design/icons';
+import {getHolidaysList} from '../../ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiresource } from '../../../../../../configs/constants';
+import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const dispatch = useDispatch();
+  const holidaysListData = useSelector((state) => state.setup.holidaysListData);
+
+  useEffect(() => {
+    dispatch(getHolidaysList(page,pageSize));
+  }, []);
 
   const ListCol = [
     {
-      title: 'Job Title',
-      dataIndex: 'jobtitle',
-      key: 'jobtitle',
-      sorted: (a, b) => a.jobtitle - b.jobtitle,
+      title: 'Holiday Name',
+      dataIndex: 'holiday_name',
+      key: 'holiday_name',
+      sorted: (a, b) => a.holiday_name - b.holiday_name,
     },
     {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
+      title: 'Date',
+      dataIndex: 'holiday_date',
+      key: 'holiday_date',
+      sorted: (a, b) => a.holiday_date - b.holiday_date,
     },
     {
-      title: 'Date Open',
-      dataIndex: 'dateopen',
-      key: 'dateopen',
-      sorted: (a, b) => a.dateopen - b.dateopen,
+      title: 'Note',
+      dataIndex: 'note',
+      key: 'note',
+      sorted: (a, b) => a.note - b.note,
     },
     {
-      title: 'Suitable Application',
-      dataIndex: 'suitableappalication',
-      key: 'suitableappalication',
-      sorted: (a, b) => a.suitableappalication - b.suitableappalication,
+      title: 'Action',
+      dataIndex: 'Action',
+      key: 'Action',
+      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
-    },
-  ];
-  const ListData = [
-    {
-      jobtitle: 'Graphic Designer',
-      company: 'Centre for Content Creation Sdn. Bhd.',
-      dateopen: '15th February 2021',
-      suitableappalication: '3',
+      render: (text, record) => (
+        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+          <CloseCircleFilled />
+        </Button>
+      ),
     },
   ];
 
@@ -65,6 +75,21 @@ export default (props) => {
     onCancel: () => setVisible(false),
   };
 
+  const deleteRecord = async (record) => {
+    //props.setLoading(true);
+    let url = `${apiresource}/HRMS Teams/${record.name}`;
+    try {
+      await axios.delete(url);
+      message.success('Record Successfully Deleted');
+      //props.setLoading(false);
+      dispatch(getHolidaysList(page,pageSize));
+    } catch (e) {
+      //props.setLoading(false);
+      const { response } = e;
+      message.error('Something went wrong');
+    }
+  }
+
   const onClickRow = (record) => {
     return {
       onClick: () => { },
@@ -75,11 +100,16 @@ export default (props) => {
     console.log('check values', value);
   }
 
+  const onPageChange = (pg) => {
+    setPage(pg);
+    dispatch(getHolidaysList(pg,pageSize));
+  }
+
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Holidays" btnList={btnList} />
+          <HeadingChip title="Teams" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard
@@ -87,9 +117,18 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={ListData}
-            pagination={true}
+            ListData={holidaysListData?.rows}
+            pagination={false}
           />
+          <div className='w-100 text-right mt-2'>
+              <Pagination
+                pageSize={pageSize}
+                current={page}
+                hideOnSinglePage={true}
+                onChange={onPageChange}
+                total={holidaysListData?.count}
+              />
+          </div>
         </Col>
       </Row>
       <Popup {...popup} />
