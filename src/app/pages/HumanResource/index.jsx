@@ -3,6 +3,7 @@ import Dashboard from '../../templates/Dashboard';
 import Policy from '../../modules/HRMS/Policy';
 import Tasks from '../../modules/HRMS/Tasks';
 import Attendance from '../../modules/HRMS/Attendance';
+import EmpAttendanceDetail from '../../modules/HRMS/Attendance/EmpAttendanceDetail';
 import TaskDetail from '../../modules/HRMS/Tasks/TaskDetail';
 import Advancement from '../../modules/HRMS/Advancement';
 import EditAdvancement from '../../modules/HRMS/Advancement/EditAdvancement';
@@ -26,7 +27,8 @@ const Components = {
   Finance,
   EditFinance,
   Attendance,
-  SetUp
+  EmpAttendanceDetail,
+  SetUp,
 };
 
 export default (props) => {
