@@ -1,48 +1,75 @@
 import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddPopup from './Components/AddPopup';
 import Search from './Components/Search';
 import {CloseCircleFilled} from '@ant-design/icons';
+import {getLeaveTypesList} from '../../ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiresource } from '../../../../../../configs/constants';
+import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const dispatch = useDispatch();
+  const leaveTypesListData = useSelector((state) => state.setup.leaveTypesListData);
+
+  useEffect(() => {
+    dispatch(getLeaveTypesList(page,pageSize));
+  }, []);
+
+  const deleteRecord = async (record) => {
+    //props.setLoading(true);
+    let url = `${apiresource}/HRMS Leave Type/${record.name}`;
+    try {
+      await axios.delete(url);
+      message.success('Record Successfully Deleted');
+      //props.setLoading(false);
+      dispatch(getLeaveTypesList(page,pageSize));
+    } catch (e) {
+      //props.setLoading(false);
+      const { response } = e;
+      message.error('Something went wrong');
+    }
+  }
 
   const ListCol = [
     {
       title: 'Leave Type',
-      dataIndex: 'LeaveType',
-      key: 'LeaveType',
-      sorted: (a, b) => a.LeaveType - b.LeaveType,
+      dataIndex: 'leave_type',
+      key: 'leave_type',
+      sorted: (a, b) => a.leave_type - b.leave_type,
     },
     {
       title: 'Approval Level',
-      dataIndex: 'ApprovalLevel',
-      key: 'ApprovalLevel',
-      sorted: (a, b) => a.ApprovalLevel - b.ApprovalLevel,
+      dataIndex: 'approval_level',
+      key: 'approval_level',
+      sorted: (a, b) => a.approval_level - b.approval_level,
       align: 'center',
     },
     {
       title: 'Contract Type',
-      dataIndex: 'ContractType',
-      key: 'ContractType',
-      sorted: (a, b) => a.ContractType - b.ContractType,
+      dataIndex: 'contract_type',
+      key: 'contract_type',
+      sorted: (a, b) => a.contract_type - b.contract_type,
       align: 'center',
     },
     {
       title: 'Gender',
-      dataIndex: 'Gender',
-      key: 'Gender',
-      sorted: (a, b) => a.Gender - b.Gender,
+      dataIndex: 'gender',
+      key: 'gender',
+      sorted: (a, b) => a.gender - b.gender,
       align: 'center',
     },
     {
       title: 'Marital Status',
-      dataIndex: 'MaritalStatus',
-      key: 'MaritalStatus',
-      sorted: (a, b) => a.MaritalStatus - b.MaritalStatus,
+      dataIndex: 'marital_status',
+      key: 'marital_status',
+      sorted: (a, b) => a.marital_status - b.marital_status,
       align: 'center',
     },
     {
@@ -52,61 +79,10 @@ export default (props) => {
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links">
+        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
           <CloseCircleFilled />
         </Button>
       ),
-    },
-  ];
-
-  const ListData = [
-    {
-      LeaveType: 'Annual Leave',
-      ApprovalLevel: '2',
-      ContractType: 'Permanent',
-      Gender: 'All',
-      MaritalStatus: 'All',
-      Action: 'Cancel'
-    },
-    {
-      LeaveType: 'Annual Leave',
-      ApprovalLevel: '2',
-      ContractType: 'Permanent',
-      Gender: 'All',
-      MaritalStatus: 'All',
-      Action: 'Cancel'
-    },
-    {
-      LeaveType: 'Annual Leave',
-      ApprovalLevel: '2',
-      ContractType: 'Permanent',
-      Gender: 'All',
-      MaritalStatus: 'All',
-      Action: 'Cancel'
-    },
-    {
-      LeaveType: 'Annual Leave',
-      ApprovalLevel: '2',
-      ContractType: 'Permanent',
-      Gender: 'All',
-      MaritalStatus: 'All',
-      Action: 'Cancel'
-    },
-    {
-      LeaveType: 'Annual Leave',
-      ApprovalLevel: '2',
-      ContractType: 'Permanent',
-      Gender: 'All',
-      MaritalStatus: 'All',
-      Action: 'Cancel'
-    },
-    {
-      LeaveType: 'Annual Leave',
-      ApprovalLevel: '2',
-      ContractType: 'Permanent',
-      Gender: 'All',
-      MaritalStatus: 'All',
-      Action: 'Cancel'
     },
   ];
 
@@ -140,6 +116,11 @@ export default (props) => {
     console.log('check values', value);
   }
 
+  const onPageChange = (pg) => {
+    setPage(pg);
+    dispatch(getLeaveTypesList(pg,pageSize));
+  }
+
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -147,14 +128,23 @@ export default (props) => {
           <HeadingChip title="Leave Types" btnList={btnList} />
         </Col>
         <Col span={24}>
-          <ListCard
+        <ListCard
             onRow={onClickRow}
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={ListData}
-            pagination={true}
+            ListData={leaveTypesListData?.rows}
+            pagination={false}
           />
+          <div className='w-100 text-right mt-2'>
+              <Pagination
+                pageSize={pageSize}
+                current={page}
+                hideOnSinglePage={true}
+                onChange={onPageChange}
+                total={leaveTypesListData?.count}
+              />
+          </div>
         </Col>
       </Row>
       <Popup {...popup} />

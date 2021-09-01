@@ -1,47 +1,46 @@
 import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, message } from 'antd';
+import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddPopup from './Components/AddPopup';
 import Search from './Components/Search';
+import {CloseCircleFilled} from '@ant-design/icons';
+import {getWarningLetterList} from '../../ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiresource } from '../../../../../../configs/constants';
+import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const dispatch = useDispatch();
+  const warningLetterListData = useSelector((state) => state.setup.warningLetterListData);
+
+  useEffect(() => {
+    dispatch(getWarningLetterList(page,pageSize));
+  }, []);
 
   const ListCol = [
     {
-      title: 'Job Title',
-      dataIndex: 'jobtitle',
-      key: 'jobtitle',
-      sorted: (a, b) => a.jobtitle - b.jobtitle,
+      title: 'Warning Letter Name',
+      dataIndex: 'name',
+      key: 'name',
+      sorted: (a, b) => a.name - b.name,
     },
     {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
-    },
-    {
-      title: 'Date Open',
-      dataIndex: 'dateopen',
-      key: 'dateopen',
-      sorted: (a, b) => a.dateopen - b.dateopen,
-    },
-    {
-      title: 'Suitable Application',
-      dataIndex: 'suitableappalication',
-      key: 'suitableappalication',
-      sorted: (a, b) => a.suitableappalication - b.suitableappalication,
+      title: 'Action',
+      dataIndex: 'Action',
+      key: 'Action',
+      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
-    },
-  ];
-  const ListData = [
-    {
-      jobtitle: 'Graphic Designer',
-      company: 'Centre for Content Creation Sdn. Bhd.',
-      dateopen: '15th February 2021',
-      suitableappalication: '3',
+      width: '100px',
+      render: (text, record) => (
+        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+          <CloseCircleFilled />
+        </Button>
+      ),
     },
   ];
 
@@ -65,6 +64,21 @@ export default (props) => {
     onCancel: () => setVisible(false),
   };
 
+  const deleteRecord = async (record) => {
+    //props.setLoading(true);
+    let url = `${apiresource}/HRMS Teams/${record.name}`;
+    try {
+      await axios.delete(url);
+      message.success('Record Successfully Deleted');
+      //props.setLoading(false);
+      dispatch(getWarningLetterList(page,pageSize));
+    } catch (e) {
+      //props.setLoading(false);
+      const { response } = e;
+      message.error('Something went wrong');
+    }
+  }
+
   const onClickRow = (record) => {
     return {
       onClick: () => { },
@@ -75,11 +89,16 @@ export default (props) => {
     console.log('check values', value);
   }
 
+  const onPageChange = (pg) => {
+    setPage(pg);
+    dispatch(getWarningLetterList(pg,pageSize));
+  }
+
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Warning Letter" btnList={btnList} />
+          <HeadingChip title="Teams" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard
@@ -87,9 +106,18 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={ListData}
-            pagination={true}
+            ListData={warningLetterListData?.rows}
+            pagination={false}
           />
+          <div className='w-100 text-right mt-2'>
+              <Pagination
+                pageSize={pageSize}
+                current={page}
+                hideOnSinglePage={true}
+                onChange={onPageChange}
+                total={warningLetterListData?.count}
+              />
+          </div>
         </Col>
       </Row>
       <Popup {...popup} />
