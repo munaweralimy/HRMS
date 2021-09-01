@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Tabs, Typography } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import Search from '../Search';
+import Search from '../Search/OverallSearch';
 import ListCard from '../../../../../molecules/ListCard';
 import moment from 'moment';
 
@@ -53,20 +53,12 @@ const ListCol = [
   },
 ];
 
-const listData = [
-  {
-    attendance_date: 'asdf',
-    Attendance_date_out: 'asdg',
-    time_in: 'asdfafd',
-    time_out: 'asdf',
-    total_work_hour: 'asfdasdf',
-    status: 'Present',
-  },
-];
 export default (props) => {
+  const { listData } = props;
   const onSearch = (value) => {
     console.log('check values', value);
   };
+
   return (
     <Card bordered={false} className="uni-card">
       <ListCard

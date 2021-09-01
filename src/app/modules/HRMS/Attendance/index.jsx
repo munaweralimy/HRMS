@@ -4,60 +4,53 @@ import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  getOverallTasks,
-  getOverallTasksWithStatus,
-  getTeamTasksWithStatus,
-  getTeamTasks,
-  emptyOverall,
-} from './ducks/actions';
-import Search from './components/Search';
+import { getOverallAttendance, getOverallAttendanceList, getTeamAttendance, getMyAttendance } from './ducks/actions';
+import Search from './components/Search/OverallSearch';
+import TeamSearch from './components/Search/TeamSearch';
 import MyAttendance from './components/MyAttendance';
-const filtersOverall = [
-  {
-    label: 'Pending',
-    value: 'Pending',
-  },
-  {
-    label: 'History',
-    value: 'History',
-  },
-];
+import moment from 'moment';
 
 const ListColOverall = [
   {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
+    title: 'Date In',
+    dataIndex: 'attendance_date',
+    key: 'attendance_date',
+    render: (text) => (text ? moment(text).format('DD/MM/YYYY') : '-'),
     sorter: true,
-    width: 120,
+  },
+  {
+    title: 'Date Out',
+    dataIndex: 'Attendance_date_out',
+    key: 'Attendance_date_out',
+    render: (text) => (text ? moment(text).format('DD/MM/YYYY') : '-'),
+    sorter: true,
   },
   {
     title: 'ID',
-    dataIndex: 'employee_id',
-    key: 'employee_id',
+    dataIndex: 'employee',
+    key: 'employee',
     sorter: true,
-    width: 150,
   },
   {
     title: 'Name',
     dataIndex: 'employee_name',
     key: 'employee_name',
     sorter: true,
+    ellipse: true,
   },
   {
-    title: 'Project',
-    dataIndex: 'project',
-    key: 'project',
+    title: 'In',
+    dataIndex: 'time_in',
+    key: 'time_in',
     sorter: true,
-    width: 100,
+    render: (text) => moment(text).format('hh:mm:ss A'),
   },
   {
-    title: 'Hours',
-    dataIndex: 'hours',
-    key: 'hours',
+    title: 'Out',
+    dataIndex: 'time_out',
+    key: 'time_out',
     sorter: true,
-    width: 100,
+    render: (text) => moment(text).format('hh:mm:ss A'),
   },
   {
     title: 'Company',
@@ -73,17 +66,21 @@ const ListColOverall = [
   },
   {
     title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'm_status',
+    key: 'm_status',
     align: 'center',
-    width: 140,
     render: (text) => {
       let clname = '';
-      if (text == 'Approved') {
+      if (text == 'On Duty') {
         clname = 'c-success';
-      } else if (text == 'Rejected') {
+      } else if (text == 'Absent') {
         clname = 'c-error';
-      } else if (text == 'Pending') {
+      } else if (
+        text == 'Late Clock In' ||
+        text == 'Late Clock Out' ||
+        text == 'Early Clock In' ||
+        text == 'Early Clock Out'
+      ) {
         clname = 'c-pending';
       }
       return <span className={`SentanceCase ${clname}`}>{text}</span>;
@@ -93,15 +90,23 @@ const ListColOverall = [
 
 const ListColTeams = [
   {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
+    title: 'Date In',
+    dataIndex: 'attendance_date',
+    key: 'attendance_date',
+    render: (text) => (text ? moment(text).format('DD/MM/YYYY') : '-'),
+    sorter: true,
+  },
+  {
+    title: 'Date Out',
+    dataIndex: 'Attendance_date_out',
+    key: 'Attendance_date_out',
+    render: (text) => (text ? moment(text).format('DD/MM/YYYY') : '-'),
     sorter: true,
   },
   {
     title: 'ID',
-    dataIndex: 'employee_id',
-    key: 'employee_id',
+    dataIndex: 'employee',
+    key: 'employee',
     sorter: true,
   },
   {
@@ -109,24 +114,21 @@ const ListColTeams = [
     dataIndex: 'employee_name',
     key: 'employee_name',
     sorter: true,
+    ellipse: true,
   },
   {
-    title: 'Project',
-    dataIndex: 'project',
-    key: 'project',
+    title: 'In',
+    dataIndex: 'time_in',
+    key: 'time_in',
     sorter: true,
+    render: (text) => moment(text).format('hh:mm:ss A'),
   },
   {
-    title: 'Hours',
-    dataIndex: 'hours',
-    key: 'hours',
+    title: 'Out',
+    dataIndex: 'time_out',
+    key: 'time_out',
     sorter: true,
-  },
-  {
-    title: 'Task',
-    dataIndex: 'task',
-    key: 'task',
-    sorter: true,
+    render: (text) => moment(text).format('hh:mm:ss A'),
   },
   {
     title: 'Status',
@@ -151,25 +153,26 @@ export default (props) => {
   const dispatch = useDispatch();
   const il8n = useTranslate();
   const { t } = il8n;
-  const overallData = useSelector((state) => state.tasks.overallTaskData);
-  const overallDataList = useSelector((state) => state.tasks.overallTaskDataWithStatus);
-  const teamTaskData = useSelector((state) => state.tasks.teamTaskData);
-  const teamTaskDataList = useSelector((state) => state.tasks.teamTaskDataWithStatus);
-
+  let empID = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].name;
+  const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
+  const overallAttendanceDataList = useSelector((state) => state.attendance.overallAttendanceList);
+  const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
+  const myAttendance = useSelector((state) => state.attendance.myAttendancea);
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
-    // dispatch(emptyOverall());
+    console.log({ page, limit, sort, sortby });
     if (type == 'list') {
-      dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby));
+      dispatch(getOverallAttendanceList(page, limit, sort, (sortby = 'creation')));
     } else {
-      dispatch(getOverallTasks(page, limit, sort, sortby));
+      dispatch(getOverallAttendance(page, limit, sort, (sortby = 'creation')));
+      // dispatch(getMyAttendance(empID));
     }
   };
 
   const onTeamAction = (filter, page, limit, sort, sortby, type, searching) => {
     if (type == 'list') {
-      dispatch(getTeamTasksWithStatus('Development', filter, page, limit, sort, sortby));
+      // dispatch(getTeamTasksWithStatus('TM000367', filter, page, limit, sort, sortby));
     } else {
-      dispatch(getTeamTasks('Development', page, limit, sort, sortby));
+      dispatch(getTeamAttendance('TM000367', page, limit, sort, (sortby = 'creation')));
     }
   };
 
@@ -177,40 +180,32 @@ export default (props) => {
     {
       title: 'Overall Attendance',
       key: 'overall',
-      count: overallData?.count || overallDataList?.count || 0,
+      count: overallAttendanceData?.count,
       Comp: MultiView,
       iProps: {
-        carddata: overallData?.rows || [],
-        cardcount: overallData?.count || 0,
-        listdata: overallDataList?.rows || [],
-        listcount: overallDataList?.count || 0,
+        carddata: overallAttendanceData?.rows || [],
+        cardcount: overallAttendanceData?.count || 0,
+        listdata: overallAttendanceDataList?.rows || [],
+        listcount: overallAttendanceDataList?.count || 0,
         listCol: ListColOverall,
         link: '/attendance/',
-        filters: filtersOverall,
+        Search: Search,
         updateApi: onOverallAction,
-        searchDropdowns: {
-          field1: [{ label: 'All', value: 'All' }],
-          field2: [{ label: 'All', value: 'All' }],
-          field3: [{ label: 'All', value: 'All' }],
-        },
       },
     },
     {
       title: 'Team Attendance',
       key: 'team',
-      count: teamTaskData?.count || teamTaskDataList?.count || 0,
+      count: teamAttendance?.count,
       iProps: {
-        carddata: teamTaskData?.rows || [],
-        cardcount: teamTaskData?.count || 0,
-        listdata: teamTaskDataList?.rows || [],
-        listcount: teamTaskDataList?.count || 0,
+        carddata: teamAttendance?.rows || [],
+        cardcount: teamAttendance?.count || 0,
+        listdata: teamAttendance?.rows || [],
+        listcount: teamAttendance?.count || 0,
         listCol: ListColTeams,
         link: '/attendance/',
-        filters: filtersOverall,
+        Search: TeamSearch,
         updateApi: onTeamAction,
-        searchDropdowns: {
-          field1: [{ label: 'All', value: 'All' }],
-        },
       },
       Comp: MultiView,
     },
