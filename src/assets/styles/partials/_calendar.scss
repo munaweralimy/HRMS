@@ -1,13 +1,13 @@
 .custom-calendar {
 
-    .ant-picker-calendar-header {
-        display: none;
-    }
+    // .ant-picker-calendar-header {
+    //     display: none;
+    // }
 
     .ant-picker-panel {
         .ant-picker-calendar-date {
             margin: 2.5px;
-            padding: 10px 5px;
+            padding: 10px 0;
             border-top: 0;
             border-radius: 8px;
             text-align: center;
@@ -16,6 +16,14 @@
             vertical-align: middle;
             color: #fff;
         }
+        .ant-picker-calendar-date-today {
+            border-top: 1px solid;
+        }
+        .ant-picker-calendar-date-value {
+            line-height: 1;
+            margin-bottom: 4px;
+            
+        }
         .ant-picker-cell {
             .ant-picker-calendar-date {
                 color: transparent;
@@ -23,9 +31,12 @@
         }
         .ant-picker-calendar-date-content {
             display: none;
-            height: 0;
-            line-height: 1;
+            height: auto;
+            line-height: 6px;
             text-align: center;
+            .ant-badge-status-text {
+                margin:0;
+            }
         }
         .ant-picker-cell-selected 
         .ant-picker-calendar-date 
@@ -42,6 +53,9 @@
             color: #fff;
         }
         .ant-picker-cell-in-view {
+            .ant-picker-calendar-date-content {
+                display: block;
+            }
             .ant-picker-calendar-date {
                 color: #fff;
             }

@@ -26,7 +26,7 @@ export default (props) => {
             tab={
                 <Space size={20}>
                     <Title className='tab-header mb-0' level={4}>{title}</Title>
-                    {count && count != 0 && <Badge count={count} className="tab-badge" />}
+                    {count ? <Badge count={count} className="tab-badge" /> : null}
                 </Space>
             }
             key={key} 
