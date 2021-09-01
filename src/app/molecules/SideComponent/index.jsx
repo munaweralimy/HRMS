@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Typography, Space, Avatar, Divider, Tag } from 'antd';
+import { Col, Typography, Space, Avatar, Divider, Tag, Radio } from 'antd';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../configs/constantData';
 
@@ -154,7 +154,7 @@ export default (props) => {
                 >
                   <Text className={`c-gray ${!isHDScreen ? 'smallFont12' : ''}`}>{item.title}</Text>
                   <Title level={item.level ? item.level : 5} className={`mb-0 c-default ${isHDScreen ? 'font-500' : ''}`}>
-                    {item.value}
+                    {Array.isArray(item.value) ? (item.value).join(', ') : item.value}
                   </Title>
                 </Space>
               </Col>
@@ -209,6 +209,35 @@ export default (props) => {
               )}
             </>
           )}
+          {item.type == 'radios' && (
+          <>
+          <Col span={24}>
+            <Radio.Group
+              size="large"
+              className="radio-options"
+              buttonStyle="solid"
+              options={item?.value && item?.value.map(x => ({label: x, value: x}))}
+              onChange={item.onChange}
+              value={item.current}
+              optionType="button"
+            />
+            </Col>
+            {!item?.noDivider && (
+                <>
+                {isHDScreen ? 
+                <Col span={24}>
+                  <Divider className="m-0" />
+                </Col>
+                :
+                !item.noLine ? 
+                  <Col span={24}>
+                    <Divider className="m-0" />
+                  </Col>
+                  :
+                  ''} 
+                </>
+              )}
+          </>)}
         </>
     )
 }
