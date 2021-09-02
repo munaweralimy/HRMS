@@ -14,6 +14,8 @@ import TeamDetails from '../../modules/HRMS/Employment/TeamDetails';
 import Finance from '../../modules/HRMS/Finance';
 import EditFinance from '../../modules/HRMS/Finance/EditFinance';
 import SetUp from '../../modules/HRMS/SetUp';
+import Requests from '../../modules/HRMS/Requests';
+
 const Components = {
   Advancement,
   EditAdvancement,
@@ -28,6 +30,8 @@ const Components = {
   EditFinance,
   Attendance,
   EmpAttendanceDetail,
+  SetUp,
+  Requests,
   SetUp,
 };
 

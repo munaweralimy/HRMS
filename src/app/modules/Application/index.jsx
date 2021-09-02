@@ -7,6 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../configs/constantData';
 import Dashboard from './Dashboard';
 import PendingRequests from './PendingRequests';
+import RequestList from '../HRMS/Requests/RequestList';
 
 const { Title } = Typography;
 
@@ -21,6 +22,9 @@ export default (props) => {
        <Row gutter={[20, 50]}>
            <Col span={24}>
                <Dashboard />
+           </Col>
+           <Col span={24}>
+               <RequestList />
            </Col>
            <Col span={24}>
                 <PendingRequests />

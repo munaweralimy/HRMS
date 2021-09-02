@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Radio, Typography, Space } from 'antd';
+import { Row, Col, Card, Table, Radio, Typography, Space, Button } from 'antd';
 
 const { Text, Title } = Typography;
 
@@ -21,6 +21,10 @@ export default (props) => {
     onChange,
     listClass,
     blackCard,
+    extraBtn,
+    extraAction,
+    btnClass,
+    headclass
   } = props;
 
   const searchProps = {
@@ -34,7 +38,7 @@ export default (props) => {
       <Row gutter={[30, 20]}>
         {title && (
           <Col span={24}>
-            <Title level={4} className="c-default mb-0">
+            <Title level={4} className={`c-default mb-0 ${headclass ? headclass : ''}`}>
               {title}
             </Title>
           </Col>
@@ -67,7 +71,7 @@ export default (props) => {
         )}
         <Col span={24}>
           <Table
-            scroll={{ x: 1000 }}
+            scroll={{ x: props.scrolling ? props.scrolling : 1000 }}
             onRow={onRow}
             className={`custom-table ${props.classes ? props.classes : ''}`}
             bordered={false}
@@ -76,6 +80,9 @@ export default (props) => {
             pagination={pagination}
             onChange={onChange}
           />
+        </Col>
+        <Col span={24} className='text-right'>
+          <Button type='primary' size='large' htmlType='button' className={btnClass ? btnClass : ''} onClick={extraAction}>{extraBtn}</Button>
         </Col>
       </Row>
     </Card>

@@ -161,6 +161,16 @@ export default [
     parent: true,
   },
   {
+    component: 'Requests',
+    path: '/requests',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'requests',
+    menu: 'Requests',
+    icon: 'ApplicationsIcon',
+    parent: true,
+  },
+  {
     component: 'SetUp',
     path: '/setup',
     title: titles.HRMS,
