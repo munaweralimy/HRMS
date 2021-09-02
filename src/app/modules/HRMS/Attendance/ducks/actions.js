@@ -44,11 +44,11 @@ export const getTeamAttendance = (team, page, limit, order, orderby) => async (d
   });
 };
 
-export const getMyAttendance = (employeeID, page, limit, order, orderb) => async (dispatch) => {
+export const getMyAttendance = (employeeID, page, limit, order, orderby) => async (dispatch) => {
   const {
     data: { message },
   } = await axios.get(
-    `/hrms.api.get_single_employee_attendance_pagination?employee=${employeeID}page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.api.get_single_employee_attendance_pagination?employee=${employeeID}&page_number=${page}&limit=${limit}${
       orderby ? `&order=${order}&orderby=${orderby}` : ''
     }`,
   );
