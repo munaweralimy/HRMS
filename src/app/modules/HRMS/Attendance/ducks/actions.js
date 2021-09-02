@@ -57,3 +57,13 @@ export const getMyAttendance = (employeeID, page, limit, order, orderby) => asyn
     data: message,
   });
 };
+
+export const getSingleAttendanceDetail = (id) => async (dispatch) => {
+  const {
+    data: { message },
+  } = await axios.get(`${apiMethod}/hrms.api.get_single_attendance?name=${id}`);
+  dispatch({
+    type: action_types.SINGLE_ATTENDANCE,
+    data: message,
+  });
+};

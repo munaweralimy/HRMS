@@ -80,7 +80,6 @@ export default (props) => {
         ListData={listdata}
         onSearch={onSearch}
         pagination={true}
-        classes="clickRow"
         listClass="nospace-card"
       />
     </Card>

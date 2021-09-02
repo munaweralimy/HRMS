@@ -5,6 +5,7 @@ const initialState = {
   overallAttendanceList: [],
   teamAttendance: [],
   myAttendance: [],
+  singleAttendance: [],
 };
 
 export default (state = initialState, action) => {
@@ -18,6 +19,8 @@ export default (state = initialState, action) => {
       return { ...state, teamAttendance: data };
     case action_types.MY_ATTENDANCE:
       return { ...state, myAttendance: data };
+    case action_types.SINGLE_ATTENDANCE:
+      return { ...state, singleAttendance: data };
     default:
       return state;
   }

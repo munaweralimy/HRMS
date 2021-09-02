@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Typography } from 'antd';
-import HeadingChip from '../../../../molecules/HeadingChip';
-import SideDetails from '../../../../molecules/SideDetails';
 import EmpAttendance from '../components/EmpAttendance';
+import StaffDetails from '../../StaffDetails';
+import { getSingleTaskDetail } from '../../Tasks/ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useLocation, useParams } from 'react-router-dom';
+
 const sideData = [
   {
     type: 'code',
@@ -43,24 +47,32 @@ const bottomList = [
 ];
 const EmpAttendanceDetail = () => {
   const { Title } = Typography;
+  const { id } = useParams();
+  const [tags, setTags] = useState([]);
+  const [deleted, setDeleted] = useState([]);
+  const singleTaskDetail = useSelector((state) => state.tasks.singleTaskData);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getSingleTaskDetail(id));
+  }, []);
+  useEffect(() => {
+    if (singleTaskDetail && singleTaskDetail?.projects) {
+      let projects = [];
+      singleTaskDetail?.projects.map((item) => {
+        projects.push({
+          name: item.name,
+          project: item.project,
+        });
+      });
+      setTags(projects);
+    }
+  }, [singleTaskDetail]);
+
   return (
-    <Row gutter={[30, 24]}>
-      <Col span={24}>
-        <HeadingChip title="Staff Details" />
-      </Col>
-      <Col span={8}>
-        <SideDetails data={sideData} type="button" bottom={[]} />
-      </Col>
-      <Col span={16}>
-        <Card bordered={false} className="scrolling-card">
-          <Row gutter={[20, 20]}>
-            <Col span={24}>
-              <EmpAttendance />
-            </Col>
-          </Row>
-        </Card>
-      </Col>
-    </Row>
+    <StaffDetails id={id} section="Attendance" data={singleTaskDetail}>
+      <EmpAttendance />
+    </StaffDetails>
   );
 };
 

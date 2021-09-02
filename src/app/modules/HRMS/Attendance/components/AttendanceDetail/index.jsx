@@ -1,13 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Typography, Row, Col, Form, Button } from 'antd';
 import { DateField, InputField, SelectField, TextAreaField, TimeField } from '../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { updateAttendance } from '../../ducks/services';
+import moment from 'moment';
 
 const AttendanceDetails = (props) => {
+  const { attendanceData } = props;
   const { Title } = Typography;
-  const { control, errors } = useForm();
+  const { control, errors, setValue, handleSubmit } = useForm();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (attendanceData) {
+      setValue('attendance_date', moment(attendanceData?.attendance_date, 'YYYY-MM-DD'));
+      setValue('Attendance_date_out', moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD'));
+      setValue('total_job_hour', attendanceData?.total_job_hour);
+      setValue('status', { value: attendanceData?.status, label: attendanceData.status });
+      setValue('time_in', moment(attendanceData?.time_in, 'h:mm:ss a'));
+      setValue('time_out', moment(attendanceData?.time_out, 'h:mm:ss a'));
+      setValue('remarks', attendanceData?.remarks);
+    }
+  }, [attendanceData]);
+
+  const onSubmitHandler = (values) => {
+    const payload = {
+      name: attendanceData.name,
+      attendance_date: moment(values.attendance_date).format('YYYY-MM-DD'),
+      Attendance_date_out: moment(values.Attendance_date_out).format('YYYY-MM-DD'),
+      total_job_hour: values.total_job_hour,
+      time_in: moment(values.time_in).format('HH:mm:ss'),
+      time_out: moment(values.time_out).format('HH:mm:ss'),
+      remarks: values.remarks,
+    };
+    updateAttendance(attendanceData.name, payload).then((response) => {
+      console.log({ response });
+    });
+  };
+
   return (
-    <Form layout="vertical" scrollToFirstError={true}>
+    <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
       <Row gutter={[24, 30]} align="bottom">
         <Col span={24}>
           <Title level={4} className="mb-0">
@@ -16,55 +49,28 @@ const AttendanceDetails = (props) => {
         </Col>
         <Col span={12}>
           <DateField
-            fieldname="date_in"
+            fieldname="attendance_date"
             label="Date In"
             control={control}
             class="mb-0"
             iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
             initValue=""
             isRequired={true}
-            validate={errors.date_in && 'error'}
-            validMessage={errors.date_in && errors.date_in.message}
+            validate={errors.attendance_date && 'error'}
+            validMessage={errors.attendance_date && errors.attendance_date.message}
           />
         </Col>
         <Col span={12}>
           <DateField
-            fieldname="date_out"
+            fieldname="Attendance_date_out"
             label="Date Out"
             control={control}
             class="mb-0"
             iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
             initValue=""
             isRequired={true}
-            validate={errors.date_out && 'error'}
-            validMessage={errors.date_out && errors.date_out.message}
-          />
-        </Col>
-        <Col span={12}>
-          <InputField
-            fieldname="total_hours"
-            label="Total Hours"
-            control={control}
-            class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
-            initValue=""
-            isRequired={true}
-            validate={errors.total_hours && 'error'}
-            validMessage={errors.total_hours && errors.total_hours.message}
-          />
-        </Col>
-        <Col span={12}>
-          <SelectField
-            fieldname="date_out"
-            label="Date Out"
-            control={control}
-            class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
-            initValue=""
-            selectOption={[]}
-            isRequired={true}
-            validate={errors.date_out && 'error'}
-            validMessage={errors.date_out && errors.date_out.message}
+            validate={errors.Attendance_date_out && 'error'}
+            validMessage={errors.Attendance_date_out && errors.Attendance_date_out.message}
           />
         </Col>
         <Col span={12}>
@@ -73,7 +79,7 @@ const AttendanceDetails = (props) => {
             label="Time In"
             control={control}
             class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'h:mm a' }}
+            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'h:mm:ss a' }}
             initValue=""
             isRequired={true}
             validate={errors.time_in && 'error'}
@@ -86,11 +92,41 @@ const AttendanceDetails = (props) => {
             label="Time Out"
             control={control}
             class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'h:mm a' }}
+            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'h:mm:ss a' }}
             initValue=""
             isRequired={true}
             validate={errors.time_out && 'error'}
             validMessage={errors.time_out && errors.time_out.message}
+          />
+        </Col>
+        <Col span={12}>
+          <InputField
+            fieldname="total_job_hour"
+            label="Total Hours"
+            control={control}
+            class="mb-0"
+            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
+            initValue=""
+            isRequired={true}
+            validate={errors.total_job_hour && 'error'}
+            validMessage={errors.total_job_hour && errors.total_job_hour.message}
+          />
+        </Col>
+        <Col span={12}>
+          <SelectField
+            fieldname="status"
+            label="Status"
+            control={control}
+            class="mb-0"
+            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
+            initValue=""
+            selectOption={[
+              { value: 'Late Clock In', label: 'Late Clock In' },
+              { value: 'On Duty', label: 'On Duty' },
+            ]}
+            isRequired={true}
+            validate={errors.date_out && 'error'}
+            validMessage={errors.date_out && errors.date_out.message}
           />
         </Col>
         <Col span={24}>
@@ -101,10 +137,6 @@ const AttendanceDetails = (props) => {
             class="mb-0"
             iProps={{ placeholder: 'Please Select date', size: 'large' }}
             initValue=""
-            selectOption={[]}
-            isRequired={true}
-            validate={errors.remarks && 'error'}
-            validMessage={errors.remarks && errors.remarks.message}
           />
         </Col>
         <Col span={24}>
