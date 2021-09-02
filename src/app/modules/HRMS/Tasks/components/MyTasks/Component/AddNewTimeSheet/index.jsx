@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
-import { Typography, Col, Button, Form, Row, message, Space } from 'antd';
+import React, {useEffect, useState} from 'react';
+import { Typography, Col, Button, Form, Row, message, Space, Spin } from 'antd';
 import {TextAreaField, SelectField, DateField, InputField } from '../../../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
-import { LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { apiMethod } from '../../../../../../../../configs/constants';
 import axios from '../../../../../../../../services/axiosInterceptor';
@@ -10,12 +10,15 @@ import { getProjectName } from '../../../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 const {Title} = Typography;
+const antIcon = <LoadingOutlined spin />;
+
 export default (props) => {
   
   const dispatch = useDispatch();
-  const { control, handleSubmit, reset } = useForm();
+  const [load, setLoad] = useState(false);
+  const { control, handleSubmit } = useForm();
   const projectName = useSelector(state => state.tasks.myProjectData);
-  const { setAddVisible } = props;
+  const { setAddVisible, id, updateApi } = props;
 
   useEffect(() => {
     dispatch(getProjectName());
@@ -23,11 +26,11 @@ export default (props) => {
 
   const onFinish = async (val) => {
     
-    console.log('val', val)
+    setLoad(true);
 
     const json = {
       timesheet: [{
-        parent: "HR-EMP-00002",
+        parent: id,
         parentfield: "timesheet",
         parenttype: "HRMS Tasks",
         status: "Pending",
@@ -42,14 +45,18 @@ export default (props) => {
     try {
         await axios.post(url, json);
         message.success('TimeSheet Added Successfully');
+        setLoad(false);
+        updateApi();
         setTimeout(() => setAddVisible(false), 1000)
     } catch(e) {
         const { response } = e;
         message.error(e);
+        setLoad(false);
     }
   }
 
   return (
+    <Spin indicator={antIcon} size="large" spinning={load}>
     <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
       <Row gutter={[20, 30]}>
         <Col span={24}>
@@ -114,5 +121,6 @@ export default (props) => {
           </Col>
       </Row>
     </Form>
+    </Spin>
   );
 };

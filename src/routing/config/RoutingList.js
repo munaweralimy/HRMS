@@ -61,7 +61,7 @@ export default [
     parent: true,
   },
   {
-    component: 'EditAdvancement',
+    component: 'AdvancementDetails',
     path: '/advancement/:id',
     title: titles.HRMS,
     permission: hrms,

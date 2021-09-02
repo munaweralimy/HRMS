@@ -5,7 +5,8 @@ const initialState = {
     overallTaskDataWithStatus: {},
     teamTaskData: {},
     teamTaskDataWithStatus: [],
-    myTaskData: [],
+    myTaskData: {},
+    myProject: [],
     myProjectData: [],
     myAddProjectData: [],
     singleTaskData: []
@@ -24,6 +25,9 @@ export default (state = initialState, action) => {
             return {...state, teamTaskDataWithStatus: data };
         case action_types.MY_TASKS:
             return {...state, myTaskData: data };
+        case action_types.MY_PROJECTS:
+            return {...state, myProject: data };
+            
         case action_types.PROJECT_NAME:
             return {...state, myProjectData: data };
         case action_types.ADD_PROJECT_NAME:
