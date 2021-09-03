@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Typography, Row, Col, Form, Button } from 'antd';
+import { Typography, Row, Col, Form, Button, message } from 'antd';
 import { DateField, InputField, SelectField, TextAreaField, TimeField } from '../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
@@ -7,19 +7,25 @@ import { updateAttendance } from '../../ducks/services';
 import moment from 'moment';
 
 const AttendanceDetails = (props) => {
-  const { attendanceData } = props;
+  const { attendanceData, onViewForm } = props;
   const { Title } = Typography;
   const { control, errors, setValue, handleSubmit } = useForm();
   const history = useHistory();
 
   useEffect(() => {
     if (attendanceData) {
-      setValue('attendance_date', moment(attendanceData?.attendance_date, 'YYYY-MM-DD'));
-      setValue('Attendance_date_out', moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD'));
+      setValue(
+        'attendance_date',
+        attendanceData?.attendance_date ? moment(attendanceData?.attendance_date, 'YYYY-MM-DD') : '',
+      );
+      setValue(
+        'Attendance_date_out',
+        attendanceData?.Attendance_date_out ? moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD') : '',
+      );
       setValue('total_job_hour', attendanceData?.total_job_hour);
       setValue('status', { value: attendanceData?.status, label: attendanceData.status });
-      setValue('time_in', moment(attendanceData?.time_in, 'h:mm:ss a'));
-      setValue('time_out', moment(attendanceData?.time_out, 'h:mm:ss a'));
+      setValue('time_in', attendanceData?.time_in ? moment(attendanceData?.time_in, 'h:mm:ss a') : '');
+      setValue('time_out', attendanceData?.time_out ? moment(attendanceData?.time_out, 'h:mm:ss a') : '');
       setValue('remarks', attendanceData?.remarks);
     }
   }, [attendanceData]);
@@ -33,9 +39,13 @@ const AttendanceDetails = (props) => {
       time_in: moment(values.time_in).format('HH:mm:ss'),
       time_out: moment(values.time_out).format('HH:mm:ss'),
       remarks: values.remarks,
+      // status: values.status.value,
     };
     updateAttendance(attendanceData.name, payload).then((response) => {
-      console.log({ response });
+      if (response.status === 200) {
+        message.success(`${attendanceData.name} Attendance Update Successfully`);
+        onViewForm(false);
+      }
     });
   };
 
@@ -79,7 +89,7 @@ const AttendanceDetails = (props) => {
             label="Time In"
             control={control}
             class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'h:mm:ss a' }}
+            iProps={{ placeholder: 'Please Select time', size: 'large', format: 'h:mm:ss a' }}
             initValue=""
             isRequired={true}
             validate={errors.time_in && 'error'}
@@ -92,7 +102,7 @@ const AttendanceDetails = (props) => {
             label="Time Out"
             control={control}
             class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'h:mm:ss a' }}
+            iProps={{ placeholder: 'Please Select time', size: 'large', format: 'h:mm:ss a' }}
             initValue=""
             isRequired={true}
             validate={errors.time_out && 'error'}
@@ -105,7 +115,7 @@ const AttendanceDetails = (props) => {
             label="Total Hours"
             control={control}
             class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
+            iProps={{ placeholder: 'hours', size: 'large', format: 'DD-MM-YYYY' }}
             initValue=""
             isRequired={true}
             validate={errors.total_job_hour && 'error'}
@@ -118,11 +128,13 @@ const AttendanceDetails = (props) => {
             label="Status"
             control={control}
             class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
+            iProps={{ placeholder: 'Please Select status', size: 'large', format: 'DD-MM-YYYY' }}
             initValue=""
             selectOption={[
-              { value: 'Late Clock In', label: 'Late Clock In' },
               { value: 'On Duty', label: 'On Duty' },
+              { value: 'Absent', label: 'Absent' },
+              { value: 'Late Clock Out', label: 'Late Clock Out' },
+              { value: 'Late Clock In', label: 'Late Clock In' },
             ]}
             isRequired={true}
             validate={errors.date_out && 'error'}
@@ -135,7 +147,7 @@ const AttendanceDetails = (props) => {
             label="Remarks"
             control={control}
             class="mb-0"
-            iProps={{ placeholder: 'Please Select date', size: 'large' }}
+            iProps={{ placeholder: 'Remarks', size: 'large' }}
             initValue=""
           />
         </Col>

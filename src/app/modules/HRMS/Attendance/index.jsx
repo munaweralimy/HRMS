@@ -27,8 +27,8 @@ const ListColOverall = [
   },
   {
     title: 'ID',
-    dataIndex: 'employee',
-    key: 'employee',
+    dataIndex: 'employee_id',
+    key: 'employee_id',
     sorter: true,
   },
   {
@@ -43,14 +43,14 @@ const ListColOverall = [
     dataIndex: 'time_in',
     key: 'time_in',
     sorter: true,
-    render: (text) => moment(text).format('hh:mm:ss A'),
+    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
   },
   {
     title: 'Out',
     dataIndex: 'time_out',
     key: 'time_out',
     sorter: true,
-    render: (text) => moment(text).format('hh:mm:ss A'),
+    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
   },
   {
     title: 'Company',
@@ -67,8 +67,8 @@ const ListColOverall = [
   },
   {
     title: 'Status',
-    dataIndex: 'm_status',
-    key: 'm_status',
+    dataIndex: 'status',
+    key: 'status',
     align: 'center',
     render: (text) => {
       let clname = '';
@@ -122,19 +122,19 @@ const ListColTeams = [
     dataIndex: 'time_in',
     key: 'time_in',
     sorter: true,
-    render: (text) => moment(text).format('hh:mm:ss A'),
+    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
   },
   {
     title: 'Out',
     dataIndex: 'time_out',
     key: 'time_out',
     sorter: true,
-    render: (text) => moment(text).format('hh:mm:ss A'),
+    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
   },
   {
     title: 'Status',
-    dataIndex: 'm_status',
-    key: 'm_status',
+    dataIndex: 'status',
+    key: 'status',
     align: 'center',
     render: (text) => {
       let clname = '';

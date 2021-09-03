@@ -37,14 +37,14 @@ const ListCol = [
   },
   {
     title: 'Hours',
-    dataIndex: 'hours',
-    key: 'hours',
+    dataIndex: 'total_job_hour',
+    key: 'total_job_hour',
     align: 'center',
   },
   {
     title: 'Status',
-    dataIndex: 'm_status',
-    key: 'm_status',
+    dataIndex: 'status',
+    key: 'status',
     align: 'center',
     render: (text) => {
       let clname = '';

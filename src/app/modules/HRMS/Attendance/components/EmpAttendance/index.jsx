@@ -27,25 +27,25 @@ const ListCol = [
     dataIndex: 'time_in',
     key: 'time_in',
     sorter: true,
-    render: (text) => (text ? moment(text).format('hh:mm:ss A') : ''),
+    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
   },
   {
     title: 'Out',
     dataIndex: 'time_out',
     key: 'time_out',
     sorter: true,
-    render: (text) => (text ? moment(text).format('hh:mm:ss A') : ''),
+    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
   },
   {
     title: 'Hours',
-    dataIndex: 'hours',
-    key: 'hours',
+    dataIndex: 'total_job_hour',
+    key: 'total_job_hour',
     align: 'center',
   },
   {
     title: 'Status',
-    dataIndex: 'm_status',
-    key: 'm_status',
+    dataIndex: 'status',
+    key: 'status',
     align: 'center',
     render: (text) => {
       let clname = '';
@@ -115,7 +115,7 @@ export default (props) => {
               Attendance History
             </Button>
             <Col span={24}>
-              <EditAttendance attendanceData={singleAttendanceDetail} />
+              <EditAttendance attendanceData={singleAttendanceDetail} onViewForm={setViewForm} />
             </Col>
           </Col>
         ) : (
