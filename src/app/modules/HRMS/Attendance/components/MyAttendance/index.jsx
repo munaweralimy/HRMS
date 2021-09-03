@@ -26,14 +26,14 @@ const ListCol = [
     dataIndex: 'time_in',
     key: 'time_in',
     sorter: true,
-    render: (text) => (text ? moment(text).format('hh:mm:ss A') : ''),
+    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
   },
   {
     title: 'Out',
     dataIndex: 'time_out',
     key: 'time_out',
     sorter: true,
-    render: (text) => (text ? moment(text).format('hh:mm:ss A') : ''),
+    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
   },
   {
     title: 'Hours',
