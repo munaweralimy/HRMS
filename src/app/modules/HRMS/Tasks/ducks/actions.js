@@ -62,13 +62,31 @@ export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby)
   };
 };
 
-export const getMyTasks = (id) => {
+export const getMyTasks = (id, page, limit, order, orderby) => {
+  let ordering = '';
+    if(order == "ascend") {
+        ordering = 'ASC'
+    } else if(order == "descend") {
+        ordering = 'DESC'
+    }
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.get_my_task_list?employee_id=${id}`);
+      } = await axios.get(`${apiMethod}/hrms.api.get_my_task_list?employee_id=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
       dispatch({
         type: action_types.MY_TASKS,
+        data: message,
+      });
+    };
+};
+
+export const getMyProjects = (id) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.get_my_project_list?employee_id=${id}`);
+      dispatch({
+        type: action_types.MY_PROJECTS,
         data: message,
       });
     };

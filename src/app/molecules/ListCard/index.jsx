@@ -81,9 +81,10 @@ export default (props) => {
             onChange={onChange}
           />
         </Col>
+        {extraBtn && 
         <Col span={24} className='text-right'>
           <Button type='primary' size='large' htmlType='button' className={btnClass ? btnClass : ''} onClick={extraAction}>{extraBtn}</Button>
-        </Col>
+        </Col>}
       </Row>
     </Card>
   );
