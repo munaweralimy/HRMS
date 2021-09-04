@@ -1,8 +1,121 @@
 import * as action_types from './constant';
+import axios from '../../../../../services/axiosInterceptor';
+import { apiMethod, apiresource } from '../../../../../configs/constants';
 
-export const onAddJob = (bol) => (dispatch) => {
-  dispatch({
-    type: action_types.ADD_JOB,
-    data: bol,
-  });
+
+export const getJobOpening = (page, limit, order, orderby) => {
+  let ordering = '';
+    if(order == "ascend") {
+        ordering = 'ASC'
+    } else if(order == "descend") {
+        ordering = 'DESC'
+    }
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.hrms_job_opening_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      dispatch({
+        type: action_types.JOB_OPENING,
+        data: message,
+      });
+    };
+};
+
+export const getSuitableApplicants = (job, page, limit, order, orderby) => {
+  let ordering = '';
+    if(order == "ascend") {
+        ordering = 'ASC'
+    } else if(order == "descend") {
+        ordering = 'DESC'
+    }
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_job_opening_pagination?job_opening=${job}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      dispatch({
+        type: action_types.SUITABLE_APPLICANTS,
+        data: message,
+      });
+    };
+};
+
+export const getOverallFit = (status, page, limit, order, orderby) => {
+  let ordering = '';
+    if(order == "ascend") {
+        ordering = 'ASC'
+    } else if(order == "descend") {
+        ordering = 'DESC'
+    }
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_fit_index_pagination?${status ? `status=${status}&` : ''}page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      dispatch({
+        type: action_types.OVERALL_FITINDEX,
+        data: message,
+      });
+    };
+};
+
+export const getOverallFitCard = (page, limit, order, orderby) => {
+  let ordering = '';
+    if(order == "ascend") {
+        ordering = 'ASC'
+    } else if(order == "descend") {
+        ordering = 'DESC'
+    }
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_fit_index_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      dispatch({
+        type: action_types.OVERALL_FITINDEX_CARD,
+        data: message,
+      });
+    };
+};
+
+export const getCompany = () => {
+    return async (dispatch) => {
+      const {
+        data: { data },
+      } = await axios.get(`${apiresource}/Company`);
+      dispatch({
+        type: action_types.COMPANY_LIST,
+        data: data,
+      });
+    };
+};
+
+export const getJobs = () => {
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/Job Position`);
+    dispatch({
+      type: action_types.JOBS_LIST,
+      data: data,
+    });
+  };
+};
+
+export const emptyApplicant = () => {
+  return (dispatch) => {
+    dispatch({
+      type: action_types.EMPTY_APPLICANTS,
+      data: {},
+    });
+  };
+};
+
+export const getAdvancementdetails = (id) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.employee_staff_detail?employee_id=${id}`);
+    dispatch({
+      type: action_types.ADVANCEMENT_DETAILS,
+      data: message,
+    });
+  };
 };

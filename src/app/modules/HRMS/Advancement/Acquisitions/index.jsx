@@ -1,54 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import AddEditJob from '../components/AddEditJob';
 import ListCard from '../../../../molecules/ListCard';
-import { onAddJob } from '../dcuks/action';
+import { getJobOpening } from '../dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
+import HeadingChip from '../../../../molecules/HeadingChip';
+import moment from 'moment';
 
 const colName = [
   {
     title: 'Job Title',
-    dataIndex: 'jobtitle',
-    key: 'jobtitle',
-    sorted: (a, b) => a.jobtitle - b.jobtitle,
+    dataIndex: 'job_title',
+    key: 'job_title',
+    sorter: true,
   },
   {
     title: 'Company',
     dataIndex: 'company',
     key: 'company',
-    sorted: (a, b) => a.company - b.company,
+    sorter: true,
   },
   {
     title: 'Date Open',
-    dataIndex: 'dateopen',
-    key: 'dateopen',
-    sorted: (a, b) => a.dateopen - b.dateopen,
+    dataIndex: 'date_open',
+    key: 'date_open',
+    sorter: true,
+    render: (text) => moment(text).format('Do MMMM YYYY')
   },
   {
     title: 'Suitable Application',
-    dataIndex: 'suitableappalication',
-    key: 'suitableappalication',
-    sorted: (a, b) => a.suitableappalication - b.suitableappalication,
+    dataIndex: 'suitable_applicants',
+    key: 'suitable_applicants',
+    sorter: true,
     align: 'center',
-    render: (text) => (Number(text) > 0 ? <span className="c-pending">{text}</span> : text),
-  },
-];
-const data = [
-  {
-    jobtitle: 'Graphic Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    dateopen: '15th February 2021',
-    suitableappalication: '3',
   },
 ];
 
-const Acquisitions = () => {
+export default (props) => {
+
+  const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [viewJobOpenings, setViewJobOpenings] = useState(false);
   const [rowData, setRowData] = useState();
-  const dispatch = useDispatch();
-  const viewAddJob = useSelector((state) => state.advancement.addJob);
-  console.log({ viewAddJob });
+  const openJobs = useSelector((state) => state.advancement.jobopen);
+
+  useEffect(() => {
+    dispatch(getJobOpening(page, limit, '', ''))
+  }, []);
+
+  const updateApi = () => {
+    setRowData('');
+    setViewJobOpenings(false);
+    dispatch(getJobOpening(1, limit, '', ''));
+  }
 
   const onClickRow = (record) => {
     return {
@@ -62,34 +68,66 @@ const Acquisitions = () => {
   const onGoBack = () => {
     setRowData('');
     setViewJobOpenings(false);
-    dispatch(onAddJob(false));
   };
-  return viewJobOpenings || viewAddJob ? (
-    <Card bordered={false} className="uni-card h-auto">
-      <Row gutter={[30, 20]}>
-        <Col span={24}>
-          <Row gutter={[24, 30]} align="bottom">
-            <Col span={24}>
-              <Button
-                type="link"
-                htmlType="button"
-                className="p-0 c-gray-linkbtn"
-                icon={<LeftOutlined />}
-                onClick={onGoBack}
-              >
-                Job Openings
-              </Button>
-            </Col>
-            <Col span={24}>
-              <AddEditJob rowData={rowData} colName={colName} data={data} />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Card>
-  ) : (
-    <ListCard ListCol={colName} ListData={data} title="Job Openings" onRow={onClickRow} />
-  );
-};
 
-export default Acquisitions;
+  const onTableChange = (pagination, filters, sorter) => {
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getJobOpening(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+    } else {
+        dispatch(getJobOpening(pagination.current, pagination.pageSize, '', ''));
+    }
+  }
+
+  const btnList = [
+    {
+      text: '+ Add Job Oppening',
+      classes: 'green-btn',
+      action: () => setViewJobOpenings(true),
+    },
+  ];
+
+  return (
+    <Row gutter={[20,30]}>
+      <Col span={24}>
+        <HeadingChip title={'Acquisitions'} btnList={btnList} />
+      </Col>
+      <Col span={24}>
+      {viewJobOpenings ? (
+      <Card bordered={false} className="uni-card h-auto">
+        <Row gutter={[20, 20]} align="bottom">
+          <Col span={24}>
+            <Button
+              type="link"
+              htmlType="button"
+              className="p-0 c-gray-linkbtn"
+              icon={<LeftOutlined />}
+              onClick={onGoBack}
+            >
+              Job Openings
+            </Button>
+          </Col>
+          <Col span={24}>
+            <AddEditJob data={rowData} updateApi={updateApi} />
+          </Col>
+        </Row>
+      </Card>
+    ) : (
+      <ListCard 
+      title="Job Openings"
+      classes='clickRow'
+      onRow={onClickRow}
+      ListCol={colName}
+      ListData={openJobs?.rows}
+      onChange={onTableChange}
+      pagination={{
+        total: openJobs?.count,
+        current: page,
+        pageSize: limit
+      }}
+      />)}
+      </Col>
+    </Row>
+  )
+}

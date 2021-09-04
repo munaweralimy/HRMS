@@ -5,17 +5,25 @@ import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useParams, useHistory } from 'react-router-dom';
 import Management from '../components/Managment';
 import PostEmployment from '../components/PostEmployment';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAdvancementdetails } from '../dcuks/action';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
 
 export default (props) => {
 
+  const dispatch = useDispatch();
+  const data = useSelector(state => state.advancement.advData)
   const { id } = useParams();
   const history = useHistory();
 
+  useEffect(() => {
+    dispatch(getAdvancementdetails(id));
+  }, []);
+
   return (
-    <StaffDetails id={id} section='Advancement' data={singleTaskDetail} title={'Tasks'}>
+    <StaffDetails id={id} section='Advancement' data={data[0]} title={'Advancement'}>
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Advancement</Title></Col>

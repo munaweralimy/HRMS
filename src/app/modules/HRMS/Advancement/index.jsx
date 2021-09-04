@@ -1,171 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
-import HeadingChip from '../../../molecules/HeadingChip';
 import Acquisitions from './Acquisitions';
 import { useTranslate } from 'Translate';
-import { PlusOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
-import { onAddJob } from './dcuks/action';
+import { useDispatch, useSelector } from 'react-redux';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import Search from './components/Search';
+import { getOverallFit, getOverallFitCard } from './dcuks/action';
 
-const data = [
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Missed',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Missed',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Missed',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Missed',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Missed',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Missed',
-    tasks: 'Testing Marketing APIs',
-  },
-];
 const colName = [
   {
     title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-    sorted: (a, b) => a.id - b.id,
+    dataIndex: 'employee_id',
+    key: 'employee_id',
+    sorter: true,
   },
   {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    sorted: (a, b) => a.name - b.name,
+    sorter: true,
   },
   {
     title: 'Job Title',
-    dataIndex: 'jobtitle',
-    key: 'jobtitle',
-    sorted: (a, b) => a.jobtitle - b.jobtitle,
-    align: 'center',
+    dataIndex: 'job_title',
+    key: 'job_title',
+    sorter: true,
   },
   {
     title: 'Company',
     dataIndex: 'company',
     key: 'company',
-    sorted: (a, b) => a.company - b.company,
+    sorter: true,
     align: 'center',
   },
   {
     title: 'Team',
-    dataIndex: 'team',
-    key: 'team',
-    sorted: (a, b) => a.team - b.team,
+    dataIndex: 'team_name',
+    key: 'team_name',
+    sorter: true,
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-    sorted: (a, b) => a.status - b.status,
+    title: 'Contract',
+    dataIndex: 'contract',
+    key: 'contract',
+    sorter: true,
+  },
+  {
+    title: 'Fit Index',
+    dataIndex: 'index_ratio',
+    key: 'index_ratio',
+    sorter: true,
   },
 ];
-const tableData = [
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-];
+
 const filters = [
   {
-    label: 'Acative Employee',
-    value: 'Acative Employee',
+    label: 'Active Employee',
+    value: 'Active',
   },
 
   {
@@ -174,34 +66,39 @@ const filters = [
   },
 ];
 
-const Advancement = () => {
+export default (props) => {
+
+  const dispatch = useDispatch();
+  const data = useSelector(state => state.advancement.fitindexcard);
+  const datalist = useSelector(state => state.advancement.fitindexlist);
+  const [filterVal, setFilterVal] = useState(filters[0].value);
   const il8n = useTranslate();
   const { t } = il8n;
-  const dispatch = useDispatch();
-  const btnList = [
-    {
-      text: 'Add Job Oppening',
-      icon: <PlusOutlined />,
-      classes: 'green-btn',
-      action: () => dispatch(onAddJob(true)),
-    },
-  ];
+
+  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
+    if (type == 'list') {
+      dispatch(getOverallFit(filter, page, limit, sort, sortby))
+    } else {
+      dispatch(getOverallFitCard(page, limit, sort, sortby));
+    }
+  }
+
   const tabs = [
     {
       title: 'Overall Fit Index',
       key: 'overall',
-      count: data?.count || tableData?.count || 6,
+      count: data?.count,
       Comp: MultiView,
       iProps: {
-        carddata: data || [],
-        cardcount: (data && data?.count) || 10,
-        listdata: tableData || [],
-        listcount: (tableData && tableData?.count) || 0,
+        carddata: data.rows || [],
+        cardcount: data.count,
+        listdata: datalist.rows,
+        listcount: datalist.count,
         listCol: colName,
         Search: Search,
         link: '/advancement/',
         filters: filters,
-        updateApi: () => {},
+        updateApi: onOverallAction,
         searchDropdowns: {
           field1: [{ label: 'All', value: 'All' }],
           field2: [{ label: 'All', value: 'All' }],
@@ -210,13 +107,11 @@ const Advancement = () => {
       },
     },
   ];
+
   return (
     <Row gutter={[24, 30]}>
       <Col span={24}>
         <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
-      </Col>
-      <Col span={24}>
-        <HeadingChip title={t('HRMS.Advancement.title2')} btnList={btnList} />
       </Col>
       <Col span={24}>
         <Acquisitions />
@@ -224,5 +119,3 @@ const Advancement = () => {
     </Row>
   );
 };
-
-export default Advancement;
