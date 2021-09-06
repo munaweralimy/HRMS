@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ListCard from '../../../../../../../molecules/ListCard';
 import DetailsComponent from '../../../../../../../molecules/HRMS/DetailsComponent';
-import { useMediaQuery } from 'react-responsive';
-import { BreakingPoint } from '../../../../../../../../configs/constantData';
 import moment from 'moment';
 
 export default ({details}) => {
@@ -10,7 +8,6 @@ export default ({details}) => {
   const { title, key, heading, data, column, nodetail, detailTitle, onAction1,onAction2 } = details;
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
-  const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
 
   const btnList = [
     {
@@ -26,6 +23,10 @@ export default ({details}) => {
       onClick: () => {
         setRowDetail(true)
         let temp = [
+          {
+            label: 'Name',
+            value: record?.name
+          },
           {
             label: 'Timesheet Date',
             value: record?.date ? moment(record.date).format('Do MMMM YYYY') : ''
@@ -45,10 +46,9 @@ export default ({details}) => {
           {
             label: 'Status',
             value: record?.status,
-            classi: record?.status =='Rejected' ? 'c-error' : record?.status == 'Approve' ? 'c-success' : 'c-pending' 
+            classi: record?.status =='Pending' ? 'c-pending' : record?.status == 'Approved' ? 'c-success' : 'c-error' 
           },
         ];
-        console.log('temping', temp)
         setRowData(temp)
       },
     };

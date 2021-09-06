@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Row, Col, Typography, Radio, Space, Tag, Card, Form, Button } from 'antd';
-import StatsCard from '../../../../components/Stats';
-import EmployerStaus from '../../../../components/development';
-import { customIcon } from '../../../../components/Rating';
-import { RateField } from '../../../../components/FormElement';
-import Aptitudes from '../../../../components/Aptitudes';
+import StatsCard from '../Stats';
+import EmployerStaus from '../development';
+import { customIcon } from '../Rating';
+import { RateField } from '../FormElement';
+import Aptitudes from '../Aptitudes';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { CloseCircleFilled } from '@ant-design/icons';
 let arr = [
@@ -71,7 +71,7 @@ const initQ = {
   department: '',
   remarks: false,
 };
-const EditManagment = () => {
+export default (props) => {
   const { Title, Text } = Typography;
   const { control, errors } = useForm();
   const { fields, append, remove } = useFieldArray({
@@ -296,5 +296,3 @@ const EditManagment = () => {
     </Row>
   );
 };
-
-export default EditManagment;

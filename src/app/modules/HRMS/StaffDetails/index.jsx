@@ -10,7 +10,7 @@ import SideDetails from '../../../molecules/SideDetails';
 import SideDetailResponsive from '../../../molecules/SideDetailResponsive';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../../configs/constantData';
-import { LeftOutlined  } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 import ListCard from '../../../molecules/ListCard';
 import { DownloadIcon } from '../../../atoms/CustomIcons';
 
@@ -172,8 +172,8 @@ export default (props) => {
   return (
     <Row gutter={[20, 30]}>
         <Col span={24}>
-            <Space direction='vertical' size={20}>
-                <Button type="link" className='c-gray-linkbtn p-0 mt-1' onClick={() => history.goBack()} htmlType="button"><LeftOutlined /> Back</Button>
+            <Space direction='vertical' size={18}>
+                <Button type="link" className='c-gray-linkbtn p-0' onClick={() => history.goBack()} htmlType="button"><LeftOutlined /> Back</Button>
                 <HeadingChip title="Staff Details" />
             </Space>
         </Col>
@@ -190,6 +190,9 @@ export default (props) => {
                     <Card bordered={false} className={`transparent-card ${isHDScreen ? 'scrolling-card' : ''}`}>
                         <Row gutter={[20, 20]}>
                             <Col span={24}>
+                                <Space direction='vertical' className='w-100'>
+                                  
+                                </Space>
                                 {props.children}
                             </Col>
                             <Col span={24}>

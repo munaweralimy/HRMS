@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Typography, Form } from 'antd';
 import { useForm } from 'react-hook-form';
 import { LeftOutlined } from '@ant-design/icons';
-import ListCard from '../../../../../../../molecules/ListCard';
-import { PopupSuccess } from '../../../../../../../atoms/Popup';
-import ContractForm from '../../../../../Employment/components/EmployeeForm/tabList/Contract';
+import ListCard from '../../../../../molecules/ListCard';
+import { PopupSuccess } from '../../../../../atoms/Popup';
+import ContractForm from '../../../Employment/components/EmployeeForm/tabList/Contract';
 const popup = {
   closable: false,
   className: 'black-modal',
@@ -125,7 +125,7 @@ const onChangePoistionHandler = () => {
   PopupSuccess(popup);
 };
 
-const EditPostEmployment = () => {
+export default (props) => {
   const { Title } = Typography;
   const { control, errors, handleSubmit } = useForm();
   const [viewForm, setViewForm] = useState(false);
@@ -205,5 +205,3 @@ const EditPostEmployment = () => {
     </Row>
   );
 };
-
-export default EditPostEmployment;

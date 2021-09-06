@@ -17,7 +17,10 @@ export default (props) => {
   }
 
   return (
-    <Link to={link ? `${link}${data.employee_id}` : ''}>
+    <Link to={{
+      pathname: link ? `${link}${data.employee_id}` : '',
+      state: { tab: data?.status }
+    }}>
     <Card bordered={false} className="uni-card">
       
       <Row gutter={[20, 30]}>
