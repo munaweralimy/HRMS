@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Tabs, Typography, Tag } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
-import { getMyTasks } from '../../ducks/actions';
+import { getMyProjects, getMyTasks } from '../../ducks/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import SearchMyTask from '../SearchMyTask';
 import ListCard from '../../../../../molecules/ListCard';
@@ -19,30 +19,35 @@ const ListCol = [
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
+    sorter: true,
   },
   {
     title: 'Project',
     dataIndex: 'project',
     key: 'project',
-    elipsis: true
+    elipsis: true,
+    sorter: true,
   },
   {
       title: 'Hours',
       dataIndex: 'hours',
       key: 'hours',
       align: 'center',
+      sorter: true,
   },
   {
       title: 'Task',
       dataIndex: 'tasks',
       key: 'tasks',
       ellipsis: true,
+      sorter: true,
   },
   {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      align: 'right',
+      align: 'center',
+      sorter: true,
       render: (text) => {
         let clname = '';
         if (text == 'Approved') {
@@ -62,13 +67,18 @@ export default (props) => {
   const dispatch = useDispatch();
   const [addVisible, setAddVisible] = useState(false)
   const myTaskData = useSelector(state => state.tasks.myTaskData);
+  const myProjects = useSelector(state => state.tasks.myProject);
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [activeKey, setActiveKey] = useState('1');
+  const [page, setPage] = useState(1);
+  const [limit,setLimit] = useState(10);
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
+  const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
 
   useEffect(() => {
-    dispatch(getMyTasks('HR-EMP-00002'));
+    dispatch(getMyTasks(id, page, limit, '', ''));
+    dispatch(getMyProjects(id));
   }, []);
 
   const btnList = [
@@ -78,6 +88,10 @@ export default (props) => {
       action: () => { setAddVisible(true); setActiveKey('1')},
     },
   ];
+
+  const updateApi = () => {
+    dispatch(getMyTasks(id, 1, limit, '', ''));
+  }
 
   const onClickRow = (record) => {
     return {
@@ -103,7 +117,7 @@ export default (props) => {
           {
             label: 'Status',
             value: record?.status,
-            classi: record?.status =='Rejected' ? 'c-error' : record?.status == 'Approve' ? 'c-success' : 'c-pending' 
+            classi: record?.status =='Pending' ? 'c-pending' : record?.status == 'Approved' ? 'c-success' : 'c-error' 
           },
         ];
         setRowData(temp)
@@ -115,6 +129,16 @@ export default (props) => {
     console.log('---------', val);
   }
 
+  const onTableChange = (pagination, filters, sorter) => {
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getMyTasks(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+    } else {
+        dispatch(getMyTasks(id, pagination.current, pagination.pageSize, '', ''));
+    }
+  }
+
   return (
     <>
       {!addVisible && <HeadingChip btnList={btnList} classes={`${isHDScreen ? 'optionsTabs' : 'mb-1-5'}`} />}
@@ -124,15 +148,21 @@ export default (props) => {
               {!rowDetails && !addVisible &&
               <ListCard 
               title='My Timesheet'
-              onRow={onClickRow}
-              Search={SearchMyTask} 
-              onSearch={onSearch} 
-              ListCol={ListCol} 
-              ListData={myTaskData?.timesheet} 
-              pagination={true}
               classes='clickRow'
+              onRow={onClickRow}
+              listClass='nospace-card'
+              Search={SearchMyTask && SearchMyTask}
+              onSearch={SearchMyTask && onSearch}
+              ListCol={ListCol}
+              ListData={myTaskData?.rows}
+              onChange={onTableChange}
+              pagination={{
+                total: myTaskData?.count,
+                current: page,
+                pageSize: limit
+              }}
               />}
-              {addVisible && <AddNewTimeSheet setAddVisible={setAddVisible} />}
+              {addVisible && <AddNewTimeSheet id={id} updateApi={updateApi} setAddVisible={setAddVisible} />}
               {rowDetails && (
                 <DetailsComponent 
                   setRowDetail={setRowDetail} 
@@ -150,9 +180,9 @@ export default (props) => {
                 </Col>
                 <Col span={24}>
                   <Row gutter={[20,20]}>
-                    {myTaskData && ( 
+                    {myProjects && ( 
                       <>
-                      {myTaskData?.projects?.map((e, index) => (
+                    {myProjects.rows?.map((e, index) => (
                     <Col span={24} key={index}>
                       <Tag className="program-list">
                         <span className="p-name">{e.project}</span>

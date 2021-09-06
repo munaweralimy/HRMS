@@ -173,8 +173,8 @@ export default (props) => {
   return (
     <Row gutter={[20, 30]}>
       <Col span={24}>
-        <Space direction="vertical" size={20}>
-          <Button type="link" className="c-gray-linkbtn p-0 mt-1" onClick={() => history.goBack()} htmlType="button">
+        <Space direction="vertical" size={18}>
+          <Button type="link" className="c-gray-linkbtn p-0" onClick={() => history.goBack()} htmlType="button">
             <LeftOutlined /> Back
           </Button>
           <HeadingChip title="Staff Details" />
@@ -192,7 +192,10 @@ export default (props) => {
           <div className="side-form">
             <Card bordered={false} className={`transparent-card ${isHDScreen ? 'scrolling-card' : ''}`}>
               <Row gutter={[20, 20]}>
-                <Col span={24}>{props.children}</Col>
+                <Col span={24}>
+                  <Space direction="vertical" className="w-100"></Space>
+                  {props.children}
+                </Col>
                 <Col span={24}>
                   <ListCard
                     scrolling={500}
