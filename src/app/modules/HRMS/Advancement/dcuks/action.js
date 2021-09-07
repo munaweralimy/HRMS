@@ -58,16 +58,10 @@ export const getOverallFit = (status, page, limit, order, orderby) => {
 };
 
 export const getOverallFitCard = (page, limit, order, orderby) => {
-  let ordering = '';
-    if(order == "ascend") {
-        ordering = 'ASC'
-    } else if(order == "descend") {
-        ordering = 'DESC'
-    }
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_fit_index_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_fit_index_pagination?status=Active&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
       dispatch({
         type: action_types.OVERALL_FITINDEX_CARD,
         data: message,
@@ -119,3 +113,35 @@ export const getAdvancementdetails = (id) => {
     });
   };
 };
+
+export const getContracts = (id, page, limit, order, orderby) => {
+  let ordering = '';
+    if(order == "ascend") {
+        ordering = 'ASC'
+    } else if(order == "descend") {
+        ordering = 'DESC'
+    }
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_employee_contract_list?employee=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+    dispatch({
+      type: action_types.CONTRACTS_LIST,
+      data: message,
+    });
+  };
+};
+
+export const getFitFigure = (id) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_get_single_records?employee_id=${id}`);
+    dispatch({
+      type: action_types.FITINDEX_DETAILS,
+      data: message,
+    });
+  };
+};
+
+ 

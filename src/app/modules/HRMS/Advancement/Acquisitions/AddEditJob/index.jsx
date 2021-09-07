@@ -192,7 +192,6 @@ export default ({data, updateApi}) => {
             </Col>
             <Col span={24}>
               <ListCard 
-                title="Job Openings"
                 classes='clickRow'
                 listClass="small-card8 b-black"
                 onRow={onClickRow}

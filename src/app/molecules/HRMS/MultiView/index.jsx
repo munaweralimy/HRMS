@@ -11,7 +11,7 @@ const { Title } = Typography;
 export default (props) => {
     const { iProps } = props;
     const history = useHistory();
-    const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns } = iProps;
+    const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey } = iProps;
     const [filterVal, setFilterVal] = useState(filters && filters[0]?.label);
     const [page, setPage] = useState(1);
     const [limit,setLimit] = useState(6);
@@ -111,6 +111,7 @@ export default (props) => {
         <SwitchView />
         {view == 'list' ? 
         <ListCard
+          classes='clickRow'
           onRow={onClickRow}
           filters={filters && filters}
           Search={Search && Search}
@@ -133,7 +134,7 @@ export default (props) => {
             {carddata.map((item, index) => (
                 <Fragment key={index}>
                 <div className='requestPanel'>
-                    <MainStatusCard data={item} link={link} />
+                    <MainStatusCard data={item} link={link} addon={addon} statusKey={statusKey} />
                 </div>
                 </Fragment>
             ))}

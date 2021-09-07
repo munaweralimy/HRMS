@@ -6,13 +6,17 @@ import moment from 'moment';
 const { Title, Text } = Typography;
 
 export default (props) => {
-  const { data, link } = props;
+  const { data, link, addon, statusKey } = props;
   const history = useHistory();
 
   const statuses = (status) => {
+    console.log('hello', status)
     switch(status) {
       case 'Missed': return 'b-error';
       case 'Pending': return 'b-pending';
+      case 'Fit Index': return 'b-success';
+      case 'Low Fit Index': return 'b-error';
+      case 'Medium Fit Index': return 'b-pending';
     }
   }
 
@@ -37,13 +41,13 @@ export default (props) => {
         <Col span={24}>
           <Card
             bordered={false}
-            className={`mini-card ${statuses(data?.status)}`}
+            className={`mini-card ${statuses(data[statusKey])}`}
           >
             <Row gutter={24} wrap={false} align="middle">
                 <Col span={14}>
                   <Space direction="vertical" size={2}>
-                    <Title level={5} className="mb-0">{data?.status} Timesheet</Title>
-                    <Title level={5} className="mb-0 op-6">{data?.date && moment(data?.date).format('Do MMMM YYYY')}</Title>
+                    <Title level={5} className="mb-0">{data[statusKey]}{" "}{addon}</Title>
+                    {data?.date && <Title level={5} className="mb-0 op-6">{data?.date && moment(data?.date).format('Do MMMM YYYY')}</Title>}
                   </Space>
                 </Col>
             </Row>

@@ -190,7 +190,9 @@ export default (props) => {
           field1: [{label: 'All', value: 'All'}],
           field2: [{label: 'All', value: 'All'}],
           field3: [{label: 'All', value: 'All'}],
-        }
+        },
+        addon: 'Timesheet',
+        statusKey:'status'
       },
     },
     {

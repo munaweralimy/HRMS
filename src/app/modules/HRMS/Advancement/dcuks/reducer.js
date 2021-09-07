@@ -7,7 +7,9 @@ const initialState = {
   applicantlist: {},
   fitindexlist: {},
   fitindexcard: {},
-  advData: {}
+  advData: {},
+  contractList: {},
+  fitFigures: {}
 };
 export default (state = initialState, action) => {
   const { type, data } = action;
@@ -28,6 +30,10 @@ export default (state = initialState, action) => {
       return { ...state, fitindexcard: data };
     case action_types.ADVANCEMENT_DETAILS:
       return { ...state, advData: data };
+    case action_types.CONTRACTS_LIST:
+      return { ...state, contractList: data };
+    case action_types.FITINDEX_DETAILS:
+      return { ...state, fitFigures: data };
       
     default:
       return state;
