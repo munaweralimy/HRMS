@@ -67,3 +67,10 @@ export const getSingleAttendanceDetail = (id) => async (dispatch) => {
     data: message,
   });
 };
+
+export const getTotalAttendance = (id) => async (dispatch) => {
+  const {
+    data: { message },
+  } = await axios.get(`${apiMethod}/hrms.api.absent_count_single_employee?employee_id=${id}`);
+  dispatch({ type: action_types.TOTAL_ABSENT, data: message });
+};

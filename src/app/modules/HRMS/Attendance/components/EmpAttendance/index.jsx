@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListCard from '../../../../../molecules/ListCard';
 import EditAttendance from '../AttendanceDetail';
 import { LeftOutlined } from '@ant-design/icons';
-import { getMyAttendance, getSingleAttendanceDetail } from '../../ducks/actions';
+import { getMyAttendance, getSingleAttendanceDetail, getTotalAttendance } from '../../ducks/actions';
+// import { getTotalAbsent } from '../../ducks/services';
 import moment from 'moment';
 const ListCol = [
   {
@@ -74,6 +75,7 @@ export default (props) => {
   const [empID, setEmpID] = useState('');
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
   const singleAttendanceDetail = useSelector((state) => state.attendance.singleAttendance);
+  const totalAbsent = useSelector((state) => state.attendance.totalAbsent);
 
   const onRowClick = (record) => {
     return {
@@ -87,6 +89,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getMyAttendance(id, 1, 6, 'desc', 'creation'));
+    dispatch(getTotalAttendance(id));
   }, [id]);
 
   useEffect(() => {
@@ -121,18 +124,20 @@ export default (props) => {
         ) : (
           <>
             <Col span={24}>
-              <Card bordered={false} className={`mini-card req-card-pending`}>
-                <Row gutter={[20, 30]}>
-                  <Col span={24}>
-                    <Space size={5} direction="vertical" align="start">
-                      <Text className="mb-0 c-white">Number of Days Absent</Text>
-                      <Title level={3} className="mb-0">
-                        2 Days
-                      </Title>
-                    </Space>
-                  </Col>
-                </Row>
-              </Card>
+              {totalAbsent && (
+                <Card bordered={false} className={`mini-card req-card-pending`}>
+                  <Row gutter={[20, 30]}>
+                    <Col span={24}>
+                      <Space size={5} direction="vertical" align="start">
+                        <Text className="mb-0 c-white">Number of Days Absent</Text>
+                        <Title level={3} className="mb-0">
+                          {`${totalAbsent} Days`}
+                        </Title>
+                      </Space>
+                    </Col>
+                  </Row>
+                </Card>
+              )}
             </Col>
             <Col span={24}>
               <Title level={4} className="mb-0">
