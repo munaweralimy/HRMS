@@ -20,7 +20,7 @@ import tasks from '../../app/modules/HRMS/Tasks/ducks/reducers';
 import finance from '../../app/modules/HRMS/Finance/ducks/reducer';
 import advancement from '../../app/modules/HRMS/Advancement/dcuks/reducer';
 import setup from '../../app/modules/HRMS/SetUp/ducks/reducers';
-
+import attendance from '../../app/modules/HRMS/Attendance/ducks/reducers';
 const rootReducer = combineReducers({
   user: userReducer,
   global,
@@ -43,6 +43,7 @@ const rootReducer = combineReducers({
   finance,
   advancement,
   setup,
+  attendance,
 });
 
 export default rootReducer;
