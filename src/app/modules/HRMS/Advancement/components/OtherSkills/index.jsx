@@ -18,62 +18,42 @@ export default ({ data, id, updateApi }) => {
       name: `other_skills`,
     });
 
-    // useEffect(() => {
-    //   if (Object.keys(data).length > 0) {
-    //     let temp1 = [];
-    //     let temp2 = [];
-    //     data?.other_skills.map(x => {
-    //       if(x.supervisor_assessment > 0 || x.self_staff_assessment > 0) {
-    //         temp1.push(x)
-    //       } else {
-    //         temp2.push(x)
-    //       }
-    //     });
-    //     setValue('other_skills', temp1);
-    //     setTags(temp2);
-    //   }
-    // }, [data]);
+    useEffect(() => {
+      if (Object.keys(data).length > 0) {
+        setValue('other_skills', data.other_skills);
+      }
+    }, [data]);
 
     const onFinish = async (val) => {
-        console.log('val', val);
-        setLoad(true);
 
-        // let job_related = [];
-        // val.job_related_skills.map(x => {
-        //   job_related.push({
-        //     name: x.name,
-        //     skill_name: x.skill_name,
-        //     supervisor_assessment: x.supervisor_assessment,
-        //     self_staff_assessment: x.self_staff_assessment
-        //   });
-        // })
+      setLoad(true);
+      let skills = [];
+      val.other_skills.map(x => {
+        skills.push({
+          name: x.name,
+          skill_name: x.skill_name,
+          supervisor_assessment: x.supervisor_assessment,
+          self_staff_assessment: x.self_staff_assessment
+        });
+      })
 
-        // tags.map(x => {
-        //   job_related.push({
-        //     name: x.name,
-        //     skill_name: x.skill_name,
-        //     supervisor_assessment: x.supervisor_assessment,
-        //     self_staff_assessment: x.self_staff_assessment
-        //   });
-        // })
+      const body = {
+        employee_id: id,
+        other_skills: skills,
+      }
 
-        // const body = {
-        //   employee_id: id,
-        //   job_related_skills: job_related
-        // }
-
-        // let url = `${apiMethod}/hrms.api.hrms_update_job_releated_skill`;
-        // try {
-        //   await axios.post(url, body);
-        //   message.success('Assessment updated');
-        //   updateApi();
-        //   setLoad(false);
-        // } catch(e) {
-        //   const { response } = e;
-        //   console.log(e);
-        //   message.error('Something went wrong');
-        //   setLoad(false);
-        // }
+      let url = `${apiMethod}/hrms.api.hrms_other_skills`;
+      try {
+        await axios.post(url, body);
+        message.success('Assessment updated');
+        updateApi();
+        setLoad(false);
+      } catch(e) {
+        const { response } = e;
+        console.log(e);
+        message.error('Something went wrong');
+        setLoad(false);
+      }
     }
 
     const onAdd = (item) => {

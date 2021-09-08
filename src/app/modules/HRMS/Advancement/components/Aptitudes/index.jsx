@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Radar } from '@ant-design/charts';
-import { Divider, Space, Card, Col, Spin, Row, Typography,Form, Button } from 'antd';
+import { Divider, Space, Card, Col, Spin, Row, Typography,Form, Button, message } from 'antd';
 import {LoadingOutlined} from '@ant-design/icons';
 import { RatingStars } from '../RateCard/Rating';
 import { RateField } from '../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
+import { apiMethod } from '../../../../../../configs/constants';
+import axios from '../../../../../../services/axiosInterceptor';
 
 const antIcon = <LoadingOutlined spin />;
 const { Title, Text } = Typography;
@@ -18,15 +20,20 @@ export default (props) => {
 
   useEffect(() => {
     if(Object.keys(data).length > 0) {
+      setValue('work_quality', data.work_quality);
+      setValue('work_speed', data.work_speed);
+      setValue('leadership', data.leadership);
+      setValue('critical_thinking', data.critical_thinking);
+      setValue('team_work', data.team_work);
       setChartData([
-        { name: 'Work Quality', rating: data.work_quality },
-        { name: 'Work Speed', rating: data.work_speed },
-        { name: 'Leadership', rating: data.leadership },
-        { name: 'Critical Thinking', rating: data.critical_thinking },
-        { name: 'Teamwork', rating: data.team_work },
+        { name: 'Work Quality', rating: parseInt(data.work_quality) },
+        { name: 'Work Speed', rating: parseInt(data.work_speed) },
+        { name: 'Leadership', rating: parseInt(data.leadership) },
+        { name: 'Critical Thinking', rating: parseInt(data.critical_thinking) },
+        { name: 'Teamwork', rating: parseInt(data.team_work) },
       ]);
     }
-  }, []);
+  }, [data]);
 
   const config = {
     data: chartData.map((d) => ({ ...d, rating: d.rating })),
@@ -67,7 +74,30 @@ export default (props) => {
     area: {},
   };
 
-  const onFinish = (val) => {
+  const onFinish = async (val) => {
+    console.log('checking', val);
+    setLoad(true);
+    const body = {
+      employee_id: id,
+      work_quality: val.work_quality,
+      work_speed: val.work_speed,
+      leadership: val.leadership,
+      critical_thinking: val.critical_thinking,
+      team_work: val.team_work
+    }
+
+    let url = `${apiMethod}/hrms.api.hrms_update_aptitute`;
+    try {
+      await axios.post(url, body);
+      message.success('Assessment updated');
+      updateApi();
+      setLoad(false);
+    } catch(e) {
+      const { response } = e;
+      console.log(e);
+      message.error('Something went wrong');
+      setLoad(false);
+    }
 
   }
   
