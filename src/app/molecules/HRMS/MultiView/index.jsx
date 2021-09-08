@@ -9,16 +9,15 @@ const _ = require('lodash');
 const { Title } = Typography;
 
 export default (props) => {
-  const { iProps } = props;
-  const history = useHistory();
-  const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns } =
-    iProps;
-  const [filterVal, setFilterVal] = useState(filters && filters[0]?.label);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(6);
-  const [view, setView] = useState('card');
-  const [sorting, setSorting] = useState('');
-  const [searchVal, setSearchVal] = useState(null);
+    const { iProps } = props;
+    const history = useHistory();
+    const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey } = iProps;
+    const [filterVal, setFilterVal] = useState(filters && filters[0]?.label);
+    const [page, setPage] = useState(1);
+    const [limit,setLimit] = useState(6);
+    const [view, setView] = useState('card');
+    const [sorting, setSorting] = useState('');
+    const [searchVal, setSearchVal] = useState(null);
 
   useEffect(() => {
     updateApi(filterVal, page, limit, '', '', view, null);
@@ -120,6 +119,7 @@ export default (props) => {
       <SwitchView />
       {view == 'list' ? (
         <ListCard
+          classes='clickRow'
           onRow={onClickRow}
           filters={filters && filters}
           Search={Search && Search}
@@ -140,9 +140,9 @@ export default (props) => {
         <>
           <div className="flexibleRow">
             {carddata.map((item, index) => (
-              <Fragment key={index}>
-                <div className="requestPanel">
-                  <MainStatusCard data={item} link={link} />
+                <Fragment key={index}>
+                <div className='requestPanel'>
+                    <MainStatusCard data={item} link={link} addon={addon} statusKey={statusKey} />
                 </div>
               </Fragment>
             ))}

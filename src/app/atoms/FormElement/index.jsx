@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DatePicker, Form, Input, Checkbox, Typography, TimePicker, Upload, Switch, Radio } from 'antd';
+import { DatePicker, Form, Input, Checkbox, Typography, TimePicker, Upload, Switch, Radio, Rate } from 'antd';
 import { PlusCircleFilled } from '@ant-design/icons';
 import { Controller } from 'react-hook-form';
 import Select from 'react-select';
@@ -399,6 +399,32 @@ export const SwitchField = (props) => {
         rules={rules}
         defaultValue={initValue ? initValue : false}
         render={({ value, onChange }) => <Switch checked={value} onChange={(e) => onChange(e)} {...iProps} />}
+      />
+    </Form.Item>
+  );
+};
+
+export const RateField = (props) => {
+  const { fieldname, label, control, iProps, rules, initValue, isRequired, validate, validMessage, valueGot } = props;
+  useEffect(() => {
+    valueGot && props.setValue(fieldname, valueGot);
+  }, [valueGot]);
+  return (
+    <Form.Item
+      required={isRequired ? isRequired : false}
+      label={label}
+      validateStatus={validate}
+      help={validMessage}
+      className={props.class}
+    >
+      <Controller
+        name={fieldname}
+        control={control}
+        defaultValue={initValue || initValue == 0 ? initValue : ''}
+        rules={rules}
+        render={({ onBlur, value, onChange }) => (
+          <Rate value={value} onChange={onChange} onBlur={props.onBlur} {...iProps} />
+        )}
       />
     </Form.Item>
   );

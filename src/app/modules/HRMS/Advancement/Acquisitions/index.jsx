@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
-import AddEditJob from '../components/AddEditJob';
+import AddEditJob from './AddEditJob';
 import ListCard from '../../../../molecules/ListCard';
 import { getJobOpening } from '../dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';

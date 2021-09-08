@@ -47,3 +47,56 @@
         border-color: $gray;
     }
 }
+.readonly-transparent {
+    margin-bottom: 0;
+    .ant-form-item-control-input {
+        min-height: unset;
+    }
+    .ant-input {
+        padding:0;
+        background: transparent;
+        border: 0;
+        &:focus {
+            border:0;
+            box-shadow: none;
+        }
+    }
+    .ant-input-focused {
+        border: 0;
+        box-shadow: none;
+    }
+}
+.circle20 {
+    width: 20px;
+    height: 20px;
+    background: $menu-gray;
+    padding:4px;
+    border-radius: 50%;
+    .anticon {
+        vertical-align: top;
+    }
+}
+
+.ant-rate-star-first, .ant-rate-star-second {
+    color: $menu-gray;
+}
+
+.ratingField {
+    .ant-rate {
+        display: flex;
+        justify-content: space-between;
+    }
+    .ant-rate-star {
+        margin:0;
+    }
+}
+.green-rate {
+    .ant-rate {
+        color: $green-color;
+    }
+}
+.blue-rate {
+    .ant-rate {
+        color: $blue;
+    }
+}

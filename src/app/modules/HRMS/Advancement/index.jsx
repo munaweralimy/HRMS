@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Row, Col } from 'antd';
 import Acquisitions from './Acquisitions';
 import { useTranslate } from 'Translate';
@@ -17,8 +17,8 @@ const colName = [
   },
   {
     title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'employee_name',
+    key: 'employee_name',
     sorter: true,
   },
   {
@@ -32,12 +32,11 @@ const colName = [
     dataIndex: 'company',
     key: 'company',
     sorter: true,
-    align: 'center',
   },
   {
     title: 'Team',
-    dataIndex: 'team_name',
-    key: 'team_name',
+    dataIndex: 'team',
+    key: 'team',
     sorter: true,
   },
   {
@@ -50,13 +49,15 @@ const colName = [
     title: 'Fit Index',
     dataIndex: 'index_ratio',
     key: 'index_ratio',
+    align: 'center',
     sorter: true,
+    render: (text, record) => <span className={`${record?.index_status == 'Fit Index' ? 'c-success' : record?.index_status == 'Low Fit Index' ? 'c-error' : 'c-pending'}`}>{text}</span>
   },
 ];
 
 const filters = [
   {
-    label: 'Active Employee',
+    label: 'Active',
     value: 'Active',
   },
 
@@ -71,7 +72,6 @@ export default (props) => {
   const dispatch = useDispatch();
   const data = useSelector(state => state.advancement.fitindexcard);
   const datalist = useSelector(state => state.advancement.fitindexlist);
-  const [filterVal, setFilterVal] = useState(filters[0].value);
   const il8n = useTranslate();
   const { t } = il8n;
 
@@ -104,6 +104,7 @@ export default (props) => {
           field2: [{ label: 'All', value: 'All' }],
           field3: [{ label: 'All', value: 'All' }],
         },
+        statusKey:'index_status'
       },
     },
   ];
