@@ -13,8 +13,8 @@ import moment from 'moment';
 const ListColOverall = [
   {
     title: 'Date In',
-    dataIndex: 'attendance_date',
-    key: 'attendance_date',
+    dataIndex: 'date',
+    key: 'date',
     render: (text) => (text ? moment(text).format('DD/MM/YYYY') : '-'),
     sorter: true,
   },
@@ -92,8 +92,8 @@ const ListColOverall = [
 const ListColTeams = [
   {
     title: 'Date In',
-    dataIndex: 'attendance_date',
-    key: 'attendance_date',
+    dataIndex: 'date',
+    key: 'date',
     render: (text) => (text ? moment(text).format('DD/MM/YYYY') : '-'),
     sorter: true,
   },

@@ -14,10 +14,7 @@ const AttendanceDetails = (props) => {
 
   useEffect(() => {
     if (attendanceData) {
-      setValue(
-        'attendance_date',
-        attendanceData?.attendance_date ? moment(attendanceData?.attendance_date, 'YYYY-MM-DD') : '',
-      );
+      setValue('attendance_date', attendanceData?.date ? moment(attendanceData?.date, 'YYYY-MM-DD') : '');
       setValue(
         'Attendance_date_out',
         attendanceData?.Attendance_date_out ? moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD') : '',
