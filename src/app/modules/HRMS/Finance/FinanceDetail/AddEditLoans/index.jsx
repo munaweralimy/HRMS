@@ -1,51 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Form, Breadcrumb } from 'antd';
-import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { closeAllOpenForms } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
 import AddLoan from '../../components/AddLoan';
+import moment from 'moment';
+
 const loanCol = [
   {
     title: 'Loan Date',
-    dataIndex: 'loan_date',
-    key: 'loan_date',
-    sorter: (a, b) => a.loan_date.length - b.loan_date.length,
-    render: (text, record) => moment(text).format('LL'),
+    dataIndex: 'loan_start_date',
+    key: 'loan_start_date',
+    sorter: true,
+    render: (text) => moment(text).format('Do MMMM YYYY'),
   },
   {
     title: 'Type',
     dataIndex: 'loan_type',
     key: 'loan_type',
-    sorter: (a, b) => a.loan_type.length - b.loan_type.length,
+    sorter: true,
   },
   {
     title: 'Ammount',
-    dataIndex: 'loan_ammount',
-    key: 'loan_ammount',
-    sorter: (a, b) => a.loan_ammount.length - b.loan_ammount.length,
+    dataIndex: 'amount',
+    key: 'amount',
+    sorter: true,
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    //sorter: (a, b) => a.term_start.length - b.term_start.length,
-    // render: (text, record) => moment(text).format('LL'),
+    sorter: true,
   },
 ];
 
-const AddEditLoans = () => {
-  const { control, errors, handleSubmit } = useForm();
+const AddEditLoans = (props) => {
+  const { loanData } = props;
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const [rowData, setRowData] = useState();
   const [viewLoanForm, setViewLoanForm] = useState(false);
   const tabVal = useSelector((state) => state.finance.tabClose);
 
-  const onFormViewer = () => {
+  const onFormViewer = (record) => {
+    setRowData(record);
     dispatch(closeAllOpenForms(true));
     setViewLoanForm(true);
   };
-
+  const onCloseForm = () => {
+    dispatch(getFinanceDetail(id));
+    setViewAssetsForm(false);
+  };
+  const onRowClickHandler = (record) => {
+    return {
+      onClick: () => {
+        onFormViewer(record);
+      },
+    };
+  };
   return (
     <Row gutter={[24, 30]} align="bottom">
       {viewLoanForm && tabVal ? (
@@ -55,7 +69,7 @@ const AddEditLoans = () => {
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => setViewLoanForm(false)}
+            onClick={onCloseForm}
           >
             Loan List
           </Button>
@@ -65,7 +79,14 @@ const AddEditLoans = () => {
         <Col span={24}>
           <Row gutter={[20, 30]} justify="end">
             <Col span="24">
-              <ListCard listClass="nospace-card" title="Loan List" ListCol={loanCol} ListData={[]} pagination={true} />
+              <ListCard
+                listClass="nospace-card"
+                title="Loan List"
+                ListCol={loanCol}
+                ListData={loanData}
+                pagination={false}
+                onRow={onRowClickHandler}
+              />
             </Col>
             <Col>
               <Button size="large" type="primary" onClick={onFormViewer}>

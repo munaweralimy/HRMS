@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Typography, Tabs, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { closeAllOpenForms } from '../ducks/action';
+import { closeAllOpenForms, getFinanceDetail } from '../ducks/action';
 import StaffDetails from '../../StaffDetails';
 import { getSingleTaskDetail } from '../../Tasks/ducks/actions';
 import { LeftOutlined } from '@ant-design/icons';
@@ -18,13 +18,16 @@ const FinanceDetail = () => {
   const dispatch = useDispatch();
   const [tags, setTags] = useState();
   const singleTaskDetail = useSelector((state) => state.tasks.singleTaskData);
+  const financeDetails = useSelector((state) => state.finance.financeDetailData);
 
   const onTabChangeHandler = (e) => {
-    dispatch(closeAllOpenForms(false));
+    dispatch(closeAllOpenForms(falsae));
   };
+
   useEffect(() => {
+    dispatch(getFinanceDetail(id));
     dispatch(getSingleTaskDetail(id));
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (singleTaskDetail && singleTaskDetail?.projects) {
@@ -59,15 +62,15 @@ const FinanceDetail = () => {
             </Button>
           </Col>
           <Col span={24}>
-            <Tabs defaultActiveKey="1" type="card" className="custom-tabs" onChange={onTabChangeHandler}>
+            <Tabs defaultActiveKey="2" type="card" className="custom-tabs" onChange={onTabChangeHandler}>
               <TabPane tab={'Account & Salary'} key={'1'}>
                 <AccountSalary id={id} />
               </TabPane>
               <TabPane tab={'Assets'} key={'2'}>
-                <Assets id={id} />
+                <Assets id={id} assetData={financeDetails?.assets} />
               </TabPane>
               <TabPane tab={'Loans'} key={'3'}>
-                <Loans id={id} />
+                <Loans id={id} loanData={financeDetails?.loan} />
               </TabPane>
               <TabPane tab={'Salary Advance'} key={'4'}>
                 <SalaryAdvance id={id} />

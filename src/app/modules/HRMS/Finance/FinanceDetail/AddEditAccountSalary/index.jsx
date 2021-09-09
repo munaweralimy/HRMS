@@ -8,11 +8,10 @@ import { LeftOutlined } from '@ant-design/icons';
 import SalaryInformation from '../../components/AccountSalaryForms/SalaryInformation';
 import AddAccount from '../../components/AccountSalaryForms/AddAccount';
 import AddAllowence from '../../components/AccountSalaryForms/AddAllowances';
-const AddEditAccountSalary = () => {
+const AddEditAccountSalary = (props) => {
   const { control, errors, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const tabVal = useSelector((state) => state.finance.tabClose);
-  console.log({ tabVal });
   const [viewSpecificForm, setViewSpecificForm] = useState({
     accountForm: false,
     allowanceForm: false,

@@ -8,13 +8,13 @@ const addAsset = [
   {
     type: 'date',
     label: 'Start Date',
-    name: 'from_date',
+    name: 'start_date',
     twocol: true,
   },
   {
     type: 'date',
     label: 'End Date',
-    name: 'to_date',
+    name: 'end_date',
     twocol: true,
   },
   {
