@@ -9,8 +9,8 @@ const { Title } = Typography;
 const ListCol = [
   {
     title: 'Date in',
-    dataIndex: 'attendance_date',
-    key: 'attendance_date',
+    dataIndex: 'date',
+    key: 'date',
     render: (text) => (text ? moment(text).format('DD/MM/YYYY') : '-'),
     sorter: true,
   },

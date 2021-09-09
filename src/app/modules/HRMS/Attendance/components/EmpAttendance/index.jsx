@@ -11,8 +11,8 @@ import moment from 'moment';
 const ListCol = [
   {
     title: 'Date in',
-    dataIndex: 'attendance_date',
-    key: 'attendance_date',
+    dataIndex: 'date',
+    key: 'date',
     render: (text) => (text ? moment(text).format('DD/MM/YYYY') : '-'),
     sorter: true,
   },
@@ -70,6 +70,8 @@ const ListCol = [
 export default (props) => {
   const { Title, Text } = Typography;
   const { id } = useParams();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(6);
   const dispatch = useDispatch();
   const [viewForm, setViewForm] = useState(false);
   const [empID, setEmpID] = useState('');
@@ -88,7 +90,7 @@ export default (props) => {
   };
 
   useEffect(() => {
-    dispatch(getMyAttendance(id, 1, 6, 'desc', 'creation'));
+    dispatch(getMyAttendance(id, 1, 6, '', ''));
     dispatch(getTotalAttendance(id));
   }, [id]);
 
@@ -98,6 +100,15 @@ export default (props) => {
     }
   }, [empID, viewForm]);
 
+  const onTableChange = (pagination, filters, sorter) => {
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+    } else {
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', ''));
+    }
+  };
   return (
     <Card bordered={false} className="uni-card h-auto">
       <Row gutter={[24, 30]} align="bottom">
@@ -140,18 +151,21 @@ export default (props) => {
               )}
             </Col>
             <Col span={24}>
-              <Title level={4} className="mb-0">
-                Attendance History
-              </Title>
-            </Col>
-            <Col span={24}>
               <ListCard
+                title="Attendance History"
                 ListCol={ListCol}
                 ListData={myAttendance?.rows}
                 onRow={onRowClick}
                 pagination={true}
                 classes="clickRow"
                 listClass="nospace-card"
+                onChange={onTableChange}
+                scrolling={500}
+                pagination={{
+                  total: myAttendance?.count,
+                  current: page,
+                  pageSize: limit,
+                }}
               />
             </Col>
           </>
