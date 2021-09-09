@@ -25,7 +25,7 @@ export default (props) => {
   }, []);
 
   return (
-    <StaffDetails id={id} section='Advancement' data={data} title={'Advancement'}>
+    <StaffDetails id={id} section='HRMS Advancement' data={data} title={'Advancement'}>
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Advancement</Title></Col>

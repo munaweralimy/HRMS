@@ -20,21 +20,44 @@ export default ({ data, id, updateApi }) => {
 
     useEffect(() => {
       if (Object.keys(data).length > 0) {
-        setValue('other_skills', data.other_skills);
+        let temp = [];
+        data.other_skills.map(x => {
+          temp.push({
+            id: x.name,
+            ...x
+          })
+        })
+        setValue('other_skills', temp);
       }
     }, [data]);
 
     const onFinish = async (val) => {
-
+      console.log('chkk', val);
       setLoad(true);
+
       let skills = [];
-      val.other_skills.map(x => {
-        skills.push({
-          name: x.name,
-          skill_name: x.skill_name,
-          supervisor_assessment: x.supervisor_assessment,
-          self_staff_assessment: x.self_staff_assessment
-        });
+      let duplicate = false;
+      val?.other_skills?.map(x => {
+        let a = skills?.find(y => y.skill_name == x.skill_name);
+        if (a) {
+          message.error('Skill Already Exist')
+          duplicate = true;
+          return false;
+        }
+        if (x.name == '') {
+          skills.push({
+            skill_name: x.skill_name,
+            supervisor_assessment: x.supervisor_assessment,
+            self_staff_assessment: x.self_staff_assessment
+          });
+        } else {
+          skills.push({
+            name: x.name,
+            skill_name: x.skill_name,
+            supervisor_assessment: x.supervisor_assessment,
+            self_staff_assessment: x.self_staff_assessment
+          });
+        }
       })
 
       const body = {
@@ -42,16 +65,22 @@ export default ({ data, id, updateApi }) => {
         other_skills: skills,
       }
 
-      let url = `${apiMethod}/hrms.api.hrms_other_skills`;
-      try {
-        await axios.post(url, body);
-        message.success('Assessment updated');
-        updateApi();
-        setLoad(false);
-      } catch(e) {
-        const { response } = e;
-        console.log(e);
-        message.error('Something went wrong');
+      console.log('noth', body)
+
+      if (!duplicate) { 
+        let url = `${apiMethod}/hrms.api.hrms_other_skills`;
+        try {
+          await axios.post(url, body);
+          message.success('Assessment updated');
+          updateApi();
+          setLoad(false);
+        } catch(e) {
+          const { response } = e;
+          console.log(e);
+          message.error('Something went wrong');
+          setLoad(false);
+        }
+      } else {
         setLoad(false);
       }
     }
@@ -67,7 +96,6 @@ export default ({ data, id, updateApi }) => {
 
     const onRemove = (index, item) => {
       remove(index);
-      tags.push(item);
     }
 
     return (
@@ -83,9 +111,7 @@ export default ({ data, id, updateApi }) => {
           <Col span={24}>
             <Space size={20} direction='vertical' className='w-100'>
             {fields.map((item, index) => (
-              <Fragment key={item.id}>
-                <RateCard item={item} index={index} control={control} onRemove={onRemove} />
-              </Fragment>
+              <RateCard key={item.id} array={'other_skills'} item={item} index={index} control={control} onRemove={onRemove} job={data.job_opening} />
             ))}
             </Space>
           </Col>

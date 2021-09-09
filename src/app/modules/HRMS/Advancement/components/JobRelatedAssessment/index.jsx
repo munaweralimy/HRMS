@@ -65,7 +65,10 @@ export default ({ data, id, updateApi }) => {
         let temp2 = [];
         data?.job_related_skills.map(x => {
           if(x.supervisor_assessment > 0 || x.self_staff_assessment > 0) {
-            temp1.push(x)
+            temp1.push({
+              id: x.name,
+              ...x
+            })
           } else {
             temp2.push(x)
           }
@@ -152,9 +155,7 @@ export default ({ data, id, updateApi }) => {
           <Col span={24}>
             <Space size={20} direction='vertical' className='w-100'>
             {fields.map((item, index) => (
-              <Fragment key={item.id}>
-                <RateCard item={item} index={index} control={control} onRemove={onRemove} />
-              </Fragment>
+              <RateCard key={item.id} array={'job_related_skills'} item={item} index={index} control={control} onRemove={onRemove} />
             ))}
             </Space>
           </Col>

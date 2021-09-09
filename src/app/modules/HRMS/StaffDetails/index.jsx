@@ -208,7 +208,7 @@ export default (props) => {
                   />
                 </Col>
                 <Col span={24}>
-                  <UpdateSection data={commentsApi} code={id} module={'HRMS'} updateComment={updateComment} />
+                  <UpdateSection data={commentsApi} code={id} module={section} updateComment={updateComment} />
                 </Col>
               </Row>
             </Card>

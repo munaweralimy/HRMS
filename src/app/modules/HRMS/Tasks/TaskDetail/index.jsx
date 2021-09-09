@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Typography, Card, Tabs, Form, Spin, message } from 'antd';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleTaskDetail, getAddProjectName} from '../ducks/actions';
+import { getSingleTaskDetail, getAddProjectName, getTimesheet} from '../ducks/actions';
 import StaffDetails from '../../StaffDetails';
 import Timesheet from './components/Timesheet';
 import Projects from './components/Projects';
@@ -25,15 +25,29 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const singleTaskDetail = useSelector((state) => state.tasks.singleTaskData);
   const projectName = useSelector((state) => state.tasks.myAddProjectData);
+  const timesheetData = useSelector((state) => state.tasks.timesheetData);
   const { control, errors, handleSubmit, reset } = useForm();
 
   useEffect(() => {
     dispatch(getSingleTaskDetail(id));
+    if (location?.state?.tab) {
+      if (location.state.tab == 'Missed') {
+        dispatch(getTimesheet(id, 'Issues', 1, 10, '', ''));
+      } else {
+        dispatch(getTimesheet(id, location?.state?.tab, 1, 10, '', ''));
+      }
+    } else {
+      dispatch(getTimesheet(id, 'Pending', 1, 10, '', ''));
+    }
     dispatch(getAddProjectName());
   }, []);
 
   const updateApi = () => {
     dispatch(getSingleTaskDetail(id));
+  }
+
+  const updateTimesheet = (status, page, limit, sort, sortby) => {
+    dispatch(getTimesheet(id, status, page, limit, sort, sortby));
   }
 
   useEffect(() => {
@@ -50,6 +64,7 @@ export default (props) => {
       singleTaskDetail?.projects.map((item) => {
         projects.push({
           name: item.row_name,
+          project_code: item.name,
           project: item.project,
         });
       });
@@ -115,7 +130,7 @@ export default (props) => {
           <Col span={24}>
         <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
             <TabPane tab="Timesheet" key="1">
-                <Timesheet id={id} updateApi={updateApi} data={singleTaskDetail} tabSelected={location?.state?.tab} />
+                <Timesheet id={id} updateApi={updateTimesheet} data={timesheetData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
             </TabPane>
             <TabPane tab="Projects" key="2">
                 <Form onFinish={handleSubmit(onFinish)} layout="vertical" scrollToFirstError={true}>
