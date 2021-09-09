@@ -124,7 +124,7 @@ export const getContracts = (id, page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_employee_contract_list?employee=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_employee_contract_list?employee_id=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
     dispatch({
       type: action_types.CONTRACTS_LIST,
       data: message,
