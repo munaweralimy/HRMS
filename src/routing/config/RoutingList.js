@@ -151,7 +151,7 @@ export default [
     parent: true,
   },
   {
-    component: 'TaskDetail',
+    component: 'EmpAttendanceDetail',
     path: '/attendance/:id',
     title: titles.HRMS,
     permission: hrms,

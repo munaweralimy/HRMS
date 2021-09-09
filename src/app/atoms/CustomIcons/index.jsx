@@ -117,3 +117,4 @@ export { default as MatrixIcon} from './MatrixIcon';
 export { default as LineChartIcon} from './LineChartIcon';
 export { default as BarIcon} from './BarIcon';
 export { default as PieIcon} from './PieIcon';
+export { default as CircleIcon} from './CircleIcon';

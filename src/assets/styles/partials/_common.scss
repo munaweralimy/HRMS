@@ -59,6 +59,10 @@ select:-webkit-autofill:focus {
 .p-0 {
   padding: 0 !important;
 }
+.py-0 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
 
 .m-0 {
   margin: 0 !important;
@@ -132,13 +136,17 @@ select:-webkit-autofill:focus {
 
 .cross-iconbtn {
   width: 20px !important;
-  padding: 10px 0 !important;
+  height: 20px !important;
+  padding: 0 !important;
   border-radius: 0;
   font-size: 20px !important;
   line-height: 1;
   vertical-align: middle;
   border: 0;
   color: $based-color !important;
+  > * {
+    font-size: 20px;
+  }
   &:hover,
   &:focus {
     color: $errors !important;
