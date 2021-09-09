@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, emptyOverall } from './ducks/actions';
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
-import MyTasks from './components/MyTasks';
+import MyLeaves from './components/MyLeaves';
 import moment from 'moment';
 const { Title } = Typography;
 const filtersOverall = [
@@ -175,7 +175,7 @@ export default (props) => {
 
   const tabs = [
     {
-      title: 'Overall Attendance',
+      title: 'Overall Leaves',
       key: 'overall',
       count: overallData?.count || overallDataList?.count || 0,
       Comp: MultiView,
@@ -186,7 +186,7 @@ export default (props) => {
         listcount: overallDataList?.count || 0,
         listCol: ListColOverall,
         Search: Search,
-        link: '/attendance/',
+        link: '/leaves/',
         filters: filtersOverall,
         updateApi: onOverallAction,
         searchDropdowns: {
@@ -197,7 +197,7 @@ export default (props) => {
       },
     },
     {
-      title: 'Team Attendance',
+      title: 'Team Leaves',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
       iProps : {
@@ -206,7 +206,7 @@ export default (props) => {
         listdata: teamTaskDataList?.rows || [],
         listcount: teamTaskDataList?.count || 0,
         listCol: ListColTeams,
-        link: '/attendance/',
+        link: '/leaves/',
         filters: filtersOverall,
         updateApi: onTeamAction,
         Search: SearchTeam,
@@ -217,9 +217,9 @@ export default (props) => {
       Comp: MultiView,
     },
     {
-      title: 'My Attendance',
-      key: 'mytask',
-      Comp: MyTasks,
+      title: 'My Leaves',
+      key: 'myleaves',
+      Comp: MyLeaves,
     },
   ]
 
