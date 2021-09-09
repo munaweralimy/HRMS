@@ -12,7 +12,7 @@ import AddEmployment from '../../modules/HRMS/Employment/AddEmployment';
 import EditEmployment from '../../modules/HRMS/Employment/EditEmployment';
 import TeamDetails from '../../modules/HRMS/Employment/TeamDetails';
 import Finance from '../../modules/HRMS/Finance';
-import EditFinance from '../../modules/HRMS/Finance/EditFinance';
+import FinanceDetails from '../../modules/HRMS/Finance/FinanceDetail';
 import SetUp from '../../modules/HRMS/SetUp';
 import Requests from '../../modules/HRMS/Requests';
 
@@ -27,7 +27,7 @@ const Components = {
   EditEmployment,
   TeamDetails,
   Finance,
-  EditFinance,
+  FinanceDetails,
   Attendance,
   EmpAttendanceDetail,
   SetUp,

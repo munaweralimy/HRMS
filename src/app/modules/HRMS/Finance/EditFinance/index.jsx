@@ -1,8 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Card, Breadcrumb, Button } from 'antd';
-import HeadingChip from '../../../../molecules/HeadingChip';
-import SideDetails from '../../../../molecules/SideDetails';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import EditFinanceForms from '../components/EditFinanceForms';
+import StaffDetails from '../../StaffDetails';
+import { getSingleTaskDetail } from '../../Tasks/ducks/actions';
 const sideData = [
   {
     type: 'code',
@@ -33,29 +35,32 @@ const sideData = [
   },
 ];
 const EditFinance = () => {
+  const [tags, setTags] = useState();
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const singleTaskDetail = useSelector((state) => state.tasks.singleTaskData);
+
+  useEffect(() => {
+    dispatch(getSingleTaskDetail(id));
+  }, []);
+
+  useEffect(() => {
+    if (singleTaskDetail && singleTaskDetail?.projects) {
+      let projects = [];
+      singleTaskDetail?.projects.map((item) => {
+        projects.push({
+          name: item.name,
+          project: item.project,
+        });
+      });
+      setTags(projects);
+    }
+  }, [singleTaskDetail]);
+
   return (
-    <Fragment>
-      <Breadcrumb separator=">" className="mb-1">
-        <Breadcrumb.Item href="/finance">Back</Breadcrumb.Item>
-      </Breadcrumb>
-      <Row gutter={[30, 24]}>
-        <Col span={24}>
-          <HeadingChip title="Staff Details" />
-        </Col>
-        <Col span={8}>
-          <SideDetails data={sideData} type="button" bottom={[]} />
-        </Col>
-        <Col span={16}>
-          <Card bordered={false} className="scrolling-card">
-            <Row gutter={[20, 20]}>
-              <Col span={24}>
-                <EditFinanceForms />
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-      </Row>
-    </Fragment>
+    <StaffDetails id={id} section="Finance" data={singleTaskDetail}>
+      <EditFinanceForms />
+    </StaffDetails>
   );
 };
 

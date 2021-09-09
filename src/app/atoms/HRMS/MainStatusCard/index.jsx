@@ -28,6 +28,10 @@ export default (props) => {
         return 'b-error';
       case 'On Duty':
         return 'b-success';
+      case 'Outstanding Loan':
+        return 'b-error';
+      case 'Expiring Asset Possesion':
+        return 'b-pending';
     }
   };
 

@@ -1,81 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Form, Breadcrumb } from 'antd';
 import { useForm } from 'react-hook-form';
-import ListCard from '../../../../../../../molecules/ListCard';
+import ListCard from '../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeAllOpenForms } from '../../../../ducks/action';
+import { closeAllOpenForms } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
-import AddSalaryAdvance from './AddSalaryAdvance';
-const salayAdvCol = [
+import AddLoan from '../../components/AddLoan';
+const loanCol = [
   {
-    title: 'Date Applied',
-    dataIndex: 'date_applied',
-    key: 'date_applied',
-    sorter: (a, b) => a.date_applied.length - b.date_applied.length,
+    title: 'Loan Date',
+    dataIndex: 'loan_date',
+    key: 'loan_date',
+    sorter: (a, b) => a.loan_date.length - b.loan_date.length,
     render: (text, record) => moment(text).format('LL'),
   },
   {
-    title: 'Deduction Date',
-    dataIndex: 'deduction_date',
-    key: 'deduction_date',
-    sorter: (a, b) => a.deduction_date.length - b.deduction_date.length,
+    title: 'Type',
+    dataIndex: 'loan_type',
+    key: 'loan_type',
+    sorter: (a, b) => a.loan_type.length - b.loan_type.length,
   },
   {
     title: 'Ammount',
-    dataIndex: 'salary_ammount',
-    key: 'salary_ammount',
-    sorter: (a, b) => a.salary_ammount.length - b.salary_ammount.length,
+    dataIndex: 'loan_ammount',
+    key: 'loan_ammount',
+    sorter: (a, b) => a.loan_ammount.length - b.loan_ammount.length,
   },
   {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
     //sorter: (a, b) => a.term_start.length - b.term_start.length,
     // render: (text, record) => moment(text).format('LL'),
   },
 ];
 
-const AddEditSalaryAdvance = () => {
+const AddEditLoans = () => {
   const { control, errors, handleSubmit } = useForm();
   const dispatch = useDispatch();
-  const [viewSalaryAdvanceForm, setviewSalaryAdvanceForm] = useState(false);
+  const [viewLoanForm, setViewLoanForm] = useState(false);
   const tabVal = useSelector((state) => state.finance.tabClose);
 
   const onFormViewer = () => {
     dispatch(closeAllOpenForms(true));
-    setviewSalaryAdvanceForm(true);
+    setViewLoanForm(true);
   };
 
   return (
     <Row gutter={[24, 30]} align="bottom">
-      {viewSalaryAdvanceForm && tabVal ? (
+      {viewLoanForm && tabVal ? (
         <Col span={24}>
           <Button
             type="link"
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => setviewSalaryAdvanceForm(false)}
+            onClick={() => setViewLoanForm(false)}
           >
-            Salary Advance List
+            Loan List
           </Button>
-          <AddSalaryAdvance />
+          <AddLoan />
         </Col>
       ) : (
         <Col span={24}>
           <Row gutter={[20, 30]} justify="end">
             <Col span="24">
-              <ListCard
-                listClass="nospace-card"
-                title="Loan List"
-                ListCol={salayAdvCol}
-                ListData={[]}
-                pagination={true}
-              />
+              <ListCard listClass="nospace-card" title="Loan List" ListCol={loanCol} ListData={[]} pagination={true} />
             </Col>
             <Col>
               <Button size="large" type="primary" onClick={onFormViewer}>
-                + Add New Advance
+                + Add New Loan
               </Button>
             </Col>
           </Row>
@@ -85,4 +79,4 @@ const AddEditSalaryAdvance = () => {
   );
 };
 
-export default AddEditSalaryAdvance;
+export default AddEditLoans;

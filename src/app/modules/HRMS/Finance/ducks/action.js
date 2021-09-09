@@ -1,3 +1,5 @@
+import axios from '../../../../../services/axiosInterceptor';
+import { apiMethod } from '../../../../../configs/constants';
 import * as action_types from './constant';
 
 export const closeAllOpenForms = (bol) => {
@@ -7,4 +9,14 @@ export const closeAllOpenForms = (bol) => {
       data: bol,
     });
   };
+};
+
+export const getOverallFinance = (page, limit) => async (dispatch) => {
+  const {
+    data: { message },
+  } = await axios.get(`${apiMethod}/hrms.api.emp_finance_overall?page_number=${page}&limit=${limit}`);
+  dispatch({
+    type: action_types.OVERALL_FINANCE,
+    data: message,
+  });
 };

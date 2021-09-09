@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Form, Breadcrumb } from 'antd';
 import { useForm } from 'react-hook-form';
-import ListCard from '../../../../../../../molecules/ListCard';
+import ListCard from '../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeAllOpenForms } from '../../../../ducks/action';
+import { closeAllOpenForms } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
-import AddAsset from './AddAssest';
+import AddAsset from '../../components/AddAssest';
 
 const assetsCol = [
   {
@@ -66,11 +66,11 @@ const AddEditAssets = () => {
           <Row gutter={[20, 30]} justify="end">
             <Col span={24}>
               <ListCard
-                listClass="nospace-card"
                 title="Assets in Position"
                 ListCol={assetsCol}
                 ListData={[]}
-                pagination={true}
+                classes="clickRow"
+                listClass="nospace-card"
               />
             </Col>
             <Col>

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Breadcrumb } from 'antd';
 import { useForm } from 'react-hook-form';
-import ListCard from '../../../../../../../molecules/ListCard';
-import { closeAllOpenForms } from '../../../../ducks/action';
+import ListCard from '../../../../../molecules/ListCard';
+import { closeAllOpenForms } from '../../ducks/action';
 import { useSelector, useDispatch } from 'react-redux';
 import { LeftOutlined } from '@ant-design/icons';
-import SalaryInformation from './AccountSalaryForms/SalaryInformation';
-import AddAccount from './AccountSalaryForms/AddAccount';
-import AddAllowence from './AccountSalaryForms/AddAllowances';
+import SalaryInformation from '../../components/AccountSalaryForms/SalaryInformation';
+import AddAccount from '../../components/AccountSalaryForms/AddAccount';
+import AddAllowence from '../../components/AccountSalaryForms/AddAllowances';
 const AddEditAccountSalary = () => {
   const { control, errors, handleSubmit } = useForm();
   const dispatch = useDispatch();

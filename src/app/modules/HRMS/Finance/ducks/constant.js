@@ -1,1 +1,2 @@
 export const CHANGE_TAB = 'CHANGE_TAB';
+export const OVERALL_FINANCE = 'OVERALL_FINANCE';

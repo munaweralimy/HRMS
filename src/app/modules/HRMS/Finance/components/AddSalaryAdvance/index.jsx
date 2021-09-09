@@ -1,10 +1,10 @@
 import React from 'react';
 import { Row, Col, Typography, Form, Button } from 'antd';
 import { useForm } from 'react-hook-form';
-import FormGroup from '../../../../../../../../molecules/FormGroup';
-import { addLoan } from './FormFileds';
+import FormGroup from '../../../../../molecules/FormGroup';
+import { addSalaryAdvance } from './FomFields';
 
-const AddLoan = () => {
+const AddSalaryAdvance = () => {
   const { control, errors, handleSubmit } = useForm();
   const { Title } = Typography;
   return (
@@ -12,17 +12,17 @@ const AddLoan = () => {
       <Row gutter={[24, 30]} align="bottom">
         <Col span={24}>
           <Title level={4} className="mb-0">
-            Loan Details
+            Salary Advance Details
           </Title>
         </Col>
-        {addLoan.map((value, key) => (
+        {addSalaryAdvance.map((value, key) => (
           <FormGroup key={key} item={value} control={control} errors={errors} />
         ))}
         <Col span={24}>
           <Row gutter={24} justify="end">
             <Col>
               <Button size="large" type="primary" htmlType="submit" className="red-btn">
-                Delete Loan
+                Delete Advance
               </Button>
             </Col>
             <Col>
@@ -37,4 +37,4 @@ const AddLoan = () => {
   );
 };
 
-export default AddLoan;
+export default AddSalaryAdvance;

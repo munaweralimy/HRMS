@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Row, Col, Typography, Form, Button } from 'antd';
 import { useForm } from 'react-hook-form';
-import FormGroup from '../../../../../../../../../molecules/FormGroup';
+import FormGroup from '../../../../../../molecules/FormGroup';
 import { salaryInformation } from './FormFields';
 const SalaryInformation = () => {
   const { Title } = Typography;
