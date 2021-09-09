@@ -136,3 +136,21 @@ export const emptyOverall = () => {
     });
   };
 };
+
+export const getTimesheet = (id, status, page, limit, order, orderby) => {
+  let ordering = '';
+    if(order == "ascend") {
+        ordering = 'ASC'
+    } else if(order == "descend") {
+        ordering = 'DESC'
+    }
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.get_employee_task_list?employee_id=${id}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      dispatch({
+        type: action_types.MY_TIMESHEETS,
+        data: message,
+      });
+    };
+};

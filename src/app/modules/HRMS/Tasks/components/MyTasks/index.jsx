@@ -69,7 +69,9 @@ export default (props) => {
   const myTaskData = useSelector(state => state.tasks.myTaskData);
   const myProjects = useSelector(state => state.tasks.myProject);
   const [rowDetails, setRowDetail] = useState(false);
+  const [mode,setMode] = useState('');
   const [rowData, setRowData] = useState([]);
+  const [selectedRecord, setRecord] = useState([]);
   const [activeKey, setActiveKey] = useState('1');
   const [page, setPage] = useState(1);
   const [limit,setLimit] = useState(10);
@@ -85,11 +87,12 @@ export default (props) => {
     {
       text: '+ Add New Timesheet',
       classes: 'green-btn',
-      action: () => { setAddVisible(true); setActiveKey('1')},
+      action: () => { setAddVisible(true); setActiveKey('1'); setMode('add')},
     },
   ];
 
   const updateApi = () => {
+    setRecord(null);
     dispatch(getMyTasks(id, 1, limit, '', ''));
   }
 
@@ -97,6 +100,7 @@ export default (props) => {
     return {
       onClick: () => {
         setRowDetail(true)
+        setRecord(record);
         let temp = [
           {
             label: 'Timesheet Date',
@@ -139,6 +143,10 @@ export default (props) => {
     }
   }
 
+  const onEdit = () => {
+    setAddVisible(true); setMode('edit')
+  }
+
   return (
     <>
       {!addVisible && <HeadingChip btnList={btnList} classes={`${isHDScreen ? 'optionsTabs' : 'mb-1-5'}`} />}
@@ -162,13 +170,16 @@ export default (props) => {
                 pageSize: limit
               }}
               />}
-              {addVisible && <AddNewTimeSheet id={id} updateApi={updateApi} setAddVisible={setAddVisible} />}
+              {addVisible && <AddNewTimeSheet id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
               {rowDetails && (
                 <DetailsComponent 
-                  setRowDetail={setRowDetail} 
+                  setRecord={setRecord}
+                  setRowDetail={setRowDetail}
                   mainTitle='Timesheet Details'
                   backbtnTitle='My Timesheet'
                   data={rowData}
+                  onAction3={onEdit}
+                  btn3title={'Edit Timesheet'}
                   />
               )}
             </TabPane>

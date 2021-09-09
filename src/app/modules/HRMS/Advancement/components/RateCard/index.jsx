@@ -6,14 +6,16 @@ import {Controller } from 'react-hook-form';
 import { InputField, RateField } from '../../../../../atoms/FormElement';
 // import querystring from 'querystring';
 import axios from '../../../../../../services/axiosInterceptor';
+import { apiMethod } from '../../../../../../configs/constants';
 
 const querystring = require('querystring');
 const { Option } = Select;
 
 export default (props) => {
 
-    const { control, index, item, onRemove } = props;
+    const { control, index, item, onRemove, array } = props;
     const [data, setData] = useState([]);
+    const [value1, setValue1] = useState();
     let timeout;
     let currentValue;
 
@@ -25,20 +27,17 @@ export default (props) => {
         currentValue = value;
 
         function callingFunc() {
-            const str = querystring.encode({
-                code: 'utf-8',
-                q: value,
-            });
-            axios.get(`chekkk`)
-            .then(response => response.json())
+            let url = `${apiMethod}/hrms.api.search_skill?search=${value}&job_title=${props.job}`
+            axios.get(url)
             .then(d => {
                 if (currentValue === value) {
-                    const { result } = d;
+                    const { data: {message} } = d;
                     const data = [];
-                    result.forEach(r => {
+                    message.forEach(r => {
+                        console.log('kkk',r)
                       data.push({
-                        value: r[0],
-                        text: r[0],
+                        value: r,
+                        text: r,
                       });
                     });
                     callback(data);
@@ -57,14 +56,12 @@ export default (props) => {
         }
     };
 
-    
-
     return (
         <Card bordered={false} className='small-card12 b-black'>
             <Row gutter={[20,20]}>
                 <Col flex='auto'>
                     <InputField
-                    fieldname={`job_related_skills[${index}].name`}
+                    fieldname={`${array}[${index}].name`}
                     label=''
                     class='readonly-transparent d-none'
                     initValue={item.name ? item.name : ''}
@@ -73,7 +70,7 @@ export default (props) => {
                     />
                     {item.skill_name ? 
                     <InputField
-                    fieldname={`job_related_skills[${index}].skill_name`}
+                    fieldname={`${array}[${index}].skill_name`}
                     label=''
                     class='readonly-transparent'
                     initValue={item.skill_name ? item.skill_name : ''}
@@ -86,14 +83,14 @@ export default (props) => {
                     className={'mb-0'}
                     >
                     <Controller
-                    name={`job_related_skills[${index}].skill_name`}
+                    name={`${array}[${index}].skill_name`}
                     control={control}
                     defaultValue={''}
-                    render={({ value, onChange }) => (
+                    render={({ value, onChange, onSearch }) => (
                         <Select 
-                        value={value}
-                        onChange={onChange}
-                        // onSearch={(e) => handleSearch}
+                        value={value1}
+                        onChange={(e) => {onChange(e); setValue1(e) }}
+                        onSearch={(e) => handleSearch(e)}
                         placeholder={'Enter skill'}
                         defaultActiveFirstOption={false}
                         showArrow={false}
@@ -101,7 +98,7 @@ export default (props) => {
                         notFoundContent={null}
                         showSearch
                         >
-                            {data.map(d => <Option key={d.value}>{d.name}</Option>)}
+                            {data.map(d => <Option key={d.value}>{d.text}</Option>)}
                         </Select>
                     )}
                     />
@@ -121,7 +118,7 @@ export default (props) => {
                     <Col flex='0 1 285px'>
                     <RateField
                         class='ratingField green-rate mb-0'
-                        fieldname={`job_related_skills[${index}].supervisor_assessment`}
+                        fieldname={`${array}[${index}].supervisor_assessment`}
                         label="Supervisor Assessment"
                         control={control}
                         initValue={item.supervisor_assessment ? item.supervisor_assessment : 0}
@@ -131,7 +128,7 @@ export default (props) => {
                     <Col flex='0 1 285px'>
                     <RateField
                         class='ratingField blue-rate mb-0'
-                        fieldname={`job_related_skills[${index}].self_staff_assessment`}
+                        fieldname={`${array}[${index}].self_staff_assessment`}
                         label="Staff Self Assessment"
                         control={control}
                         initValue={item.self_staff_assessment ? item.self_staff_assessment : 0}

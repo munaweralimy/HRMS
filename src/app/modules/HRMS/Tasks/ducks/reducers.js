@@ -9,7 +9,8 @@ const initialState = {
     myProject: [],
     myProjectData: [],
     myAddProjectData: [],
-    singleTaskData: []
+    singleTaskData: [],
+    timesheetData: {}
 };
 
 export default (state = initialState, action) => {
@@ -36,6 +37,9 @@ export default (state = initialState, action) => {
             return {...state, singleTaskData: data };
         case action_types.EMPTY_TASKS:
             return initialState;
+        case action_types.MY_TIMESHEETS:
+            return {...state, timesheetData: data };
+            
             
         default:
             return state;

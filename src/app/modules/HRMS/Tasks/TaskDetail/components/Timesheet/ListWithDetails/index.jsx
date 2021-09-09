@@ -3,11 +3,13 @@ import ListCard from '../../../../../../../molecules/ListCard';
 import DetailsComponent from '../../../../../../../molecules/HRMS/DetailsComponent';
 import moment from 'moment';
 
-export default ({details}) => {
+export default ({details, updateApi}) => {
 
   const { title, key, heading, data, column, nodetail, detailTitle, onAction1,onAction2 } = details;
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   const btnList = [
     {
@@ -54,6 +56,17 @@ export default ({details}) => {
     };
   }
 
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo',pagination)
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      updateApi(key, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey);
+    } else {
+      updateApi(key, pagination.current, pagination.pageSize, '', '');
+    }
+  }
+
     return (
         <>
         {!rowDetails ?
@@ -61,8 +74,13 @@ export default ({details}) => {
             title={heading}
             onRow={!nodetail ? onClickRow : null}
             ListCol={column} 
-            ListData={data} 
-            pagination={true}
+            ListData={data?.rows} 
+            pagination={{
+              total: data?.count,
+              current: page,
+              pageSize: limit
+            }}
+            onChange={onTableChange}
             classes={`${!nodetail ? 'clickRow' : ''}`}
             scrolling={500}
             listClass="nospace-card"
