@@ -100,6 +100,18 @@ const AddEditAccountSalary = (props) => {
 
     setViewSpecificForm(viewFormObj);
   }
+
+  const onRowClickHandler = (record) => {
+    return {
+      onClick: () => {
+        if (record?.account_no) {
+          onFormViewHandler('accountForm');
+        } else if (record?.allowance_type) {
+          onFormViewHandler('allowanceForm');
+        }
+      },
+    };
+  };
   return (
     <Row gutter={[24, 30]} align="bottom">
       {viewSpecificForm.accountForm && tabVal ? (
@@ -140,6 +152,7 @@ const AddEditAccountSalary = (props) => {
                   ListData={accountData}
                   pagination={false}
                   scrolling={500}
+                  onRow={onRowClickHandler}
                 />
               </Col>
               <Col>{empEditRecords[0].btnAcation}</Col>
@@ -158,6 +171,7 @@ const AddEditAccountSalary = (props) => {
                   ListData={allowanceData}
                   pagination={false}
                   scrolling={500}
+                  onRow={onRowClickHandler}
                 />
               </Col>
               <Col>{empEditRecords[1].btnAcation}</Col>
