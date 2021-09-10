@@ -139,6 +139,7 @@ const AddEditAccountSalary = (props) => {
                   ListCol={empEditRecords[0].empHistoryCol}
                   ListData={accountData}
                   pagination={false}
+                  scrolling={500}
                 />
               </Col>
               <Col>{empEditRecords[0].btnAcation}</Col>
@@ -156,6 +157,7 @@ const AddEditAccountSalary = (props) => {
                   ListCol={empEditRecords[1].empHistoryCol}
                   ListData={allowanceData}
                   pagination={false}
+                  scrolling={500}
                 />
               </Col>
               <Col>{empEditRecords[1].btnAcation}</Col>

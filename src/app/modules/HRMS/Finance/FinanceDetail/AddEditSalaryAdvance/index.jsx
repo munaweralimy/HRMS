@@ -70,7 +70,8 @@ const AddEditSalaryAdvance = () => {
                 title="Loan List"
                 ListCol={salayAdvCol}
                 ListData={[]}
-                pagination={true}
+                pagination={false}
+                scrolling={500}
               />
             </Col>
             <Col>

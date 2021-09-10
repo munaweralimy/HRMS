@@ -97,6 +97,7 @@ const AddEditLoans = (props) => {
                 ListData={loanData}
                 pagination={false}
                 onRow={onRowClickHandler}
+                scrolling={500}
               />
             </Col>
             <Col>

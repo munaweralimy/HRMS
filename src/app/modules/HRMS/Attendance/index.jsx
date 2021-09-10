@@ -166,6 +166,7 @@ export default (props) => {
   const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
   const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
+
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     console.log({ page, limit, sort, sortby });
     if (type == 'list') {

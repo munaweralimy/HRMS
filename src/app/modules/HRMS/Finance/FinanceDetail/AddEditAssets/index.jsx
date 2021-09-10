@@ -90,6 +90,7 @@ const AddEditAssets = (props) => {
                 listClass="nospace-card"
                 pagination={false}
                 onRow={onRowClickHandler}
+                scrolling={500}
               />
             </Col>
             <Col>
