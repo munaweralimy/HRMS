@@ -64,7 +64,11 @@ const FinanceDetail = () => {
           <Col span={24}>
             <Tabs defaultActiveKey="2" type="card" className="custom-tabs" onChange={onTabChangeHandler}>
               <TabPane tab={'Account & Salary'} key={'1'}>
-                <AccountSalary id={id} />
+                <AccountSalary
+                  id={id}
+                  accountData={financeDetails?.account}
+                  allowanceData={financeDetails?.allowance}
+                />
               </TabPane>
               <TabPane tab={'Assets'} key={'2'}>
                 <Assets id={id} assetData={financeDetails?.assets} />

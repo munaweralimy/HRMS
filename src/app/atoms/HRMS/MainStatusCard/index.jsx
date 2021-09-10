@@ -10,7 +10,6 @@ export default (props) => {
   const history = useHistory();
 
   const statuses = (status) => {
-    console.log('hello', status);
     switch (status) {
       case 'Missed':
         return 'b-error';

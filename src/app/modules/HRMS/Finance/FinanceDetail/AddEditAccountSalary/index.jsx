@@ -8,7 +8,10 @@ import { LeftOutlined } from '@ant-design/icons';
 import SalaryInformation from '../../components/AccountSalaryForms/SalaryInformation';
 import AddAccount from '../../components/AccountSalaryForms/AddAccount';
 import AddAllowence from '../../components/AccountSalaryForms/AddAllowances';
+
 const AddEditAccountSalary = (props) => {
+  const { accountData, allowanceData } = props;
+  console.log({ accountData }, { allowanceData });
   const { control, errors, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const tabVal = useSelector((state) => state.finance.tabClose);
@@ -30,19 +33,19 @@ const AddEditAccountSalary = (props) => {
           title: 'Account No.',
           dataIndex: 'account_no',
           key: 'account_no',
-          sorter: (a, b) => a.account_no.length - b.account_no.length,
+          sorter: true,
         },
         {
           title: 'Account Type',
           dataIndex: 'account_type',
           key: 'account_type',
-          sorter: (a, b) => a.account_type.length - b.account_type.length,
+          sorter: true,
         },
         {
           title: 'Branch',
-          dataIndex: 'account_branch',
-          key: 'account_branch',
-          sorter: (a, b) => a.account_branch.length - b.account_branch.length,
+          dataIndex: 'branch',
+          key: 'branch',
+          sorter: true,
           ellipsis: true,
         },
       ],
@@ -58,33 +61,32 @@ const AddEditAccountSalary = (props) => {
       empHistoryCol: [
         {
           title: 'Date',
-          dataIndex: 'allowance_date',
-          key: 'allowance_date',
-          sorter: (a, b) => a.allowance_date.length - b.allowance_date.length,
-          render: (text, record) => moment(text).format('LL'),
+          dataIndex: 'date_given',
+          key: 'date_given',
+          sorter: true,
+          // render: (text, record) => moment(text).format('LL'),
         },
         {
           title: 'Allowance Type',
           dataIndex: 'allowance_type',
           key: 'allowance_type',
-          sorter: (a, b) => a.allowance_type.length - b.allowance_type.length,
+          sorter: true,
         },
         {
           title: 'Ammount',
-          dataIndex: 'allowance_ammount',
-          key: 'allowance_ammount',
-          sorter: (a, b) => a.allowance_ammount.length - b.allowance_ammount.length,
+          dataIndex: 'amount',
+          key: 'amount',
+          sorter: true,
         },
         {
           title: 'Description',
           dataIndex: 'description',
           key: 'description',
-          //sorter: (a, b) => a.term_start.length - b.term_start.length,
-          // render: (text, record) => moment(text).format('LL'),
         },
       ],
     },
   ];
+
   function onFormViewHandler(form) {
     dispatch(closeAllOpenForms(true));
     let viewFormObj = {
@@ -135,8 +137,8 @@ const AddEditAccountSalary = (props) => {
                   listClass="nospace-card"
                   title={empEditRecords[0].heading}
                   ListCol={empEditRecords[0].empHistoryCol}
-                  ListData={[]}
-                  pagination={true}
+                  ListData={accountData}
+                  pagination={false}
                 />
               </Col>
               <Col>{empEditRecords[0].btnAcation}</Col>
@@ -152,8 +154,8 @@ const AddEditAccountSalary = (props) => {
                   listClass="nospace-card"
                   title={empEditRecords[1].heading}
                   ListCol={empEditRecords[1].empHistoryCol}
-                  ListData={[]}
-                  pagination={true}
+                  ListData={allowanceData}
+                  pagination={false}
                 />
               </Col>
               <Col>{empEditRecords[1].btnAcation}</Col>
