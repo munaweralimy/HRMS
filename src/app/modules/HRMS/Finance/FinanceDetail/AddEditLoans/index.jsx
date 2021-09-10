@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Form, Breadcrumb } from 'antd';
+import React, { useState } from 'react';
+import { Row, Col, Button } from 'antd';
 import ListCard from '../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { closeAllOpenForms } from '../../ducks/action';
+import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
 import AddLoan from '../../components/AddLoan';
 import moment from 'moment';
@@ -27,12 +27,22 @@ const loanCol = [
     dataIndex: 'amount',
     key: 'amount',
     sorter: true,
+    render: (text) => `RM ${text}`,
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
     sorter: true,
+    render: (text) => {
+      let clname = '';
+      if (text == 'Completed') {
+        clname = 'c-success';
+      } else if (text == 'Incomplete') {
+        clname = 'c-error';
+      }
+      return <span className={`SentanceCase ${clname}`}>{text}</span>;
+    },
   },
 ];
 
@@ -51,7 +61,7 @@ const AddEditLoans = (props) => {
   };
   const onCloseForm = () => {
     dispatch(getFinanceDetail(id));
-    setViewAssetsForm(false);
+    setViewLoanForm(false);
   };
   const onRowClickHandler = (record) => {
     return {
@@ -73,7 +83,7 @@ const AddEditLoans = (props) => {
           >
             Loan List
           </Button>
-          <AddLoan />
+          <AddLoan data={rowData} onUpdateComplete={onCloseForm} />
         </Col>
       ) : (
         <Col span={24}>
@@ -82,6 +92,7 @@ const AddEditLoans = (props) => {
               <ListCard
                 listClass="nospace-card"
                 title="Loan List"
+                classes="clickRow"
                 ListCol={loanCol}
                 ListData={loanData}
                 pagination={false}

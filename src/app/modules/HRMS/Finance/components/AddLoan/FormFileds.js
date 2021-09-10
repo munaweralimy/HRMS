@@ -4,23 +4,28 @@ const addLoan = [
     label: 'Loan Type',
     name: 'loan_type',
     twocol: true,
+    options: [
+      { value: 'General Loan', label: 'General Loan' },
+      { value: 'Student Loan', label: 'Student Loan' },
+    ],
   },
   {
     type: 'select',
     label: 'Loan Ammount',
     name: 'loan_ammount_type',
     twocol: true,
+    options: [{ value: 'RM', label: 'RM' }],
   },
   {
     type: 'input',
     label: '',
-    name: 'loan_ammount',
+    name: 'amount',
     twocol: true,
   },
   {
     type: 'date',
     label: 'Loan Start Date',
-    name: 'from_date',
+    name: 'loan_start_date',
     twocol: true,
   },
   {
@@ -28,18 +33,13 @@ const addLoan = [
     label: 'Monthly Deduction from Salary',
     name: 'monthly_deduction',
     twocol: true,
+    options: [{ value: 'RM', label: 'RM' }],
   },
   {
     type: 'input',
     label: '',
     name: 'deduct_ammount',
     twocol: true,
-  },
-  {
-    type: 'input',
-    label: 'Description',
-    name: 'description',
-    twocol: false,
   },
 ];
 export { addLoan };

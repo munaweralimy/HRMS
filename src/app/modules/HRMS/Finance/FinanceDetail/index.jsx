@@ -21,7 +21,7 @@ const FinanceDetail = () => {
   const financeDetails = useSelector((state) => state.finance.financeDetailData);
 
   const onTabChangeHandler = (e) => {
-    dispatch(closeAllOpenForms(falsae));
+    dispatch(closeAllOpenForms(false));
   };
 
   useEffect(() => {
