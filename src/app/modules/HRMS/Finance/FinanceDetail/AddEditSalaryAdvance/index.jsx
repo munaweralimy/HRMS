@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Form, Breadcrumb } from 'antd';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import { Row, Col, Button } from 'antd';
 import ListCard from '../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeAllOpenForms } from '../../ducks/action';
+import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
 import AddSalaryAdvance from '../../components/AddSalaryAdvance';
 const salayAdvCol = [
@@ -35,15 +34,30 @@ const salayAdvCol = [
   },
 ];
 
-const AddEditSalaryAdvance = () => {
-  const { control, errors, handleSubmit } = useForm();
+const AddEditSalaryAdvance = (props) => {
+  const { id, advanceSalaryData } = props;
   const dispatch = useDispatch();
+  const [rowData, setRowData] = useState();
   const [viewSalaryAdvanceForm, setviewSalaryAdvanceForm] = useState(false);
   const tabVal = useSelector((state) => state.finance.tabClose);
 
-  const onFormViewer = () => {
+  const onFormViewer = (record) => {
+    setRowData(record);
     dispatch(closeAllOpenForms(true));
     setviewSalaryAdvanceForm(true);
+  };
+
+  const onCloseForm = () => {
+    dispatch(getFinanceDetail(id));
+    setviewSalaryAdvanceForm(false);
+  };
+
+  const onRowClickHandler = (record) => {
+    return {
+      onClick: () => {
+        onFormViewer(record);
+      },
+    };
   };
 
   return (
@@ -55,11 +69,11 @@ const AddEditSalaryAdvance = () => {
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => setviewSalaryAdvanceForm(false)}
+            onClick={onCloseForm}
           >
             Salary Advance List
           </Button>
-          <AddSalaryAdvance />
+          <AddSalaryAdvance id={id} data={rowData} onUpdateComplete={onCloseForm} />
         </Col>
       ) : (
         <Col span={24}>
@@ -69,8 +83,9 @@ const AddEditSalaryAdvance = () => {
                 listClass="nospace-card"
                 title="Loan List"
                 ListCol={salayAdvCol}
-                ListData={[]}
+                ListData={advanceSalaryData}
                 pagination={false}
+                onRow={onRowClickHandler}
                 scrolling={500}
               />
             </Col>
