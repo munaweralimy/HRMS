@@ -102,7 +102,7 @@ export const getComments = (doctype, id) => {
     return async(dispatch) => {
         const {
             data: { message },
-        } = await axios.get(`${apiMethod}/aqa.api.get_message?doctype=${doctype}&doc_name=${id}`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_message?doctype=${doctype}&doc_name=${id}`);
         dispatch({
             type: action_types.ALL_COMMENTS,
             data: message,

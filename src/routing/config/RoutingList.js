@@ -82,7 +82,7 @@ export default [
   },
   {
     component: 'AddEmployment',
-    path: '/employment/addnew',
+    path: '/employment/add',
     title: titles.HRMS,
     permission: hrms,
     key: 'employment',
@@ -102,7 +102,7 @@ export default [
   },
   {
     component: 'TeamDetails',
-    path: '/employment/teamdetails',
+    path: '/employment/team/:id',
     title: titles.HRMS,
     permission: hrms,
     key: 'employment',

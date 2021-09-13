@@ -11,8 +11,8 @@ const { Title } = Typography;
 export default (props) => {
     const { iProps } = props;
     const history = useHistory();
-    const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey } = iProps;
-    const [filterVal, setFilterVal] = useState(filters && filters[0]?.label);
+    const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey, addonkey, listLink, topbtn } = iProps;
+    const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
     const [page, setPage] = useState(1);
     const [limit,setLimit] = useState(6);
     const [view, setView] = useState('card');
@@ -79,6 +79,10 @@ export default (props) => {
             </Radio.Button>
           </Radio.Group>
         </Space>
+        {topbtn && 
+        <Button type="primary" size='large' className="green-btn" onClick={topbtn.topAction}>
+            {topbtn.title}
+        </Button>}
       </Space>
     );
   };
@@ -99,7 +103,7 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
-        history.push(`${link}${record?.employee_id}`);
+        history.push(`${listLink || link}${record?.employee_id}`);
       },
     };
   };
@@ -142,7 +146,7 @@ export default (props) => {
             {carddata.map((item, index) => (
                 <Fragment key={index}>
                 <div className='requestPanel'>
-                    <MainStatusCard data={item} link={link} addon={addon} statusKey={statusKey} />
+                    <MainStatusCard data={item} link={link} addon={addon || item[addonkey]} statusKey={statusKey} />
                 </div>
               </Fragment>
             ))}

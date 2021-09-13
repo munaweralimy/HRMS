@@ -1,68 +1,82 @@
-import React from 'react';
-import { Button } from 'antd';
-import ListCard from '../../../../molecules/ListCard';
+import React, {useState, useEffect} from 'react';
+import { Row, Col, Typography } from 'antd';
+import ListComponent from '../../../../molecules/HRMS/ListComponent';
 import Search from '../components/Search';
 import { useHistory } from 'react-router-dom';
-const TeamList = () => {
+import { getTeams } from '../ducks/action';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+
+const { Title } = Typography;
+const colName = [
+  {
+    title: 'Team',
+    dataIndex: 'team_name',
+    key: 'team_name ',
+    sorter: true,
+  },
+  {
+    title: 'Company',
+    dataIndex: 'company',
+    key: 'company',
+    sorter: true,
+  },
+  {
+    title: 'Team Member',
+    dataIndex: 'members',
+    key: 'members',
+    sorter: true,
+    align: 'center',
+  },
+  {
+    title: 'Crated',
+    dataIndex: 'creation',
+    key: 'creation',
+    sorter: true,
+    render: (text) => text ? moment(text).format('Do MMMM YYYY') : text
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    sorter: true,
+  },
+];
+
+export default (props) => {
+
   const history = useHistory();
-  const colName = [
-    {
-      title: 'Team',
-      dataIndex: 'team',
-      key: 'team',
-      sorted: (a, b) => a.team - b.team,
-      render: (text) => (
-        <Button
-          type="text"
-          className="p-0"
-          onClick={() => {
-            history.push('/employment/teamdetails');
-          }}
-        >
-          {text}
-        </Button>
-      ),
-    },
-    {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
-    },
-    {
-      title: 'Team Member',
-      dataIndex: 'teammember',
-      key: 'teammember',
-      sorted: (a, b) => a.teammember - b.teammember,
-      align: 'center',
-    },
-    {
-      title: 'Crated',
-      dataIndex: 'created',
-      key: 'created',
-      sorted: (a, b) => a.created - b.created,
-      align: 'center',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      sorted: (a, b) => a.created - b.created,
-    },
-  ];
-  const data = [
-    {
-      team: 'Graphic Designer',
-      company: 'Centre for Content Creation Sdn. Bhd.',
-      teammember: '9',
-      created: '15th February 2021',
-      status: '3 Issues',
-    },
-  ];
+  const dispatch = useDispatch();
+  const data = useSelector(state => state.employment.teamList);
+
+  useEffect(() => {
+    dispatch(getTeams(1, 5, '', ''))
+  }, []);
 
   const onSearch = () => {};
 
-  return <ListCard ListCol={colName} ListData={data} Search={Search} onSearch={onSearch} />;
-};
+  const updateList = (page, limit, sort, sortby) => {
+    dispatch(getTeams(page, limit, sort, sortby));
+  }
 
-export default TeamList;
+    
+  return (
+    <Row gutter={[20,30]}>
+      <Col span={24}>
+        <Title level={3} className='mb-0'>Team List</Title>
+      </Col>
+      <Col span={24}>
+        <ListComponent
+          link='/employment/team/'
+          linkKey='team_code'
+          Search={Search}
+          onSearch={onSearch}
+          data={data}
+          ListCol= {colName}
+          defaultLimit={5}
+          updateList={updateList}
+        />
+      </Col>
+  </Row>
+  )
+};
