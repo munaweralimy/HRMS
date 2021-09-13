@@ -170,9 +170,9 @@ export default (props) => {
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     console.log({ page, limit, sort, sortby });
     if (type == 'list') {
-      dispatch(getOverallAttendance(page, limit, sort, (sortby = 'creation')));
+      dispatch(getOverallAttendance(page, limit, sort, sortby));
     } else {
-      dispatch(getOverallAttendance(page, limit, sort, (sortby = 'creation')));
+      dispatch(getOverallAttendance(page, limit, sort, sortby));
     }
   };
 

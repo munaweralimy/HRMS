@@ -31,6 +31,8 @@ export default (props) => {
         return 'b-error';
       case 'Expiring Asset Possesion':
         return 'b-pending';
+      case 'On Leave':
+        return 'b-success';
     }
   };
 
