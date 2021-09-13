@@ -15,6 +15,11 @@ export const updateAccount = (id, payload) => {
 export const updateSalaryAdvance = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Salary Advance/${id}`, payload);
 };
+
+export const updateSalaryInformation = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS EMP Finance/${id}`, payload);
+};
+
 export const addNewAccount = (payload) => {
   return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
 };

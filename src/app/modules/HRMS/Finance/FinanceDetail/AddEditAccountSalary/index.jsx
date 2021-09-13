@@ -10,7 +10,7 @@ import AddAccount from '../../components/AccountSalaryForms/AddAccount';
 import AddAllowence from '../../components/AccountSalaryForms/AddAllowances';
 
 const AddEditAccountSalary = (props) => {
-  const { accountData, allowanceData } = props;
+  const { accountData, allowanceData, salaryInfo } = props;
   const { id } = useParams();
   const [selectRowData, setSelectRowData] = useState();
   const dispatch = useDispatch();
@@ -161,7 +161,7 @@ const AddEditAccountSalary = (props) => {
             </Row>
           </Col>
           <Col span={24}>
-            <SalaryInformation />
+            <SalaryInformation id={id} />
           </Col>
           <Col span={24}>
             <Row gutter={[20, 30]} justify="end">

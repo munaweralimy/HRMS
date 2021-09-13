@@ -66,6 +66,7 @@ const FinanceDetail = () => {
               <TabPane tab={'Account & Salary'} key={'1'}>
                 <AccountSalary
                   id={id}
+                  salaryInfo={financeDetails}
                   accountData={financeDetails?.account}
                   allowanceData={financeDetails?.allowance}
                 />
