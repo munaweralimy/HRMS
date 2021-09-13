@@ -8,3 +8,7 @@ export const updateAssets = (id, payload) => {
 export const updateLoan = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Loan/${id}`, payload);
 };
+
+export const updateAccount = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS EMP Account/${id}`, payload);
+};

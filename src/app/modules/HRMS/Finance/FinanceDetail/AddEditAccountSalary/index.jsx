@@ -11,7 +11,7 @@ import AddAllowence from '../../components/AccountSalaryForms/AddAllowances';
 
 const AddEditAccountSalary = (props) => {
   const { accountData, allowanceData } = props;
-  console.log({ accountData }, { allowanceData });
+  const [selectRowData, setSelectRowData] = useState();
   const { control, errors, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const tabVal = useSelector((state) => state.finance.tabClose);
@@ -23,7 +23,7 @@ const AddEditAccountSalary = (props) => {
     {
       heading: 'Account List',
       btnAcation: (
-        <Button size="large" type="primary" onClick={() => onFormViewHandler('accountForm')}>
+        <Button size="large" type="primary" onClick={() => onFormViewHandler('accountForm', '')}>
           + Add New Account
         </Button>
       ),
@@ -53,7 +53,7 @@ const AddEditAccountSalary = (props) => {
     {
       heading: 'Allowances List',
       btnAcation: (
-        <Button size="large" type="primary" onClick={() => onFormViewHandler('allowanceForm')}>
+        <Button size="large" type="primary" onClick={() => onFormViewHandler('allowanceForm', '')}>
           + Add New Allowence
         </Button>
       ),
@@ -87,7 +87,7 @@ const AddEditAccountSalary = (props) => {
     },
   ];
 
-  function onFormViewHandler(form) {
+  function onFormViewHandler(form, record) {
     dispatch(closeAllOpenForms(true));
     let viewFormObj = {
       ...viewSpecificForm,
@@ -97,7 +97,7 @@ const AddEditAccountSalary = (props) => {
     if (form.length > 0) {
       viewFormObj[form] = true;
     }
-
+    setSelectRowData(record);
     setViewSpecificForm(viewFormObj);
   }
 
@@ -105,9 +105,9 @@ const AddEditAccountSalary = (props) => {
     return {
       onClick: () => {
         if (record?.account_no) {
-          onFormViewHandler('accountForm');
+          onFormViewHandler('accountForm', record);
         } else if (record?.allowance_type) {
-          onFormViewHandler('allowanceForm');
+          onFormViewHandler('allowanceForm', record);
         }
       },
     };
@@ -121,11 +121,11 @@ const AddEditAccountSalary = (props) => {
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => onFormViewHandler('')}
+            onClick={() => onFormViewHandler('', '')}
           >
             Account List
           </Button>
-          <AddAccount />
+          <AddAccount selectedAccout={selectRowData} onCloseForm={onFormViewHandler} />
         </Col>
       ) : viewSpecificForm.allowanceForm && tabVal ? (
         <Col span={24}>
@@ -134,11 +134,11 @@ const AddEditAccountSalary = (props) => {
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => onFormViewHandler('')}
+            onClick={() => onFormViewHandler('', '')}
           >
             Allowances List
           </Button>
-          <AddAllowence />
+          <AddAllowence selectedAllowance={selectRowData} />
         </Col>
       ) : (
         <>

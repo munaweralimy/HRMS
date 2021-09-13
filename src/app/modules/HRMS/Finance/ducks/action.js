@@ -11,12 +11,35 @@ export const closeAllOpenForms = (bol) => {
   };
 };
 
-export const getOverallFinance = (page, limit) => async (dispatch) => {
+export const getOverallFinance = (page, limit, order, orderby) => async (dispatch) => {
   const {
     data: { message },
-  } = await axios.get(`${apiMethod}/hrms.api.emp_finance_overall?page_number=${page}&limit=${limit}`);
+  } = await axios.get(
+    `${apiMethod}/hrms.api.get_overall_employment_cards?&page_number=${page}&limit=${limit}${
+      order ? `&order=${order}` : ''
+    }`,
+  );
   dispatch({
     type: action_types.OVERALL_FINANCE,
+    data: message,
+  });
+};
+export const getOverallFinanceList = (status, page, limit, order, orderby) => async (dispatch) => {
+  let ordering = '';
+  if (order == 'ascend') {
+    ordering = 'ASC';
+  } else if (order == 'descend') {
+    ordering = 'DESC';
+  }
+  const {
+    data: { message },
+  } = await axios.get(
+    `${apiMethod}/hrms.api.get_overall_finance_list?status=${status}&page_number=${page}&limit=${limit}${
+      order ? `&order=${ordering}&orderby=${orderby}` : ''
+    }`,
+  );
+  dispatch({
+    type: action_types.OVERALL_FINANCE_LIST,
     data: message,
   });
 };

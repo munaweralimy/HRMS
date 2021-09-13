@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form';
 import FormGroup from '../../../../../../molecules/FormGroup';
 import { addAllowences } from './FormFields';
 
-const AddAllowences = () => {
+const AddAllowences = (props) => {
+  console.log({ props });
   const { control, errors, handleSubmit } = useForm();
   const { Title } = Typography;
   return (

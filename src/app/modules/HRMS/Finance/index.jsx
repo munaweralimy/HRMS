@@ -5,7 +5,7 @@ import { useTranslate } from 'Translate';
 import Search from './components/Search';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
-import { getOverallFinance } from './ducks/action';
+import { getOverallFinance, getOverallFinanceList } from './ducks/action';
 const colName = [
   {
     title: 'ID',
@@ -49,8 +49,8 @@ const colName = [
 
 const filters = [
   {
-    label: 'Acative Employee',
-    value: 'Acative Employee',
+    label: 'Active',
+    value: 'Active',
   },
 
   {
@@ -62,9 +62,14 @@ const Finance = () => {
   const dispatch = useDispatch();
   const il8n = useTranslate();
   const overallFinance = useSelector((state) => state.finance.overallFinanceData);
+  const overallFinanceList = useSelector((state) => state.finance.overallFinanceListData);
 
-  const onOverallAction = (filter, page, limit, sort, sortby) => {
-    dispatch(getOverallFinance(page, limit));
+  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
+    if (type === 'list') {
+      dispatch(getOverallFinanceList(filter, page, limit, sort, sortby));
+    } else {
+      dispatch(getOverallFinance(page, limit, sort, sortby));
+    }
   };
 
   const tabs = [
@@ -76,9 +81,10 @@ const Finance = () => {
       iProps: {
         carddata: overallFinance?.rows || [],
         cardcount: overallFinance?.count || 0,
-        listdata: overallFinance?.rows || [],
-        listcount: overallFinance?.count || 0,
+        listdata: overallFinanceList?.rows || [],
+        listcount: overallFinanceList?.count || 0,
         listCol: colName,
+        filters: filters,
         Search: Search,
         link: '/finance/',
         statusKey: 'status',
