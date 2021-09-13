@@ -38,7 +38,7 @@ const addLoan = [
   {
     type: 'input',
     label: '',
-    name: 'deduct_ammount',
+    name: 'deduction_amount',
     twocol: true,
   },
 ];

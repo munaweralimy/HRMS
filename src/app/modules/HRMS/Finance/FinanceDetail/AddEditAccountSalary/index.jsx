@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Breadcrumb } from 'antd';
-import { useForm } from 'react-hook-form';
 import ListCard from '../../../../../molecules/ListCard';
-import { closeAllOpenForms } from '../../ducks/action';
+import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import SalaryInformation from '../../components/AccountSalaryForms/SalaryInformation';
 import AddAccount from '../../components/AccountSalaryForms/AddAccount';
@@ -11,8 +11,8 @@ import AddAllowence from '../../components/AccountSalaryForms/AddAllowances';
 
 const AddEditAccountSalary = (props) => {
   const { accountData, allowanceData } = props;
+  const { id } = useParams();
   const [selectRowData, setSelectRowData] = useState();
-  const { control, errors, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const tabVal = useSelector((state) => state.finance.tabClose);
   const [viewSpecificForm, setViewSpecificForm] = useState({
@@ -97,6 +97,7 @@ const AddEditAccountSalary = (props) => {
     if (form.length > 0) {
       viewFormObj[form] = true;
     }
+    dispatch(getFinanceDetail(id));
     setSelectRowData(record);
     setViewSpecificForm(viewFormObj);
   }
@@ -147,6 +148,7 @@ const AddEditAccountSalary = (props) => {
               <Col span={24}>
                 <ListCard
                   listClass="nospace-card"
+                  classes="clickRow"
                   title={empEditRecords[0].heading}
                   ListCol={empEditRecords[0].empHistoryCol}
                   ListData={accountData}
@@ -166,6 +168,7 @@ const AddEditAccountSalary = (props) => {
               <Col span={24}>
                 <ListCard
                   listClass="nospace-card"
+                  classes="clickRow"
                   title={empEditRecords[1].heading}
                   ListCol={empEditRecords[1].empHistoryCol}
                   ListData={allowanceData}

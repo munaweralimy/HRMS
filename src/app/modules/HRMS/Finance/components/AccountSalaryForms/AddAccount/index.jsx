@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Typography, Form, Button, message } from 'antd';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import { addAccount } from './FormFileds';
 import FormGroup from '../../../../../../molecules/FormGroup';
-import { updateAccount } from '../../../ducks/services';
+import { updateAccount, addNewAccount } from '../../../ducks/services';
+
 const AddAccount = (props) => {
   const { selectedAccout, onCloseForm } = props;
+  const { id } = useParams();
   const { Title } = Typography;
   const { control, errors, setValue, handleSubmit } = useForm();
 
@@ -23,10 +26,16 @@ const AddAccount = (props) => {
       account_type: values?.account_type.label,
       branch: values?.branch,
     };
-    updateAccount(selectedAccout?.name, payload).then((response) => {
-      message.success(`${selectedAccout?.name} Updated Seccussfully`);
-      onCloseForm('', '');
-    });
+
+    selectedAccout.name
+      ? updateAccount(selectedAccout?.name, payload).then((response) => {
+          message.success(`${selectedAccout?.name} Updated Seccussfully`);
+          onCloseForm('', '');
+        })
+      : addNewAccount({ employee_id: id, account: { ...payload, status: 'Active' } }).then((response) => {
+          message.success(`New Account Added Seccussfully`);
+          onCloseForm('', '');
+        });
   };
 
   return (
@@ -42,16 +51,26 @@ const AddAccount = (props) => {
         ))}
         <Col span={24}>
           <Row gutter={24} justify="end">
-            <Col>
-              <Button size="large" type="primary" htmlType="submit" className="red-btn">
-                Delete Account
-              </Button>
-            </Col>
-            <Col>
-              <Button size="large" type="primary" htmlType="submit" className="green-btn">
-                Save Changes
-              </Button>
-            </Col>
+            {selectedAccout?.name ? (
+              <>
+                <Col>
+                  <Button size="large" type="primary" htmlType="submit" className="red-btn">
+                    Delete Account
+                  </Button>
+                </Col>
+                <Col>
+                  <Button size="large" type="primary" htmlType="submit" className="green-btn">
+                    Save Changes
+                  </Button>
+                </Col>
+              </>
+            ) : (
+              <Col>
+                <Button size="large" type="primary" htmlType="submit" className="green-btn">
+                  Add Account
+                </Button>
+              </Col>
+            )}
           </Row>
         </Col>
       </Row>

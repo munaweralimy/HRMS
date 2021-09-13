@@ -12,3 +12,15 @@ export const updateLoan = (id, payload) => {
 export const updateAccount = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Account/${id}`, payload);
 };
+
+export const addNewAccount = (payload) => {
+  return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
+};
+
+export const addNewAsset = (payload) => {
+  return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
+};
+
+export const addNewLoan = (payload) => {
+  return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
+};

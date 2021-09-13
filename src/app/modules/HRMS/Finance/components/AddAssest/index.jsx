@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Typography, Form, Button, message } from 'antd';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import FormGroup from '../../../../../molecules/FormGroup';
 import { addAsset } from './FormFields';
-import { updateAssets } from '../../ducks/services';
+import { updateAssets, addNewAsset } from '../../ducks/services';
 import moment from 'moment';
 
 const AddAsset = (props) => {
   const { data, onUpdateComplete } = props;
+  const { id } = useParams();
   const { control, errors, setValue, handleSubmit } = useForm();
   const { Title } = Typography;
-  console.log({ data });
   useEffect(() => {
     if (data?.asset_no) {
       setValue('asset_no', data?.asset_no);
@@ -27,12 +28,19 @@ const AddAsset = (props) => {
       end_date: moment(values?.end_date).format('YYYY-MM-DD'),
       description: values?.description,
     };
-    updateAssets(data?.name, payload).then((response) => {
-      if (response.status === 200) {
-        message.success(`Asset ${data?.asset_no} update successfully`);
-        onUpdateComplete();
-      }
-    });
+    data?.name
+      ? updateAssets(data?.name, payload).then((response) => {
+          if (response.status === 200) {
+            message.success(`Asset ${data?.asset_no} update successfully`);
+            onUpdateComplete();
+          }
+        })
+      : addNewAsset({ employee_id: id, assets: { ...payload, possession_status: 'In Staff Possession' } }).then(
+          (response) => {
+            message.success(`New Asset added successfully`);
+            onUpdateComplete();
+          },
+        );
   };
 
   return (

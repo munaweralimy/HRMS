@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Typography, Form, Button, message } from 'antd';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import FormGroup from '../../../../../molecules/FormGroup';
 import { addLoan } from './FormFileds';
 import { SwitchField } from '../../../../../atoms/FormElement';
-import { updateLoan } from '../../ducks/services';
+import { updateLoan, addNewLoan } from '../../ducks/services';
 import moment from 'moment';
 
 const AddLoan = (props) => {
   const { data, onUpdateComplete } = props;
+  const { id } = useParams();
   const { control, errors, setValue, handleSubmit } = useForm();
   const { Title } = Typography;
 
@@ -19,6 +21,7 @@ const AddLoan = (props) => {
       setValue('amount', data.amount);
       setValue('loan_start_date', moment(data.loan_start_date, 'YYYY-MM-DD'));
       setValue('monthly_deduction', { value: 'RM', label: 'RM' });
+      setValue('deduction_amount', data.deduction_amount);
       setValue('status', data.status === 'Completed' ? true : false);
     }
   }, [data]);
@@ -36,7 +39,10 @@ const AddLoan = (props) => {
           message.success(`${data.name} Updated Successfully`);
           onUpdateComplete();
         })
-      : '';
+      : addNewLoan({ employee_id: id, loan: { ...payload, loan_status: 'Active' } }).then((response) => {
+          message.success(`New Loan Added Successfully`);
+          onUpdateComplete();
+        });
   };
 
   return (
