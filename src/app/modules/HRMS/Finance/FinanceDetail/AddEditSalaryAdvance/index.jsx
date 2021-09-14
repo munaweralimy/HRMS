@@ -81,7 +81,7 @@ const AddEditSalaryAdvance = (props) => {
             <Col span="24">
               <ListCard
                 listClass="nospace-card"
-                title="Loan List"
+                title="Salary Advance List"
                 ListCol={salayAdvCol}
                 ListData={advanceSalaryData}
                 pagination={false}
