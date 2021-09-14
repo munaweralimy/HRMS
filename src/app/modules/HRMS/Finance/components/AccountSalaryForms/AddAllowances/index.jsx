@@ -3,7 +3,7 @@ import { Row, Col, Typography, Form, Button, message } from 'antd';
 import { useForm } from 'react-hook-form';
 import FormGroup from '../../../../../../molecules/FormGroup';
 import { addAllowences } from './FormFields';
-import { updateAllowance, addNewAllowance } from '../../../ducks/services';
+import { updateAllowance, addNewAllowance, deleteAllowance } from '../../../ducks/services';
 import { useParams } from 'react-router-dom';
 
 import moment from 'moment';
@@ -47,6 +47,13 @@ const AddAllowences = (props) => {
         });
   };
 
+  const onDeleteHandler = () => {
+    deleteAllowance(selectedAllowance.name, { status: 'Inactive' }).then((response) => {
+      message.success(`Allowance ${selectedAllowance.name} Deleted Seccussfully`);
+      onCloseForm('', '');
+    });
+  };
+
   return (
     <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
       <Row gutter={[24, 30]} align="bottom">
@@ -63,7 +70,7 @@ const AddAllowences = (props) => {
             {selectedAllowance?.name ? (
               <>
                 <Col>
-                  <Button size="large" type="primary" htmlType="submit" className="red-btn">
+                  <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
                     Delete Allowance
                   </Button>
                 </Col>

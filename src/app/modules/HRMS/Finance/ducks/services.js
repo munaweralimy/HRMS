@@ -41,3 +41,10 @@ export const addNewSalaryAdvance = (payload) => {
 export const addNewAllowance = (payload) => {
   return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
 };
+
+export const deleteAccount = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS EMP Account/${id}`, payload);
+};
+export const deleteAllowance = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS EMP Allowance/${id}`, payload);
+};

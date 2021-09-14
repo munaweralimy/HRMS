@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { addAccount } from './FormFileds';
 import FormGroup from '../../../../../../molecules/FormGroup';
-import { updateAccount, addNewAccount } from '../../../ducks/services';
+import { updateAccount, addNewAccount, deleteAccount } from '../../../ducks/services';
 
 const AddAccount = (props) => {
   const { selectedAccout, onCloseForm } = props;
@@ -38,6 +38,13 @@ const AddAccount = (props) => {
         });
   };
 
+  const onDeleteHandler = () => {
+    deleteAccount(selectedAccout.name, { status: 'Inactive' }).then((response) => {
+      message.success(`Account ${selectedAccout.name} Deleted Seccussfully`);
+      onCloseForm('', '');
+    });
+  };
+
   return (
     <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
       <Row gutter={[24, 30]} align="bottom">
@@ -54,7 +61,7 @@ const AddAccount = (props) => {
             {selectedAccout?.name ? (
               <>
                 <Col>
-                  <Button size="large" type="primary" htmlType="submit" className="red-btn">
+                  <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
                     Delete Account
                   </Button>
                 </Col>
