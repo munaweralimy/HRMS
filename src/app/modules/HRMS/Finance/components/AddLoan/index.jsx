@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import FormGroup from '../../../../../molecules/FormGroup';
 import { addLoan } from './FormFileds';
 import { SwitchField } from '../../../../../atoms/FormElement';
-import { updateLoan, addNewLoan } from '../../ducks/services';
+import { updateLoan, addNewLoan, deleteLoan } from '../../ducks/services';
 import moment from 'moment';
 
 const AddLoan = (props) => {
@@ -34,16 +34,24 @@ const AddLoan = (props) => {
       loan_type: values?.loan_type.label,
       deduction_amount: values?.deduction_amount,
       status: values?.status,
+      loan_status: 'Active',
     };
     data?.name
       ? updateLoan(data.name, payload).then((response) => {
           message.success(`${data.name} Updated Successfully`);
           onUpdateComplete();
         })
-      : addNewLoan({ employee_id: id, loan: { ...payload, loan_status: 'Active' } }).then((response) => {
+      : addNewLoan({ employee_id: id, loan: { ...payload } }).then((response) => {
           message.success(`New Loan Added Successfully`);
           onUpdateComplete();
         });
+  };
+
+  const onDeleteHandler = () => {
+    deleteLoan(data.name, { loan_status: 'Inactive' }).then((response) => {
+      message.success(`Loan ${data.name} Deleted Seccussfully`);
+      onUpdateComplete();
+    });
   };
 
   return (
@@ -81,7 +89,7 @@ const AddLoan = (props) => {
             {data?.name ? (
               <>
                 <Col>
-                  <Button size="large" type="primary" htmlType="submit" className="red-btn">
+                  <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
                     Delete Loan
                   </Button>
                 </Col>
