@@ -16,38 +16,53 @@ export default (props) => {
   
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, setValue } = useForm();
   const projectName = useSelector(state => state.tasks.myProjectData);
-  const { setAddVisible, id, updateApi } = props;
+  const { setAddVisible, id, updateApi, mode, data } = props;
 
   useEffect(() => {
     dispatch(getProjectName());
   }, []);
 
+  useEffect(() => {
+    if(mode != 'add') {
+      setValue('projectName', {label: data.project, value: data.project});
+      setValue('timesheetDate', moment(data.date, 'YYYY-MM-DD'));
+      setValue('totalHours', data.hours);
+      setValue('task', data.tasks);
+    }
+  }, [data]);
+
   const onFinish = async (val) => {
     
     setLoad(true);
 
+    let temp = [{
+      parent: id,
+      parentfield: "timesheet",
+      parenttype: "HRMS Tasks",
+      status: "Pending",
+      doctype: "HRMS Timesheet",
+      project: val?.projectName?.value,
+      hours: val?.totalHours,
+      date: val?.timesheetDate ? moment(val?.timesheetDate).format('YYYY-MM-DD'): '',
+      tasks: val?.task,
+    }]
+
+    if (mode == 'edit') {
+      temp[0]['name'] = data.name;
+    }
+
     const json = {
-      timesheet: [{
-        parent: id,
-        parentfield: "timesheet",
-        parenttype: "HRMS Tasks",
-        status: "Pending",
-        doctype: "HRMS Timesheet",
-        project: val?.projectName?.value,
-        hours: val?.totalHours,
-        date: val?.timesheetDate ? moment(val?.timesheetDate).format('YYYY-MM-DD'): '',
-        tasks: val?.task,
-      }]
+      timesheet: temp
     }
     let url = `${apiMethod}/hrms.api.add_single_timesheet`;
     try {
         await axios.post(url, json);
         message.success('TimeSheet Added Successfully');
         setLoad(false);
-        updateApi();
-        setTimeout(() => setAddVisible(false), 1000)
+        
+        setTimeout(() => {setAddVisible(false); updateApi()}, 1000)
     } catch(e) {
         const { response } = e;
         message.error(e);

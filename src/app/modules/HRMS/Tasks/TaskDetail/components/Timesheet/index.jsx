@@ -12,6 +12,7 @@ export default (props) => {
 
     const { id, data, tabSelected, updateApi } = props;
     const [load, setLoad] = useState(false);
+    const [update, setUpdate] = useState(false);
     const [activeTab, setActiveTab] = useState(tabSelected ? tabSelected : 'Pending');
 
     const ListCol = [
@@ -19,24 +20,28 @@ export default (props) => {
           title: 'Date',
           dataIndex: 'date',
           key: 'date',
+          sorter: true,
         },
         {
             title: 'Project',
             dataIndex: 'project',
             key: 'project',
-            elipsis: true
+            elipsis: true,
+            sorter: true,
         },
         {
             title: 'Hours',
             dataIndex: 'hours',
             key: 'hours',
             align: 'center',
+            sorter: true,
         },
         {
             title: 'Task',
             dataIndex: 'tasks',
             key: 'tasks',
             ellipsis: true,
+            sorter: true,
         },
         {
             title: 'Status',
@@ -99,7 +104,7 @@ export default (props) => {
             await axios.get(url);
             setLoad(false)
             message.success('Timesheet Successfully Approved');
-            setTimeout(() => updateApi(), 2000);
+            setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
             
         } catch(e) {
             const { response } = e;
@@ -116,7 +121,7 @@ export default (props) => {
             await axios.get(url);
             setLoad(false)
             message.success('Timesheet Successfully Rejected');
-            setTimeout(() => updateApi(), 2000);
+            setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
             
         } catch(e) {
             const { response } = e;
@@ -130,7 +135,7 @@ export default (props) => {
             title: 'Pending',
             key: 'Pending',
             heading: 'Pending Timesheet List',
-            data: data?.pending,
+            data: data,
             column: ListCol,
             nodetail: false,
             detailTitle: 'Pending Timesheet Details',
@@ -139,8 +144,8 @@ export default (props) => {
         },
         {
             title: 'Issues',
-            key: 'Missed',
-            data: data?.issues,
+            key: 'Issues',
+            data: data,
             heading: 'Missed Timesheet List',
             column: ListCol2,
             nodetail: true,
@@ -148,20 +153,26 @@ export default (props) => {
         {
             title: 'History',
             key: 'History',
-            data: data?.history,
+            data: data,
             heading: 'Timesheet Archive',
             column: ListCol,
             nodetail: false,
             detailTitle: 'Timesheet Details',
         },
     ]
+
+    const changeTab = (e) => {
+      setActiveTab(e);
+      updateApi(e, 1, 10, '', '');
+      setUpdate(true);
+    }
  
     return (
         <Spin indicator={antIcon} size="large" spinning={load}>
-            <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={(e) => setActiveTab(e)}>
+            <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={changeTab}>
                 {tabs.map((item) => (
                     <TabPane tab={item.title} key={item.key}>
-                        <ListWithDetails details={item} />
+                        <ListWithDetails details={item} updateApi={updateApi} update={update} />
                     </TabPane>
                 ))}
             </Tabs>

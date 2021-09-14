@@ -23,35 +23,13 @@ export default (props) => {
     append(initQ)
   }
 
-  // const onAdd = () => {
-  //   if (selected) {
-  //     let temp = [];
-  //     temp = [...options];
-  //     const newtags = [...tags];
-  //     let check = newtags.findIndex((z) => z.name == selected.value);
-  //     if (check == -1) {
-  //       let a = options.findIndex((y) => y.value == selected.value);
-  //       if (a) {
-  //         setOptions(temp);
-  //       }
-
-  //       let obj = {};
-  //       obj['project'] = selected.value;
-  //       obj['name'] = selected.label;
-  //       newtags.push(obj);
-  //       setSelected('');
-  //       setTags(newtags);
-  //     } else {
-  //       message.error('Already Exist');
-  //     }
-  //   }
-  // };
-
   const onRemove = (e) => {
+    console.log('mdjlkj',e);
     let delProg = [];
     delProg = [...deleted];
     delProg.push({
       name: e.name,
+      project_code: e.project_code
     });
     setDeleted(delProg);
     const current = tags.filter((tag) => tag.project !== e.project);
