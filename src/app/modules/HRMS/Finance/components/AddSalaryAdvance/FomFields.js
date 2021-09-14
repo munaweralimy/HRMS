@@ -2,7 +2,7 @@ const addSalaryAdvance = [
   {
     type: 'date',
     label: 'Date Applied',
-    name: 'applied_date',
+    name: 'date_applied',
     twocol: true,
   },
   {

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import FormGroup from '../../../../../molecules/FormGroup';
 import { SliderFiled } from '../../../../../atoms/FormElement';
 import { addSalaryAdvance } from './FomFields';
-import { addNewSalaryAdvance, updateSalaryAdvance } from '../../ducks/services';
+import { addNewSalaryAdvance, updateSalaryAdvance, deleteAdvanceSalary } from '../../ducks/services';
 import moment from 'moment';
 
 const AddSalaryAdvance = (props) => {
@@ -15,7 +15,7 @@ const AddSalaryAdvance = (props) => {
 
   useEffect(() => {
     if (data) {
-      setValue('applied_date', data?.applied_date ? moment(data.applied_date, 'YYYY-MM-DD') : '');
+      setValue('date_applied', data?.date_applied ? moment(data.date_applied, 'YYYY-MM-DD') : '');
       setValue('deduction_date', data?.deduction_date ? moment(data.deduction_date, 'YYYY-MM-DD') : '');
       setValue('description', data?.description);
       setValue('amount', data?.amount);
@@ -28,16 +28,24 @@ const AddSalaryAdvance = (props) => {
       deduction_date: moment(values?.deduction_date).format('YYYY-MM-DD'),
       amount: values?.amount,
       description: values?.description,
+      status: 'Active',
     };
     data?.name
       ? updateSalaryAdvance(data.name, payload).then((response) => {
           message.success(`Advance Salary ${data.name} Updated Successfully`);
           onUpdateComplete();
         })
-      : addNewSalaryAdvance({ employee_id: id, salary_advance: { ...payload, status: 'Active' } }).then((response) => {
+      : addNewSalaryAdvance({ employee_id: id, salary_advance: { ...payload } }).then((response) => {
           message.success(`Advance Salary Added Successfully`);
           onUpdateComplete();
         });
+  };
+
+  const onDeleteHandler = () => {
+    deleteAdvanceSalary(data.name, { status: 'Inactive' }).then((response) => {
+      message.success(`Salary ${data.name} Deleted Seccussfully`);
+      onUpdateComplete();
+    });
   };
 
   return (
@@ -73,7 +81,7 @@ const AddSalaryAdvance = (props) => {
             {data?.name ? (
               <>
                 <Col>
-                  <Button size="large" type="primary" htmlType="submit" className="red-btn">
+                  <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
                     Delete Advance
                   </Button>
                 </Col>

@@ -54,3 +54,7 @@ export const deleteAsset = (id, payload) => {
 export const deleteLoan = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Loan/${id}`, payload);
 };
+
+export const deleteAdvanceSalary = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS EMP Salary Advance/${id}`, payload);
+};
