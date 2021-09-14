@@ -139,7 +139,7 @@ const AddEditAccountSalary = (props) => {
           >
             Allowances List
           </Button>
-          <AddAllowence selectedAllowance={selectRowData} />
+          <AddAllowence selectedAllowance={selectRowData} onCloseForm={onFormViewHandler} />
         </Col>
       ) : (
         <>

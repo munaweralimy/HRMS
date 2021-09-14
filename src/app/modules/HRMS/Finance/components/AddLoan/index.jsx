@@ -32,6 +32,7 @@ const AddLoan = (props) => {
       amount: values?.amount,
       loan_start_date: moment(values?.loan_start_date).format('YYYY-MM-DD'),
       loan_type: values?.loan_type.label,
+      deduction_amount: values?.deduction_amount,
       status: values?.status,
     };
     data?.name

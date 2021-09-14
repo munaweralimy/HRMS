@@ -5,25 +5,28 @@ import { useSelector, useDispatch } from 'react-redux';
 import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
 import AddSalaryAdvance from '../../components/AddSalaryAdvance';
+import moment from 'moment';
+
 const salayAdvCol = [
   {
     title: 'Date Applied',
     dataIndex: 'date_applied',
     key: 'date_applied',
-    sorter: (a, b) => a.date_applied.length - b.date_applied.length,
-    render: (text, record) => moment(text).format('LL'),
+    sorter: true,
+    render: (text) => moment(text).format('Do MMMM YYYY'),
   },
   {
     title: 'Deduction Date',
     dataIndex: 'deduction_date',
     key: 'deduction_date',
-    sorter: (a, b) => a.deduction_date.length - b.deduction_date.length,
+    sorter: true,
+    render: (text) => moment(text).format('Do MMMM YYYY'),
   },
   {
     title: 'Ammount',
-    dataIndex: 'salary_ammount',
-    key: 'salary_ammount',
-    sorter: (a, b) => a.salary_ammount.length - b.salary_ammount.length,
+    dataIndex: 'amount',
+    key: 'amount',
+    sorter: true,
   },
   {
     title: 'Description',
@@ -82,6 +85,7 @@ const AddEditSalaryAdvance = (props) => {
               <ListCard
                 listClass="nospace-card"
                 title="Salary Advance List"
+                classes="clickRow"
                 ListCol={salayAdvCol}
                 ListData={advanceSalaryData}
                 pagination={false}

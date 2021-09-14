@@ -2,37 +2,42 @@ const addAllowences = [
   {
     type: 'select',
     label: 'Allowence Type',
-    name: 'allowence_type',
+    name: 'allowance_type',
     twocol: true,
+    options: [
+      { label: 'Travel Allowance', value: 'Travel Allowance' },
+      { label: 'Medical Allowance', value: 'Medical Allowance' },
+    ],
   },
   {
     type: 'select',
     label: 'Allowece Ammount',
     name: 'allowence_ammount_type',
     twocol: true,
+    options: [{ value: 'RM', label: 'RM' }],
   },
   {
     type: 'input',
     label: '',
-    name: 'allowence_ammount',
+    name: 'amount',
     twocol: true,
   },
   {
     type: 'date',
     label: 'Date Given',
-    name: 'allowence_date',
+    name: 'date_given',
     twocol: true,
   },
   {
     type: 'upload',
     label: 'Upload Document',
-    name: 'allowence_document',
+    name: 'document',
     twocol: true,
   },
   {
     type: 'input',
     label: 'Description',
-    name: 'allowence_description',
+    name: 'description',
     twocol: true,
   },
 ];

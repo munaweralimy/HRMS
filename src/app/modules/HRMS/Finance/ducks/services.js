@@ -15,7 +15,9 @@ export const updateAccount = (id, payload) => {
 export const updateSalaryAdvance = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Salary Advance/${id}`, payload);
 };
-
+export const updateAllowance = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS EMP Allowance/${id}`, payload);
+};
 export const updateSalaryInformation = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Finance/${id}`, payload);
 };
@@ -33,5 +35,9 @@ export const addNewLoan = (payload) => {
 };
 
 export const addNewSalaryAdvance = (payload) => {
+  return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
+};
+
+export const addNewAllowance = (payload) => {
   return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
 };
