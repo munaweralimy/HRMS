@@ -29,8 +29,14 @@ export default (props) => {
         return 'b-success';
       case 'Outstanding Loan':
         return 'b-error';
-      case 'Expiring Asset Possesion':
+      case 'Expiring Asset Possession':
         return 'b-pending';
+      case 'Expired Asset Possession':
+        return 'b-error';
+      case 'Expiring':
+        return 'b-pending';
+      case 'Expired':
+        return 'b-error';
       case 'On Leave':
         return 'b-success';
     }

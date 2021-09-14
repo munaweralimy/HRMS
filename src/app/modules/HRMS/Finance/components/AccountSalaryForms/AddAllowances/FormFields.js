@@ -32,6 +32,7 @@ const addAllowences = [
     type: 'upload',
     label: 'Upload Document',
     name: 'document',
+    placeholder: 'Upload',
     twocol: true,
   },
   {

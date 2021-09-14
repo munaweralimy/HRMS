@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import FormGroup from '../../../../../../molecules/FormGroup';
 import { addAllowences } from './FormFields';
 import { updateAllowance, addNewAllowance, deleteAllowance } from '../../../ducks/services';
+import { uniquiFileName, getSingleUpload, getFileName } from '../../../../../../../features/utility';
+
 import { useParams } from 'react-router-dom';
 
 import moment from 'moment';
@@ -23,17 +25,32 @@ const AddAllowences = (props) => {
       setValue('allowence_ammount_type', { value: 'RM', label: 'RM' });
       setValue('amount', selectedAllowance.amount);
       setValue('date_given', moment(selectedAllowance.date_given, 'YYYY-MM-DD'));
-      setValue('document', selectedAllowance.document);
+      setValue('document', {
+        fileList: [
+          {
+            uid: '-1',
+            name: getFileName(selectedAllowance?.document),
+            status: 'done',
+            url: `http://cms2dev.limkokwing.net${selectedAllowance.document}`,
+          },
+        ],
+      });
       setValue('description', selectedAllowance.description);
     }
   }, [selectedAllowance]);
 
-  const onSubmitHandler = (values) => {
+  const onSubmitHandler = async (values) => {
+    let res = '';
+    if (values.document.file) {
+      let modifiedName = uniquiFileName(values.document?.file?.originFileObj.name);
+      res = await getSingleUpload(modifiedName, 'image', values.document?.file?.originFileObj, 'HRMS EMP Finance', id);
+    }
     const payload = {
       allowance_type: values.allowance_type.label,
       amount: values.amount,
       date_given: moment(values.date_given).format('YYYY-MM-DD'),
       description: values.description,
+      document: res?.file_url ? res?.file_url : selectedAllowance.document,
       status: 'Active',
     };
     selectedAllowance?.name
