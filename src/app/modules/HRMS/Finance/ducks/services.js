@@ -48,3 +48,6 @@ export const deleteAccount = (id, payload) => {
 export const deleteAllowance = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Allowance/${id}`, payload);
 };
+export const deleteAsset = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS EMP Assets/${id}`, payload);
+};

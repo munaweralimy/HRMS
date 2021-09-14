@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import FormGroup from '../../../../../molecules/FormGroup';
 import { addAsset } from './FormFields';
-import { updateAssets, addNewAsset } from '../../ducks/services';
+import { updateAssets, addNewAsset, deleteAsset } from '../../ducks/services';
 import moment from 'moment';
 
 const AddAsset = (props) => {
@@ -27,6 +27,7 @@ const AddAsset = (props) => {
       start_date: moment(values?.start_date).format('YYYY-MM-DD'),
       end_date: moment(values?.end_date).format('YYYY-MM-DD'),
       description: values?.description,
+      possession_status: 'In Staff Possession',
     };
     data?.name
       ? updateAssets(data?.name, payload).then((response) => {
@@ -35,12 +36,17 @@ const AddAsset = (props) => {
             onUpdateComplete();
           }
         })
-      : addNewAsset({ employee_id: id, assets: { ...payload, possession_status: 'In Staff Possession' } }).then(
-          (response) => {
-            message.success(`New Asset added successfully`);
-            onUpdateComplete();
-          },
-        );
+      : addNewAsset({ employee_id: id, assets: { ...payload } }).then((response) => {
+          message.success(`New Asset added successfully`);
+          onUpdateComplete();
+        });
+  };
+
+  const onDeleteHandler = () => {
+    deleteAsset(data.name, { status: '', possession_status: 'With Company' }).then((response) => {
+      message.success(`Asset ${data.name} Deleted Seccussfully`);
+      onUpdateComplete();
+    });
   };
 
   return (
@@ -59,8 +65,8 @@ const AddAsset = (props) => {
             {data?.asset_no ? (
               <>
                 <Col>
-                  <Button size="large" type="primary" htmlType="submit" className="red-btn">
-                    Delete Account
+                  <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
+                    Delete Asset
                   </Button>
                 </Col>
                 <Col>
