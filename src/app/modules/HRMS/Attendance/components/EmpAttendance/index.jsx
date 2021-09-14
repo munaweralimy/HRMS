@@ -111,11 +111,21 @@ export default (props) => {
   };
   return (
     <Card bordered={false} className="uni-card h-auto">
-      <Row gutter={[24, 30]} align="bottom">
-        <Col span={24}>
+      <Row gutter={[24, 30]}>
+        <Col span={24} flex="auto">
           <Title level={4} className="mb-0">
             Attendance
           </Title>
+        </Col>
+        <Col>
+          <Button
+            icon={<LeftOutlined />}
+            size="middle"
+            className="c-graybtn small-btn"
+            onClick={() => history.push('/requests')}
+          >
+            Categories
+          </Button>
         </Col>
         {viewForm ? (
           <Col span={24}>
