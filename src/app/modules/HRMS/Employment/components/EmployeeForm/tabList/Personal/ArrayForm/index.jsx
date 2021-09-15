@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import { Row, Col, Button, Typography } from 'antd';
+import { Row, Col, Button, Typography, Card } from 'antd';
 import FormGroup from '../../../../../../../../molecules/FormGroup';
 
 const {Title} = Typography;
@@ -12,7 +12,8 @@ export default (props) => {
     return (
         <>
         {fields.map((elem, index) => (
-            <Row gutter={[20,20]} className='position-relative' key={elem.id}>
+            <Card className={`${item.single ? 'transparent-card' : 'border-card'}`} key={elem.id}>
+            <Row gutter={[20,20]} className='position-relative'>
                 {item.child.map((x, i) => (
                 <Fragment key={i}>
                     {x?.subheader && (
@@ -35,6 +36,7 @@ export default (props) => {
                 </Fragment>
                 ))}
             </Row>
+            </Card>
         ))}
         </>
     )

@@ -109,7 +109,7 @@ export default (props) => {
           iProps={{ disabled: props.static ? props.static : false }}
           control={control}
           initValue={
-            elem
+            elem && elem[item.name]
               ? {
                   fileList: [
                     {

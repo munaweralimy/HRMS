@@ -11,6 +11,22 @@ const { Title } = Typography;
 const identificationList = [
   {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
 ]
+const instituteList = [
+  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+]
+const educationList = [
+  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+]
+const degreeList = [
+  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+]
+const positionList = [
+  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+]
+const relationList = [
+  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+]
+ 
 
 export default (props) => {
 
@@ -42,7 +58,31 @@ export default (props) => {
     control,
     name: 'emails',
   });
-  
+
+  const { fields: fieldsEd, append: appendEd, remove: removeEd,
+  } = useFieldArray({
+    control,
+    name: 'education',
+  });
+
+  const { fields: fieldsWx, append: appendWx, remove: removeWx,
+  } = useFieldArray({
+    control,
+    name: 'external_work_history',
+  });
+
+  const { fields: fieldsEm, append: appendEm, remove: removeEm,
+  } = useFieldArray({
+    control,
+    name: 'emergency_details',
+  });
+
+  const { fields: fieldsCh, append: appendCh, remove: removeCh,
+  } = useFieldArray({
+    control,
+    name: 'employee_children',
+  });
+
   
 
   useEffect(() => {
@@ -52,6 +92,40 @@ export default (props) => {
 
   const initE = { email: '' }
   const initP = { phone: '' }
+  const initEd = {
+    school_univ: "",
+    fields: "",
+    year_of_passing: "",
+    from_date: "",
+    to_date: "",
+    cgpa: "",
+    level: "",
+    country: "",
+    transcript: ""
+  }
+  const initWx = {
+    company_name: "",
+    designation: "",
+    from_date: "",
+    to_date: "",
+    description: ""
+  }
+  const initEm = {
+    salutation: "",
+    contact_person: "",
+    relation: "",
+    email: "",
+    phone_number: ""
+  }
+
+  const initCh = {
+      salutation: "",
+      full_name: "",
+      gender: "",
+      dob: "",
+      email: "",
+      occupation: ""
+  }
 
   const personalFields = [
     {
@@ -190,6 +264,288 @@ export default (props) => {
           },
       ]
     },
+
+// Childrens details
+
+    {
+      type: 'array',
+      name: 'employee_children',
+      subheader: 'Children Details',
+      twocol: false,
+      field: fieldsCh,
+      remov: removeCh,
+      adding: () => appendCh(initCh),
+      appendText:'+ Add children',
+      single: false,
+      child : [
+        {
+          subheader: 'Child',
+          type: 'select',
+          name: 'salutation',
+          label: 'Title',
+          options: titleList,
+          req: false,
+          placeholder: 'Please Select',
+          twocol: false,
+          colWidth: '0 1 150px'
+        },    
+        {
+          type: 'input',
+          name: 'full_name',
+          label: 'Name as per IC/Passport',
+          req: false,
+          placeholder: 'Please state',
+          twocol: false,
+          colWidth: '1 0 60%'
+        },
+        
+        {
+          type: 'select',
+          name: 'gender',
+          label: 'Gender',
+          placeholder: 'Please Select',
+          options: genderList.map(x => ({label: x.name, value: x.name})),
+          req: false,
+          twocol: true,
+        },
+        {
+          type: 'date',
+          name: 'dob',
+          label: 'Date of Birth',
+          req: false,
+          format: 'Do MMMM YYYY',
+          twocol: true,
+        },
+        {
+          type: 'input',
+          name: 'email',
+          label: 'Email',
+          req: false,
+          placeholder: 'Please state',
+          twocol: true,
+        },
+        {
+          type: 'input',
+          name: 'occupation',
+          label: 'Occupation',
+          req: false,
+          placeholder: 'Please state',
+          twocol: true,
+        },
+      ]
+    },
+
+// Emergency details
+    {
+      type: 'array',
+      name: 'emergency_details',
+      subheader: 'Emergency Details',
+      twocol: false,
+      field: fieldsEm,
+      remov: removeEm,
+      adding: () => appendEm(initEm),
+      appendText:'+ Add other emergency details',
+      single: false,
+      child : [
+        {
+          subheader: 'Emergency Contact',
+          type: 'select',
+          name: 'salutation',
+          label: 'Title',
+          options: titleList,
+          req: false,
+          placeholder: 'Please Select',
+          twocol: false,
+          colWidth: '0 1 150px'
+        },    
+        {
+          type: 'input',
+          name: 'contact_person',
+          label: 'Name as per IC/Passport',
+          req: false,
+          placeholder: 'Please state',
+          twocol: false,
+          colWidth: '0 1 60%'
+        },
+        
+        {
+          type: 'select',
+          name: 'relation',
+          label: 'Relationship',
+          placeholder: 'Please Select',
+          options: relationList,
+          req: false,
+          twocol: false,
+          colWidth: '1 0 100%'
+        },
+        {
+          type: 'input',
+          name: 'email',
+          label: 'Email',
+          req: false,
+          placeholder: 'Please state',
+          twocol: true,
+        },
+        {
+          type: 'input',
+          name: 'phone_number',
+          label: 'Phone',
+          req: false,
+          placeholder: 'Please state',
+          twocol: true,
+        },
+      ]
+    },
+    
+// Education details
+    {
+      type: 'array',
+      name: 'education',
+      twocol: false,
+      subheader: 'Education Level',
+      field: fieldsEd,
+      remov: removeEd,
+      adding: () => appendEd(initEd),
+      appendText:'+ Add other educaiton level',
+      single: false,
+      child : [
+        {
+            subheader: 'Education Level',
+            type: 'select',
+            name: 'school_univ',
+            label: 'Institution',
+            req: false,
+            options: instituteList,
+            colWidth: '1 0 100%',
+            placeholder: 'Please Select',
+            twocol: false,
+        },
+        {
+          type: 'select',
+          name: 'fields',
+          label: 'Field',
+          options: degreeList,
+          req: false,
+          colWidth: '1 0 100%',
+          placeholder: 'Please Select',
+          twocol: false,
+        },
+        {
+          type: 'date',
+          name: 'year_of_passing',
+          label: 'Graduation Year',
+          dateType: 'year',
+          req: false,
+          colWidth: '1 0 100%',
+          twocol: false,
+        },
+        {
+          type: 'date',
+          name: 'from_date',
+          label: 'From Date',
+          req: false,
+          twocol: true,
+        },
+        {
+          type: 'date',
+          name: 'to_date',
+          label: 'To Date',
+          req: false,
+          twocol: true,
+        },
+        {
+          type: 'input',
+          name: 'cgpa',
+          label: 'CGPA',
+          req: false,
+          placeholder: 'Please state',
+          twocol: true,
+        },
+        {
+          type: 'select',
+          name: 'level',
+          label: 'Education Type',
+          options: educationList,
+          req: false,
+          placeholder: 'Please Select',
+          twocol: true,
+        },
+        {
+          type: 'select',
+          name: 'country',
+          label: 'Country of Graduation',
+          options: countryList?.map(x => ({label: x.name, value: x.name})),
+          req: false,
+          placeholder: 'Please Select',
+          twocol: true,
+        },
+        {
+          name: 'transcript',
+          label: 'Attach Transcript',
+          req: false,
+          placeholder: 'Upload',
+          type: 'upload',
+          twocol: true,
+          reqmessage: 'required',
+        },
+      ]
+    },
+// Work Experience details
+    {
+      type: 'array',
+      name: 'external_work_history',
+      twocol: false,
+      subheader: 'Work Experience',
+      field: fieldsWx,
+      remov: removeWx,
+      adding: () => appendWx(initWx),
+      appendText:'+ Add other work experience',
+      single: false,
+      child : [
+        {
+            subheader: 'Work Experience',
+            type: 'input',
+            name: 'company_name',
+            label: 'Employer',
+            req: false,
+            placeholder: 'Please state',
+            twocol: true,
+        },
+        {
+          type: 'select',
+          name: 'designation',
+          label: 'Position',
+          options: positionList,
+          req: false,
+          placeholder: 'Please Select',
+          twocol: true,
+        },
+        {
+          type: 'date',
+          name: 'from_date',
+          label: 'From Date',
+          req: false,
+          twocol: true,
+        },
+        {
+          type: 'date',
+          name: 'to_date',
+          label: 'To Date',
+          req: false,
+          twocol: true,
+        },
+        {
+          type: 'textarea',
+          name: 'description',
+          label: 'Description',
+          req: false,
+          placeholder: 'Please state',
+          twocol: false,
+          colWidth: '1 0 100%'
+        },
+      ]
+    },
+
   ];
   
   const onFinish = async (val) => {
@@ -203,7 +559,7 @@ export default (props) => {
       {personalFields.map((item, idx) => (
         <Fragment key={idx}>
           {item?.subheader && 
-          <Col span={24}><Title level={5} className='mb-0 c-default'>{item.subheader}</Title></Col>}
+          <Col span={24}><Title level={4} className='mb-0 c-default'>{item.subheader}</Title></Col>}
           {item.type == 'array' ?
             <Col span={item.twocol ? 12 : 24}>
               <Row gutter={[20, 30]}>
@@ -221,377 +577,6 @@ export default (props) => {
           }
         </Fragment>
       ))}
-      {/* <Col span={6}>
-        <SelectField
-          fieldname="salutation"
-          label="Title"
-          control={control}
-          class="mb-0"
-          selectOption={}
-        />
-      </Col>
-      <Col span={18}>
-        <InputField
-          fieldname="first_name"
-          label="Name as per IC/Passport"
-          control={control}
-          class="mb-0"
-          iProps={{ placeholder: '', size: 'large' }}
-        />
-      </Col>
-      {personalInfoFields().map((item, index) => (
-        <Fragment key={index}>
-          {item?.subheader && (
-            <Col span={24}>
-              <Title level={5} className="mb-0 c-default">
-                {item.subheader}
-              </Title>
-            </Col>
-          )}
-          <FormGroup item={item} control={control} errors={errors} />
-        </Fragment>
-      ))}
-      <Col span={24}>
-        <Title level={4} className="mb-0">
-          Contact Details
-        </Title>
-      </Col>
-      {contactDetails().map((item, index) => (
-        <Fragment key={index}>
-          {item?.subheader && (
-            <Col span={24}>
-              <Title level={5} className="mb-0 c-default">
-                {item.subheader}
-              </Title>
-            </Col>
-          )}
-          <FormGroup item={item} control={control} errors={errors} />
-        </Fragment>
-      ))}
-      <Col span={24}>
-        <Title level={4} className="mb-0">
-          Spouse Details
-        </Title>
-      </Col>
-      <Col span={6}>
-        <SelectField
-          fieldname="spouse_salutation"
-          label="Title"
-          control={control}
-          class="mb-0"
-          selectOption={[
-            { value: 'Mr', label: 'Mr' },
-            { value: 'Miss', label: 'Miss' },
-          ]}
-        />
-      </Col>
-      <Col span={18}>
-        <InputField
-          fieldname="spouse_name"
-          label="Name as per IC/Passport"
-          control={control}
-          class="mb-0"
-          iProps={{ placeholder: '', size: 'large' }}
-        />
-      </Col>
-      {spouseDetails().map((item, index) => (
-        <Fragment key={index}>
-          {item?.subheader && (
-            <Col span={24}>
-              <Title level={5} className="mb-0 c-default">
-                {item.subheader}
-              </Title>
-            </Col>
-          )}
-          {item?.type == 'switch' ? (
-            <Col span={24}>
-              <Row gutter={24} justify="space-between">
-                <Col span={12}>{item.label}</Col>
-                <Col span={3} offset={4}>
-                  <FormGroup item={item} control={control} errors={errors} />
-                </Col>
-              </Row>
-            </Col>
-          ) : (
-            <FormGroup item={item} control={control} errors={errors} />
-          )}
-        </Fragment>
-      ))}
-      <Col span={24}>
-        <Title level={4} className="mb-0">
-          Children Details
-        </Title>
-      </Col>
-      {childrenDetail().map((item, idx) => (
-        <Fragment key={idx}>
-          {item?.subheader && (
-            <Col span={24}>
-              <Title level={5} className="mb-0 c-default">
-                {item.subheader}
-              </Title>
-            </Col>
-          )}
-          {item.type == 'array' ? (
-            <Col span={24}>
-              {fileds1.map((elem, index) => (
-                <Card className="border-card" key={elem.id}>
-                  <Row gutter={[20, 20]}>
-                    {item.child.map((x, i) => (
-                      <Fragment key={i}>
-                        {x?.subheader && (
-                          <Col span={24}>
-                            <Row gutter={20}>
-                              <Col flex={'auto'}>
-                                <Title level={5} className="mb-0 c-default">{`${index + 1} ${x.subheader} `}</Title>
-                              </Col>
-
-                              <Col flex="80px">
-                                <Button
-                                  type="link"
-                                  htmlType="button"
-                                  className="p-0 h-auto c-gray-linkbtn"
-                                  onClick={() => childRemove(index)}
-                                >
-                                  Remove
-                                </Button>
-                              </Col>
-                            </Row>
-                          </Col>
-                        )}
-
-                        <FormGroup elem={elem} index={index} parent={item} item={x} control={control} errors={errors} />
-                      </Fragment>
-                    ))}
-                  </Row>
-                </Card>
-              ))}
-
-              <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={() => childAppend(initQ)}>
-                + Add children
-              </Button>
-            </Col>
-          ) : (
-            <FormGroup static={true} item={item} control={control} errors={errors} />
-          )}
-        </Fragment>
-      ))}
-      <Col span={24}>
-        <Title level={4} className="mb-0">
-          Emergency Details
-        </Title>
-      </Col>
-      <Col span={6}>
-        <SelectField
-          fieldname="emergency_salutation"
-          label="Title"
-          control={control}
-          class="mb-0"
-          selectOption={[
-            { value: 'Mr', label: 'Mr' },
-            { value: 'Miss', label: 'Miss' },
-          ]}
-        />
-      </Col>
-      <Col span={18}>
-        <InputField
-          fieldname="emergency_contact"
-          label="Name as per IC/Passport"
-          control={control}
-          class="mb-0"
-          iProps={{ placeholder: '', size: 'large' }}
-        />
-      </Col>
-      {emergencyDetail().map((item, index) => (
-        <Fragment key={index}>
-          {item?.subheader && (
-            <Col span={24}>
-              <Title level={5} className="mb-0 c-default">
-                {item.subheader}
-              </Title>
-            </Col>
-          )}
-          <FormGroup item={item} control={control} errors={errors} />
-        </Fragment>
-      ))} */}
-      {/* {emergencyDetail().map((item, idx) => (
-        <Fragment key={idx}>
-          {item?.subheader && (
-            <Col span={24}>
-              <Title level={5} className="mb-0 c-default">
-                {item.subheader}
-              </Title>
-            </Col>
-          )}
-          
-          {item.type == 'array' ? (
-            <Col span={24}>
-              {fields2.map((elem, index) => (
-                <Card className="border-card" key={elem.id}>
-                  <Row gutter={[20, 20]}>
-                    {item.child.map((x, i) => (
-                      <Fragment key={i}>
-                        {x?.subheader && (
-                          <Col span={24}>
-                            <Row gutter={20}>
-                              <Col flex={'auto'}>
-                                <Title level={5} className="mb-0 c-default">{`${index + 1} ${x.subheader} `}</Title>
-                              </Col>
-
-                              <Col flex="80px">
-                                <Button
-                                  type="link"
-                                  htmlType="button"
-                                  className="p-0 h-auto c-gray-linkbtn"
-                                  onClick={() => emergencyRemove(index)}
-                                >
-                                  Remove
-                                </Button>
-                              </Col>
-                            </Row>
-                          </Col>
-                        )}
-                        <FormGroup elem={elem} index={index} parent={item} item={x} control={control} errors={errors} />
-                      </Fragment>
-                    ))}
-                  </Row>
-                </Card>
-              ))}
-
-              <Button
-                htmlType="button"
-                type="dashed"
-                size="large"
-                className="w-100"
-                onClick={() => emergencyAppend(initQ)}
-              >
-                + Add other emergency detail
-              </Button>
-            </Col>
-          ) : (
-            <FormGroup static={true} item={item} control={control} errors={errors} />
-          )}
-        </Fragment>
-      ))} */}
-      {/* <Col span={24}>
-        <Title level={4} className="mb-0">
-          Education Level
-        </Title>
-      </Col>
-      {educationLevel().map((item, idx) => (
-        <Fragment key={idx}>
-          {item?.subheader && (
-            <Col span={24}>
-              <Title level={5} className="mb-0 c-default">
-                {item.subheader}
-              </Title>
-            </Col>
-          )}
-          {item.type == 'array' ? (
-            <Col span={24}>
-              {fields3.map((elem, index) => (
-                <Card className="border-card" key={elem.id}>
-                  <Row gutter={[20, 20]}>
-                    {item.child.map((x, i) => (
-                      <Fragment key={i}>
-                        {x?.subheader && (
-                          <Col span={24}>
-                            <Row gutter={20}>
-                              <Col flex={'auto'}>
-                                <Title level={5} className="mb-0 c-default">{`${index + 1} ${x.subheader} `}</Title>
-                              </Col>
-
-                              <Col flex="80px">
-                                <Button
-                                  type="link"
-                                  htmlType="button"
-                                  className="p-0 h-auto c-gray-linkbtn"
-                                  onClick={() => educationRemove(index)}
-                                >
-                                  Remove
-                                </Button>
-                              </Col>
-                            </Row>
-                          </Col>
-                        )}
-                        <FormGroup index={index} parent={item} item={x} control={control} errors={errors} />
-                      </Fragment>
-                    ))}
-                  </Row>
-                </Card>
-              ))}
-
-              <Button
-                htmlType="button"
-                type="dashed"
-                size="large"
-                className="w-100"
-                onClick={() => educationAppend(initQ)}
-              >
-                + Add other education level
-              </Button>
-            </Col>
-          ) : (
-            <FormGroup static={true} item={item} control={control} errors={errors} />
-          )}
-        </Fragment>
-      ))}
-      <Col span={24}>
-        <Title level={4} className="mb-0">
-          Work Experience
-        </Title>
-      </Col>
-      {workExperience().map((item, idx) => (
-        <Fragment key={idx}>
-          {item?.subheader && (
-            <Col span={24}>
-              <Title level={5} className="mb-0 c-default">
-                {item.subheader}
-              </Title>
-            </Col>
-          )}
-          {item.type == 'array' ? (
-            <Col span={24}>
-              {fields4.map((elem, index) => (
-                <Card className="border-card" key={elem.id}>
-                  <Row gutter={[20, 20]}>
-                    {item.child.map((x, i) => (
-                      <Fragment key={i}>
-                        {x?.subheader && (
-                          <Col span={24}>
-                            <Row gutter={20}>
-                              <Col flex={'auto'}>
-                                <Title level={5} className="mb-0 c-default">{`${index + 1} ${x.subheader} `}</Title>
-                              </Col>
-
-                              <Col flex="80px">
-                                <Button
-                                  type="link"
-                                  htmlType="button"
-                                  className="p-0 h-auto c-gray-linkbtn"
-                                  onClick={() => workRemove(index)}
-                                >
-                                  Remove
-                                </Button>
-                              </Col>
-                            </Row>
-                          </Col>
-                        )}
-                        <FormGroup elem={elem} index={index} parent={item} item={x} control={control} errors={errors} />
-                      </Fragment>
-                    ))}
-                  </Row>
-                </Card>
-              ))}
-
-              <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={() => workAppend(initQ)}>
-                + Add other work experience
-              </Button>
-            </Col>
-          ) : (
-            <FormGroup static={true} item={item} control={control} errors={errors} />
-          )}
-        </Fragment>
-      ))} */}
     </Row>
     </Form>
   );
