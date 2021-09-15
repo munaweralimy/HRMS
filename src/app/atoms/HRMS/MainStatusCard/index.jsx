@@ -39,6 +39,8 @@ export default (props) => {
         return 'b-error';
       case 'On Leave':
         return 'b-success';
+      case 'Rest Day':
+        return 'b-success';
     }
   };
 

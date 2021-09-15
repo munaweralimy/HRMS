@@ -48,7 +48,7 @@ const ListCol = [
     align: 'center',
     render: (text) => {
       let clname = '';
-      if (text == 'On Duty') {
+      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
         clname = 'c-success';
       } else if (text == 'Absent') {
         clname = 'c-error';
