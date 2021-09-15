@@ -15,7 +15,7 @@ export const getOverallFinance = (page, limit, order, orderby) => async (dispatc
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.api.get_overall_employment_cards?&page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.api.get_overall_finance_cards?&page_number=${page}&limit=${limit}${
       order ? `&order=${order}` : ''
     }`,
   );
