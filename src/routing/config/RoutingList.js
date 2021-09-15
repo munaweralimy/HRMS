@@ -91,7 +91,7 @@ export default [
     parent: false,
   },
   {
-    component: 'EditEmployment',
+    component: 'EmploymentDetails',
     path: '/employment/:id',
     title: titles.HRMS,
     permission: hrms,

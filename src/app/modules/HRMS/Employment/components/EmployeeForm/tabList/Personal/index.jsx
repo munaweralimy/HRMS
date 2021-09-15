@@ -1,77 +1,233 @@
-import React, { Fragment } from 'react';
-import { Row, Col, Typography, Button, Card } from 'antd';
-import { useFieldArray } from 'react-hook-form';
-import {
-  personalInfoFields,
-  contactDetails,
-  spouseDetails,
-  childrenDetail,
-  emergencyDetail,
-  educationLevel,
-  workExperience,
-} from './PersonalFormFields/PersoanlFormFields';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Row, Col, Typography, Button, Form, message } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
-import { InputField, SelectField } from '../../../../../../../atoms/FormElement';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { titleList } from '../../../../../../../../configs/constantData';
+import { getCountry, getRace, getReligion, getMarital, getGender } from '../../../../../../Application/ducks/actions';
+import { useSelector, useDispatch } from 'react-redux';
+import ArrayForm from './ArrayForm';
 
-const Personal = (props) => {
-  const { control, errors, t } = props;
-  const mode = 'edAit';
-  const { Title } = Typography;
-  const {
-    fields: fileds1,
-    append: childAppend,
-    remove: childRemove,
+const { Title } = Typography;
+const identificationList = [
+  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+]
+
+export default (props) => {
+
+  const { mode, data, updateApi, id, setLoad } = props;
+  const dispatch = useDispatch();
+  const { control, errors, setValue, handleSubmit } = useForm();
+  const genderList = useSelector(state => state.global.genderData);
+  const raceList = useSelector(state => state.global.raceData);
+  const maritalList = useSelector(state => state.global.maritalData);
+  const religionList = useSelector(state => state.global.religionData);
+  const countryList = useSelector(state => state.global.countryData);
+
+  useEffect(() => {
+    dispatch(getCountry());
+    dispatch(getRace());
+    dispatch(getReligion());
+    dispatch(getMarital());
+    dispatch(getGender());
+  }, []);
+
+  const { fields: fieldsP, append: appendP, remove: removeP,
   } = useFieldArray({
     control,
-    name: 'employee_children',
+    name: 'phone_nos',
   });
-  const {
-    fields: fields2,
-    append: emergencyAppend,
-    remove: emergencyRemove,
+
+  const { fields: fieldsE, append: appendE, remove: removeE,
   } = useFieldArray({
     control,
-    name: 'emergency_detail',
+    name: 'emails',
   });
-  const {
-    fields: fields3,
-    append: educationAppend,
-    remove: educationRemove,
-  } = useFieldArray({
-    control,
-    name: 'education',
-  });
-  const {
-    fields: fields4,
-    append: workAppend,
-    remove: workRemove,
-  } = useFieldArray({
-    control,
-    name: 'external_work_history',
-  });
-  const initQ = {
-    education_name: '',
-    country: '',
-    academic_transcript: '',
-    academic_certificate: '',
-  };
+  
+  
+
+  useEffect(() => {
+    if (mode == 'edit' && data && Object.keys(data).length > 0) {
+    } 
+  }, [data]);
+
+  const initE = { email: '' }
+  const initP = { phone: '' }
+
+  const personalFields = [
+    {
+      type: 'select',
+      label: 'Title',
+      name: 'salutation',
+      twocol: false,
+      colWidth: '0 1 150px',
+      options: titleList,
+      req: true,
+      reqmessage: 'required',
+    },
+    {
+      type: 'input',
+      label: 'Name as per IC/Passport',
+      name: 'first_name',
+      twocol: false,
+      colWidth: '1 0 auto',
+      req: true,
+      reqmessage: 'Please enter name',
+    },
+    {
+      type: 'upload',
+      name: 'image',
+      label: 'Profile Picture',
+      placeholder: 'Upload',
+      twocol: false,
+      colWidth: '1 0 100%',
+      req: false,
+    },
+    {
+      type: 'select',
+      label: 'Gender',
+      name: 'gender',
+      twocol: true,
+      options: genderList?.map(x => ({label: x.name, value: x.name})),
+      req: true,
+      reqmessage: 'required',
+    },
+    {
+      type: 'select',
+      label: 'Marital Status',
+      name: 'marital_status',
+      twocol: true,
+      options: maritalList?.map(x => ({label: x.name, value: x.name})),
+      req: true,
+      reqmessage: 'required',
+    },
+    {
+      type: 'select',
+      label: 'Nationality',
+      name: 'nationality',
+      twocol: true,
+      options: countryList?.map(x => ({label: x.name, value: x.name})),
+      req: true,
+      reqmessage: 'required',
+    },
+    {
+      type: 'select',
+      label: 'Identification Type',
+      name: 'identification_type',
+      twocol: true,
+      options: identificationList,
+      req: false,
+    },
+    {
+      type: 'input',
+      label: 'Identification No.',
+      name: 'identification_no',
+      twocol: true,
+      req: false,
+    },
+    {
+      type: 'date',
+      label: 'Date of Birth',
+      name: 'date_of_birth',
+      twocol: true,
+      req: true,
+      reqmessage: 'Required',
+    },
+    {
+      type: 'select',
+      label: 'Race',
+      name: 'race',
+      twocol: true,
+      options: raceList?.map(x => ({label: x.name, value: x.name})),
+      req: false,
+    },
+    {
+      type: 'select',
+      label: 'Religion',
+      name: 'religious',
+      twocol: true,
+      options: religionList?.map(x => ({label: x.name, value: x.name})),
+      req: false,
+    },
+    {
+      subheader: 'Contact Details',
+      type: 'array',
+      name: 'phone_nos',
+      twocol: true,
+      field: fieldsP,
+      remov: removeP,
+      adding: () => appendP(initP),
+      appendText:'+ Add phone no.',
+      single: true,
+      child : [
+          {
+              type: 'input',
+              name: 'phone',
+              label: 'Phone No.',
+              req: false,
+              number: true,
+              colWidth: '1 0 100%',
+              twocol: false,
+          },
+      ]
+    },
+    {
+      type: 'array',
+      name: 'emails',
+      twocol: true,
+      field: fieldsE,
+      remov: removeE,
+      adding: () => appendE(initE),
+      appendText:'+ Add email',
+      single: true,
+      child : [
+          {
+              type: 'input',
+              name: 'email',
+              label: 'Email',
+              req: false,
+              colWidth: '1 0 100%',
+              twocol: false,
+          },
+      ]
+    },
+  ];
+  
+  const onFinish = async (val) => {
+    console.log('val', val);
+  }
+
   return (
+    <Form layout='vertical' onFinish={handleSubmit(onFinish)}>
     <Row gutter={[24, 30]} align="bottom">
-      <Col span={24}>
-        <Title level={4} className="mb-0">
-          Personal Information
-        </Title>
-      </Col>
-      <Col span={6}>
+      <Col span={24}><Title level={4} className="mb-0 c-default">Personal Information</Title></Col>
+      {personalFields.map((item, idx) => (
+        <Fragment key={idx}>
+          {item?.subheader && 
+          <Col span={24}><Title level={5} className='mb-0 c-default'>{item.subheader}</Title></Col>}
+          {item.type == 'array' ?
+            <Col span={item.twocol ? 12 : 24}>
+              <Row gutter={[20, 30]}>
+                <Col span={24}>
+                  <ArrayForm fields={item.field} remove={item.remov} item={item} control={control} errors={errors} />
+                </Col>
+                <Col span={24}>
+                  <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={item.adding}>
+                    {item.appendText}
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          : <FormGroup static={true} item={item} control={control} errors={errors} />
+          }
+        </Fragment>
+      ))}
+      {/* <Col span={6}>
         <SelectField
           fieldname="salutation"
           label="Title"
           control={control}
           class="mb-0"
-          selectOption={[
-            { value: 'Mr', label: 'Mr' },
-            { value: 'Miss', label: 'Miss' },
-          ]}
+          selectOption={}
         />
       </Col>
       <Col span={18}>
@@ -256,7 +412,7 @@ const Personal = (props) => {
           )}
           <FormGroup item={item} control={control} errors={errors} />
         </Fragment>
-      ))}
+      ))} */}
       {/* {emergencyDetail().map((item, idx) => (
         <Fragment key={idx}>
           {item?.subheader && (
@@ -316,7 +472,7 @@ const Personal = (props) => {
           )}
         </Fragment>
       ))} */}
-      <Col span={24}>
+      {/* <Col span={24}>
         <Title level={4} className="mb-0">
           Education Level
         </Title>
@@ -435,9 +591,8 @@ const Personal = (props) => {
             <FormGroup static={true} item={item} control={control} errors={errors} />
           )}
         </Fragment>
-      ))}
+      ))} */}
     </Row>
+    </Form>
   );
 };
-
-export default Personal;

@@ -56,6 +56,16 @@ select:-webkit-autofill:focus {
     justify-content: center;
 }
 
+.position-relative {
+  position: relative;
+}
+
+.right-fixed {
+  position: absolute;
+  top:0;
+  right:10px;
+}
+
 .p-0 {
   padding: 0 !important;
 }

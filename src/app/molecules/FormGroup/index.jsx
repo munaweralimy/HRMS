@@ -1,6 +1,7 @@
 import React from 'react';
-import { InputField, DateField, SelectField, CheckboxGroup, UploadField } from '../../atoms/FormElement';
+import { InputField, DateField, SelectField, CheckboxGroup, UploadField, TextAreaField } from '../../atoms/FormElement';
 import { Row, Col, Typography } from 'antd';
+import moment from 'moment';
 import { getFileName } from '../../../features/utility';
 
 const { Title } = Typography;
@@ -33,7 +34,7 @@ export default (props) => {
   };
 
   return (
-    <Col xxl={item.twocol ? 12 : 24} xl={item.twocol ? 12 : 24} lg={item.twocol ? 12 : 24} md={24}>
+    <Col className={item.hidden ? 'd-none': ''} flex={`${item.twocol ? '1 0 300px': item.colWidth ? item.colWidth : '100%'}`}>
       {item.type == 'input' && (
         <InputField
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
@@ -68,7 +69,7 @@ export default (props) => {
           selectOption={item.options}
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
-          validate={setValidate(true)}
+          validMessage={setValidate(true)}
         />
       )}
       {item.type == 'date' && (
@@ -77,11 +78,14 @@ export default (props) => {
           label={item.label}
           control={control}
           class="mb-0"
-          iProps={{ size: 'large' }}
+          iProps={{ size: 'large', format: item?.format ? item?.format : '' }}
           initValue=""
-          rules={{ required: { value: item.req, message: item.reqmessage } }}
+          rules={{ 
+            required: { value: item.req, message: item.reqmessage },
+            setValueAs: (value) => moment(value).format('YYYY-MM-DD'),
+           }}
           validate={setValidate(false)}
-          validate={setValidate(true)}
+          validMessage={setValidate(true)}
         />
       )}
       {item.type == 'checkbox' && (
@@ -94,7 +98,7 @@ export default (props) => {
           option={item.options}
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
-          validate={setValidate(true)}
+          validMessage={setValidate(true)}
         />
       )}
       {item.type == 'upload' && (
@@ -120,7 +124,21 @@ export default (props) => {
           }
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
-          validate={setValidate(true)}
+          validMessage={setValidate(true)}
+        />
+      )}
+      {item.type == 'textarea' && (
+        <TextAreaField
+          fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
+          label={item.label}
+          control={control}
+          class={`mb-0 ${item.hidden ? 'd-none' : ''}`}
+          iProps={{
+            readOnly: props.static ? props.static : false,
+            placeholder: item.placeholder,
+            size: 'large',
+          }}
+          initValue={elem && elem[item.name] ? elem[item.name] : ''}
         />
       )}
     </Col>
