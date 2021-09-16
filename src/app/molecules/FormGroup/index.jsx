@@ -65,7 +65,7 @@ export default (props) => {
           class={`mb-0 w-100 ${item.hidden ? 'd-none' : ''}`}
           initValue={elem ? { label: elem[item.name], value: elem[item.name] } : ''}
           control={control}
-          iProps={{ placeholder: item.placeholder, isDisabled: item.disabled || props.static }}
+          iProps={{ placeholder: item.placeholder, isMulti: item.multiple ? item.multiple : false , isDisabled: item.disabled || props.static }}
           selectOption={item.options}
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
@@ -78,8 +78,8 @@ export default (props) => {
           label={item.label}
           control={control}
           class="mb-0"
-          iProps={{ size: 'large', format: item?.format ? item?.format : '' }}
-          initValue=""
+          iProps={{ picker: item?.dateType ? item?.dateType : 'date', size: 'large', format: item?.format ? item?.format : '' }}
+          initValue={elem && elem[item.name] ? moment(elem[item.name], 'YYYY-MM-DD') : ''}
           rules={{ 
             required: { value: item.req, message: item.reqmessage },
             setValueAs: (value) => moment(value).format('YYYY-MM-DD'),
@@ -102,6 +102,8 @@ export default (props) => {
         />
       )}
       {item.type == 'upload' && (
+        <>
+        {console.log('kkk', item.name, elem)}
         <UploadField
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
@@ -126,6 +128,7 @@ export default (props) => {
           validate={setValidate(false)}
           validMessage={setValidate(true)}
         />
+        </>
       )}
       {item.type == 'textarea' && (
         <TextAreaField

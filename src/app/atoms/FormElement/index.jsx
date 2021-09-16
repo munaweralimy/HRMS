@@ -104,6 +104,26 @@ export const SelectField = (props) => {
                 color: '#BEBEBE',
                 backgroundColor: state.isFocused ? '#0077B6' : '#171717',
               }),
+              multiValue: (styles, { data }) => {
+                return {
+                  ...styles,
+                  backgroundColor: '#0e0e0e',
+                  borderRadius: 8,
+                  padding: '0 4px'
+                };
+              },
+              multiValueLabel: (styles) => ({
+                ...styles,
+                color: '#fff',
+              }),
+              multiValueRemove: (styles) => ({
+                ...styles,
+                color: '#7c7c7c',
+                ':hover': {
+                  backgroundColor: '#0e0e0e',
+                  color: 'white',
+                },
+              }),
               placeholder: (place) => ({ ...place, color: 'rgba(0,0,0,.3)' }),
             }}
             onChange={(e) => {

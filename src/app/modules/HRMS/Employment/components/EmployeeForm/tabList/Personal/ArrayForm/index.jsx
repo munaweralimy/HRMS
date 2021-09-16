@@ -6,7 +6,6 @@ const {Title} = Typography;
 
 export default (props) => {
 
-    console.log('check', props)
     const { fields, remove, item, control, errors} = props;
 
     return (
