@@ -9,4 +9,5 @@ export const MARITAL_STATUS = "MARITAL_STATUS";
 export const ALL_COMMENTS = "ALL_COMMENTS";
 export const EMPTY_COMMENTS = "EMPTY_COMMENTS";
 export const MENU_STAT = "MENU_STAT";
-
+export const INTITUTION_LIST = "INTITUTION_LIST";
+export const EDUCATION_TYPE = "EDUCATION_TYPE";

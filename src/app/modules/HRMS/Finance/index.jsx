@@ -159,8 +159,8 @@ const tableData = [
 ];
 const filters = [
   {
-    label: 'Acative Employee',
-    value: 'Acative Employee',
+    label: 'Active Employee',
+    value: 'Active',
   },
 
   {

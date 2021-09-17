@@ -13,6 +13,7 @@ const { TabPane } = Tabs;
 
 export default (props) => {
 
+  
   const dispatch = useDispatch();
   const data = useSelector(state => state.advancement.advData)
   const figures = useSelector(state => state.advancement.fitFigures)

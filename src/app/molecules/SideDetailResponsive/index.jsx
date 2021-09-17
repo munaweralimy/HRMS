@@ -9,7 +9,7 @@ export default (props) => {
   return (
     <Card bordered={false} className="uni-card">
       <Layout className="empty-card ">
-        <Card bordered={false} className={`detail-cardtop ${props.bottom.length > 1 ? 'onebtn-height' : ''}`}>
+        <Card bordered={false} className={`detail-cardtop ${props?.bottom?.length > 1 ? 'onebtn-height' : ''}`}>
           {props.cardType == 'empty' ? (
             <Row gutter={30} align='middle'>
               <Col flex='0 0 150px'>

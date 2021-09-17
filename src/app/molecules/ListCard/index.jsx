@@ -35,7 +35,7 @@ export default (props) => {
 
   return (
     <Card bordered={false} className={`uni-card ${listClass ? listClass : ''}`}>
-      <Row gutter={[30, 20]}>
+      <Row gutter={[20, 30]}>
         {title && (
           <Col span={24}>
             <Title level={4} className={`c-default mb-0 ${headclass ? headclass : ''}`}>

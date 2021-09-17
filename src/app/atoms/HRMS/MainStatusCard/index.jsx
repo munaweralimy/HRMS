@@ -28,6 +28,10 @@ export default (props) => {
         return 'b-error';
       case 'On Duty':
         return 'b-success';
+      case 'Expiring':
+        return 'b-pending';
+      case 'Expired':
+        return 'b-error';
     }
   };
 
@@ -42,7 +46,7 @@ export default (props) => {
         <Row gutter={[20, 30]}>
           <Col span={24}>
             <Space size={17}>
-              <Avatar size="large" size={70} src="" />
+              <Avatar size="large" size={70} src={`http://cms2dev.limkokwing.net${data?.image}`} />
               <Space direction="vertical" size={0}>
                 <Title level={5} className="c-default mb-0">
                   {data?.employee_name}
@@ -55,7 +59,7 @@ export default (props) => {
           <Col span={24}>
             <Card bordered={false} className={`mini-card ${statuses(data[statusKey])}`}>
               <Row gutter={24} wrap={false} align="middle">
-                <Col span={14}>
+                <Col span={24}>
                   <Space direction="vertical" size={2}>
                     <Title level={5} className="mb-0">
                       {data[statusKey]} {addon}
