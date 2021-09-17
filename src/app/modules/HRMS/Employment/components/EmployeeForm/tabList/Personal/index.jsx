@@ -3,32 +3,47 @@ import { Row, Col, Typography, Button, Form, message } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { titleList } from '../../../../../../../../configs/constantData';
-import { getCountry, getRace, getReligion, getMarital, getGender } from '../../../../../../Application/ducks/actions';
+import { getCountry, getRace, getReligion, getMarital, getGender, getInstitution, getEducationType } from '../../../../../../Application/ducks/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import ArrayForm from './ArrayForm';
 import moment from 'moment';
-import {getFileName} from '../../../../../../../../features/utility';
+import {getFileName, getSingleUpload} from '../../../../../../../../features/utility';
+import { employApi } from '../../../../ducks/services';
 
 const _ = require("lodash");
 const { Title } = Typography;
 
 const identificationList = [
-  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+  {label: 'MyKad/MyPR',value: 'MyKad/MyPR'},
+  {label: 'IC', value: 'IC '},
+  {label: 'Passport', value: 'Passport '}
 ]
-const instituteList = [
-  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
-]
-const educationList = [
-  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
-]
+
 const degreeList = [
-  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+  {label: 'Foundation', value: 'Foundation'},
+  {label: 'Diploma', value: 'Diploma'},
+  {label: 'Degree', value: 'Degree'},
+  {label: 'Masters Degree', value: 'Masters Degree'},
+  {label: 'Doctorate', value: 'Doctorate'},
 ]
 const positionList = [
-  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+  {label: 'Junior Executive', value: 'Junior Executive'},
+  {label: 'Senior Executive', value: 'Senior Executive'},
+  {label: 'Assistant Manager', value: 'Assistant Manager'},
+  {label: 'Manager', value: 'Manager'},
+  {label: 'Senior Manager', value: 'Senior Manager'},
+  {label: 'Junior Partner', value: 'Junior Partner'},
+  {label: 'Senior Partner', value: 'Senior Partner'},
+  {label: 'Associate', value: 'Associate'},
+  {label: 'Senior Associate', value: 'Senior Associate'},
+  {label: 'Director', value: 'Director'},
+  {label: 'Senior Director', value: 'Senior Director'},
 ]
 const relationList = [
-  {label: 'MyKad / MyPR', value: 'MyKad / MyPR'}
+  {label: 'Father', value: 'Father'},
+  {label: 'Mother', value: 'Mother'},
+  {label: 'Relative', value: 'Relative'},
+  {label: 'Others', value: 'Others'},
 ]
  
 
@@ -42,6 +57,8 @@ export default (props) => {
   const maritalList = useSelector(state => state.global.maritalData);
   const religionList = useSelector(state => state.global.religionData);
   const countryList = useSelector(state => state.global.countryData);
+  const instituteList = useSelector(state => state.global.institutions);
+  const educationList = useSelector(state => state.global.educationType);
 
   useEffect(() => {
     dispatch(getCountry());
@@ -49,19 +66,9 @@ export default (props) => {
     dispatch(getReligion());
     dispatch(getMarital());
     dispatch(getGender());
+    dispatch(getInstitution());
+    dispatch(getEducationType());
   }, []);
-
-  const { fields: fieldsP, append: appendP, remove: removeP,
-  } = useFieldArray({
-    control,
-    name: 'phone_nos',
-  });
-
-  const { fields: fieldsE, append: appendE, remove: removeE,
-  } = useFieldArray({
-    control,
-    name: 'emails',
-  });
 
   const { fields: fieldsEd, append: appendEd, remove: removeEd,
   } = useFieldArray({
@@ -78,7 +85,7 @@ export default (props) => {
   const { fields: fieldsEm, append: appendEm, remove: removeEm,
   } = useFieldArray({
     control,
-    name: 'emergency_details',
+    name: 'emergency_contact',
   });
 
   const { fields: fieldsCh, append: appendCh, remove: removeCh,
@@ -91,7 +98,7 @@ export default (props) => {
 
   useEffect(() => {
     if (mode == 'edit' && data && Object.keys(data).length > 0) {
-      setValue('salutation', data?.salutation);
+      setValue('salutation', data?.salutation ? {label: data?.salutation, value: data?.salutation}: '');
       setValue('first_name', data?.first_name);
       setValue('image', data?.image ? {fileList: [{uid: '-1', name: getFileName(data?.image), status: 'done', url: `http://cms2dev.limkokwing.net${data?.image}`}]} : '');
       setValue('gender', data?.gender ? {label: data?.gender, value: data?.gender} : '');
@@ -103,17 +110,22 @@ export default (props) => {
       setValue('race', data?.race ? {label: data?.race, value: data?.race} : '');
       setValue('religious', data?.religious ? {label: data?.religious, value: data?.religious} : '');
       
-      setValue('current_address_1', data?.current_address_1);
-      setValue('current_state', data?.current_state);
-      setValue('current_post_code', data?.current_post_code);
-      setValue('current_country', data?.current_country ? {label: data?.current_country,value: data?.current_country} : '');
-      setValue('current_city', data?.current_city);
-
-      setValue('permanent_address_1', data?.permanent_address_1);
-      setValue('permanent_state', data?.permanent_state);
-      setValue('permanent_post_code', data?.permanent_post_code);
-      setValue('permanent_country', data?.permanent_country ? {label: data?.permanent_country,value: data?.permanent_country} : '');
-      setValue('permanent_city', data?.permanent_city);
+      if (data?.current_permanent_address && data?.current_permanent_address.length > 0) {
+        if (data?.current_permanent_address[0]?.current_address == 1) {
+          setValue('current_address_1', data?.current_permanent_address[0].current_address_1);
+          setValue('current_state', data?.current_permanent_address[0].permanent_state);
+          setValue('current_post_code', data?.current_permanent_address[0].current_post_code);
+          setValue('current_country', data?.current_permanent_address[0]?.current_country ? {label: data?.current_permanent_address[0].current_country,value: data?.current_permanent_address[0].current_country} : '');
+          setValue('current_city', data?.current_permanent_address[0].current_city);
+        }
+        if (data?.current_permanent_address[1]?.permanent_address == 1) {
+          setValue('permanent_address_1', data?.current_permanent_address[1].current_address_1);
+          setValue('permanent_state', data?.current_permanent_address[1].permanent_state);
+          setValue('permanent_post_code', data?.current_permanent_address[1].current_post_code);
+          setValue('permanent_country', data?.current_permanent_address[1]?.current_country ? {label: data?.current_permanent_address[1].current_country,value: data?.current_permanent_address[1].current_country} : '');
+          setValue('permanent_city', data?.current_permanent_address[1].current_city);
+        }
+      }
 
       setValue('spouse_salutation', data?.spouse_salutation ? {label: data?.spouse_salutation, value: data?.spouse_salutation} : '');
       setValue('spouse_name', data?.spouse_name);
@@ -130,20 +142,21 @@ export default (props) => {
       setValue('spouse_phone_no', data?.spouse_phone_no);
       setValue('spouse_income_tax_no', data?.spouse_income_tax_no);
 
-      setValue('phone_nos', data?.phone_nos);
-      setValue('emails', data?.emails);
+      setValue('primary_phone_no', data?.primary_phone_no);
+      setValue('secondary_phone_no', data?.secondary_phone_no);
+      setValue('primary_email', data?.primary_email);
+      setValue('secondary_email', data?.secondary_email);
+
       setValue('education', data?.education);
       setValue('external_work_history', data?.external_work_history);
-      setValue('emergency_details', data?.emergency_details);
+      setValue('emergency_contact', data?.emergency_contact);
       setValue('employee_children', data?.employee_children);
     } 
   }, [data]);
 
-  const initE = { email: '' }
-  const initP = { phone: '' }
   const initEd = {
-    school_univ: [],
-    fields: [],
+    school_univ: '',
+    fields: '',
     year_of_passing: "",
     from_date: "",
     to_date: "",
@@ -182,8 +195,9 @@ export default (props) => {
       label: 'Title',
       name: 'salutation',
       twocol: false,
-      colWidth: '0 1 150px',
+      colWidth: '0 1 120px',
       options: titleList,
+      placeholder: 'Select',
       req: true,
       reqmessage: 'required',
     },
@@ -193,6 +207,7 @@ export default (props) => {
       name: 'first_name',
       twocol: false,
       colWidth: '1 0 auto',
+      placeholder: 'Please state',
       req: true,
       reqmessage: 'Please enter name',
     },
@@ -203,7 +218,8 @@ export default (props) => {
       placeholder: 'Upload',
       twocol: false,
       colWidth: '1 0 100%',
-      req: false,
+      req: true,
+      reqmessage: 'Please upload image'
     },
     {
       type: 'select',
@@ -212,31 +228,35 @@ export default (props) => {
       twocol: true,
       options: genderList?.map(x => ({label: x.name, value: x.name})),
       req: true,
-      reqmessage: 'required',
+      placeholder: 'Please select',
+      reqmessage: 'Required',
     },
     {
       type: 'select',
       label: 'Marital Status',
       name: 'marital_status',
       twocol: true,
+      placeholder: 'Please select',
       options: maritalList?.map(x => ({label: x.name, value: x.name})),
       req: true,
-      reqmessage: 'required',
+      reqmessage: 'Required',
     },
     {
       type: 'select',
       label: 'Nationality',
       name: 'nationality',
       twocol: true,
+      placeholder: 'Please select',
       options: countryList?.map(x => ({label: x.name, value: x.name})),
       req: true,
-      reqmessage: 'required',
+      reqmessage: 'Required',
     },
     {
       type: 'select',
       label: 'Identification Type',
       name: 'identification_type',
       twocol: true,
+      placeholder: 'Please select',
       options: identificationList,
       req: false,
     },
@@ -244,6 +264,7 @@ export default (props) => {
       type: 'input',
       label: 'Identification No.',
       name: 'identification_no',
+      placeholder: 'Please state',
       twocol: true,
       req: false,
     },
@@ -260,6 +281,7 @@ export default (props) => {
       label: 'Race',
       name: 'race',
       twocol: true,
+      placeholder: 'Please select',
       options: raceList?.map(x => ({label: x.name, value: x.name})),
       req: false,
     },
@@ -267,52 +289,48 @@ export default (props) => {
       type: 'select',
       label: 'Religion',
       name: 'religious',
+      placeholder: 'Please select',
       twocol: true,
       options: religionList?.map(x => ({label: x.name, value: x.name})),
       req: false,
     },
     {
       subheader: 'Contact Details',
-      type: 'array',
-      name: 'phone_nos',
+      type: 'input',
+      name: 'primary_phone_no',
+      label: 'Phone No.',
+      placeholder: 'Please state',
+      req: true,
+      number: true,
       twocol: true,
-      field: fieldsP,
-      remov: removeP,
-      adding: () => appendP(initP),
-      appendText:'+ Add phone no.',
-      single: true,
-      child : [
-          {
-              type: 'input',
-              name: 'phone',
-              label: 'Phone No.',
-              req: false,
-              number: true,
-              colWidth: '1 0 100%',
-              twocol: false,
-          },
-      ]
+      reqmessage: 'Required',
     },
     {
-      type: 'array',
-      name: 'emails',
+      type: 'input',
+      name: 'secondary_phone_no',
+      label: 'Second Phone No.',
+      placeholder: 'Please state',
+      req: false,
+      number: true,
       twocol: true,
-      field: fieldsE,
-      remov: removeE,
-      adding: () => appendE(initE),
-      appendText:'+ Add email',
-      single: true,
-      child : [
-          {
-              type: 'input',
-              name: 'email',
-              label: 'Email',
-              req: false,
-              colWidth: '1 0 100%',
-              twocol: false,
-          },
-      ]
     },
+    {
+        type: 'input',
+        name: 'primary_email',
+        label: 'Email',
+        placeholder: 'Please state',
+        req: true,
+        twocol: true,
+        reqmessage: 'Required',
+    },
+    {
+      type: 'input',
+      name: 'secondary_email',
+      label: 'Second Email',
+      placeholder: 'Please state',
+      req: false,
+      twocol: true,
+  },
 
 // Current Address
 
@@ -455,6 +473,7 @@ export default (props) => {
       label: 'Gender',
       name: 'spouse_gender',
       twocol: true,
+      placeholder: 'Please select',
       options: genderList?.map(x => ({label: x.name, value: x.name})),
       req: true,
       reqmessage: 'required',
@@ -464,6 +483,7 @@ export default (props) => {
       label: 'Marital Status',
       name: 'spouse_martial_status',
       twocol: true,
+      placeholder: 'Please select',
       options: maritalList?.map(x => ({label: x.name, value: x.name})),
       req: true,
       reqmessage: 'required',
@@ -473,6 +493,7 @@ export default (props) => {
       label: 'Nationality',
       name: 'spouse_nationality',
       twocol: true,
+      placeholder: 'Please select',
       options: countryList?.map(x => ({label: x.name, value: x.name})),
       req: true,
       reqmessage: 'required',
@@ -482,6 +503,7 @@ export default (props) => {
       label: 'Identification Type',
       name: 'spouse_identification_type',
       twocol: true,
+      placeholder: 'Please select',
       options: identificationList,
       req: false,
     },
@@ -506,6 +528,7 @@ export default (props) => {
       label: 'Race',
       name: 'spouse_race',
       twocol: true,
+      placeholder: 'Please select',
       options: raceList?.map(x => ({label: x.name, value: x.name})),
       req: false,
     },
@@ -514,6 +537,7 @@ export default (props) => {
       label: 'Religion',
       name: 'spouse_religious',
       twocol: true,
+      placeholder: 'Please select',
       options: religionList?.map(x => ({label: x.name, value: x.name})),
       req: false,
     },
@@ -632,7 +656,7 @@ export default (props) => {
 // Emergency details
     {
       type: 'array',
-      name: 'emergency_details',
+      name: 'emergency_contact',
       subheader: 'Emergency Details',
       twocol: false,
       field: fieldsEm,
@@ -644,7 +668,7 @@ export default (props) => {
         {
           subheader: 'Emergency Contact',
           type: 'select',
-          name: 'salutation',
+          name: 'title',
           label: 'Title',
           options: titleList,
           req: false,
@@ -654,7 +678,7 @@ export default (props) => {
         },    
         {
           type: 'input',
-          name: 'contact_person',
+          name: 'relation_name',
           label: 'Name as per IC/Passport',
           req: false,
           placeholder: 'Please state',
@@ -709,8 +733,7 @@ export default (props) => {
             name: 'school_univ',
             label: 'Institution',
             req: false,
-            multiple: true,
-            options: instituteList,
+            options: instituteList?.map(x => ({label: x.name, value: x.name})),
             colWidth: '1 0 100%',
             placeholder: 'Please Select',
             twocol: false,
@@ -721,7 +744,6 @@ export default (props) => {
           label: 'Field',
           options: degreeList,
           req: false,
-          multiple: true,
           colWidth: '1 0 100%',
           placeholder: 'Please Select',
           twocol: false,
@@ -731,6 +753,7 @@ export default (props) => {
           name: 'year_of_passing',
           label: 'Graduation Year',
           dateType: 'year',
+          format: 'YYYY',
           req: false,
           colWidth: '1 0 100%',
           twocol: false,
@@ -761,7 +784,7 @@ export default (props) => {
           type: 'select',
           name: 'level',
           label: 'Education Type',
-          options: educationList,
+          options: educationList.map(x => ({label: x.name, value: x.name})),
           req: false,
           placeholder: 'Please Select',
           twocol: true,
@@ -846,6 +869,159 @@ export default (props) => {
 
   const onFinish = async (val) => {
     console.log('val', val);
+    setLoad(true);
+
+    let profileImg = '';
+    if (val.image) {
+      if (val.image.fileList[0].uid != '-1') {
+        let modifiedName = uniquiFileName(val.image?.file?.originFileObj.name)
+        let res = await getSingleUpload(modifiedName, 'image',  val.image?.file?.originFileObj, 'Employee', id);
+        profileImg = res?.file_url;
+      } else {
+        profileImg = val.image.fileList[0].url
+      }
+    }
+
+    let educate = [];
+    let children = [];
+    let work = [];
+    let emergency = [];
+
+    if (val.external_work_history && val.external_work_history.length > 0) {
+      val.external_work_history.map(x => {
+        work.push({
+          company_name: x.company_name,
+          description: x.description,
+          designation: x.designation.value,
+          from_date: x.from_date,
+          to_date: x.to_date
+
+        })
+      })
+    }
+
+    if (val.emergency_contact && val.emergency_contact.length > 0) {
+      val.emergency_contact.map(x => {
+        emergency.push({
+          title: x.title.value,
+          relation_name: x.relation_name,
+          relation: x.relation.value,
+          email: x.email,
+          phone: x.phone
+        })
+      })
+    }
+
+    if (val.education && val.education.length > 0) {
+      await Promise.all(val.education.map(async (x) => {
+        let url = '';
+        if (x.transcript) {
+          if (x.transcript.fileList[0].uid != '-1') {
+            let modifiedName = uniquiFileName(x.transcript?.file?.originFileObj.name)
+            let res = await getSingleUpload(modifiedName, 'image',  x.transcript?.file?.originFileObj, 'Employee', id);
+            url = res?.file_url
+          } else {
+            url = x.transcript.fileList[0].url;
+          }
+        }
+        educate.push({
+          cgpa: x.cgpa,
+          country: x.country?.value,
+          fields: x.fields.value,
+          from_date: x.from_date,
+          level: x.level?.value,
+          school_univ: x.school_univ?.value,
+          to_date: x.to_date,
+          transcript: url ? url.replace('http://cms2dev.limkokwing.net', '') : '',
+        })
+      }));
+    }
+
+    if (val.employee_children && val.employee_children.length > 0) {
+      val.employee_children.map(x => {
+        children.push({
+          salutation: x.salutation.value,
+          dob: x.dob,
+          email: x.email,
+          full_name: x.full_name,
+          gender: x.gender.value,
+          occupation: x.occupation,
+        })
+      })
+    }
+
+    
+
+    const body = {
+      salutation: val.salutation?.value,
+      first_name: val.first_name,
+      image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",
+      gender: val.gender ? val.gender.value : '',
+      marital_status: val.marital_status?.value,
+      nationality: val.nationality?.value,
+      identification_type: val.identification_type?.value,
+      identification_no: val.identification_no,
+      date_of_birth: val.date_of_birth,
+      race: val.race?.vallue,
+      religious: val.religious?.value,
+      primary_phone_no: val.primary_phone_no,
+      secondary_phone_no: val.secondary_phone_no,
+      primary_email: val.primary_email,
+      secondary_email: val.secondary_email,
+
+      current_permanent_address: [
+        {
+            current_address_1: val.current_address_1,
+            current_city: val.current_city,
+            current_post_code: val.current_post_code,
+            current_country: val.current_country.value,
+            permanent_state: val.current_state,
+            current_address: 1
+        },
+        {
+            current_address_1: val.permanent_address_1,
+            current_city: val.permanent_city,
+            current_post_code: val.permanent_post_code,
+            current_country: val.permanent_country.value,
+            permanent_state: val.permanent_state,
+            permanent_address: 1
+        }
+      ],
+
+      spouse_salutation: val.spouse_salutation?.value,
+      spouse_name: val.spouse_name,
+      spouse_gender: val.spouse_gender?.value,
+      spouse_martial_status: val.spouse_martial_status?.value,
+      spouse_nationality: val.spouse_nationality?.value,
+      spouse_identification_type: val.spouse_identification_type?.value,
+      spouse_identification_no: val.spouse_identification_no,
+      spouse_dob: val.spouse_dob, 
+      spouse_race: val.spouse_race?.value,
+      spouse_religious: val.spouse_religious?.value,
+      spouse_employee_name: val.spouse_employee_name,
+      spouse_employee_email: val.spouse_employee_email?.value,
+      spouse_phone_no: val.spouse_phone_no,
+      spouse_income_tax_no: val.spouse_income_tax_no,
+
+      emergency_details: emergency,
+      employee_children: children,
+      education: educate,
+      external_work_history: work,
+    }
+    console.log('--------', body);
+    if (mode== 'edit') {
+      employApi(body, id).then(res => {
+        setLoad(false);
+        updateApi();
+        message.success('Detaila Successfully Saved')
+      }).catch(e => {
+        console.log(e);
+        setLoad(false);
+        message.error(e);
+      })
+    } else {
+
+    }
   }
 
   const FormComp = () => (

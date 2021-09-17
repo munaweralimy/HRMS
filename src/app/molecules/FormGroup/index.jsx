@@ -82,7 +82,7 @@ export default (props) => {
           initValue={elem && elem[item.name] ? moment(elem[item.name], 'YYYY-MM-DD') : ''}
           rules={{ 
             required: { value: item.req, message: item.reqmessage },
-            setValueAs: (value) => moment(value).format('YYYY-MM-DD'),
+            setValueAs: (value) => value ? moment(value).format('YYYY-MM-DD') : '',
            }}
           validate={setValidate(false)}
           validMessage={setValidate(true)}
@@ -102,8 +102,6 @@ export default (props) => {
         />
       )}
       {item.type == 'upload' && (
-        <>
-        {console.log('kkk', item.name, elem)}
         <UploadField
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
@@ -111,7 +109,7 @@ export default (props) => {
           iProps={{ disabled: props.static ? props.static : false }}
           control={control}
           initValue={
-            elem && elem[item.name]
+            elem && elem[item.name] && typeof elem[item.name] == 'string'
               ? {
                   fileList: [
                     {
@@ -128,7 +126,6 @@ export default (props) => {
           validate={setValidate(false)}
           validMessage={setValidate(true)}
         />
-        </>
       )}
       {item.type == 'textarea' && (
         <TextAreaField

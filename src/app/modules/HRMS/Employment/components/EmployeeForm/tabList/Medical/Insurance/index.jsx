@@ -38,6 +38,7 @@ const colName = [
 const instype = [
   {label: 'Group Health Plan', value: 'Group Health Plan'},
   {label: 'Medical Card', value: 'Medical Card'},
+  {label: 'Life Insurance', value: 'Life Insurance'},
 ]
 
 const insuranceFields = [

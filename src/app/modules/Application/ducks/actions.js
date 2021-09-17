@@ -98,6 +98,31 @@ export const getProgName = () => {
   };
 };
 
+export const getInstitution = () => {
+  return async(dispatch) => {
+      const {
+          data: { data },
+      } = await axios.get(`${apiresource}/Institutions`);
+      dispatch({
+          type: action_types.INTITUTION_LIST,
+          data: data,
+      });
+  };
+};
+
+export const getEducationType = () => {
+  return async(dispatch) => {
+      const {
+          data: { data },
+      } = await axios.get(`${apiresource}/HRMS Education Field?fields=["name","education_field"]`);
+      dispatch({
+          type: action_types.EDUCATION_TYPE,
+          data: data,
+      });
+  };
+};
+
+
 export const getComments = (doctype, id) => {
     return async(dispatch) => {
         const {

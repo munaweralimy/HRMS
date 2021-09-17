@@ -91,7 +91,7 @@ export default (props) => {
         date_of_issue: val.date_of_issue,
         valid_upto: val.valid_upto,
         employment_pass_no: val.employment_pass_no,
-        emp_pass_expiration_date: val.emp_pass_expiration_date
+        emp_pass_expiration_date: val.emp_pass_expiration_date != 'Invalid date' ? val.emp_pass_expiration_date : ''
     }
 
     let url = `${apiresource}/Employee/${id}`;
