@@ -18,14 +18,16 @@ const addAllowences = [
     type: 'select',
     label: 'Allowece Ammount',
     name: 'allowence_ammount_type',
-    twocol: true,
+    twocol: false,
+    colWidth: '0 1 133px',
     options: [{ value: 'RM', label: 'RM' }],
   },
   {
     type: 'input',
     label: '',
     name: 'amount',
-    twocol: true,
+    twocol: false,
+    colWidth: '1 0 180px',
   },
   {
     type: 'date',

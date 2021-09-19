@@ -2,9 +2,10 @@ const salaryInformation = [
   {
     type: 'select',
     name: 'currency_typeSalary',
-    label: ' Ammount',
+    label: 'Salary Ammount',
     placeholder: '',
-    twocol: true,
+    twocol: false,
+    colWidth: '0 1 118px',
     options: [{ value: 'RM', label: 'RM' }],
   },
   {
@@ -12,7 +13,8 @@ const salaryInformation = [
     name: 'salary_amount',
     label: '',
     placeholder: '',
-    twocol: true,
+    twocol: false,
+    colWidth: '1 0 180px',
   },
   {
     type: 'select',
@@ -64,7 +66,8 @@ const salaryInformation = [
     name: 'tax_currency_type',
     label: 'Tax Ammount',
     placeholder: '',
-    twocol: true,
+    twocol: false,
+    colWidth: '0 1 118px',
     options: [{ value: 'RM', label: 'RM' }],
   },
   {
@@ -72,7 +75,8 @@ const salaryInformation = [
     name: 'tax_amount',
     label: '',
     placeholder: '',
-    twocol: true,
+    twocol: false,
+    colWidth: '1 0 180px',
   },
 ];
 

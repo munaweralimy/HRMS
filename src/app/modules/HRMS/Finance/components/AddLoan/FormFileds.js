@@ -13,14 +13,16 @@ const addLoan = [
     type: 'select',
     label: 'Loan Ammount',
     name: 'loan_ammount_type',
-    twocol: true,
+    twocol: false,
+    colWidth: '0 1 110px',
     options: [{ value: 'RM', label: 'RM' }],
   },
   {
     type: 'input',
     label: '',
     name: 'amount',
-    twocol: true,
+    twocol: false,
+    colWidth: '1 0 180px',
   },
   {
     type: 'date',
@@ -32,14 +34,16 @@ const addLoan = [
     type: 'select',
     label: 'Monthly Deduction from Salary',
     name: 'monthly_deduction',
-    twocol: true,
+    twocol: false,
+    colWidth: '0 1 110px',
     options: [{ value: 'RM', label: 'RM' }],
   },
   {
     type: 'input',
     label: '',
     name: 'deduction_amount',
-    twocol: true,
+    twocol: false,
+    colWidth: '1 0 180px',
   },
 ];
 export { addLoan };
