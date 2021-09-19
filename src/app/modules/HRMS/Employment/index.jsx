@@ -1,68 +1,130 @@
-import React, { useState } from 'react';
+import React, {useEffect} from 'react';
 import { Row, Col } from 'antd';
-import { useHistory } from 'react-router-dom';
-import HeadingChip from '../../../molecules/HeadingChip';
-import OverallEmployment from './OverallEmployment';
-import TeamList from './TeamList';
+// import Acquisitions from './Acquisitions';
 import { useTranslate } from 'Translate';
-import { PlusOutlined } from '@ant-design/icons';
-const data = [
+import { useDispatch, useSelector } from 'react-redux';
+import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
+import MultiView from '../../../molecules/HRMS/MultiView';
+import Search from './components/Search';
+import TeamList from './TeamList';
+import { getOverallCard, getOverallList } from './ducks/action';
+import { useHistory } from 'react-router';
+
+
+const colName = [
   {
-    name: 'Walter Gibson',
-    student: '123686234',
-    form_name: 'Low Fit Index',
-    status: 'Pending Request',
-    onClick: () => history.push,
+    title: 'ID',
+    dataIndex: 'name',
+    key: 'name',
+    sorter: true,
   },
   {
-    name: 'Walter Gibson',
-    student: '123686234',
-    form_name: 'Low Fit Index',
-    status: 'Pending Request',
+    title: 'Name',
+    dataIndex: 'employee_name',
+    key: 'employee_name',
+    sorter: true,
   },
   {
-    name: 'Walter Gibson',
-    student: '123686234',
-    form_name: 'Low Fit Index',
-    status: 'Pending Request',
+    title: 'Job Title',
+    dataIndex: 'job_title',
+    key: 'job_title',
+    sorter: true,
   },
   {
-    name: 'Walter Gibson',
-    student: '123686234',
-    form_name: 'Low Fit Index',
-    status: 'Pending Request',
+    title: 'Company',
+    dataIndex: 'company',
+    key: 'company',
+    sorter: true,
+  },
+  {
+    title: 'Team',
+    dataIndex: 'team_name',
+    key: 'team_name',
+    sorter: true,
+  },
+  {
+    title: 'Contract',
+    dataIndex: 'contract_type',
+    key: 'contract_type',
+    sorter: true,
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    sorter: true,
+    render: (text, record) => <span className={`${record?.status != 'No Issues' ? 'c-error' : ''}`}>{text}</span>
   },
 ];
 
-const Employment = () => {
-  const il8n = useTranslate();
-  const [girdView, setGridView] = useState('2');
-  const { t } = il8n;
-  const history = useHistory();
+const filters = [
+  {
+    label: 'Active Employee',
+    value: 'Active',
+  },
+  {
+    label: 'Draft',
+    value: 'Draft',
+  },
+  {
+    label: 'Archive',
+    value: 'Archive',
+  },
+];
 
-  const btnList = [
+export default (props) => {
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const il8n = useTranslate();
+  const { t } = il8n;
+  const data = useSelector(state => state.employment.empcard);
+  const datalist = useSelector(state => state.employment.emplist);
+
+  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
+    if (type == 'list') {
+      dispatch(getOverallList(filter, page, limit, sort, sortby))
+    } else {
+      dispatch(getOverallCard(page, limit, sort, sortby));
+    }
+  }
+
+  const tabs = [
     {
-      type: 'GridViewChanger',
-      action: (key) => {
-        console.log({ key });
-        setGridView(key);
+      title: 'Overall Employment',
+      key: 'overall',
+      count: data?.count,
+      Comp: MultiView,
+      iProps: {
+        carddata: data?.rows || [],
+        cardcount: data?.count,
+        listdata: datalist?.rows,
+        listcount: datalist?.count,
+        listCol: colName,
+        Search: Search,
+        link: '/employment/',
+        listLink: '/requests/',
+        filters: filters,
+        updateApi: onOverallAction,
+        searchDropdowns: {
+          field1: [{ label: 'All', value: 'All' }],
+          field2: [{ label: 'All', value: 'All' }],
+          field3: [{ label: 'All', value: 'All' }],
+        },
+        statusKey:'status',
+        addonkey: 'exp_type',
+        topbtn: {
+          topAction: () => history.push('/employment/add'),
+          title: '+ Add New Employee'
+        }
       },
-    },
-    {
-      text: '+ Add New Employment',
-      classes: 'green-btn',
-      action: () => history.push('/employment/addnew'),
     },
   ];
 
   return (
     <Row gutter={[24, 30]}>
       <Col span={24}>
-        <HeadingChip title={t('HRMS.Employment.title1')} btnList={btnList} />
-      </Col>
-      <Col span={24}>{girdView === '1' ? <TeamList /> : girdView === '2' ? <OverallEmployment data={data} /> : ''}</Col>
-      <Col span={24}>
-        <HeadingChip title={t('HRMS.Employment.title2')} />
+        <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
       </Col>
       <Col span={24}>
         <TeamList />
@@ -70,5 +132,3 @@ const Employment = () => {
     </Row>
   );
 };
-
-export default Employment;

@@ -28,19 +28,6 @@ export const getFacultyList = (status, page, limit) => {
 };
 
 
-
-export const getInstitution = () => {
-    return async(dispatch) => {
-        const {
-            data: { data },
-        } = await axios.get(`${apiresource}/Institutions`);
-        dispatch({
-            type: action_types.INTITUTION_LIST,
-            data: data,
-        });
-    };
-};
-
 export const getSingleFaculty = (code) => {
     return async(dispatch) => {
         const {

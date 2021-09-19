@@ -1,0 +1,93 @@
+import * as action_types from './constant';
+import axios from '../../../../../services/axiosInterceptor';
+import { apiMethod, apiresource } from '../../../../../configs/constants';
+
+export const getOverallList = (status, page, limit, order, orderby) => {
+  let ordering = '';
+    if(order == "ascend") {
+        ordering = 'ASC'
+    } else if(order == "descend") {
+        ordering = 'DESC'
+    }
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.get_overall_employment_list?status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      dispatch({
+        type: action_types.EMPLOYEE_LIST,
+        data: message,
+      });
+    };
+};
+
+export const getOverallCard = (page, limit, order, orderby) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.get_overall_employment_cards?page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
+      dispatch({
+        type: action_types.EMPLOYEE_CARD,
+        data: message,
+      });
+    };
+};
+
+export const getTeams = (page, limit, order, orderby) => {
+    let ordering = '';
+      if(order == "ascend") {
+          ordering = 'ASC'
+      } else if(order == "descend") {
+          ordering = 'DESC'
+      }
+      return async (dispatch) => {
+        const {
+          data: { message },
+        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+        dispatch({
+          type: action_types.TEAM_LIST,
+          data: message,
+        });
+      };
+  };
+
+  export const getTeamsDetail = (id) => {
+      return async (dispatch) => {
+        const {
+          data: { message },
+        } = await axios.get(`${apiMethod}/hrms.api.team_detail_side_bar?team_code=${id}`);
+        dispatch({
+          type: action_types.TEAM_DETAILS,
+          data: message,
+        });
+      };
+  };
+
+  export const getMembers = (id, page, limit, order, orderby) => {
+    let ordering = '';
+      if(order == "ascend") {
+          ordering = 'ASC'
+      } else if(order == "descend") {
+          ordering = 'DESC'
+      }
+      return async (dispatch) => {
+        const {
+          data: { message },
+        } = await axios.get(`${apiMethod}/hrms.api.get_team_detail?team_code=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+        dispatch({
+          type: action_types.MEMBER_LIST,
+          data: message,
+        });
+      };
+  };
+
+  export const getEmployeeDetail = (id) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.employment_details?empid=${id}`);
+      dispatch({
+        type: action_types.EMPLOYEE_DETAILS,
+        data: message,
+      });
+    };
+  };
