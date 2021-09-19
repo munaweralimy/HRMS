@@ -5,8 +5,13 @@ const addAllowences = [
     name: 'allowance_type',
     twocol: true,
     options: [
-      { label: 'Travel Allowance', value: 'Travel Allowance' },
-      { label: 'Medical Allowance', value: 'Medical Allowance' },
+      { label: 'Children Education Allowance', value: 'Children Education Allowance' },
+      { label: 'Hostel Allowance', value: 'Hostel Allowance' },
+      { label: 'Transport Allowance', value: 'Transport Allowance' },
+      { label: 'Outstation Allowance', value: 'Outstation Allowance' },
+      { label: 'Daily Allowance', value: 'Daily Allowance' },
+      { label: 'Uniform Allowance', value: 'Uniform Allowance' },
+      { label: 'Academic/ Research Allowance', value: 'Academic/ Research Allowance' },
     ],
   },
   {

@@ -20,7 +20,11 @@ const salaryInformation = [
     label: 'Payment Method',
     placeholder: '',
     twocol: true,
-    options: [{ value: 'Automatic Payment System (APS)', label: 'Automatic Payment System (APS)' }],
+    options: [
+      { value: 'Automatic Payment System (APS)', label: 'Automatic Payment System (APS)' },
+      { value: 'Cash', label: 'Cash' },
+      { value: 'Cheque', label: 'Cheque' },
+    ],
   },
   {
     type: 'select',
@@ -29,8 +33,12 @@ const salaryInformation = [
     placeholder: '',
     twocol: true,
     options: [
+      { value: 'Daily', label: 'Daily' },
+      { value: 'Weekly', label: 'Weekly' },
+      { value: 'Biweekly', label: 'Biweekly' },
       { value: 'Monthly', label: 'Monthly' },
-      { value: 'Yearly', label: 'Yearly' },
+      { value: 'Quarterly', label: 'Quarterly' },
+      { value: 'Annually', label: 'Annually' },
     ],
   },
   {
