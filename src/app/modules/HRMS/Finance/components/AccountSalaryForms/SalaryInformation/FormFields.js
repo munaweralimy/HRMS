@@ -2,26 +2,31 @@ const salaryInformation = [
   {
     type: 'select',
     name: 'currency_typeSalary',
-    label: 'Salary Ammount',
+    label: 'Salary Amount',
     placeholder: '',
     twocol: false,
     colWidth: '0 1 118px',
+
     options: [{ value: 'RM', label: 'RM' }],
   },
   {
     type: 'input',
     name: 'salary_amount',
     label: '',
-    placeholder: '',
+    placeholder: 'Amount',
     twocol: false,
+    req: true,
+    reqmessage: 'Please enter amount',
     colWidth: '1 0 180px',
   },
   {
     type: 'select',
     name: 'payment_method',
     label: 'Payment Method',
-    placeholder: '',
+    placeholder: 'Select Payment Method',
     twocol: true,
+    req: true,
+    reqmessage: 'Payment method required',
     options: [
       { value: 'Automatic Payment System (APS)', label: 'Automatic Payment System (APS)' },
       { value: 'Cash', label: 'Cash' },
@@ -34,6 +39,8 @@ const salaryInformation = [
     label: 'Payment Frequency',
     placeholder: '',
     twocol: true,
+    req: true,
+    reqmessage: 'Payment frequency required',
     options: [
       { value: 'Daily', label: 'Daily' },
       { value: 'Weekly', label: 'Weekly' },

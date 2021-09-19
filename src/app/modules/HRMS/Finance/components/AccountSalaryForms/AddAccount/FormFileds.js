@@ -3,13 +3,19 @@ const addAccount = [
     type: 'input',
     label: 'Account No.',
     name: 'account_no',
+    placeholder: 'Enter Account No',
+    req: true,
+    reqmessage: 'Account Number required',
     twocol: true,
   },
   {
     type: 'select',
     label: 'Account Type',
     name: 'account_type',
+    placeholder: 'Select Account type',
     twocol: true,
+    req: true,
+    reqmessage: 'Account Type required',
     options: [
       { value: 'EPF', label: 'EPF' },
       { value: 'SOCSO', label: 'SOCSO' },
@@ -41,7 +47,10 @@ const addAccount = [
     type: 'input',
     label: 'Branch',
     name: 'branch',
+    placeholder: 'Branch Name',
     twocol: false,
+    req: true,
+    reqmessage: 'Branch Name required',
   },
 ];
 export { addAccount };

@@ -69,6 +69,9 @@ const AddSalaryAdvance = (props) => {
                 errors={errors}
                 initValue={''}
                 iProps={{ min: 0, max: 5000, marks: { 0: 'RM 0', 5000: 'RM 5,000' } }}
+                rules={{
+                  required: { value: true, message: 'Select Amount' },
+                }}
               />
             </Col>
             <Col span={4}>

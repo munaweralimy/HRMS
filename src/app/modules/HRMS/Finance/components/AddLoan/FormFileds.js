@@ -4,6 +4,9 @@ const addLoan = [
     label: 'Loan Type',
     name: 'loan_type',
     twocol: true,
+    req: true,
+    placeholder: 'Select Loan type',
+    reqmessage: 'Loan Type required',
     options: [
       { value: 'General Loan', label: 'General Loan' },
       { value: 'Student Loan', label: 'Student Loan' },
@@ -21,13 +24,18 @@ const addLoan = [
     type: 'input',
     label: '',
     name: 'amount',
+    placeholder: 'Enter Amount',
     twocol: false,
+    req: true,
+    reqmessage: 'Amount required',
     colWidth: '1 0 180px',
   },
   {
     type: 'date',
     label: 'Loan Start Date',
     name: 'loan_start_date',
+    req: true,
+    reqmessage: 'date required',
     twocol: true,
   },
   {
@@ -43,7 +51,10 @@ const addLoan = [
     label: '',
     name: 'deduction_amount',
     twocol: false,
+    placeholder: 'Enter Amount',
     colWidth: '1 0 180px',
+    req: true,
+    reqmessage: 'Amount required',
   },
 ];
 export { addLoan };
