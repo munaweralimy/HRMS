@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Breadcrumb } from 'antd';
-import { useForm } from 'react-hook-form';
-import ListCard from '../../../../../../../molecules/ListCard';
-import { closeAllOpenForms } from '../../../../ducks/action';
+import ListCard from '../../../../../molecules/ListCard';
+import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
-import SalaryInformation from './AccountSalaryForms/SalaryInformation';
-import AddAccount from './AccountSalaryForms/AddAccount';
-import AddAllowence from './AccountSalaryForms/AddAllowances';
-const AddEditAccountSalary = () => {
-  const { control, errors, handleSubmit } = useForm();
+import SalaryInformation from '../../components/AccountSalaryForms/SalaryInformation';
+import AddAccount from '../../components/AccountSalaryForms/AddAccount';
+import AddAllowence from '../../components/AccountSalaryForms/AddAllowances';
+
+const AddEditAccountSalary = (props) => {
+  const { accountData, allowanceData, salaryInfo } = props;
+  const { id } = useParams();
+  const [selectRowData, setSelectRowData] = useState();
   const dispatch = useDispatch();
   const tabVal = useSelector((state) => state.finance.tabClose);
-  console.log({ tabVal });
   const [viewSpecificForm, setViewSpecificForm] = useState({
     accountForm: false,
     allowanceForm: false,
@@ -21,7 +23,7 @@ const AddEditAccountSalary = () => {
     {
       heading: 'Account List',
       btnAcation: (
-        <Button size="large" type="primary" onClick={() => onFormViewHandler('accountForm')}>
+        <Button size="large" type="primary" onClick={() => onFormViewHandler('accountForm', '')}>
           + Add New Account
         </Button>
       ),
@@ -31,19 +33,19 @@ const AddEditAccountSalary = () => {
           title: 'Account No.',
           dataIndex: 'account_no',
           key: 'account_no',
-          sorter: (a, b) => a.account_no.length - b.account_no.length,
+          sorter: true,
         },
         {
           title: 'Account Type',
           dataIndex: 'account_type',
           key: 'account_type',
-          sorter: (a, b) => a.account_type.length - b.account_type.length,
+          sorter: true,
         },
         {
           title: 'Branch',
-          dataIndex: 'account_branch',
-          key: 'account_branch',
-          sorter: (a, b) => a.account_branch.length - b.account_branch.length,
+          dataIndex: 'branch',
+          key: 'branch',
+          sorter: true,
           ellipsis: true,
         },
       ],
@@ -51,7 +53,7 @@ const AddEditAccountSalary = () => {
     {
       heading: 'Allowances List',
       btnAcation: (
-        <Button size="large" type="primary" onClick={() => onFormViewHandler('allowanceForm')}>
+        <Button size="large" type="primary" onClick={() => onFormViewHandler('allowanceForm', '')}>
           + Add New Allowence
         </Button>
       ),
@@ -59,34 +61,33 @@ const AddEditAccountSalary = () => {
       empHistoryCol: [
         {
           title: 'Date',
-          dataIndex: 'allowance_date',
-          key: 'allowance_date',
-          sorter: (a, b) => a.allowance_date.length - b.allowance_date.length,
-          render: (text, record) => moment(text).format('LL'),
+          dataIndex: 'date_given',
+          key: 'date_given',
+          sorter: true,
+          // render: (text, record) => moment(text).format('LL'),
         },
         {
           title: 'Allowance Type',
           dataIndex: 'allowance_type',
           key: 'allowance_type',
-          sorter: (a, b) => a.allowance_type.length - b.allowance_type.length,
+          sorter: true,
         },
         {
           title: 'Ammount',
-          dataIndex: 'allowance_ammount',
-          key: 'allowance_ammount',
-          sorter: (a, b) => a.allowance_ammount.length - b.allowance_ammount.length,
+          dataIndex: 'amount',
+          key: 'amount',
+          sorter: true,
         },
         {
           title: 'Description',
           dataIndex: 'description',
           key: 'description',
-          //sorter: (a, b) => a.term_start.length - b.term_start.length,
-          // render: (text, record) => moment(text).format('LL'),
         },
       ],
     },
   ];
-  function onFormViewHandler(form) {
+
+  function onFormViewHandler(form, record) {
     dispatch(closeAllOpenForms(true));
     let viewFormObj = {
       ...viewSpecificForm,
@@ -96,9 +97,22 @@ const AddEditAccountSalary = () => {
     if (form.length > 0) {
       viewFormObj[form] = true;
     }
-
+    dispatch(getFinanceDetail(id));
+    setSelectRowData(record);
     setViewSpecificForm(viewFormObj);
   }
+
+  const onRowClickHandler = (record) => {
+    return {
+      onClick: () => {
+        if (record?.account_no) {
+          onFormViewHandler('accountForm', record);
+        } else if (record?.allowance_type) {
+          onFormViewHandler('allowanceForm', record);
+        }
+      },
+    };
+  };
   return (
     <Row gutter={[24, 30]} align="bottom">
       {viewSpecificForm.accountForm && tabVal ? (
@@ -108,11 +122,11 @@ const AddEditAccountSalary = () => {
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => onFormViewHandler('')}
+            onClick={() => onFormViewHandler('', '')}
           >
             Account List
           </Button>
-          <AddAccount />
+          <AddAccount selectedAccout={selectRowData} onCloseForm={onFormViewHandler} />
         </Col>
       ) : viewSpecificForm.allowanceForm && tabVal ? (
         <Col span={24}>
@@ -121,11 +135,11 @@ const AddEditAccountSalary = () => {
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => onFormViewHandler('')}
+            onClick={() => onFormViewHandler('', '')}
           >
             Allowances List
           </Button>
-          <AddAllowence />
+          <AddAllowence selectedAllowance={selectRowData} onCloseForm={onFormViewHandler} />
         </Col>
       ) : (
         <>
@@ -134,27 +148,33 @@ const AddEditAccountSalary = () => {
               <Col span={24}>
                 <ListCard
                   listClass="nospace-card"
+                  classes="clickRow"
                   title={empEditRecords[0].heading}
                   ListCol={empEditRecords[0].empHistoryCol}
-                  ListData={[]}
-                  pagination={true}
+                  ListData={accountData}
+                  pagination={false}
+                  scrolling={500}
+                  onRow={onRowClickHandler}
                 />
               </Col>
               <Col>{empEditRecords[0].btnAcation}</Col>
             </Row>
           </Col>
           <Col span={24}>
-            <SalaryInformation />
+            <SalaryInformation id={id} />
           </Col>
           <Col span={24}>
             <Row gutter={[20, 30]} justify="end">
               <Col span={24}>
                 <ListCard
                   listClass="nospace-card"
+                  classes="clickRow"
                   title={empEditRecords[1].heading}
                   ListCol={empEditRecords[1].empHistoryCol}
-                  ListData={[]}
-                  pagination={true}
+                  ListData={allowanceData}
+                  pagination={false}
+                  scrolling={500}
+                  onRow={onRowClickHandler}
                 />
               </Col>
               <Col>{empEditRecords[1].btnAcation}</Col>

@@ -70,7 +70,7 @@ const EmpAttendanceDetail = () => {
   }, [singleTaskDetail]);
 
   return (
-    <StaffDetails id={id} section="Attendance" data={singleTaskDetail}>
+    <StaffDetails id={id} section="Attendance" data={singleTaskDetail} title={'Attendance'}>
       <EmpAttendance />
     </StaffDetails>
   );

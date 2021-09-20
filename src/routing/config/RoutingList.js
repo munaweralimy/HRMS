@@ -121,7 +121,7 @@ export default [
     parent: true,
   },
   {
-    component: 'EditFinance',
+    component: 'FinanceDetails',
     path: '/finance/:id',
     title: titles.HRMS,
     permission: hrms,

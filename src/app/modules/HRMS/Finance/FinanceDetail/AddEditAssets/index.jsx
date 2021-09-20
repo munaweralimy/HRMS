@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Row, Col, Button, Form, Breadcrumb } from 'antd';
+import { Row, Col, Button } from 'antd';
 import { useForm } from 'react-hook-form';
-import ListCard from '../../../../../../../molecules/ListCard';
+import ListCard from '../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeAllOpenForms } from '../../../../ducks/action';
+import { useParams } from 'react-router-dom';
+import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
-import AddAsset from './AddAssest';
+import AddAsset from '../../components/AddAssest';
+import moment from 'moment';
 
 const assetsCol = [
   {
@@ -16,36 +18,51 @@ const assetsCol = [
   },
   {
     title: 'Start',
-    dataIndex: 'from_date',
-    key: 'from_date',
-    sorter: (a, b) => a.from_date.length - b.from_date.length,
+    dataIndex: 'start_date',
+    key: 'start_date',
+    sorter: true,
+    render: (text) => moment(text).format('Do MMMM YYYY'),
   },
   {
     title: 'End',
-    dataIndex: 'to_date',
-    key: 'to_date',
-    sorter: (a, b) => a.to_date.length - b.to_date.length,
+    dataIndex: 'end_date',
+    key: 'end_date',
+    sorter: true,
+    render: (text) => moment(text).format('Do MMMM YYYY'),
   },
   {
     title: 'Description',
     dataIndex: 'description',
     key: 'description',
-    //sorter: (a, b) => a.term_start.length - b.term_start.length,
-    // render: (text, record) => moment(text).format('LL'),
   },
 ];
 
-const AddEditAssets = () => {
-  const { control, errors, handleSubmit } = useForm();
+const AddEditAssets = (props) => {
+  const { assetData } = props;
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const [rowData, setRowData] = useState();
   const [viewAssetsForm, setViewAssetsForm] = useState(false);
   const tabVal = useSelector((state) => state.finance.tabClose);
 
-  const onFormViewer = () => {
+  const onFormViewer = (record) => {
+    setRowData(record);
     dispatch(closeAllOpenForms(true));
     setViewAssetsForm(true);
   };
 
+  const onCloseForm = () => {
+    dispatch(getFinanceDetail(id));
+    setViewAssetsForm(false);
+  };
+
+  const onRowClickHandler = (record) => {
+    return {
+      onClick: () => {
+        onFormViewer(record);
+      },
+    };
+  };
   return (
     <Row gutter={[24, 30]} align="bottom">
       {viewAssetsForm && tabVal ? (
@@ -55,22 +72,25 @@ const AddEditAssets = () => {
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => setViewAssetsForm(false)}
+            onClick={onCloseForm}
           >
             Assets in Possession
           </Button>
-          <AddAsset />
+          <AddAsset data={rowData} onUpdateComplete={onCloseForm} />
         </Col>
       ) : (
         <Col span={24}>
           <Row gutter={[20, 30]} justify="end">
             <Col span={24}>
               <ListCard
-                listClass="nospace-card"
                 title="Assets in Position"
                 ListCol={assetsCol}
-                ListData={[]}
-                pagination={true}
+                ListData={assetData}
+                classes="clickRow"
+                listClass="nospace-card"
+                pagination={false}
+                onRow={onRowClickHandler}
+                scrolling={500}
               />
             </Col>
             <Col>

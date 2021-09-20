@@ -10,7 +10,6 @@ export default (props) => {
   const history = useHistory();
 
   const statuses = (status) => {
-    console.log('hello', status);
     switch (status) {
       case 'Missed':
         return 'b-error';
@@ -28,10 +27,20 @@ export default (props) => {
         return 'b-error';
       case 'On Duty':
         return 'b-success';
+      case 'Outstanding Loan':
+        return 'b-error';
+      case 'Expiring Asset Possession':
+        return 'b-pending';
+      case 'Expired Asset Possession':
+        return 'b-error';
       case 'Expiring':
         return 'b-pending';
       case 'Expired':
         return 'b-error';
+      case 'On Leave':
+        return 'b-success';
+      case 'Rest Day':
+        return 'b-success';
     }
   };
 

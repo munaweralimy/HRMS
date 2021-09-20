@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
@@ -72,7 +72,7 @@ const ListColOverall = [
     align: 'center',
     render: (text) => {
       let clname = '';
-      if (text == 'On Duty') {
+      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
         clname = 'c-success';
       } else if (text == 'Absent') {
         clname = 'c-error';
@@ -138,7 +138,7 @@ const ListColTeams = [
     align: 'center',
     render: (text) => {
       let clname = '';
-      if (text == 'On Duty') {
+      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
         clname = 'c-success';
       } else if (text == 'Absent') {
         clname = 'c-error';
@@ -159,17 +159,20 @@ export default (props) => {
   const dispatch = useDispatch();
   const il8n = useTranslate();
   const { t } = il8n;
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(6);
   let empID = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].name;
 
   const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
   const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
+
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     console.log({ page, limit, sort, sortby });
     if (type == 'list') {
-      dispatch(getOverallAttendance(page, limit, sort, (sortby = 'creation')));
+      dispatch(getOverallAttendance(page, limit, sort, sortby));
     } else {
-      dispatch(getOverallAttendance(page, limit, sort, (sortby = 'creation')));
+      dispatch(getOverallAttendance(page, limit, sort, sortby));
     }
   };
 
@@ -182,8 +185,18 @@ export default (props) => {
   };
 
   useEffect(() => {
-    dispatch(getMyAttendance(empID, 1, 6, 'desc', 'creation'));
+    dispatch(getMyAttendance(empID, page, limit, '', ''));
   }, [empID]);
+
+  const onTableChange = (pagination, filters, sorter) => {
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getMyAttendance(empID, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+    } else {
+      dispatch(getMyAttendance(empID, pagination.current, pagination.pageSize, '', ''));
+    }
+  };
 
   const tabs = [
     {
@@ -226,6 +239,9 @@ export default (props) => {
       iProps: {
         listdata: myAttendance?.rows || [],
         listcount: myAttendance?.count || 0,
+        onTableChange: onTableChange,
+        page: page,
+        limit: limit,
       },
       count: myAttendance?.count || 0,
       Comp: MyAttendance,

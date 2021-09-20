@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DatePicker, Form, Input, Checkbox, Typography, TimePicker, Upload, Switch, Radio, Rate } from 'antd';
+import { DatePicker, Form, Input, Checkbox, Typography, TimePicker, Upload, Switch, Radio, Rate, Slider } from 'antd';
 import { PlusCircleFilled } from '@ant-design/icons';
 import { Controller } from 'react-hook-form';
 import Select from 'react-select';
@@ -166,7 +166,7 @@ export const DateField = (props) => {
           control={control}
           defaultValue={initValue ? initValue : ''}
           rules={rules}
-          render={({ value, onChange }) => (
+          render={({ value, onChange }) =>
             props.type == 'range' ? (
               <RangePicker
                 style={{ width: '100%' }}
@@ -176,18 +176,19 @@ export const DateField = (props) => {
                   props.onChange && props.onChange(e);
                 }}
                 {...iProps}
-              />)
-            :
-            <DatePicker
-              style={{ width: '100%' }}
-              value={value}
-              onChange={(e) => {
-                onChange(e);
-                props.onChange && props.onChange(e);
-              }}
-              {...iProps}
-            />
-          )}
+              />
+            ) : (
+              <DatePicker
+                style={{ width: '100%' }}
+                value={value}
+                onChange={(e) => {
+                  onChange(e);
+                  props.onChange && props.onChange(e);
+                }}
+                {...iProps}
+              />
+            )
+          }
         />
       </Form.Item>
     </>
@@ -444,6 +445,33 @@ export const RateField = (props) => {
         rules={rules}
         render={({ onBlur, value, onChange }) => (
           <Rate value={value} onChange={onChange} onBlur={props.onBlur} {...iProps} />
+        )}
+      />
+    </Form.Item>
+  );
+};
+
+export const SliderFiled = (props) => {
+  const { fieldname, label, control, iProps, rules, initValue, isRequired, validate, validMessage, valueGot } = props;
+  useEffect(() => {
+    valueGot && props.setValue(fieldname, valueGot);
+  }, [valueGot]);
+
+  return (
+    <Form.Item
+      required={isRequired ? isRequired : false}
+      label={label}
+      validateStatus={validate}
+      help={validMessage}
+      className={props.class}
+    >
+      <Controller
+        name={fieldname}
+        control={control}
+        defaultValue={initValue || initValue == 0 ? initValue : ''}
+        rules={rules}
+        render={({ onBlur, value, onChange }) => (
+          <Slider value={value} onChange={onChange} onBlur={props.onBlur} {...iProps} />
         )}
       />
     </Form.Item>
