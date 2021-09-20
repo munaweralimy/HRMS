@@ -50,7 +50,7 @@ const ListCol = [
     align: 'center',
     render: (text) => {
       let clname = '';
-      if (text == 'On Duty') {
+      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
         clname = 'c-success';
       } else if (text == 'Absent') {
         clname = 'c-error';
@@ -90,7 +90,7 @@ export default (props) => {
   };
 
   useEffect(() => {
-    dispatch(getMyAttendance(id, 1, 6, '', ''));
+    dispatch(getMyAttendance(id, page, limit, '', ''));
     dispatch(getTotalAttendance(id));
   }, [id]);
 
@@ -111,11 +111,21 @@ export default (props) => {
   };
   return (
     <Card bordered={false} className="uni-card h-auto">
-      <Row gutter={[24, 30]} align="bottom">
-        <Col span={24}>
+      <Row gutter={[24, 30]}>
+        <Col span={24} flex="auto">
           <Title level={4} className="mb-0">
             Attendance
           </Title>
+        </Col>
+        <Col>
+          <Button
+            icon={<LeftOutlined />}
+            size="middle"
+            className="c-graybtn small-btn"
+            onClick={() => history.push('/requests')}
+          >
+            Categories
+          </Button>
         </Col>
         {viewForm ? (
           <Col span={24}>

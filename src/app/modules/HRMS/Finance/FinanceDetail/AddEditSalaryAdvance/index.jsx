@@ -1,30 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Form, Breadcrumb } from 'antd';
-import { useForm } from 'react-hook-form';
-import ListCard from '../../../../../../../molecules/ListCard';
+import React, { useState } from 'react';
+import { Row, Col, Button } from 'antd';
+import ListCard from '../../../../../molecules/ListCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeAllOpenForms } from '../../../../ducks/action';
+import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
-import AddSalaryAdvance from './AddSalaryAdvance';
+import AddSalaryAdvance from '../../components/AddSalaryAdvance';
+import moment from 'moment';
+
 const salayAdvCol = [
   {
     title: 'Date Applied',
     dataIndex: 'date_applied',
     key: 'date_applied',
-    sorter: (a, b) => a.date_applied.length - b.date_applied.length,
-    render: (text, record) => moment(text).format('LL'),
+    sorter: true,
+    render: (text) => moment(text).format('Do MMMM YYYY'),
   },
   {
     title: 'Deduction Date',
     dataIndex: 'deduction_date',
     key: 'deduction_date',
-    sorter: (a, b) => a.deduction_date.length - b.deduction_date.length,
+    sorter: true,
+    render: (text) => moment(text).format('Do MMMM YYYY'),
   },
   {
     title: 'Ammount',
-    dataIndex: 'salary_ammount',
-    key: 'salary_ammount',
-    sorter: (a, b) => a.salary_ammount.length - b.salary_ammount.length,
+    dataIndex: 'amount',
+    key: 'amount',
+    sorter: true,
   },
   {
     title: 'Description',
@@ -35,15 +37,30 @@ const salayAdvCol = [
   },
 ];
 
-const AddEditSalaryAdvance = () => {
-  const { control, errors, handleSubmit } = useForm();
+const AddEditSalaryAdvance = (props) => {
+  const { id, advanceSalaryData } = props;
   const dispatch = useDispatch();
+  const [rowData, setRowData] = useState();
   const [viewSalaryAdvanceForm, setviewSalaryAdvanceForm] = useState(false);
   const tabVal = useSelector((state) => state.finance.tabClose);
 
-  const onFormViewer = () => {
+  const onFormViewer = (record) => {
+    setRowData(record);
     dispatch(closeAllOpenForms(true));
     setviewSalaryAdvanceForm(true);
+  };
+
+  const onCloseForm = () => {
+    dispatch(getFinanceDetail(id));
+    setviewSalaryAdvanceForm(false);
+  };
+
+  const onRowClickHandler = (record) => {
+    return {
+      onClick: () => {
+        onFormViewer(record);
+      },
+    };
   };
 
   return (
@@ -55,11 +72,11 @@ const AddEditSalaryAdvance = () => {
             htmlType="button"
             className="mb-1 p-0 c-gray-linkbtn"
             icon={<LeftOutlined />}
-            onClick={() => setviewSalaryAdvanceForm(false)}
+            onClick={onCloseForm}
           >
             Salary Advance List
           </Button>
-          <AddSalaryAdvance />
+          <AddSalaryAdvance id={id} data={rowData} onUpdateComplete={onCloseForm} />
         </Col>
       ) : (
         <Col span={24}>
@@ -67,10 +84,13 @@ const AddEditSalaryAdvance = () => {
             <Col span="24">
               <ListCard
                 listClass="nospace-card"
-                title="Loan List"
+                title="Salary Advance List"
+                classes="clickRow"
                 ListCol={salayAdvCol}
-                ListData={[]}
-                pagination={true}
+                ListData={advanceSalaryData}
+                pagination={false}
+                onRow={onRowClickHandler}
+                scrolling={500}
               />
             </Col>
             <Col>

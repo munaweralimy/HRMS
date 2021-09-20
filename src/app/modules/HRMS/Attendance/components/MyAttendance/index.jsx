@@ -48,7 +48,7 @@ const ListCol = [
     align: 'center',
     render: (text) => {
       let clname = '';
-      if (text == 'On Duty') {
+      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
         clname = 'c-success';
       } else if (text == 'Absent') {
         clname = 'c-error';
@@ -67,7 +67,7 @@ const ListCol = [
 
 export default (props) => {
   const { iProps } = props;
-  const { listdata } = iProps;
+  const { listdata, listcount, onTableChange, limit, page } = iProps;
   const onSearch = (value) => {
     console.log('check values', value);
   };
@@ -81,6 +81,12 @@ export default (props) => {
         onSearch={onSearch}
         pagination={true}
         listClass="nospace-card"
+        onChange={onTableChange}
+        pagination={{
+          total: listcount,
+          current: page,
+          pageSize: limit,
+        }}
       />
     </Card>
   );

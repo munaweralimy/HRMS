@@ -1,72 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslate } from 'Translate';
 import Search from './components/Search';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
-
-const data = [
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Pending',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Pending',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Pending',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Pending',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Pending',
-    tasks: 'Testing Marketing APIs',
-  },
-  {
-    employee_id: 'HR-EMP-00001',
-    employee_name: 'sheeraz kaleem',
-    row_name: '8f36e8e809',
-    project: 'CMS2',
-    hours: 9,
-    date: '2021-07-28',
-    status: 'Pending',
-    tasks: 'Testing Marketing APIs',
-  },
-];
+import { getOverallFinance, getOverallFinanceList } from './ducks/action';
 const colName = [
   {
     title: 'ID',
@@ -107,59 +46,10 @@ const colName = [
     sorted: (a, b) => a.status - b.status,
   },
 ];
-const tableData = [
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-  {
-    id: 123456,
-    name: 'Walater Gibson',
-    jobtitle: 'Graphics Designer',
-    company: 'Centre for Content Creation Sdn. Bhd.',
-    team: 'Development',
-    status: '3 Issues',
-  },
-];
+
 const filters = [
   {
-    label: 'Active Employee',
+    label: 'Active',
     value: 'Active',
   },
 
@@ -169,35 +59,36 @@ const filters = [
   },
 ];
 const Finance = () => {
+  const dispatch = useDispatch();
   const il8n = useTranslate();
-  const [girdView, setGridView] = useState('2');
-  const { t } = il8n;
-  const [filterVal, setFilterVal] = useState(filters[0].value);
-  const onFilter = (e) => {
-    setFilterVal(e.target.value);
+  const overallFinance = useSelector((state) => state.finance.overallFinanceData);
+  const overallFinanceList = useSelector((state) => state.finance.overallFinanceListData);
+
+  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
+    if (type === 'list') {
+      dispatch(getOverallFinanceList(filter, page, limit, sort, sortby));
+    } else {
+      dispatch(getOverallFinance(page, limit, sort, sortby));
+    }
   };
 
   const tabs = [
     {
       title: 'Overall Finance',
       key: 'overall',
-      count: data?.count || tableData?.count || 6,
+      count: overallFinance?.count,
       Comp: MultiView,
       iProps: {
-        carddata: data || [],
-        cardcount: (data && data?.count) || 10,
-        listdata: tableData || [],
-        listcount: (tableData && tableData?.count) || 0,
+        carddata: overallFinance?.rows || [],
+        cardcount: overallFinance?.count || 0,
+        listdata: overallFinanceList?.rows || [],
+        listcount: overallFinanceList?.count || 0,
         listCol: colName,
+        filters: filters,
         Search: Search,
         link: '/finance/',
-        filters: filters,
-        updateApi: () => {},
-        searchDropdowns: {
-          field1: [{ label: 'All', value: 'All' }],
-          field2: [{ label: 'All', value: 'All' }],
-          field3: [{ label: 'All', value: 'All' }],
-        },
+        statusKey: 'status',
+        updateApi: onOverallAction,
       },
     },
   ];
