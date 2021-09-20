@@ -60,3 +60,56 @@ export const titleList = [
     { value: 'Ms', label: 'Ms.' },
     { value: 'Mrs', label: 'Mrs.' },
   ]
+
+export const etypeList = [
+    {label: 'Full-time', value: 'Full-time'},
+    {label: 'Half-time', value: 'Half-time'},
+  ]
+  
+  export const ctypeList = [
+    {label: 'Permanent', value: 'Permanent'},
+    {label: 'Contract', value: 'Contract'},
+    {label: 'Probation', value: 'Probation'},
+  ]
+  
+  export const staffCategory = [
+    {label: 'Non-Academic', value: 'Non-Academic'},
+    {label: 'Academic', value: 'Academic'},
+  ]
+
+  export const identificationList = [
+    {label: 'MyKad/MyPR',value: 'MyKad/MyPR'},
+    {label: 'IC', value: 'IC '},
+    {label: 'Passport', value: 'Passport '}
+  ]
+  
+  export const degreeList = [
+    {label: 'Foundation', value: 'Foundation'},
+    {label: 'Diploma', value: 'Diploma'},
+    {label: 'Degree', value: 'Degree'},
+    {label: 'Masters Degree', value: 'Masters Degree'},
+    {label: 'Doctorate', value: 'Doctorate'},
+  ]
+  export const positionList = [
+    {label: 'Junior Executive', value: 'Junior Executive'},
+    {label: 'Senior Executive', value: 'Senior Executive'},
+    {label: 'Assistant Manager', value: 'Assistant Manager'},
+    {label: 'Manager', value: 'Manager'},
+    {label: 'Senior Manager', value: 'Senior Manager'},
+    {label: 'Junior Partner', value: 'Junior Partner'},
+    {label: 'Senior Partner', value: 'Senior Partner'},
+    {label: 'Associate', value: 'Associate'},
+    {label: 'Senior Associate', value: 'Senior Associate'},
+    {label: 'Director', value: 'Director'},
+    {label: 'Senior Director', value: 'Senior Director'},
+  ]
+  export const relationList = [
+    {label: 'Father', value: 'Father'},
+    {label: 'Mother', value: 'Mother'},
+    {label: 'Relative', value: 'Relative'},
+    {label: 'Others', value: 'Others'},
+  ]
+
+  export const templateList = [
+    {label: 'Default Work Hours', value: 'Default Work Hours'}
+  ]

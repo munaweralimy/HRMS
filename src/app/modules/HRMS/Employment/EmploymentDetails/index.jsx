@@ -7,7 +7,7 @@ import { LeftOutlined } from '@ant-design/icons';
 import { useParams, useHistory } from 'react-router-dom';
 import EmployeeForm from '../components/EmployeeForm';
 import {getEmployeeDetail} from '../ducks/action';
-import {LoadingOutlined} from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const antIcon = <LoadingOutlined spin />;

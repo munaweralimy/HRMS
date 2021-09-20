@@ -9,43 +9,10 @@ import ArrayForm from './ArrayForm';
 import moment from 'moment';
 import {getFileName, getSingleUpload} from '../../../../../../../../features/utility';
 import { employApi } from '../../../../ducks/services';
+import { relationList, positionList, degreeList, identificationList } from '../../../../../../../../configs/constantData';
 
 const _ = require("lodash");
 const { Title } = Typography;
-
-const identificationList = [
-  {label: 'MyKad/MyPR',value: 'MyKad/MyPR'},
-  {label: 'IC', value: 'IC '},
-  {label: 'Passport', value: 'Passport '}
-]
-
-const degreeList = [
-  {label: 'Foundation', value: 'Foundation'},
-  {label: 'Diploma', value: 'Diploma'},
-  {label: 'Degree', value: 'Degree'},
-  {label: 'Masters Degree', value: 'Masters Degree'},
-  {label: 'Doctorate', value: 'Doctorate'},
-]
-const positionList = [
-  {label: 'Junior Executive', value: 'Junior Executive'},
-  {label: 'Senior Executive', value: 'Senior Executive'},
-  {label: 'Assistant Manager', value: 'Assistant Manager'},
-  {label: 'Manager', value: 'Manager'},
-  {label: 'Senior Manager', value: 'Senior Manager'},
-  {label: 'Junior Partner', value: 'Junior Partner'},
-  {label: 'Senior Partner', value: 'Senior Partner'},
-  {label: 'Associate', value: 'Associate'},
-  {label: 'Senior Associate', value: 'Senior Associate'},
-  {label: 'Director', value: 'Director'},
-  {label: 'Senior Director', value: 'Senior Director'},
-]
-const relationList = [
-  {label: 'Father', value: 'Father'},
-  {label: 'Mother', value: 'Mother'},
-  {label: 'Relative', value: 'Relative'},
-  {label: 'Others', value: 'Others'},
-]
- 
 
 export default (props) => {
 
@@ -868,7 +835,7 @@ export default (props) => {
   ];
 
   const onFinish = async (val) => {
-    console.log('val', val);
+
     setLoad(true);
 
     let profileImg = '';
@@ -950,8 +917,6 @@ export default (props) => {
       })
     }
 
-    
-
     const body = {
       salutation: val.salutation?.value,
       first_name: val.first_name,
@@ -1008,7 +973,6 @@ export default (props) => {
       education: educate,
       external_work_history: work,
     }
-    console.log('--------', body);
     if (mode== 'edit') {
       employApi(body, id).then(res => {
         setLoad(false);

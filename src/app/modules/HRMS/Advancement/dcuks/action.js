@@ -69,29 +69,7 @@ export const getOverallFitCard = (page, limit, order, orderby) => {
     };
 };
 
-export const getCompany = () => {
-    return async (dispatch) => {
-      const {
-        data: { data },
-      } = await axios.get(`${apiresource}/Company`);
-      dispatch({
-        type: action_types.COMPANY_LIST,
-        data: data,
-      });
-    };
-};
 
-export const getJobs = () => {
-  return async (dispatch) => {
-    const {
-      data: { data },
-    } = await axios.get(`${apiresource}/Job Position`);
-    dispatch({
-      type: action_types.JOBS_LIST,
-      data: data,
-    });
-  };
-};
 
 export const emptyApplicant = () => {
   return (dispatch) => {
