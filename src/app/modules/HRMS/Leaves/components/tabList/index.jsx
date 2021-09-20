@@ -1,3 +1,3 @@
-export { default as OverallTasks } from './OverallTasks';
-export { default as TeamTasks } from './TeamTasks';
-export { default as MyTasks } from './MyTasks';
+export { default as OverallLeaves } from './OverallLeaves';
+export { default as TeamLeaves } from './TeamLeaves';
+export { default as MyLeaves } from './MyLeaves';

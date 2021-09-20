@@ -1,169 +1,142 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Tabs, Typography, Tag } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
-import { getMyTasks } from '../../ducks/actions';
+import { getMyLeaves, getMyAvailableLeaves  } from '../../ducks/actions';
 import { useSelector, useDispatch } from 'react-redux';
-import SearchMyTask from '../SearchMyTask';
 import ListCard from '../../../../../molecules/ListCard';
 import AddNewTimeSheet from './Component/AddNewTimeSheet';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../../../../configs/constantData';
 import DetailsComponent from '../../../../../molecules/HRMS/DetailsComponent';
-import moment from 'moment';
+import LeaveApplication from '../LeaveApplication';
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
-const ListCol = [
-  {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
-  },
-  {
-    title: 'Project',
-    dataIndex: 'project',
-    key: 'project',
-    elipsis: true
-  },
-  {
-      title: 'Hours',
-      dataIndex: 'hours',
-      key: 'hours',
-      align: 'center',
-  },
-  {
-      title: 'Task',
-      dataIndex: 'tasks',
-      key: 'tasks',
-      ellipsis: true,
-  },
-  {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      align: 'right',
-      render: (text) => {
-        let clname = '';
-        if (text == 'Approved') {
-          clname = 'c-success';
-        } else if (text == 'Rejected' || text == 'Missed') {
-          clname = 'c-error';
-        } else if (text == 'Pending') {
-          clname = 'c-pending';
-        }
-        return <span className={`SentanceCase ${clname}`}>{text}</span>;
-      },
-  },
-]
-
 export default (props) => {
-
   const dispatch = useDispatch();
   const [addVisible, setAddVisible] = useState(false)
-  const myTaskData = useSelector(state => state.tasks.myTaskData);
+  const myTaskData = useSelector(state => state.leaves.myTaskData);
+  const myAvailableLeaves = useSelector(state => state.leaves.myAvailableLeaves);
   const [rowDetails, setRowDetail] = useState(false);
+  const [mode, setMode] = useState('');
   const [rowData, setRowData] = useState([]);
+  const [selectedRecord, setRecord] = useState([]);
   const [activeKey, setActiveKey] = useState('1');
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
+  const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  
+  const ListCol = [
+    {
+      title: 'Leave Type',
+      dataIndex: 'leave_type',
+      key: 'leave_type',
+      sorter: true, 
+    },
+    {
+      title: 'Carried Forward',
+      dataIndex: 'carry_forwarded_leaves',
+      key: 'carry_forwarded_leaves',
+      align: 'center',
+      sorter: true,
+      render: (text) => {
+        return <>{text} Days</>
+      }
+    },
+    {
+      title: 'Entitlement',
+      dataIndex: 'till_date',
+      key: 'till_date',
+      sorter: true,
+      align: 'center',
+      render: (text) => {
+        return <>{text} Days</>
+      }
+    },
+    {
+      title: 'Taken',
+      dataIndex: 'taken_leaves',
+      key: 'taken_leaves',
+      sorter: true,
+      align: 'center',
+      render: (text) => {
+        return <>{text} Days</>
+      }
+    },
+    {
+      title: 'Available',
+      dataIndex: 'available_leaves',
+      key: 'available_leaves',
+      align: 'center',
+      sorter: true,
+      render: (text) => {
+        return <span className="c-success">{text} Days</span>;
+      },
+    },
+  ]
 
   useEffect(() => {
-    dispatch(getMyTasks('HR-EMP-00002'));
+    dispatch(getMyLeaves(id,'Pending', page, limit, '', ''));
+    dispatch(getMyAvailableLeaves(id));
   }, []);
+
+
+  const updateTimesheet = (status, page, limit, sort, sortby) => {
+    dispatch(getMyLeaves(id, status, page, limit, sort, sortby));
+  }
 
   const btnList = [
     {
-      text: '+ Add New Timesheet',
+      text: '+ Apply Leave',
       classes: 'green-btn',
-      action: () => { setAddVisible(true); setActiveKey('1')},
+      action: () => { setAddVisible(true); setActiveKey('1'); setMode('add') },
     },
   ];
 
-  const onClickRow = (record) => {
-    return {
-      onClick: () => {
-        setRowDetail(true)
-        let temp = [
-          {
-            label: 'Timesheet Date',
-            value: record?.date ? moment(record.date).format('Do MMMM YYYY') : ''
-          },
-          {
-            label: 'Project Name',
-            value: record?.project
-          },
-          {
-            label: 'Total Hours',
-            value: record?.hours
-          },
-          {
-            label: 'Task',
-            value: record?.tasks
-          },
-          {
-            label: 'Status',
-            value: record?.status,
-            classi: record?.status =='Rejected' ? 'c-error' : record?.status == 'Approve' ? 'c-success' : 'c-pending' 
-          },
-        ];
-        setRowData(temp)
-      },
-    };
+  const updateApi = () => {
+    setRecord(null);
+    dispatch(getMyLeaves(id,'Pending', 1, limit, '', ''));
   }
 
-  const onSearch = (val) => {
-    console.log('---------', val);
+  const onEdit = () => {
+    setAddVisible(true); setMode('edit')
   }
 
   return (
     <>
       {!addVisible && <HeadingChip btnList={btnList} classes={`${isHDScreen ? 'optionsTabs' : 'mb-1-5'}`} />}
       <Card bordered={false} className='uni-card'>
-          <Tabs activeKey={activeKey} type="card" className='custom-tabs' onChange={(e) => setActiveKey(e)}>
-            <TabPane key={'1'} tab='Timesheet'>
-              {!rowDetails && !addVisible &&
-              <ListCard 
-              title='My Timesheet'
-              onRow={onClickRow}
-              Search={SearchMyTask} 
-              onSearch={onSearch} 
-              ListCol={ListCol} 
-              ListData={myTaskData?.timesheet} 
-              pagination={true}
-              classes='clickRow'
-              />}
-              {addVisible && <AddNewTimeSheet setAddVisible={setAddVisible} />}
-              {rowDetails && (
-                <DetailsComponent 
-                  setRowDetail={setRowDetail} 
-                  mainTitle='Timesheet Details'
-                  backbtnTitle='My Timesheet'
-                  data={rowData}
-                  />
-              )}
-            </TabPane>
+        <Tabs activeKey={activeKey} type="card" className='custom-tabs' onChange={(e) => setActiveKey(e)}>
+          <TabPane key={'1'} tab='Leave Application'>
+            {!rowDetails && !addVisible &&
+              <LeaveApplication id={id} updateApi={updateTimesheet} data={myTaskData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
+            }
+            {addVisible && <AddNewTimeSheet id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
+            {rowDetails && (
+              <DetailsComponent
+                setRecord={setRecord}
+                setRowDetail={setRowDetail}
+                mainTitle='Timesheet Details'
+                backbtnTitle='My Timesheet'
+                data={rowData}
+                onAction3={onEdit}
+                btn3title={'Edit Timesheet'}
+              />
+            )}
+          </TabPane>
 
-            <TabPane key={'2'} tab='Projects'>
-              <Row gutter={[20,30]}>
-                <Col span={24}>
-                  <Title level={4} className='c-default mb-0'>My Projects</Title>
-                </Col>
-                <Col span={24}>
-                  <Row gutter={[20,20]}>
-                    {myTaskData && ( 
-                      <>
-                      {myTaskData?.projects?.map((e, index) => (
-                    <Col span={24} key={index}>
-                      <Tag className="program-list">
-                        <span className="p-name">{e.project}</span>
-                      </Tag>
-                    </Col>))}
-                    </>)}
-                  </Row>
-                </Col>
-              </Row>
-            </TabPane>
-          </Tabs>
+          <TabPane key={'2'} tab='Availability'>
+            <Row gutter={[20, 30]}>
+              <Col span={24}>
+                <Row gutter={[20, 20]}>
+                  <ListCard title='Leave Availability' ListCol={ListCol} ListData={myAvailableLeaves?.availibility} pagination={true} />
+                </Row>
+              </Col>
+            </Row>
+          </TabPane>
+        </Tabs>
       </Card>
     </>
   );
