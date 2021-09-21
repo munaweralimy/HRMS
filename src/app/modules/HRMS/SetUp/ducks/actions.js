@@ -34,11 +34,15 @@ export const getLeaveTypesList = (page, limit, order) => {
   };
 };
 
-export const getLeaveEntitlementsList = (page, limit) => {
+export const getLeaveEntitlementsList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_leave_entitlement_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_leave_entitlement_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.LEAVE_ENTITLEMENTS_LIST,
       data: message,
@@ -58,11 +62,15 @@ export const getUserRolesList = (page, limit) => {
   };
 };
 
-export const getWorkingHoursList = (page, limit) => {
+export const getWorkingHoursList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.work_hour_template_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.work_hour_template_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}` : ''
+      }&orderby=creation`,
+    );
     dispatch({
       type: action_types.WORKING_HOURS_LIST,
       data: message,
@@ -70,11 +78,15 @@ export const getWorkingHoursList = (page, limit) => {
   };
 };
 
-export const getJobPositionsList = (page, limit) => {
+export const getJobPositionsList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.job_position_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.job_position_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.JOB_POSITIONS_LIST,
       data: message,

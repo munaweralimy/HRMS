@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
@@ -49,7 +49,9 @@ export default (props) => {
     {
       text: '+ New User Role',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setVisible(true);
+      },
     },
   ];
 
@@ -57,24 +59,30 @@ export default (props) => {
     closable: false,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {},
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
-
+  };
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getTeamList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -88,7 +96,12 @@ export default (props) => {
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={ListData}
-            pagination={true}
+            pagination={{
+              total: teamListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
         </Col>
       </Row>
