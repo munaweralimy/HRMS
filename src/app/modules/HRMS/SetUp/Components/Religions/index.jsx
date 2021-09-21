@@ -24,30 +24,12 @@ export default (props) => {
 
   const ListCol = [
     {
-      title: 'Team Name',
-      dataIndex: 'team_name',
-      key: 'team_name',
-      sorted: (a, b) => a.team_name - b.team_name,
+      title: 'Religion',
+      dataIndex: 'religion',
+      key: 'religion',
+      sorted: (a, b) => a.religion - b.religion,
     },
-    {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
-    },
-    {
-      title: 'Team Leader',
-      dataIndex: 'team_leader_name',
-      key: 'team_leader_name',
-      sorted: (a, b) => a.team_leader_name - b.team_leader_name,
-    },
-    {
-      title: 'Team Member',
-      dataIndex: 'total_staff_count',
-      key: 'total_staff_count',
-      sorted: (a, b) => a.total_staff_count - b.total_staff_count,
-      align: 'center',
-    },
+
     {
       title: 'Action',
       dataIndex: 'Action',

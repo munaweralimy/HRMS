@@ -14,7 +14,7 @@ import axios from '../../../../../../services/axiosInterceptor';
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const holidaysListData = useSelector((state) => state.setup.holidaysListData);
 
@@ -25,21 +25,22 @@ export default (props) => {
   const ListCol = [
     {
       title: 'Holiday Name',
-      dataIndex: 'holiday_name',
-      key: 'holiday_name',
-      sorted: (a, b) => a.holiday_name - b.holiday_name,
+      dataIndex: 'holiday',
+      key: 'holiday',
+      sorted: (a, b) => a.holiday - b.holiday,
     },
     {
       title: 'Date',
-      dataIndex: 'holiday_date',
-      key: 'holiday_date',
-      sorted: (a, b) => a.holiday_date - b.holiday_date,
+      dataIndex: 'date',
+      key: 'date',
+      sorted: (a, b) => a.date - b.date,
     },
     {
       title: 'Note',
       dataIndex: 'note',
       key: 'note',
       sorted: (a, b) => a.note - b.note,
+      render: (text) => (text ? text : '-'),
     },
     {
       title: 'Action',

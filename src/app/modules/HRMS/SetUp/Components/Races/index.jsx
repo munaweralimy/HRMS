@@ -93,9 +93,9 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getRacesList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
     } else {
-      dispatch(getTeamList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getRacesList(pagination.current, pagination.pageSize, '', ''));
     }
   };
 
