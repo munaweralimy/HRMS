@@ -2,11 +2,15 @@ import axios from '../../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../../configs/constants';
 
-export const getTeamList = (page, limit) => {
+export const getTeamList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_team_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_team_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.TEAMS_LIST,
       data: message,
@@ -14,11 +18,15 @@ export const getTeamList = (page, limit) => {
   };
 };
 
-export const getLeaveTypesList = (page, limit) => {
+export const getLeaveTypesList = (page, limit, order) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.leave_type_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.leave_type_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.LEAVE_TYPE_LIST,
       data: message,
@@ -217,4 +225,3 @@ export const getRequestFormsList = (page, limit) => {
     });
   };
 };
-
