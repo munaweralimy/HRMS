@@ -1,12 +1,12 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddPopup from './Components/AddPopup';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getNationalitiesList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getNationalitiesList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiresource } from '../../../../../../configs/constants';
 import axios from '../../../../../../services/axiosInterceptor';
@@ -14,20 +14,20 @@ import axios from '../../../../../../services/axiosInterceptor';
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const nationalitiesListData = useSelector((state) => state.setup.nationalitiesListData);
 
   useEffect(() => {
-    dispatch(getNationalitiesList(page,pageSize));
+    dispatch(getNationalitiesList(page, limit, '', ''));
   }, []);
 
   const ListCol = [
     {
       title: 'Nationality',
-      dataIndex: 'nationality',
-      key: 'nationality',
-      sorted: (a, b) => a.nationality - b.nationality,
+      dataIndex: 'name',
+      key: 'name',
+      sorted: (a, b) => a.name - b.name,
     },
     {
       title: 'Action',
@@ -48,7 +48,9 @@ export default (props) => {
     {
       text: '+ New Nationality',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setVisible(true);
+      },
     },
   ];
 
@@ -56,10 +58,7 @@ export default (props) => {
     closable: false,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -71,28 +70,34 @@ export default (props) => {
       await axios.delete(url);
       message.success('Record Successfully Deleted');
       //props.setLoading(false);
-      dispatch(getNationalitiesList(page,pageSize));
+      dispatch(getNationalitiesList(page, pageSize));
     } catch (e) {
       //props.setLoading(false);
       const { response } = e;
       message.error('Something went wrong');
     }
-  }
+  };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {},
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
 
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getNationalitiesList(pg,pageSize));
-  }
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
 
   return (
     <>
@@ -107,17 +112,13 @@ export default (props) => {
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={nationalitiesListData?.rows}
-            pagination={false}
+            pagination={{
+              total: nationalitiesListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={nationalitiesListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

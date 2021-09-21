@@ -94,11 +94,15 @@ export const getJobPositionsList = (page, limit, order, orderby) => {
   };
 };
 
-export const getEducationalFieldsList = (page, limit) => {
+export const getEducationalFieldsList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_education_field_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_education_field_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.EDUCATIONAL_FIELDS_LIST,
       data: message,
@@ -106,11 +110,15 @@ export const getEducationalFieldsList = (page, limit) => {
   };
 };
 
-export const getInstitutionsList = (page, limit) => {
+export const getInstitutionsList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.institution_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.institution_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.INSTITUTIONS_LIST,
       data: message,
@@ -118,11 +126,15 @@ export const getInstitutionsList = (page, limit) => {
   };
 };
 
-export const getNationalitiesList = (page, limit) => {
+export const getNationalitiesList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_nationality_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_nationality_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.NATIONALITIES_LIST,
       data: message,
@@ -130,11 +142,15 @@ export const getNationalitiesList = (page, limit) => {
   };
 };
 
-export const getHolidaysList = (page, limit) => {
+export const getHolidaysList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_holidays_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_holidays_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.HOLIDAYS_LIST,
       data: message,
@@ -142,11 +158,15 @@ export const getHolidaysList = (page, limit) => {
   };
 };
 
-export const getReligionsList = (page, limit) => {
+export const getReligionsList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.religion_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.religion_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.RELIGIONS_LIST,
       data: message,
@@ -154,11 +174,15 @@ export const getReligionsList = (page, limit) => {
   };
 };
 
-export const getRacesList = (page, limit) => {
+export const getRacesList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.race_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.race_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.RACES_LIST,
       data: message,
@@ -166,11 +190,15 @@ export const getRacesList = (page, limit) => {
   };
 };
 
-export const getProjectsList = (page, limit) => {
+export const getProjectsList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_projects_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_projects_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.PROJECTS_LIST,
       data: message,
@@ -178,11 +206,15 @@ export const getProjectsList = (page, limit) => {
   };
 };
 
-export const getWarningLetterList = (page, limit) => {
+export const getWarningLetterList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.warning_letter_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.warning_letter_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.WARNING_LETTER_LIST,
       data: message,
@@ -190,11 +222,15 @@ export const getWarningLetterList = (page, limit) => {
   };
 };
 
-export const getLetterTemplateList = (page, limit) => {
+export const getLetterTemplateList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.letter_template_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.letter_template_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.LETTER_TEMPLATE_LIST,
       data: message,
@@ -202,11 +238,15 @@ export const getLetterTemplateList = (page, limit) => {
   };
 };
 
-export const getApproversList = (page, limit) => {
+export const getApproversList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_approver_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_approver_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.APPROVERS_LIST,
       data: message,
@@ -214,11 +254,15 @@ export const getApproversList = (page, limit) => {
   };
 };
 
-export const getAssetsList = (page, limit) => {
+export const getAssetsList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_assets_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_assets_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.ASSETS_LIST,
       data: message,
@@ -226,11 +270,15 @@ export const getAssetsList = (page, limit) => {
   };
 };
 
-export const getRequestFormsList = (page, limit) => {
+export const getRequestFormsList = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.aqa_form_request_pagination?page_number=${page}&limit=${limit}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.aqa_form_request_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${order}&orderby=creation` : ''
+      }`,
+    );
     dispatch({
       type: action_types.REQUEST_FORMS_LIST,
       data: message,
