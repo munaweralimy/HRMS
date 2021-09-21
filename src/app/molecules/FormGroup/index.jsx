@@ -40,12 +40,14 @@ export default (props) => {
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
           control={control}
-          class={`mb-0 ${item.hidden ? 'd-none' : ''}`}
+          class={`mb-0 ${item.hidden ? 'd-none' : ''} ${item.arrow == false ? 'no-arrow' : ''}`}
           iProps={{
             readOnly: props.static ? props.static : false,
             placeholder: item.placeholder,
             size: 'large',
             type: item.number && 'number',
+            min: item.min && item.min,
+            max: item.max && item.max,
           }}
           initValue={elem && elem[item.name] ? elem[item.name] : ''}
           rules={{
@@ -65,6 +67,7 @@ export default (props) => {
           class={`mb-0 w-100 ${item.hidden ? 'd-none' : ''}`}
           initValue={elem ? { label: elem[item.name], value: elem[item.name] } : ''}
           control={control}
+          onChange={item.onChange && item.onChange}
           iProps={{ placeholder: item.placeholder, isMulti: item.multiple ? item.multiple : false , isDisabled: item.disabled || props.static }}
           selectOption={item.options}
           rules={{ required: { value: item.req, message: item.reqmessage } }}

@@ -27,7 +27,7 @@ export const InputField = (props) => {
         <Controller
           name={fieldname}
           control={control}
-          defaultValue={initValue || initValue == 0 ? initValue : ''}
+          defaultValue={initValue ? initValue : initValue == 0 ? 0 : ''}
           rules={rules}
           render={({ onBlur, value, onChange }) => (
             <Input value={value} onChange={onChange} onBlur={props.onBlur} {...iProps} />

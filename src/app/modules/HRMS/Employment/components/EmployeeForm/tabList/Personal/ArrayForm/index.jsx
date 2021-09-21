@@ -11,7 +11,7 @@ export default (props) => {
     return (
         <>
         {fields.map((elem, index) => (
-            <Card className={`${item.single ? 'transparent-card' : 'border-card'}`} key={elem.id}>
+            <Card bordered={item.noCard == true ? false : true} className={`${item.single ? 'transparent-card' : item.noCard == true ? 'no-card-aform' : 'border-card'}`} key={elem.id}>
             <Row gutter={[20,20]} className='position-relative'>
                 {item.child.map((x, i) => (
                 <Fragment key={i}>

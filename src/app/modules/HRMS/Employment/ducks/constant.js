@@ -6,3 +6,5 @@ export const EMPLOYEE_LIST = 'EMPLOYEE_LIST';
 export const EMPLOYEE_CARD = 'EMPLOYEE_CARD';
 export const JOBS_LIST = 'JOBS_LIST';
 export const COMPANY_LIST = 'COMPANY_LIST';
+export const HOUR_TEMPLATE = 'HOUR_TEMPLATE';
+export const TEMPLATE_LIST = 'TEMPLATE_LIST';

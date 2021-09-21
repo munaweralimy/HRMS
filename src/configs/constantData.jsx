@@ -110,6 +110,15 @@ export const etypeList = [
     {label: 'Others', value: 'Others'},
   ]
 
-  export const templateList = [
-    {label: 'Default Work Hours', value: 'Default Work Hours'}
+  export const timelap = [
+    {label: 'am', value: 'am'},
+    {label: 'pm', value: 'pm'}
   ]
+
+  export const workType = [
+    {label: 'Full Day', value: 'Full Day'},
+    {label: 'Half Day', value: 'Half Day'},
+    {label: 'Rest Day', value: 'Rest Day'}
+  ]
+
+  
