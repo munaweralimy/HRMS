@@ -1,47 +1,56 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, message } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Button, Switch } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddPopup from './Components/AddPopup';
 import Search from './Components/Search';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getRequestFormsList } from '../../ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const dispatch = useDispatch();
+  const requestFormsList = useSelector((state) => state.setup.requestFormsListData);
 
+  useEffect(() => {
+    dispatch(getRequestFormsList(page, limit, '', ''));
+  }, []);
   const ListCol = [
     {
-      title: 'Job Title',
-      dataIndex: 'jobtitle',
-      key: 'jobtitle',
-      sorted: (a, b) => a.jobtitle - b.jobtitle,
+      title: 'Form Name',
+      dataIndex: 'form_name',
+      key: 'form_name',
+      sorted: (a, b) => a.form_name - b.form_name,
     },
     {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
+      title: 'Fields',
+      dataIndex: 'fields',
+      key: 'fields',
+      sorted: (a, b) => a.fields - b.fields,
     },
     {
-      title: 'Date Open',
-      dataIndex: 'dateopen',
-      key: 'dateopen',
-      sorted: (a, b) => a.dateopen - b.dateopen,
-    },
-    {
-      title: 'Suitable Application',
-      dataIndex: 'suitableappalication',
-      key: 'suitableappalication',
-      sorted: (a, b) => a.suitableappalication - b.suitableappalication,
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      sorted: (a, b) => a.status - b.status,
       align: 'center',
+      render: (text, record) => <Switch checked={text == 1 ? true : false} disabled />,
     },
-  ];
-  const ListData = [
     {
-      jobtitle: 'Graphic Designer',
-      company: 'Centre for Content Creation Sdn. Bhd.',
-      dateopen: '15th February 2021',
-      suitableappalication: '3',
+      title: 'Action',
+      dataIndex: 'Action',
+      key: 'Action',
+      sorted: (a, b) => a.Action - b.Action,
+      align: 'center',
+      render: (text, record) => (
+        <Button type="link" className="list-links" onClick={() => {}}>
+          <CloseCircleFilled />
+        </Button>
+      ),
     },
   ];
 
@@ -49,7 +58,9 @@ export default (props) => {
     {
       text: '+ New Form',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setVisible(true);
+      },
     },
   ];
 
@@ -57,24 +68,30 @@ export default (props) => {
     closable: false,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {},
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
-
+  };
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -87,8 +104,13 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={ListData}
-            pagination={true}
+            ListData={requestFormsList?.rows}
+            pagination={{
+              total: requestFormsList?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
         </Col>
       </Row>

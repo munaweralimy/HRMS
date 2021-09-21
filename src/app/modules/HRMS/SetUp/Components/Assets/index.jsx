@@ -1,47 +1,63 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, message } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddPopup from './Components/AddPopup';
 import Search from './Components/Search';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getAssetsList } from '../../ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const dispatch = useDispatch();
+  const assetsList = useSelector((state) => state.setup.assetsListData);
+
+  useEffect(() => {
+    dispatch(getAssetsList(page, limit, '', ''));
+  }, []);
 
   const ListCol = [
     {
-      title: 'Job Title',
-      dataIndex: 'jobtitle',
-      key: 'jobtitle',
-      sorted: (a, b) => a.jobtitle - b.jobtitle,
+      title: 'Asset No.',
+      dataIndex: 'assets_id',
+      key: 'assets_id',
+      sorted: (a, b) => a.assets_id - b.assets_id,
     },
     {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
+      title: 'Asset Name',
+      dataIndex: 'assets_name',
+      key: 'assets_name',
+      sorted: (a, b) => a.assets_name - b.assets_name,
     },
     {
-      title: 'Date Open',
-      dataIndex: 'dateopen',
-      key: 'dateopen',
-      sorted: (a, b) => a.dateopen - b.dateopen,
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text) => {
+        let clname = '';
+        if (text == 'In Staff Possession') {
+          clname = 'c-pending';
+        } else if (text == 'With Company') {
+          clname = 'c-success';
+        }
+        return <span className={`SentanceCase ${clname}`}>{text}</span>;
+      },
     },
     {
-      title: 'Suitable Application',
-      dataIndex: 'suitableappalication',
-      key: 'suitableappalication',
-      sorted: (a, b) => a.suitableappalication - b.suitableappalication,
+      title: 'Action',
+      dataIndex: 'Action',
+      key: 'Action',
+      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
-    },
-  ];
-  const ListData = [
-    {
-      jobtitle: 'Graphic Designer',
-      company: 'Centre for Content Creation Sdn. Bhd.',
-      dateopen: '15th February 2021',
-      suitableappalication: '3',
+      render: (text, record) => (
+        <Button type="link" className="list-links" onClick={() => {}}>
+          <CloseCircleFilled />
+        </Button>
+      ),
     },
   ];
 
@@ -49,7 +65,9 @@ export default (props) => {
     {
       text: '+ New Asset',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setVisible(true);
+      },
     },
   ];
 
@@ -57,23 +75,31 @@ export default (props) => {
     closable: false,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {},
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
+
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
 
   return (
     <>
@@ -87,8 +113,13 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={ListData}
-            pagination={true}
+            ListData={assetsList?.rows}
+            pagination={{
+              total: assetsList?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
         </Col>
       </Row>
