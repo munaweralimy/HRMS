@@ -6,13 +6,13 @@ const {Title} = Typography;
 
 export default (props) => {
 
-    const { fields, remove, item, control, errors} = props;
+    const { fields, remove, item, control, errors, gap} = props;
 
     return (
         <>
         {fields.map((elem, index) => (
             <Card bordered={item.noCard == true ? false : true} className={`${item.single ? 'transparent-card' : item.noCard == true ? 'no-card-aform' : 'border-card'}`} key={elem.id}>
-            <Row gutter={[20,20]} className='position-relative'>
+            <Row gutter={gap ? gap : [20,20]} className='position-relative'>
                 {item.child.map((x, i) => (
                 <Fragment key={i}>
                     {x?.subheader && (

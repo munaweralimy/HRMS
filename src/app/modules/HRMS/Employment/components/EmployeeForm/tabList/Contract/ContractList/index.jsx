@@ -3,13 +3,15 @@ import { Row, Col, Form, message } from 'antd';
 import ListCard from '../../../../../../../../molecules/ListCard';
 import ListFormComp from '../../../../../../../../molecules/HRMS/ListFormComp';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { etypeList, ctypeList, staffCategory, positionList, workType, timelap } from '../../../../../../../../../configs/constantData';
+import { etypeList, ctypeList, staffCategory, positionList, workType, timelap, alternateSat } from '../../../../../../../../../configs/constantData';
 import { getCompany, getJobs, getTeams, getRoles, getStaffs } from '../../../../../../../Application/ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { getWHTemplateList } from '../../../../../ducks/action';
 import axios from '../../../../../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../../../../../configs/constants';
+import { uniquiFileName, getSingleUpload } from '../../../../../../../../../features/utility';
 import moment from 'moment';
+import { contractApi } from '../../../../../ducks/services';
 
   const colName = [
     {
@@ -107,7 +109,8 @@ import moment from 'moment';
 export default (props) => {
 
     const dispatch = useDispatch();
-    const { data, updateApi, id, setLoad, setVisible } = props;
+    const { data, updateApi, id, setLoad, setVisible, mode, setForm, formObj } = props;
+    const [noEdit, setNoedit] = useState(true);
     const { control, errors, setValue, reset, handleSubmit } = useForm();
     const [formVisible, setFormVisible] = useState(false);
     const [recordData, setRecord] = useState(null);
@@ -127,7 +130,10 @@ export default (props) => {
       dispatch(getTeams());
       dispatch(getRoles());
       dispatch(getStaffs());
-      dispatch(getWHTemplateList())
+      dispatch(getWHTemplateList());
+      if (mode == 'add') {
+        addNew();
+      }
     }, []);
 
     useEffect(() => {
@@ -141,32 +147,34 @@ export default (props) => {
       }
     }, [templates]);
 
-    const { fields, append, remvoe} = useFieldArray({
+    const { fields, append, remove} = useFieldArray({
       control,
       name: 'work_hour_template_detail',
     });
 
     const onWHChnage = async (e) => {
-      console.log(e)
       if(e.label == "Custom Template") {
-        console.log('i am her')
+        setNoedit(false);
         setValue('work_hour_template_detail', custom)
       } else {
+        if (noEdit == false) {
+          setNoedit(true);
+        }
         try {
           const res = await axios.get(`${apiMethod}/hrms.api.get_work_hours_temp_data?tempid=${e.label}`);
           let temp = [];
+          remove();
           res?.data?.message.map((x, i) => {
             temp.push({
               id: i,
               day: x.day,
-              time_hour: 1,
-              time_min: 0,
-              time_type: x.time_type ? {label: x.time_type, value: x.time_type } : '',
-              work_hour_type: x.work_hour_type ? {label: x.work_hour_type, value: x.work_hour_type } : '  ',
+              time_hour: x.start_time ? moment(x.start_time, 'hh:mm:ss').hour() : 0,
+              time_min: x.start_time ? moment(x.start_time, 'hh:mm:ss').minute() : 0,
+              time_type: x.time_type,
+              work_hour_type: x.work_hour_type,
               work_hours: x.work_hours,
             })
           })
-          console.log('checking', temp)
           setValue('work_hour_template_detail', temp);
         }catch(e) {
           console.log(e)
@@ -210,7 +218,7 @@ export default (props) => {
         name: 'end_date',
         label: 'To Date',
         twocol: true,
-        req: true,
+        req: false,
         reqmessage: 'Please state'
       },
       // employment details
@@ -241,7 +249,7 @@ export default (props) => {
         label: 'Team',
         placeholder: 'Please Select',
         twocol: true,
-        options: teamList.map(x => ({label: x.team_name, value: x.team_name})),
+        options: teamList.map(x => ({label: x.team_name, value: x.name})),
         req: true,
         reqmessage: 'Please state'
       },
@@ -307,6 +315,7 @@ export default (props) => {
         twocol: false,
         colWidth: '1 0 100%',
         field: fields,
+        gap: [10, 10],
         single: false,
         noCard: true,
         child : [
@@ -317,7 +326,7 @@ export default (props) => {
             static: true,
             req: false,
             twocol: false,
-            colWidth: '0 1 150px'
+            colWidth: '1 0 100px'
           },    
           {
             type: 'select',
@@ -325,9 +334,10 @@ export default (props) => {
             label: '',
             placeholder: 'Please Select',
             options: workType,
+            static: noEdit,
             req: true,
             twocol: false,
-            colWidth: '0 1 150px'
+            colWidth: '1 0 100px'
           },
           {
             type: 'input',
@@ -337,6 +347,7 @@ export default (props) => {
             number: true,
             min: 1,
             max: 12,
+            static: noEdit,
             arrow: false,
             twocol: false,
             colWidth: '0 1 70px'
@@ -348,6 +359,7 @@ export default (props) => {
             number: true,
             arrow: false,
             req: true,
+            static: noEdit,
             min: 0,
             max: 59,
             twocol: false,
@@ -359,6 +371,7 @@ export default (props) => {
             label: '',
             placeholder: 'Select',
             options: timelap,
+            static: noEdit,
             req: true,
             twocol: false,
             colWidth: '0 1 100px'
@@ -368,6 +381,7 @@ export default (props) => {
             name: 'work_hours',
             label: '',
             req: true,
+            static: noEdit,
             number:true,
             arrow: false,
             min: 0,
@@ -378,21 +392,78 @@ export default (props) => {
           },
         ]
       },
+      {
+        type: 'switch',
+        name: 'alternate_saturdays',
+        label: 'Alternate Saturdays',
+        req: false,
+        twocol: false,
+        colWidth: '1 0 100%'
+      },
+      {
+        type: 'select',
+        name: 'alt_saturday_group',
+        label: 'Group',
+        placeholder: 'Select',
+        options: alternateSat,
+        req: true,
+        twocol: false,
+        colWidth: '1 0 100%'
+      },
     ];
 
     const onClickRow = (record) => {
 
       return {
         onClick: () => {
-          
           setRecord([
             {
-              field: 'name',
-              value: record.name
+              field: 'contract_type',
+              value: record.contract_type ? {label: record.contract_type,value: record.contract_type}: '' 
             },
             {
-              field: 'letter_type',
-              value: record.letter_type ? {label: record.letter_type, value: record.letter_type} : ''
+              field: 'company',
+              value: record.company ? {label: record.company,value: record.company}: '' 
+            },
+            {
+              field: 'employement_type',
+              value: record.employement_type ? {label: record.employement_type,value: record.employement_type}: '' 
+            },
+            {
+              field: 'employee_role',
+              value: record.employee_role ? {label: record.employee_role,value: record.employee_role}: '' 
+            },
+            {
+              field: 'job_title',
+              value: record.job_title ? {label: record.job_title,value: record.job_title}: '' 
+            },
+            {
+              field: 'position_level',
+              value: record.position_level ? {label: record.position_level,value: record.position_level}: '' 
+            },
+            {
+              field: 'staff_category',
+              value: record.staff_category ? {label: record.staff_category,value: record.staff_category}: '' 
+            },
+            {
+              field: 'supervisor',
+              value: record.supervisor ? {label: record.supervisor,value: record.supervisor}: '' 
+            },
+            {
+              field: 'team',
+              value: record.team ? {label: record.team,value: record.team}: '' 
+            },
+            {
+              field: 'work_hour_template',
+              value: record.work_hour_template ? {label: record.work_hour_template,value: record.work_hour_template}: '' 
+            },
+            {
+              field: 'start_date',
+              value: record.start_date ? moment(record.start_date, 'YYYY-MM-DD') : '' 
+            },
+            {
+              field: 'end_date',
+              value: record.end_date ? moment(record.end_date, 'YYYY-MM-DD') : '' 
             },
           ]);
           setVisible({
@@ -407,6 +478,7 @@ export default (props) => {
     }
     
     const addNew = () => {
+      setRecord(null);
         setVisible({
             set1: true,
             set2: false,
@@ -429,7 +501,85 @@ export default (props) => {
     }
 
     const onFinish = async (val) => {
-      
+      setLoad(true);
+      let empRole = [];
+      let workhours = [];
+      let contactPDF = '';
+
+      if (val?.work_hour_template?.value == "Custom Template") {
+        val.work_hour_template_detail.map(x => {
+          workhours.push({
+            day: x.day,
+            work_hour_type: x.work_hour_type.value,
+            start_time: `${x.time_hour}:${x.time_min}:00`,
+            time_type: x.time_type.value,
+            work_hours: x.work_hours
+          })
+        })
+      }
+
+      if (val.employee_role.length > 0) {
+        val.employee_role.map(x => {
+          empRole.push({
+            role: x.value
+          })
+        })
+      }
+      if (val.contract_attachment) {
+        if (val.contract_attachment.fileList[0].uid != '-1') {
+          let modifiedName = uniquiFileName(val.contract_attachment?.file?.originFileObj.name)
+          let res = await getSingleUpload(modifiedName, 'image',  val.contract_attachment?.file?.originFileObj, 'Employee', id);
+          contactPDF = res?.file_url;
+        } else {
+          contactPDF = val.contract_attachment.fileList[0].url
+        }
+      }
+      const body = {
+        party_name: id,
+        contract_type: val?.contract_type?.value,
+        employement_type: val?.employement_type?.value,
+        start_date: val.start_date ? val.start_date : '',
+        end_date: val.end_date ? val.end_date : "",
+        staff_category: val?.staff_category?.value,
+        company: val?.company?.value,
+        team: val?.team?.value,
+        job_title: val?.job_title?.value,
+        position_level: val?.position_level?.value,
+        supervisor: val?.supervisor?.value,
+        employee_role: empRole,
+        contract_attachment: contactPDF,
+        work_hour_template: val?.work_hour_template?.value,    
+        custom_work_hour_template: val?.work_hour_template?.value == 'Custom Template' ? 1 : 0,
+        alternate_saturdays: val.alternate_saturdays ==  true ? 1 : 0,
+        alt_saturday_group: val.alternate_saturdays ==  true ? val?.alt_saturday_group.value : ''
+      }
+      if (workhours.length > 0) {
+        body.push({work_hour_template_detail: workhours})
+      }
+      console.log('val', val, body)
+
+      let getID = null;
+
+      if (recordData != null) {
+        getID = 123;
+      }
+      if (mode == 'edit') {
+        contractApi(body, getID).then(res => {
+          setLoad(false);
+          updateApi();
+          message.success('Detaila Successfully Saved')
+        }).catch(e => {
+          console.log(e);
+          setLoad(false);
+          message.error(e);
+        })
+      } else {
+        setForm({
+          ...formObj,
+          contract: body
+        })
+      }
+
     }
 
     return (
@@ -441,7 +591,7 @@ export default (props) => {
                 title="Employment History"
                 onRow={onClickRow}
                 ListCol={colName}
-                ListData={data?.employee_medical}
+                ListData={data?.contracts}
                 pagination={false}
                 extraBtn={'+ Add New Contract'}
                 extraAction={addNew}
@@ -459,6 +609,7 @@ export default (props) => {
                 record={recordData}
                 onBack={onBack}
                 setValue={setValue}
+                mode={mode}
                 title={'Employment Contract'}
                 fieldsList={contractDetails}
                 backbtnTitle='Employment History'

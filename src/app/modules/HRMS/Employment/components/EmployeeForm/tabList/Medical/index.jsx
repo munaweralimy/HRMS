@@ -48,7 +48,7 @@ const medicalFields = [
 
 export default (props) => {
 
-  const { mode, data, updateApi, id, setLoad } = props;
+  const { mode, data, updateApi, id, setLoad, setForm, formObj } = props;
   const { control, errors, setValue, handleSubmit } = useForm();
   const [visisble, setVisible] = useState(true);
 
@@ -76,6 +76,7 @@ export default (props) => {
         health_details: val.health_details
     }
 
+    if (mode == 'edit') {
     employApi(body, id).then(res => {
       setLoad(false);
       updateApi();
@@ -85,6 +86,12 @@ export default (props) => {
       setLoad(false);
       message.error(e);
     })
+    } else {
+      setForm({
+        ...formObj,
+        medical: body
+      })
+    }
   }
 
   return (

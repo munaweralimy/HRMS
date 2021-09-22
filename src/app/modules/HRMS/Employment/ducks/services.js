@@ -25,6 +25,10 @@ export const insuranceApi = (payload, id) => {
   }
 };
 
-export const addContract = (payload) => {
-  return axios.post(`${apiresource}/Contract`, payload);
+export const contractApi = (payload, id) => {
+  if (id) {
+    return axios.put(`${apiresource}/Contract/${id}`, payload);
+  } else {
+    return axios.post(`${apiresource}/Contract`, payload);
+  }
 };

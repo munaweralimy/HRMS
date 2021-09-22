@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputField, DateField, SelectField, CheckboxGroup, UploadField, TextAreaField } from '../../atoms/FormElement';
+import { InputField, DateField, SelectField, CheckboxGroup, UploadField, TextAreaField, SwitchField } from '../../atoms/FormElement';
 import { Row, Col, Typography } from 'antd';
 import moment from 'moment';
 import { getFileName } from '../../../features/utility';
@@ -42,7 +42,7 @@ export default (props) => {
           control={control}
           class={`mb-0 ${item.hidden ? 'd-none' : ''} ${item.arrow == false ? 'no-arrow' : ''}`}
           iProps={{
-            readOnly: props.static ? props.static : false,
+            readOnly: props.static ? props.static : item.static ? true : false,
             placeholder: item.placeholder,
             size: 'large',
             type: item.number && 'number',
@@ -68,7 +68,7 @@ export default (props) => {
           initValue={elem ? { label: elem[item.name], value: elem[item.name] } : ''}
           control={control}
           onChange={item.onChange && item.onChange}
-          iProps={{ placeholder: item.placeholder, isMulti: item.multiple ? item.multiple : false , isDisabled: item.disabled || props.static }}
+          iProps={{ placeholder: item.placeholder, isMulti: item.multiple ? item.multiple : false , isDisabled: item.disabled ? item.disabled : props.static ? props.static : item.static ? item.static : false}}
           selectOption={item.options}
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
@@ -144,6 +144,16 @@ export default (props) => {
           initValue={elem && elem[item.name] ? elem[item.name] : ''}
         />
       )}
+      {item.type == 'switch' && (
+        <SwitchField
+          fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
+          label={item.label}
+          control={control}
+          iProps={{ size: 'large' }}
+          initValue={elem && elem[item.name] ? elem[item.name] : ''}
+        />
+      )}
+      
     </Col>
   );
 };

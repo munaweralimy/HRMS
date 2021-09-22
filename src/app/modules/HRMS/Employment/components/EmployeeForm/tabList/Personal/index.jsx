@@ -16,7 +16,7 @@ const { Title } = Typography;
 
 export default (props) => {
 
-  const { mode, data, updateApi, id, setLoad } = props;
+  const { mode, data, updateApi, id, setLoad, setForm, formObj } = props;
   const dispatch = useDispatch();
   const { control, errors, setValue, handleSubmit } = useForm();
   const genderList = useSelector(state => state.global.genderData);
@@ -984,7 +984,10 @@ export default (props) => {
         message.error(e);
       })
     } else {
-
+      setForm({
+        ...formObj,
+        personal: body
+      })
     }
   }
 

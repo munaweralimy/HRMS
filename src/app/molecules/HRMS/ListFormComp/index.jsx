@@ -8,7 +8,7 @@ const { Title } = Typography;
 
 export default (props) => {
 
-    const { control, errors, title, fieldsList, record, backbtnTitle, extrabtn, setValue, btnMain, onBack } = props;
+    const { control, errors, title, fieldsList, record, backbtnTitle, extrabtn, setValue, btnMain, onBack, mode } = props;
 
     useEffect(() => {
         if(record) {
@@ -20,12 +20,13 @@ export default (props) => {
 
     return (
         <Row gutter={[20, 30]}>
+            {mode == 'edit' && 
             <Col span={24}>
                 <Space direction='vertical' size={20}>
                     <Button type="link" className='c-gray-linkbtn p-0 mt-1' onClick={onBack} htmlType="button"><LeftOutlined />{backbtnTitle}</Button>
                     {title && <Title level={4} className='c-default mb-0'>{title}</Title>}
                 </Space>
-            </Col>
+            </Col>}
             {fieldsList.map((item, idx) => (
                 <Fragment key={idx}>
                 {item?.subheader && 
@@ -34,7 +35,7 @@ export default (props) => {
                     <Col span={item.twocol ? 12 : 24}>
                     <Row gutter={[20, 30]}>
                         <Col span={24}>
-                        <ArrayForm fields={item.field} remove={item.remov} item={item} control={control} errors={errors} />
+                        <ArrayForm gap={item.gap} fields={item.field} remove={item.remov} item={item} control={control} errors={errors} />
                         </Col>
                         {item.adding &&
                         <Col span={24}>
@@ -48,13 +49,13 @@ export default (props) => {
                 }
                 </Fragment>
             ))}
-
+            {mode == 'edit' && 
             <Col span={24}>
             <Row gutter={20} justify='end'>
                 {extrabtn && record != null && <Col><Button type='primary' htmlType='button' size='large' className={extrabtn?.class ? extrabtn?.class: ''} onClick={extrabtn?.onAction}>{extrabtn?.title}</Button></Col>}
                 <Col><Button type='primary' htmlType='submit' size='large' className={btnMain?.class ? btnMain.class : 'green-btn'}>{btnMain?.title ? btnMain.title : 'Save Changes'}</Button></Col>
             </Row>
-            </Col>
+            </Col>}
         </Row>
     )
 }

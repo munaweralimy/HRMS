@@ -121,4 +121,7 @@ export const etypeList = [
     {label: 'Rest Day', value: 'Rest Day'}
   ]
 
-  
+  export const alternateSat = [
+    {label: 'A (Week 1 and 3 of every month)', value: 'A (Week 1 and 3 of every month)'},
+    {label: 'B (Week 2 and 4 of every month)', value: 'B (Week 2 and 4 of every month)'},
+  ]

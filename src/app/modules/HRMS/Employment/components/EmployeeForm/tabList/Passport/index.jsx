@@ -3,8 +3,7 @@ import { Row, Col, Typography, Button, Form, message, Spin } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
-import { apiresource } from '../../../../../../../../configs/constants';
-import axios from '../../../../../../../../services/axiosInterceptor';
+import { employApi } from '../../../../ducks/services';
 
 const { Title } = Typography;
 const pStatus = [
@@ -15,7 +14,7 @@ const pStatus = [
 
 export default (props) => {
 
-  const { mode, data, updateApi, id, setLoad } = props;
+  const { mode, data, updateApi, id, setLoad, setForm, formObj } = props;
   const { control, errors, setValue, handleSubmit } = useForm();
 
   useEffect(() => {
@@ -94,20 +93,22 @@ export default (props) => {
         emp_pass_expiration_date: val.emp_pass_expiration_date != 'Invalid date' ? val.emp_pass_expiration_date : ''
     }
 
-    let url = `${apiresource}/Employee/${id}`;
-    try {
-      await axios.put(url, body);
-      setLoad(false);
-      if (mode == 'edit') {
+    if (mode == 'edit') {
+      employApi(body, id).then(res => {
+        setLoad(false);
         updateApi();
+        message.success('Medical Record Successfully Saved')
+      }).catch(e => {
+        console.log(e);
+        setLoad(false);
+        message.error(e);
+      })
       } else {
-        
+        setForm({
+          ...formObj,
+          passport: body
+        })
       }
-    } catch(e) {
-      const {response} = e;
-      console.log(response);
-      message.error('Something went wrong');
-    }
   }
 
   return (
