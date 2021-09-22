@@ -17,6 +17,7 @@ export const dummyRequest = (response) => {
   };
 
   export const getFileName = (url) => {
+    console.log('url check', url)
     if (url) {
       var filename = url.substring(url.lastIndexOf('/')+1);
       return filename;

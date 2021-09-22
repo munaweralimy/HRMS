@@ -6,7 +6,7 @@ import { useTranslate } from 'Translate';
 import { useForm } from 'react-hook-form';
 import PlaceHolderImage from '../../../../../assets/img/faculty.png';
 import Information from './Information';
-import { getInstitution } from '../ducks/actions';
+import { getInstitution } from '../../../Application/ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiresource } from '../../../../../configs/constants';
 import axios from '../../../../../services/axiosInterceptor';
@@ -19,7 +19,7 @@ export default (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const inst_code = useSelector(state => state.faculty.institutions);
+    const inst_code = useSelector(state => state.global.institutions);
     const { control, errors, handleSubmit, reset } = useForm();
     const [ tags, setTags ] = useState([])
     const [status, setStatus] = useState('Draft');

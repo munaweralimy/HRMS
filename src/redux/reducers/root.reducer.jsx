@@ -22,6 +22,7 @@ import advancement from '../../app/modules/HRMS/Advancement/dcuks/reducer';
 import setup from '../../app/modules/HRMS/SetUp/ducks/reducers';
 import attendance from '../../app/modules/HRMS/Attendance/ducks/reducers';
 import leaves from '../../app/modules/HRMS/Leaves/ducks/reducers';
+import employment from '../../app/modules/HRMS/Employment/ducks/reducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -46,7 +47,8 @@ const rootReducer = combineReducers({
   advancement,
   setup,
   attendance,
-  leaves
+  leaves,
+  employment
 });
 
 export default rootReducer;

@@ -120,7 +120,7 @@ export default (props) => {
   };
 
   return (
-    <StaffDetails id={id} section='Tasks' data={singleTaskDetail} title={'Tasks'}>
+    <StaffDetails id={id} section='HRMS Tasks' data={singleTaskDetail} title={'Tasks'}>
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Tasks</Title></Col>

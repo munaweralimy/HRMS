@@ -10,6 +10,8 @@ const initialState = {
     progData: [],
     maritalData: [],
     comments: [],
+    institutions: [],
+    educationType: [],
     menu: false
 };
 
@@ -38,6 +40,11 @@ export default (state = initialState, action) => {
             return {...state, comments: data };
         case action_types.MENU_STAT:
             return {...state, menu: data };
+        case action_types.INTITUTION_LIST:
+            return {...state, institutions: data };
+        case action_types.EDUCATION_TYPE:
+            return {...state, educationType: data };
+            
         default:
             return state;
     }

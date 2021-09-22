@@ -54,3 +54,9 @@ export const termTear = [
 export const BreakingPoint = {
     HDPLUS: '(min-width: 1500px)',
 }
+
+export const titleList = [
+    { value: 'Mr', label: 'Mr.' },
+    { value: 'Ms', label: 'Ms.' },
+    { value: 'Mrs', label: 'Mrs.' },
+  ]

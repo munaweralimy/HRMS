@@ -9,10 +9,10 @@ import Advancement from '../../modules/HRMS/Advancement';
 import AdvancementDetails from '../../modules/HRMS/Advancement/AdvancementDetails';
 import Employment from '../../modules/HRMS/Employment';
 import AddEmployment from '../../modules/HRMS/Employment/AddEmployment';
-import EditEmployment from '../../modules/HRMS/Employment/EditEmployment';
+import EmploymentDetails from '../../modules/HRMS/Employment/EmploymentDetails';
 import TeamDetails from '../../modules/HRMS/Employment/TeamDetails';
 import Finance from '../../modules/HRMS/Finance';
-import EditFinance from '../../modules/HRMS/Finance/EditFinance';
+import FinanceDetails from '../../modules/HRMS/Finance/FinanceDetail';
 import SetUp from '../../modules/HRMS/SetUp';
 import Requests from '../../modules/HRMS/Requests';
 import Reports from '../../modules/HRMS/Reports';
@@ -28,10 +28,10 @@ const Components = {
   Policy,
   Employment,
   AddEmployment,
-  EditEmployment,
+  EmploymentDetails,
   TeamDetails,
   Finance,
-  EditFinance,
+  FinanceDetails,
   Attendance,
   EmpAttendanceDetail,
   SetUp,

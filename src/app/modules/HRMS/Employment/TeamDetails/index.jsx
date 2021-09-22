@@ -1,82 +1,143 @@
-import React from 'react';
-import { Row, Col, Card } from 'antd';
+import React, { useEffect } from 'react';
+import { Row, Col, Card, Button, Space } from 'antd';
 import HeadingChip from '../../../../molecules/HeadingChip';
-import { useTranslate } from 'Translate';
 import SideDetails from '../../../../molecules/SideDetails';
-import MemberList from '../components/MemberList';
+import SideDetailResponsive from '../../../../molecules/SideDetailResponsive';
 import UpdateSection from '../../../../molecules/UpdateSection';
-const sideData = [
+import { useSelector, useDispatch } from 'react-redux';
+import { getMembers, getTeamsDetail } from '../ducks/action';
+import { useParams, useHistory } from 'react-router';
+import { useMediaQuery } from 'react-responsive';
+import { BreakingPoint } from '../../../../../configs/constantData';
+import ListComponent from '../../../../molecules/HRMS/ListComponent';
+import { LeftOutlined } from '@ant-design/icons';
+import { getComments, emptyComments } from '../../../Application/ducks/actions';
+import moment from 'moment';
+
+const colName = [
   {
-    type: 'code',
-    text: 'Scholarship',
-    title: '',
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id',
+    sorter: true,
   },
   {
-    type: 'reversetitleValue',
-    title: 'Schemes',
-    level1: 3,
-    level2: 4,
-    value: '',
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    sorter: true,
   },
   {
-    type: 'reversetitleValue',
-    title: 'Active Students',
-    level1: 3,
-    level2: 4,
-    value: '',
+    title: 'Job Title',
+    dataIndex: 'job_title',
+    key: 'job_title',
+    sorter: true,
   },
   {
-    type: 'titleValue',
-    title: 'Created',
-    space: 10,
-    level: 4,
-    value: '',
-    noDivider: true,
-  },
-];
-const bottomList = [
-  {
-    title: 'Issue Warning Letter',
-    type: 'button',
-    class: 'black-btn',
-    action: () => {},
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    sorter: true,
   },
 ];
 
-// const data = [
-//   {
-//     team: 'Graphic Designer',
-//     company: 'Centre for Content Creation Sdn. Bhd.',
-//     teammember: '9',
-//     created: '15th February 2021',
-//     status: '3 Issues',
-//   },
-// ];
-const TeamDetails = () => {
-  const il8n = useTranslate();
-  const { t } = il8n;
+export default (props) => {
+
+  const dispatch= useDispatch();
+  const history = useHistory();
+  const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
+  const { id } = useParams();
+  const members = useSelector(state => state.employment.memberList);
+  const commentsApi = useSelector((state) => state.global.comments);
+  const teams = useSelector(state => state.employment.teamDetails);
+
+  const sideData = [
+    {
+      type: 'tag',
+      title: 'Team',
+      noDivider: true,
+      highlight: true,
+    },
+    {
+      type: 'mainTitle',
+      title: teams?.team_name,
+      highlight: true,
+    },
+    {
+      type: 'titleValue',
+      title: 'Company',
+      value: teams?.company,
+    },
+    {
+      type: 'titleValue',
+      title: 'Created',
+      value: teams?.creation ? moment(teams.creation).format('Do MMMM YYYY'): '',
+      noDivider: true,
+      highlight: true,
+    },
+  ];
+  
+  useEffect(() => {
+    dispatch(getMembers(id, 1, 5, '', ''));
+    dispatch(getTeamsDetail(id))
+    updateComment();
+    return () => dispatch(emptyComments());
+  }, []);
+
+  const updateList = (page, limit, sort, sortby) => {
+    dispatch(getMembers(id, page, limit, sort, sortby));
+  }
+
+  const updateComment = () => {
+    dispatch(getComments('HRMS Team', id));
+  };
+
+  const listProps = {
+    title: 'Member List',
+    scrolling: 500,
+  }
+
   return (
-    <Row gutter={[24, 30]}>
+    <Row gutter={[20, 30]}>
       <Col span={24}>
-        <HeadingChip title={'Team Details'} />
+        <Space direction="vertical" size={18}>
+          <Button type="link" className="c-gray-linkbtn p-0" onClick={() => history.goBack()} htmlType="button">
+            <LeftOutlined /> Back
+          </Button>
+          <HeadingChip title="Team Details" />
+        </Space>
       </Col>
-      <Col span={8}>
-        <SideDetails data={sideData} cardType="empty" type="button" bottom={bottomList} />
-      </Col>
-      <Col span={16}>
-        <Card bordered={false} className="scrolling-card">
-          <Row gutter={[20, 20]}>
-            <Col span={24}>
-              <MemberList />
-            </Col>
-            <Col span={24}>
-              <UpdateSection data={[]} module={'HRMS'} updateComment={[]} />
-            </Col>
-          </Row>
-        </Card>
+      <Col span={24}>
+      <div className="twocol-3070">
+          <div className="side-detail">
+            {isHDScreen ? (
+              <SideDetails data={sideData} />
+            ) : (
+              <SideDetailResponsive data={sideData} />
+            )}
+          </div>
+          <div className="side-form">
+            <Card bordered={false} className={`transparent-card ${isHDScreen ? 'scrolling-card' : ''}`}>
+              <Row gutter={[20, 20]}>
+                <Col span={24}>
+                  <ListComponent
+                    listProps={listProps}
+                    link='/requests/'
+                    linkKey='id'
+                    data={members}
+                    ListCol= {colName}
+                    defaultLimit={5}
+                    updateList={updateList}
+                  />
+                </Col>
+                <Col span={24}>
+                  <UpdateSection data={commentsApi} module={'HRMS Teams'} updateComment={updateComment} />
+                </Col>
+              </Row>
+            </Card>
+          </div>
+        </div>
       </Col>
     </Row>
   );
 };
-
-export default TeamDetails;

@@ -7,7 +7,7 @@ export const getOverallAttendance = (page, limit, order, orderby) => async (disp
     data: { message },
   } = await axios.get(
     `${apiMethod}/hrms.api.get_overall_attendance_pagination?page_number=${page}&limit=${limit}${
-      orderby ? `&order=${order}&orderby=${orderby}` : ''
+      order ? `&order=${order}&orderby=creation` : ''
     }`,
   );
   dispatch({
@@ -21,7 +21,7 @@ export const getOverallAttendanceList = (page, limit, order, orderby) => async (
     data: { message },
   } = await axios.get(
     `${apiMethod}/hrms.api.get_all_attendance_pagination?page_number=${page}&limit=${limit}${
-      orderby ? `&order=${order}&orderby=${orderby}` : ''
+      order ? `&order=${order}&orderby=${orderby}` : ''
     }`,
   );
   dispatch({

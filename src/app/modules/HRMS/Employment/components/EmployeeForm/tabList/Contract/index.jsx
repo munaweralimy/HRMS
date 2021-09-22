@@ -1,36 +1,36 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { Row, Col, Typography, Button } from 'antd';
-import { useSelector } from 'react-redux';
-import { useFieldArray } from 'react-hook-form';
-import FormGroup from '../../../../../../../molecules/FormGroup';
-import {
-  contractDetails,
-  employmentDetails,
-  workHours,
-  workingDays,
-  alternateSaturday,
-} from '../FormFields/FormFields';
+import React, { useState } from 'react';
+import { Row, Col } from 'antd';
+import WarningLetter from './WarningLetter';
+import ContractList from './ContractList';
 
-const Contract = (props) => {
-  const { control, errors, t } = props;
-  const { Title } = Typography;
-  const mode = 'add';
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'program_requirements',
+export default (props) => {
+
+  const { mode, data, updateApi, id, setLoad } = props;
+
+  const [visisble, setVisible] = useState({
+    set1: true,
+    set2: true,
+    set3: true,
+    set4: true,
   });
 
-  // const filedArrayList = () => {
-  //   workingDays.map((value, key) => append(value));
-  // };
-
-  useEffect(() => {
-    workingDays.map((value, key) => append(value));
-  }, [workingDays]);
-
-  const _ = require('lodash');
   return (
-    <Row gutter={[24, 30]} align="bottom">
+    <>
+    <Row gutter={[20, 50]}>
+      {visisble.set1 && <Col span={24}>
+        <ContractList {...props} setVisible={setVisible} />
+      </Col>}
+      {/* {visisble.set2 && <Col span={24}>
+        <Termination {...props} setVisible={setVisible} />
+      </Col>}
+      {visisble.set3 && <Col span={24}>
+        <ShowCauseLetter {...props} setVisible={setVisible} />
+      </Col>} */}
+      {visisble.set4 && <Col span={24}>
+        <WarningLetter {...props} setVisible={setVisible} />
+      </Col>}
+    </Row>
+    {/* <Row gutter={[24, 30]} align="bottom">
       <Col span={24}>
         <Title level={4} className="mb-0">
           Contract Details
@@ -119,8 +119,7 @@ const Contract = (props) => {
           )}
         </Fragment>
       ))}
-    </Row>
+    </Row> */}
+    </>
   );
 };
-
-export default Contract;
