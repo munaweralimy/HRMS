@@ -201,7 +201,6 @@ export default (props) => {
   const leaveStatisticsBar = useSelector(state => state.leaves.leaveStatisticsBar);
 
   useEffect(() => {
-    
     dispatch(getLeaveStatisticListReplacement());
     dispatch(getLeaveStatisticListUnpaid());
     dispatch(getLeaveStatisticBar());
