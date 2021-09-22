@@ -21,6 +21,7 @@ import finance from '../../app/modules/HRMS/Finance/ducks/reducer';
 import advancement from '../../app/modules/HRMS/Advancement/dcuks/reducer';
 import setup from '../../app/modules/HRMS/SetUp/ducks/reducers';
 import attendance from '../../app/modules/HRMS/Attendance/ducks/reducers';
+import leaves from '../../app/modules/HRMS/Leaves/ducks/reducers';
 import employment from '../../app/modules/HRMS/Employment/ducks/reducer';
 
 const rootReducer = combineReducers({
@@ -46,6 +47,7 @@ const rootReducer = combineReducers({
   advancement,
   setup,
   attendance,
+  leaves,
   employment
 });
 

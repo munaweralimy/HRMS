@@ -1,53 +1,68 @@
 import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, message } from 'antd';
+import { Row, Col, Button, Pagination, message, Switch } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddPopup from './Components/AddPopup';
 import Search from './Components/Search';
+import {CloseCircleFilled} from '@ant-design/icons';
+import {getRequestFormsList} from '../../ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiresource } from '../../../../../../configs/constants';
+import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const dispatch = useDispatch();
+  const requestFormsListData = useSelector((state) => state.setup.requestFormsListData);
+
+  useEffect(() => {
+    dispatch(getRequestFormsList(page,pageSize));
+  }, []);
 
   const ListCol = [
     {
-      title: 'Job Title',
-      dataIndex: 'jobtitle',
-      key: 'jobtitle',
-      sorted: (a, b) => a.jobtitle - b.jobtitle,
+      title: 'Form Name',
+      dataIndex: 'form_name',
+      key: 'form_name',
+      sorted: (a, b) => a.form_name - b.form_name,
     },
     {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
-    },
-    {
-      title: 'Date Open',
-      dataIndex: 'dateopen',
-      key: 'dateopen',
-      sorted: (a, b) => a.dateopen - b.dateopen,
-    },
-    {
-      title: 'Suitable Application',
-      dataIndex: 'suitableappalication',
-      key: 'suitableappalication',
-      sorted: (a, b) => a.suitableappalication - b.suitableappalication,
+      title: 'Fields',
+      dataIndex: 'form_fields_count',
+      key: 'form_fields_count',
       align: 'center',
+      sorted: (a, b) => a.form_fields_count - b.form_fields_count,
     },
-  ];
-  const ListData = [
     {
-      jobtitle: 'Graphic Designer',
-      company: 'Centre for Content Creation Sdn. Bhd.',
-      dateopen: '15th February 2021',
-      suitableappalication: '3',
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      sorted: (a, b) => a.status - b.status,
+      render: (text, record) => (
+        <Switch defaultChecked={text == 'Archive'} />
+      ),
+    },
+    {
+      title: 'Action',
+      dataIndex: 'Action',
+      key: 'Action',
+      sorted: (a, b) => a.Action - b.Action,
+      align: 'center',
+      width: '100px',
+      render: (text, record) => (
+        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+          <CloseCircleFilled />
+        </Button>
+      ),
     },
   ];
 
   const btnList = [
     {
-      text: '+ New Form',
+      text: '+ New Team',
       classes: 'green-btn',
       action: () => { setVisible(true);},
     },
@@ -65,6 +80,21 @@ export default (props) => {
     onCancel: () => setVisible(false),
   };
 
+  const deleteRecord = async (record) => {
+    //props.setLoading(true);
+    let url = `${apiresource}/HRMS Teams/${record.name}`;
+    try {
+      await axios.delete(url);
+      message.success('Record Successfully Deleted');
+      //props.setLoading(false);
+      dispatch(getRequestFormsList(page,pageSize));
+    } catch (e) {
+      //props.setLoading(false);
+      const { response } = e;
+      message.error('Something went wrong');
+    }
+  }
+
   const onClickRow = (record) => {
     return {
       onClick: () => { },
@@ -75,11 +105,16 @@ export default (props) => {
     console.log('check values', value);
   }
 
+  const onPageChange = (pg) => {
+    setPage(pg);
+    dispatch(getRequestFormsList(pg,pageSize));
+  }
+
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Request Forms" btnList={btnList} />
+          <HeadingChip title="Teams" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard
@@ -87,9 +122,18 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={ListData}
-            pagination={true}
+            ListData={requestFormsListData?.rows}
+            pagination={false}
           />
+          <div className='w-100 text-right mt-2'>
+              <Pagination
+                pageSize={pageSize}
+                current={page}
+                hideOnSinglePage={true}
+                onChange={onPageChange}
+                total={requestFormsListData?.count}
+              />
+          </div>
         </Col>
       </Row>
       <Popup {...popup} />
