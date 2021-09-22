@@ -131,7 +131,7 @@ export default (props) => {
             <Row gutter={[20, 30]}>
               <Col span={24}>
                 <Row gutter={[20, 20]}>
-                  <ListCard title='Leave Availability' ListCol={ListCol} ListData={myAvailableLeaves?.availibility} pagination={true} />
+                  <ListCard title='Leave Availability' ListCol={ListCol} ListData={myAvailableLeaves?.availibility} pagination={false} />
                 </Row>
               </Col>
             </Row>
