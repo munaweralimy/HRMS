@@ -1,17 +1,22 @@
-import React from 'react';
-import { Row, Col, ConfigProvider, Calendar, Card, Button, Typography, Space, Badge } from 'antd';
+import React, {useEffect} from 'react';
+import { Row, Col, ConfigProvider, Calendar, Card, Button, Typography, Space, Badge, Collapse, Avatar } from 'antd';
 import en_GB from 'antd/lib/locale-provider/en_GB';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
-import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, emptyOverall } from './ducks/actions';
+import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, 
+        getLeaveStatisticListAnnual, getLeaveStatisticListReplacement, getLeaveStatisticListUnpaid,
+        getLeaveStatisticBar
+} from './ducks/actions';
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
 import MyLeaves from './components/MyLeaves';
+import ListCard from '../../../molecules/ListCard';
 import moment from 'moment';
-const { Title } = Typography;
+const { Title, Text } = Typography;
+const { Panel } = Collapse;
 const filtersOverall = [
   {
     label: 'Pending',
@@ -24,13 +29,6 @@ const filtersOverall = [
 ];
 
 const ListColOverall = [
-  {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
-    sorter: true,
-    width: 120,
-  },
   {
     title: 'ID',
     dataIndex: 'employee_id',
@@ -45,18 +43,40 @@ const ListColOverall = [
     sorter: true,
   },
   {
-    title: 'Project',
-    dataIndex: 'project',
-    key: 'project',
+    title: 'Applied',
+    dataIndex: 'creation',
+    key: 'creation',
     sorter: true,
-    width: 100,
+    width: 110,
+    render: (text) => {
+      return moment(text).format('YYYY-MM-DD')
+    }
   },
   {
-    title: 'Hours',
-    dataIndex: 'hours',
-    key: 'hours',
+    title: 'Start',
+    dataIndex: 'start_date',
+    key: 'start_date',
     sorter: true,
-    width: 100,
+    width: 110,
+    render: (text) => {
+      return moment(text).format('YYYY-MM-DD')
+    }
+  },
+  {
+    title: 'End',
+    dataIndex: 'end_date',
+    key: 'end_date',
+    sorter: true,
+    width: 110,
+    render: (text) => {
+      return moment(text).format('YYYY-MM-DD')
+    }
+  },
+  {
+    title: 'Type',
+    dataIndex: 'leave_type',
+    key: 'leave_type',
+    sorter: true,
   },
   {
     title: 'Company',
@@ -72,8 +92,8 @@ const ListColOverall = [
   },
   {
     title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'application_status',
+    key: 'application_status',
     align: 'center',
     width: 140,
     render: (text) => {
@@ -92,12 +112,6 @@ const ListColOverall = [
 
 const ListColTeams = [
   {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
-    sorter: true,
-  },
-  {
     title: 'ID',
     dataIndex: 'employee_id',
     key: 'employee_id',
@@ -110,27 +124,51 @@ const ListColTeams = [
     sorter: true,
   },
   {
-    title: 'Project',
-    dataIndex: 'project',
-    key: 'project',
+    title: 'Applied',
+    dataIndex: 'creation',
+    key: 'creation',
+    sorter: true,
+    width: 110,
+    render: (text) => {
+      return moment(text).format('YYYY-MM-DD')
+    }
+  },
+  {
+    title: 'Start',
+    dataIndex: 'start_date',
+    key: 'start_date',
+    sorter: true,
+    width: 110,
+    render: (text) => {
+      return moment(text).format('YYYY-MM-DD')
+    }
+  },
+  {
+    title: 'End',
+    dataIndex: 'end_date',
+    key: 'end_date',
+    sorter: true,
+    width: 110,
+    render: (text) => {
+      return moment(text).format('YYYY-MM-DD')
+    }
+  },
+  {
+    title: 'Type',
+    dataIndex: 'leave_type',
+    key: 'leave_type',
     sorter: true,
   },
   {
-    title: 'Hours',
-    dataIndex: 'hours',
-    key: 'hours',
-    sorter: true,
-  },
-  {
-    title: 'Task',
-    dataIndex: 'task',
-    key: 'task',
+    title: 'Period',
+    dataIndex: 'leave_period',
+    key: 'leave_period',
     sorter: true,
   },
   {
     title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'application_status',
+    key: 'application_status',
     align: 'center',
     render: (text) => {
       let clname = '';
@@ -146,22 +184,40 @@ const ListColTeams = [
   },
 ];
 
-export default (props) => {
 
+
+export default (props) => {
   const dispatch = useDispatch();
   const il8n = useTranslate();
   const { t } = il8n;
-  const overallData = useSelector(state => state.tasks.overallTaskData);
-  const overallDataList = useSelector(state => state.tasks.overallTaskDataWithStatus);
-  const teamTaskData = useSelector(state => state.tasks.teamTaskData);
-  const teamTaskDataList = useSelector(state => state.tasks.teamTaskDataWithStatus);
+  const overallData = useSelector(state => state.leaves.overallTaskData);
+  const overallDataList = useSelector(state => state.leaves.overallTaskDataWithStatus);
+  const teamTaskData = useSelector(state => state.leaves.teamTaskData);
+  const teamTaskDataList = useSelector(state => state.leaves.teamTaskDataWithStatus);
+
+  const leaveStatAnnualList = useSelector(state => state.leaves.leaveStatAnnualList);
+  const leaveStatReplacementList = useSelector(state => state.leaves.leaveStatReplacementList);
+  const leaveStatUnpaidList = useSelector(state => state.leaves.leaveStatUnpaidList);
+  const leaveStatisticsBar = useSelector(state => state.leaves.leaveStatisticsBar);
+
+  useEffect(() => {
+    
+    dispatch(getLeaveStatisticListReplacement());
+    dispatch(getLeaveStatisticListUnpaid());
+    dispatch(getLeaveStatisticBar());
+  }, [])
+
+  // console.log('leaveStatAnnualList', leaveStatAnnualList)
+  // console.log('leaveStatReplacementList', leaveStatReplacementList)
+  // console.log('leaveStatUnpaidList', leaveStatUnpaidList)
+  console.log('leaveStatisticsBar', leaveStatisticsBar)
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     // dispatch(emptyOverall());
     if (type == 'list') {
-      dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby))
+      dispatch(getOverallTasksWithStatus(filter, page, limit, sort,'HR-EMP-00002', sortby))
     } else {
-      dispatch(getOverallTasks(page, limit, sort, sortby));
+      dispatch(getOverallTasks(page, limit, sort,'HR-EMP-00002', sortby));
     }
   }
 
@@ -173,13 +229,59 @@ export default (props) => {
     }
   }
 
+
+  const leavesPanelHeader = (item,index) => (
+    <>
+      <Row justify="space-between">
+        <Col>
+          <Title level={4} className="m-0">{item?.leave_type}</Title>
+          <Title level={5} className="m-0">Company Average</Title>
+          <Title level={3} className="m-0">80%</Title>
+        </Col>
+        <Col>
+          <Space className='w-100' size={30} align="start">
+            <Avatar.Group
+              maxCount={5}  
+              size={70}
+            >
+              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
+                <Avatar size={70} />
+                <Text className='c-error'>95%</Text>
+              </Space>
+  
+              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
+                <Avatar size={70} />
+                <Text className='c-error'>93%</Text>
+              </Space>
+  
+              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
+                <Avatar size={70} />
+                <Text className='c-error'>82%</Text>
+              </Space>
+  
+              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
+                <Avatar size={70} />
+                <Text className='c-error'>81%</Text>
+              </Space>
+  
+              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
+                <Avatar size={70} />
+                <Text className='c-error'>81%</Text>
+              </Space>
+            </Avatar.Group>
+          </Space>
+        </Col>
+      </Row>
+    </>
+  );
+
   const tabs = [
     {
       title: 'Overall Leaves',
       key: 'overall',
       count: overallData?.count || overallDataList?.count || 0,
       Comp: MultiView,
-      iProps : {
+      iProps: {
         carddata: overallData?.rows || [],
         cardcount: overallData?.count || 0,
         listdata: overallDataList?.rows || [],
@@ -190,17 +292,19 @@ export default (props) => {
         filters: filtersOverall,
         updateApi: onOverallAction,
         searchDropdowns: {
-          field1: [{label: 'All', value: 'All'}],
-          field2: [{label: 'All', value: 'All'}],
-          field3: [{label: 'All', value: 'All'}],
-        }
+          field1: [{ label: 'All', value: 'All' }],
+          field2: [{ label: 'All', value: 'All' }],
+          field3: [{ label: 'All', value: 'All' }],
+        },
+        addon: 'Timesheet',
+        statusKey: 'application_status'
       },
     },
     {
       title: 'Team Leaves',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
-      iProps : {
+      iProps: {
         carddata: teamTaskData?.rows || [],
         cardcount: teamTaskData?.count || 0,
         listdata: teamTaskDataList?.rows || [],
@@ -211,8 +315,10 @@ export default (props) => {
         updateApi: onTeamAction,
         Search: SearchTeam,
         searchDropdowns: {
-          field1: [{label: 'All', value: 'All'}],
-        }
+          field1: [{ label: 'All', value: 'All' }],
+        },
+        addon: 'Leave Application',
+        statusKey: 'application_status'
       },
       Comp: MultiView,
     },
@@ -266,7 +372,7 @@ export default (props) => {
     );
   }
 
-  const customHeader = ({value, type, onChange, onTypeChange}) => {
+  const customHeader = ({ value, type, onChange, onTypeChange }) => {
 
     const nextMonth = () => {
       let newValue = value.clone();
@@ -299,7 +405,7 @@ export default (props) => {
     const updateValue = (value) => {
       return moment(value).format('MMMM YYYY')
     }
-    
+
     return (
       <Card bordered={false} className='mini-card mini-card10 b-dark-gray'>
         <Row gutter={20} justify='space-between'>
@@ -311,30 +417,153 @@ export default (props) => {
     );
   }
 
+  const onClickRow = (record) => {
+    return {
+      onClick: () => { },
+    };
+  }
+
+  function callback(key) {
+    dispatch(getLeaveStatisticListAnnual(leaveStatisticsBar[key]?.leave_type));
+  }
+
+  console.log('leaveStatAnnualList', leaveStatAnnualList)
+
+  const ListCol = [
+    {
+      title: 'Name',
+      dataIndex: 'employee_name',
+      key: 'employee_name',
+      sorted: (a, b) => a.employee_name - b.employee_name,
+    },
+    {
+      title: 'Job Title',
+      dataIndex: 'job_title',
+      key: 'job_title',
+      sorted: (a, b) => a.job_title - b.job_title,
+    },
+    {
+      title: 'Company',
+      dataIndex: 'company',
+      key: 'company',
+      sorted: (a, b) => a.company - b.company,
+    },
+    {
+      title: 'Team',
+      dataIndex: 'team',
+      key: 'team',
+      sorted: (a, b) => a.team - b.team,
+    },
+    {
+      title: 'Contract',
+      dataIndex: 'contract',
+      key: 'contract',
+      sorted: (a, b) => a.contract - b.contract,
+    },
+    {
+      title: 'Leaves Taken',
+      dataIndex: 'taken_employee_leaves',
+      key: 'taken_employee_leaves',
+      sorted: (a, b) => a.taken_employee_leaves - b.taken_employee_leaves,
+      align: 'center',
+      width: '100px',
+      render: (text) => {
+        return <span className="c-error">{text}</span>;
+      },
+    },
+  ];
+
+  const ListData = [
+    {
+      name: 'Walter Gibson',
+      job_title: 'Senior Graphic Designer',
+      company: 'Center for Content Creation',
+      team: 'Development',
+      contract: 'Permanent',
+      leaves_taken: '93%',
+    },
+    {
+      name: 'Walter Gibson',
+      job_title: 'Senior Graphic Designer',
+      company: 'Center for Content Creation',
+      team: 'Development',
+      contract: 'Permanent',
+      leaves_taken: '93%',
+    },
+    {
+      name: 'Walter Gibson',
+      job_title: 'Senior Graphic Designer',
+      company: 'Center for Content Creation',
+      team: 'Development',
+      contract: 'Permanent',
+      leaves_taken: '93%',
+    },
+    {
+      name: 'Walter Gibson',
+      job_title: 'Senior Graphic Designer',
+      company: 'Center for Content Creation',
+      team: 'Development',
+      contract: 'Permanent',
+      leaves_taken: '93%',
+    },
+    {
+      name: 'Walter Gibson',
+      job_title: 'Senior Graphic Designer',
+      company: 'Center for Content Creation',
+      team: 'Development',
+      contract: 'Permanent',
+      leaves_taken: '93%',
+    },
+    {
+      name: 'Walter Gibson',
+      job_title: 'Senior Graphic Designer',
+      company: 'Center for Content Creation',
+      team: 'Development',
+      contract: 'Permanent',
+      leaves_taken: '93%',
+    },
+  ]
+
   return (
     <Row gutter={[24, 30]}>
       <Col span={24}>
         <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
       </Col>
       <Col span={24}>
-        Leave Statistics
+        {leaveStatisticsBar && (
+          <>
+            <Collapse accordion onChange={callback}>
+                {leaveStatisticsBar.map((item, index) => (
+                    <Panel header={leavesPanelHeader(item,index)} key={index} showArrow={false}>
+                      <ListCard
+                        onRow={onClickRow}
+                        ListCol={ListCol}
+                        ListData={leaveStatAnnualList?.rows}
+                        pagination={true}
+                      />
+                    </Panel>
+                ))}
+            </Collapse>
+          </>
+        )}
+        
       </Col>
       <Col span={24}>
         <Card bordered={false} className='uni-card dashboard-card'>
           <ConfigProvider locale={en_GB}>
-              <Calendar 
-              className='custom-calendar' 
-              dateCellRender={dateCellRender} 
-              disabledDate = {
-                  current => {
-                  return  moment(current).day() === 0 || moment(current).day() === 6 
-                  }
+            <Calendar
+              className='custom-calendar'
+              dateCellRender={dateCellRender}
+              disabledDate={
+                current => {
+                  return moment(current).day() === 0 || moment(current).day() === 6
+                }
               }
               headerRender={customHeader}
-              />
+            />
           </ConfigProvider>
         </Card>
       </Col>
     </Row>
-    )
+  )
 }

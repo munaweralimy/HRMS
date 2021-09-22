@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
-import { Typography, Col, Button, Form, Row, message, Space } from 'antd';
+import React, {useEffect, useState} from 'react';
+import { Typography, Col, Button, Form, Row, message, Space, Spin } from 'antd';
 import {TextAreaField, SelectField, DateField, InputField } from '../../../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
-import { LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { apiMethod } from '../../../../../../../../configs/constants';
 import axios from '../../../../../../../../services/axiosInterceptor';
@@ -10,46 +10,68 @@ import { getProjectName } from '../../../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 const {Title} = Typography;
+const antIcon = <LoadingOutlined spin />;
+
 export default (props) => {
   
   const dispatch = useDispatch();
-  const { control, handleSubmit, reset } = useForm();
+  const [load, setLoad] = useState(false);
+  const { control, handleSubmit, setValue } = useForm();
   const projectName = useSelector(state => state.tasks.myProjectData);
-  const { setAddVisible } = props;
+  const { setAddVisible, id, updateApi, mode, data } = props;
 
   useEffect(() => {
     dispatch(getProjectName());
   }, []);
 
+  useEffect(() => {
+    if(mode != 'add') {
+      setValue('projectName', {label: data.project, value: data.project});
+      setValue('timesheetDate', moment(data.date, 'YYYY-MM-DD'));
+      setValue('totalHours', data.hours);
+      setValue('task', data.tasks);
+    }
+  }, [data]);
+
   const onFinish = async (val) => {
     
-    console.log('val', val)
+    setLoad(true);
+
+    let temp = [{
+      parent: id,
+      parentfield: "timesheet",
+      parenttype: "HRMS Tasks",
+      status: "Pending",
+      doctype: "HRMS Timesheet",
+      project: val?.projectName?.value,
+      hours: val?.totalHours,
+      date: val?.timesheetDate ? moment(val?.timesheetDate).format('YYYY-MM-DD'): '',
+      tasks: val?.task,
+    }]
+
+    if (mode == 'edit') {
+      temp[0]['name'] = data.name;
+    }
 
     const json = {
-      timesheet: [{
-        parent: "HR-EMP-00002",
-        parentfield: "timesheet",
-        parenttype: "HRMS Tasks",
-        status: "Pending",
-        doctype: "HRMS Timesheet",
-        project: val?.projectName?.value,
-        hours: val?.totalHours,
-        date: val?.timesheetDate ? moment(val?.timesheetDate).format('YYYY-MM-DD'): '',
-        tasks: val?.task,
-      }]
+      timesheet: temp
     }
     let url = `${apiMethod}/hrms.api.add_single_timesheet`;
     try {
         await axios.post(url, json);
         message.success('TimeSheet Added Successfully');
-        setTimeout(() => setAddVisible(false), 1000)
+        setLoad(false);
+        
+        setTimeout(() => {setAddVisible(false); updateApi()}, 1000)
     } catch(e) {
         const { response } = e;
         message.error(e);
+        setLoad(false);
     }
   }
 
   return (
+    <Spin indicator={antIcon} size="large" spinning={load}>
     <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
       <Row gutter={[20, 30]}>
         <Col span={24}>
@@ -114,5 +136,6 @@ export default (props) => {
           </Col>
       </Row>
     </Form>
+    </Spin>
   );
 };

@@ -141,6 +141,16 @@ export default [
     parent: true,
   },
   {
+    component: 'LeavesDetail',
+    path: '/leaves/:id',
+    title: titles.HRMS,
+    permission: hrms,
+    menu: 'Leaves',
+    key: 'leaves',
+    icon: 'ApplicationsIcon',
+    parent: false,
+  },
+  {
     component: 'Attendance',
     path: '/attendance',
     title: titles.HRMS,

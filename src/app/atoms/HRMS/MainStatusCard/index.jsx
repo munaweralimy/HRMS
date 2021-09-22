@@ -8,9 +8,7 @@ const { Title, Text } = Typography;
 export default (props) => {
   const { data, link, addon, statusKey } = props;
   const history = useHistory();
-
   const statuses = (status) => {
-    console.log('hello', status);
     switch (status) {
       case 'Missed':
         return 'b-error';
@@ -63,6 +61,11 @@ export default (props) => {
                     {data?.date && (
                       <Title level={5} className="mb-0 op-6">
                         {data?.date && moment(data?.date).format('Do MMMM YYYY')}
+                      </Title>
+                    )}
+                    {data?.creation && (
+                      <Title level={5} className="mb-0 op-6">
+                        {data?.creation && moment(data?.creation).format('Do MMMM YYYY')}
                       </Title>
                     )}
                   </Space>
