@@ -1,26 +1,28 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Button, Pagination, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Button, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditEducation from './Components/AddEditEducation';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getEducationalFieldsList } from '../../ducks/actions';
+import { deleteEducationLeave } from '../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [field, setField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const educationalFieldsListData = useSelector((state) => state.setup.educationalFieldsListData);
 
   useEffect(() => {
-    dispatch(getEducationalFieldsList(page, limit, '', ''));
-  }, []);
+    if (!visible) {
+      dispatch(getEducationalFieldsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -28,6 +30,18 @@ export default (props) => {
       dataIndex: 'education_field',
       key: 'education_field',
       sorted: (a, b) => a.education_field - b.education_field,
+      render: (text, record) => (
+        <Button
+          type="link"
+          className="list-links"
+          onClick={() => {
+            setField(text);
+            setVisible(true);
+          }}
+        >
+          {text}
+        </Button>
+      ),
     },
     {
       title: 'Action',
@@ -37,7 +51,16 @@ export default (props) => {
       align: 'center',
       width: '100px',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button
+          type="link"
+          className="list-links"
+          onClick={() => {
+            deleteEducationLeave(record.education_field).then((response) => {
+              dispatch(getEducationalFieldsList(page, limit, '', ''));
+              message.success('Education deleted successfully');
+            });
+          }}
+        >
           <CloseCircleFilled />
         </Button>
       ),
@@ -49,6 +72,7 @@ export default (props) => {
       text: '+ New Education Field',
       classes: 'green-btn',
       action: () => {
+        setField('');
         setVisible(true);
       },
     },
@@ -58,30 +82,11 @@ export default (props) => {
     closable: false,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditEducation educationField={field} title="Add New Education Field" onClose={() => setVisible(false)} />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
-  };
-
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getEducationalFieldsList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  };
-
-  const onClickRow = (record) => {
-    return {
-      onClick: () => {},
-    };
   };
 
   const onSearch = (value) => {
@@ -106,7 +111,6 @@ export default (props) => {
         </Col>
         <Col span={24}>
           <ListCard
-            onRow={onClickRow}
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
