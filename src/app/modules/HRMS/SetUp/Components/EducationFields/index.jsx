@@ -30,18 +30,6 @@ export default (props) => {
       dataIndex: 'education_field',
       key: 'education_field',
       sorted: (a, b) => a.education_field - b.education_field,
-      render: (text, record) => (
-        <Button
-          type="link"
-          className="list-links"
-          onClick={() => {
-            setField(text);
-            setVisible(true);
-          }}
-        >
-          {text}
-        </Button>
-      ),
     },
     {
       title: 'Action',
@@ -55,10 +43,10 @@ export default (props) => {
           type="link"
           className="list-links"
           onClick={() => {
-            deleteEducationLeave(record.education_field).then((response) => {
-              dispatch(getEducationalFieldsList(page, limit, '', ''));
-              message.success('Education deleted successfully');
-            });
+            // deleteEducationLeave(record.education_field).then((response) => {
+            //   dispatch(getEducationalFieldsList(page, limit, '', ''));
+            //   message.success('Education deleted successfully');
+            // });
           }}
         >
           <CloseCircleFilled />
@@ -103,6 +91,16 @@ export default (props) => {
       dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, '', ''));
     }
   };
+
+  const onRowClick = (record) => {
+    return {
+      onClick: () => {
+        setField(record.education_field);
+        setVisible(true);
+      },
+    };
+  };
+
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -111,9 +109,11 @@ export default (props) => {
         </Col>
         <Col span={24}>
           <ListCard
+            onRow={onRowClick}
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
+            className="clickRow"
             ListData={educationalFieldsListData?.rows}
             pagination={{
               total: educationalFieldsListData?.count,

@@ -26,6 +26,21 @@ export const getSingleEducation = (id) => {
 export const updateSingleEducation = (id, payload) => {
   return axios.put(`${apiresource}/HRMS Education Field/${id}`, payload);
 };
-export const deleteEducationLeave = (id) => {
+export const deleteSingleEducation = (id) => {
   return axios.delete(`${apiresource}/HRMS Education Field/${id}`);
+};
+
+export const addInstitution = (payload) => {
+  return axios.put(`${apiresource}/institutions`, payload);
+};
+
+export const getSingleInstitution = (id) => {
+  return axios.get(`${apiresource}/institutions/${id}`);
+};
+
+export const updateSingleInstitution = (id, payload) => {
+  return axios.put(`${apiresource}/institutions/${id}`, payload);
+};
+export const deleteSingleInstitution = (id) => {
+  return axios.delete(`${apiresource}/institutions/${id}`);
 };

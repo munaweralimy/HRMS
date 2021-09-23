@@ -1,26 +1,27 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Button, Pagination, message } from 'antd';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditInstitution from './Components/AddEditInstitution';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getInstitutionsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [institutionFiled, setInstitutionField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const institutionsListData = useSelector((state) => state.setup.institutionsListData);
 
   useEffect(() => {
-    dispatch(getInstitutionsList(page, limit));
-  }, []);
+    if (!visible) {
+      dispatch(getInstitutionsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -37,7 +38,7 @@ export default (props) => {
       align: 'center',
       width: '100px',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links">
           <CloseCircleFilled />
         </Button>
       ),
@@ -49,6 +50,7 @@ export default (props) => {
       text: '+ New Institution',
       classes: 'green-btn',
       action: () => {
+        setInstitutionField('');
         setVisible(true);
       },
     },
@@ -58,29 +60,24 @@ export default (props) => {
     closable: false,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditInstitution
+        institutionName={institutionFiled}
+        title="Add New Institution"
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getInstitutionsList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  };
-
   const onClickRow = (record) => {
+    console.log({ record });
     return {
-      onClick: () => {},
+      onClick: () => {
+        setInstitutionField(record.name);
+        setVisible(true);
+      },
     };
   };
 

@@ -2,43 +2,47 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Button, Row, Col, Typography, Form, message } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
-import { educationFields } from './FormFields';
-import { addEducationField, deleteSingleEducation, updateSingleEducation } from '../../../../ducks/services';
+import { institution } from './FormFields';
+import { addInstitution, deleteSingleInstitution, updateSingleInstitution } from '../../../../ducks/services';
 
 export default (props) => {
-  const { title, onClose, educationField } = props;
+  const { title, onClose, institutionName } = props;
   const { Title, Text } = Typography;
   const { control, errors, reset, setValue, handleSubmit } = useForm();
 
   const onFinish = (values) => {
-    educationField.length == 0
-      ? addEducationField(values).then((response) => {
-          message.success('Education Field Added Successfully');
+    const payload = {
+      name1: values.institution,
+      code: values.institution,
+    };
+    institutionName.length == 0
+      ? addInstitution(payload).then((response) => {
+          message.success('Institution Added Successfully');
           onClose();
         })
-      : updateSingleEducation(educationField, values).then((response) => {
-          message.success('Education Field Updated Successfully');
+      : updateSingleInstitution(institutionName, payload).then((response) => {
+          message.success('Institution Updated Successfully');
           onClose();
         });
   };
   const onDeleteEducationField = () => {
-    deleteSingleEducation(educationField)
+    deleteSingleInstitution(institutionName)
       .then((response) => {
-        message.success('Education Field Deleted Successfully');
+        message.success('Institution Deleted Successfully');
         onClose();
       })
       .catch((error) => {
-        message.error('Education Field Deleted Unsccessfully');
+        message.error('Institution Deleted Unsccessfully');
         onClose();
       });
   };
   useEffect(() => {
-    if (educationField.length > 0) {
-      setValue('education_field', educationField);
+    if (institutionName.length > 0) {
+      setValue('institution', institutionName);
     } else {
       reset();
     }
-  }, [educationField]);
+  }, [institutionName]);
 
   return (
     <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
@@ -48,12 +52,12 @@ export default (props) => {
         </Col>
         <Col span={24}>
           <Row gutter={[20, 30]}>
-            {educationFields.map((item, idx) => (
+            {institution.map((item, idx) => (
               <Fragment key={idx}>
                 <FormGroup item={item} control={control} errors={errors} />
               </Fragment>
             ))}
-            {educationField.length == 0 ? (
+            {institutionName.length == 0 ? (
               <>
                 <Col span={12}>
                   <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>
