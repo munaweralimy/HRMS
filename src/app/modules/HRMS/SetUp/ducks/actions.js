@@ -285,3 +285,13 @@ export const getRequestFormsList = (page, limit, order, orderby) => {
     });
   };
 };
+
+export const getSingleLeave = (id) => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get(`${apiresource}/HRMS Leave Type/${id}`);
+  dispatch({
+    type: action_types.SINGLE_LEAVE,
+    data: data,
+  });
+};
