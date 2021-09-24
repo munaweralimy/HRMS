@@ -16,7 +16,7 @@ export const deleteSingleLeave = (id) => {
 };
 
 export const addEducationField = (payload) => {
-  return axios.put(`${apiresource}/HRMS Education Field`, payload);
+  return axios.post(`${apiresource}/HRMS Education Field`, payload);
 };
 
 export const getSingleEducation = (id) => {
@@ -31,7 +31,7 @@ export const deleteSingleEducation = (id) => {
 };
 
 export const addInstitution = (payload) => {
-  return axios.put(`${apiresource}/institutions`, payload);
+  return axios.post(`${apiresource}/institutions`, payload);
 };
 
 export const getSingleInstitution = (id) => {

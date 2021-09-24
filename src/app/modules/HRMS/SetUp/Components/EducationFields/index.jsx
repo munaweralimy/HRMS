@@ -60,7 +60,7 @@ export default (props) => {
       text: '+ New Education Field',
       classes: 'green-btn',
       action: () => {
-        setField('');
+        setField({ name: '', education_field: '' });
         setVisible(true);
       },
     },
@@ -95,7 +95,7 @@ export default (props) => {
   const onRowClick = (record) => {
     return {
       onClick: () => {
-        setField(record.education_field);
+        setField(record);
         setVisible(true);
       },
     };

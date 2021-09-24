@@ -7,22 +7,23 @@ import { addEducationField, deleteSingleEducation, updateSingleEducation } from 
 
 export default (props) => {
   const { title, onClose, educationField } = props;
+  console.log({ educationField });
   const { Title, Text } = Typography;
   const { control, errors, reset, setValue, handleSubmit } = useForm();
 
   const onFinish = (values) => {
-    educationField.length == 0
+    educationField.education_field.length == 0
       ? addEducationField(values).then((response) => {
           message.success('Education Field Added Successfully');
           onClose();
         })
-      : updateSingleEducation(educationField, values).then((response) => {
+      : updateSingleEducation(educationField.name, values).then((response) => {
           message.success('Education Field Updated Successfully');
           onClose();
         });
   };
   const onDeleteEducationField = () => {
-    deleteSingleEducation(educationField)
+    deleteSingleEducation(educationField.name)
       .then((response) => {
         message.success('Education Field Deleted Successfully');
         onClose();
@@ -33,8 +34,8 @@ export default (props) => {
       });
   };
   useEffect(() => {
-    if (educationField.length > 0) {
-      setValue('education_field', educationField);
+    if (educationField.education_field.length > 0) {
+      setValue('education_field', educationField.education_field);
     } else {
       reset();
     }
@@ -53,7 +54,7 @@ export default (props) => {
                 <FormGroup item={item} control={control} errors={errors} />
               </Fragment>
             ))}
-            {educationField.length == 0 ? (
+            {educationField.education_field.length == 0 ? (
               <>
                 <Col span={12}>
                   <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>
