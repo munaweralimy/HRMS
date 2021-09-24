@@ -17,10 +17,16 @@ const antIcon = <LoadingOutlined spin />;
 export default (props) => {
 
   const [ load, setLoad] = useState(false);
+  const [ formObj, setForm] = useState();
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
 
   const onFinish = async () => {
+    
   }
+
+  useEffect(() => {
+    console.log('formObj', formObj);
+  }, [formObj]);
 
   const sideData = {
     image: PlaceHolderImage,
@@ -42,11 +48,6 @@ export default (props) => {
   
 
 return (
-      <Form 
-      layout="vertical" 
-      scrollToFirstError={true}
-      onFinish={onFinish}
-      >
         <Row gutter={[20, 30]}>
           <Col span={24}>
             <Space direction="vertical" size={18}>
@@ -75,7 +76,7 @@ return (
                           </Col>
                           <Col span={24}>
                             <Spin indicator={antIcon} size="large" spinning={load}>
-                              <EmployeeForm mode='add' setLoad={setLoad} />
+                              <EmployeeForm mode='add' setLoad={setLoad} setForm={setForm} formObj={formObj} />
                             </Spin>
                           </Col>
                         </Row>
@@ -85,6 +86,5 @@ return (
                 </div>
             </Col>
         </Row>
-    </Form>
   );
 };

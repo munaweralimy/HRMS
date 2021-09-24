@@ -63,7 +63,7 @@ export const titleList = [
 
 export const etypeList = [
     {label: 'Full-time', value: 'Full-time'},
-    {label: 'Half-time', value: 'Half-time'},
+    {label: 'Part-time', value: 'Part-time'},
   ]
   
   export const ctypeList = [
@@ -78,7 +78,6 @@ export const etypeList = [
   ]
 
   export const identificationList = [
-    {label: 'MyKad/MyPR',value: 'MyKad/MyPR'},
     {label: 'IC', value: 'IC '},
     {label: 'Passport', value: 'Passport '}
   ]
@@ -124,4 +123,10 @@ export const etypeList = [
   export const alternateSat = [
     {label: 'A (Week 1 and 3 of every month)', value: 'A (Week 1 and 3 of every month)'},
     {label: 'B (Week 2 and 4 of every month)', value: 'B (Week 2 and 4 of every month)'},
+  ]
+
+  export const pStatus = [
+    {label: 'Expiring', value: 'Expiring'},
+    {label: 'Expired', value: 'Expired'},
+    {label: 'Active', value: 'Active'},
   ]

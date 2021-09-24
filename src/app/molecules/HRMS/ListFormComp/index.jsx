@@ -49,13 +49,12 @@ export default (props) => {
                 }
                 </Fragment>
             ))}
-            {mode == 'edit' && 
             <Col span={24}>
             <Row gutter={20} justify='end'>
                 {extrabtn && record != null && <Col><Button type='primary' htmlType='button' size='large' className={extrabtn?.class ? extrabtn?.class: ''} onClick={extrabtn?.onAction}>{extrabtn?.title}</Button></Col>}
                 <Col><Button type='primary' htmlType='submit' size='large' className={btnMain?.class ? btnMain.class : 'green-btn'}>{btnMain?.title ? btnMain.title : 'Save Changes'}</Button></Col>
             </Row>
-            </Col>}
+            </Col>
         </Row>
     )
 }

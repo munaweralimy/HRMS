@@ -49,7 +49,7 @@ export default (props) => {
             min: item.min && item.min,
             max: item.max && item.max,
           }}
-          initValue={elem && elem[item.name] ? elem[item.name] : ''}
+          initValue={elem && elem[item.name] ? elem[item.name] : item.number ? 0 : ''}
           rules={{
             required: { value: item.req, message: item.reqmessage },
             pattern: item.email
@@ -85,7 +85,7 @@ export default (props) => {
           initValue={elem && elem[item.name] ? moment(elem[item.name], 'YYYY-MM-DD') : ''}
           rules={{ 
             required: { value: item.req, message: item.reqmessage },
-            setValueAs: (value) => value ? moment(value).format('YYYY-MM-DD') : '',
+            setValueAs: (value) => value ? item.dateType == 'year' ? moment(value).format('YYYY') : moment(value).format('YYYY-MM-DD') : '',
            }}
           validate={setValidate(false)}
           validMessage={setValidate(true)}
