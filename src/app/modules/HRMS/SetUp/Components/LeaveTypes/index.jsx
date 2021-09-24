@@ -99,7 +99,7 @@ export default (props) => {
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
     content: <AddEditLeave leaveType={leaveType} title="Add New Leave Type" onClose={() => setVisible(false)} />,

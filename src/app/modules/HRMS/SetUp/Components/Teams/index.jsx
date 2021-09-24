@@ -73,7 +73,7 @@ export default (props) => {
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
     content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,

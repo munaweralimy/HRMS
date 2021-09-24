@@ -55,3 +55,14 @@ export const updateSingleCountry = (id, payload) => {
 export const deleteSingleCountry = (id) => {
   return axios.delete(`${apiresource}/Country/${id}`);
 };
+
+export const addSingleHoliday = (payload) => {
+  return axios.post(`${apiresource}/HRMS Holidays`, payload);
+};
+
+export const updateSingleHoliday = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS Holidays/${id}`, payload);
+};
+export const deleteSingleHoliday = (id) => {
+  return axios.delete(`${apiresource}/HRMS Holidays/${id}`);
+};
