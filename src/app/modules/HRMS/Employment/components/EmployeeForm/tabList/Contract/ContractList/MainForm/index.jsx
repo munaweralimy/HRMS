@@ -68,10 +68,8 @@ import moment from 'moment';
 
 export default (props) => {
 
-    const { control, errors, setValue, reset } = props;
+    const { control, errors, setValue, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh } = props;
     const [noEdit, setNoedit] = useState(true);
-    const [formVisible, setFormVisible] = useState(false);
-    const [recordData, setRecord] = useState(null);
     const [templateList, setTemplateList] = useState([]);
     
     const jobList = useSelector(state => state.global.jobslist);
@@ -92,6 +90,13 @@ export default (props) => {
       }
     }, [templates]);
 
+    // useEffect(() => {
+    //   console.log('----', recordData)
+    //   if (recordData[16]?.value == 0) {
+    //     onWHChnage(recordData[13]?.value);
+    //   }  
+    // }, [refresh]);
+    
     const { fields, append, remove} = useFieldArray({
       control,
       name: 'work_hour_template_detail',

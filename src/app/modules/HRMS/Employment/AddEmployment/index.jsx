@@ -8,6 +8,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import SideDetails from '../../../../molecules/SideDetails';
 import SideDetailResponsive from '../../../../molecules/SideDetailResponsive';
 import { useMediaQuery } from 'react-responsive';
+import { useForm } from 'react-hook-form';
 import { BreakingPoint } from '../../../../../configs/constantData';
 import PlaceHolderImage from '../../../../../assets/img/scholarship-icon.svg';
 
@@ -17,9 +18,8 @@ const antIcon = <LoadingOutlined spin />;
 export default (props) => {
 
   const [ load, setLoad] = useState(false);
-  const [ formObj, setForm] = useState();
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
-
+  const { control, errors, setValue, reset, handleSubmit } = useForm();
   const onFinish = async () => {
     
   }
@@ -48,6 +48,7 @@ export default (props) => {
   
 
 return (
+      <Form layout='vertical' onFinish={handleSubmit(onFinish)} scrollToFirstError>
         <Row gutter={[20, 30]}>
           <Col span={24}>
             <Space direction="vertical" size={18}>
@@ -76,7 +77,14 @@ return (
                           </Col>
                           <Col span={24}>
                             <Spin indicator={antIcon} size="large" spinning={load}>
-                              <EmployeeForm mode='add' setLoad={setLoad} setForm={setForm} formObj={formObj} />
+                              <EmployeeForm 
+                              mode='add' 
+                              setLoad={setLoad}
+                              controlOut={control}
+                              errorsOut={errors}
+                              resetOut={reset}
+                              setValueOut={setValue}
+                              />
                             </Spin>
                           </Col>
                         </Row>
@@ -86,5 +94,6 @@ return (
                 </div>
             </Col>
         </Row>
+      </Form>
   );
 };

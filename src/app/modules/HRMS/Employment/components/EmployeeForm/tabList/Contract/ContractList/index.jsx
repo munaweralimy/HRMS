@@ -51,6 +51,7 @@ export default (props) => {
     const { control: controlIn, errors: errorsIn, setValue: setValueIn, reset: resetIn, handleSubmit: handleSubmitIn } = useForm();
     const [formVisible, setFormVisible] = useState(false);
     const [recordData, setRecord] = useState(null);
+    const [refresh, doRefresh] = useState(0);
 
     useEffect(() => {
       dispatch(getJobs());
@@ -147,6 +148,11 @@ export default (props) => {
               field: 'end_date',
               value: record.end_date ? moment(record.end_date, 'YYYY-MM-DD') : '' 
             },
+            {
+              field: 'custom_work_hour_template',
+              value: record.custom_work_hour_template 
+            },
+
           ];
           if (record?.custom_work_hour_template == 1) {
             let t = [];
@@ -174,10 +180,7 @@ export default (props) => {
               set4: false,
           });
           setFormVisible(true);
-          if (record?.custom_work_hour_template == 0) {
-            console.log('kkk', record?.work_hour_template)
-            onWHChnage({label: record?.work_hour_template});
-          }
+          doRefresh(prev => prev + 1)
         },
       };
     }
@@ -298,10 +301,10 @@ export default (props) => {
             <Col span={24}>
               {mode == 'edit' ?
               <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-                <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} />
+                <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />
               </Form>
               :
-              <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} />}
+              <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />}
             </Col>}
         </Row>
 
