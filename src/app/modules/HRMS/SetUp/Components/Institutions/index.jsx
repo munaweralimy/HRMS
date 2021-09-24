@@ -26,9 +26,9 @@ export default (props) => {
   const ListCol = [
     {
       title: 'Institution',
-      dataIndex: 'name',
-      key: 'name',
-      sorted: (a, b) => a.name - b.name,
+      dataIndex: 'Institution',
+      key: 'Institution',
+      sorted: (a, b) => a.Institution - b.Institution,
     },
     {
       title: 'Action',
@@ -50,7 +50,7 @@ export default (props) => {
       text: '+ New Institution',
       classes: 'green-btn',
       action: () => {
-        setInstitutionField('');
+        setInstitutionField({ Institution: '', name: '' });
         setVisible(true);
       },
     },
@@ -72,10 +72,9 @@ export default (props) => {
   };
 
   const onClickRow = (record) => {
-    console.log({ record });
     return {
       onClick: () => {
-        setInstitutionField(record.name);
+        setInstitutionField(record);
         setVisible(true);
       },
     };

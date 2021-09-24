@@ -7,6 +7,7 @@ import { addInstitution, deleteSingleInstitution, updateSingleInstitution } from
 
 export default (props) => {
   const { title, onClose, institutionName } = props;
+  console.log({ institutionName });
   const { Title, Text } = Typography;
   const { control, errors, reset, setValue, handleSubmit } = useForm();
 
@@ -14,19 +15,22 @@ export default (props) => {
     const payload = {
       name1: values.institution,
       code: values.institution,
+      doctype: 'Institutions',
     };
-    institutionName.length == 0
+    institutionName.Institution.length == 0
       ? addInstitution(payload).then((response) => {
           message.success('Institution Added Successfully');
           onClose();
         })
-      : updateSingleInstitution(institutionName, payload).then((response) => {
-          message.success('Institution Updated Successfully');
-          onClose();
-        });
+      : updateSingleInstitution(institutionName.name, { name1: values.institution, doctype: 'Institutions' }).then(
+          (response) => {
+            message.success('Institution Updated Successfully');
+            onClose();
+          },
+        );
   };
   const onDeleteEducationField = () => {
-    deleteSingleInstitution(institutionName)
+    deleteSingleInstitution(institutionName.name)
       .then((response) => {
         message.success('Institution Deleted Successfully');
         onClose();
@@ -37,8 +41,8 @@ export default (props) => {
       });
   };
   useEffect(() => {
-    if (institutionName.length > 0) {
-      setValue('institution', institutionName);
+    if (institutionName.Institution.length > 0) {
+      setValue('institution', institutionName.Institution);
     } else {
       reset();
     }
@@ -57,7 +61,7 @@ export default (props) => {
                 <FormGroup item={item} control={control} errors={errors} />
               </Fragment>
             ))}
-            {institutionName.length == 0 ? (
+            {institutionName.Institution.length == 0 ? (
               <>
                 <Col span={12}>
                   <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>

@@ -31,16 +31,16 @@ export const deleteSingleEducation = (id) => {
 };
 
 export const addInstitution = (payload) => {
-  return axios.post(`${apiresource}/institutions`, payload);
+  return axios.post(`${apiresource}/Institutions`, payload);
 };
 
 export const getSingleInstitution = (id) => {
-  return axios.get(`${apiresource}/institutions/${id}`);
+  return axios.get(`${apiresource}/Institutions/${id}`);
 };
 
 export const updateSingleInstitution = (id, payload) => {
-  return axios.put(`${apiresource}/institutions/${id}`, payload);
+  return axios.put(`${apiresource}/Institutions/${id}`, payload);
 };
 export const deleteSingleInstitution = (id) => {
-  return axios.delete(`${apiresource}/institutions/${id}`);
+  return axios.delete(`${apiresource}/Institutions/${id}`);
 };
