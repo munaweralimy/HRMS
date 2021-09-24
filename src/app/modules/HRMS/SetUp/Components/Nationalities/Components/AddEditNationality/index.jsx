@@ -1,66 +1,66 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { Button, Row, Col, Typography, Form, message } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
-import { institution } from './FormFields';
-import { addInstitution, deleteSingleInstitution, updateSingleInstitution } from '../../../../ducks/services';
+import { nationalityFields } from './FormFields';
+import { addCountry, deleteSingleCountry, updateSingleCountry } from '../../../../ducks/services';
 
 export default (props) => {
-  const { title, onClose, institutionName } = props;
+  const { title, onClose, countryName } = props;
   const { Title, Text } = Typography;
-  const { control, errors, reset, setValue, handleSubmit } = useForm();
+  const { control, errors, setValue, reset, handleSubmit } = useForm();
 
   const onFinish = (values) => {
     const payload = {
-      name1: values.institution,
-      code: values.institution,
-      doctype: 'Institutions',
+      country_name: values.country_name,
+      code: values.country_name.substring(0, 3),
     };
-    institutionName.Institution.length == 0
-      ? addInstitution(payload).then((response) => {
-          message.success('Institution Added Successfully');
-          onClose();
-        })
-      : updateSingleInstitution(institutionName.name, { name1: values.institution, doctype: 'Institutions' }).then(
-          (response) => {
-            message.success('Institution Updated Successfully');
+    countryName.name.length == 0
+      ? addCountry(payload)
+          .then((response) => {
+            message.success('Country Added Successfully');
             onClose();
-          },
-        );
+          })
+          .catch((error) => message.error('Country exists'))
+      : updateSingleCountry(countryName.code, { name: values.country_name })
+          .then((response) => {
+            message.success('Country Updated Successfully');
+            onClose();
+          })
+          .catch((error) => message.error('Update Failed'));
   };
-  const onDeleteEducationField = () => {
-    deleteSingleInstitution(institutionName.name)
+  const onDeleteNationality = () => {
+    deleteSingleCountry(countryName.code)
       .then((response) => {
-        message.success('Institution Deleted Successfully');
+        message.success('Country Deleted Successfully');
         onClose();
       })
       .catch((error) => {
-        message.error('Institution Deleted Unsccessfully');
+        message.error('Country Deleted Unsccessfully');
         onClose();
       });
   };
   useEffect(() => {
-    if (institutionName.Institution.length > 0) {
-      setValue('institution', institutionName.Institution);
+    if (countryName.name.length > 0) {
+      setValue('country_name', countryName.name);
     } else {
       reset();
     }
-  }, [institutionName]);
-
+  }, [countryName]);
   return (
     <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-      <Row gutter={[20, 30]}>
+      <Row gutter={[20, 50]}>
         <Col span={24}>
           <Title level={3}>{title}</Title>
         </Col>
         <Col span={24}>
           <Row gutter={[20, 30]}>
-            {institution.map((item, idx) => (
+            {nationalityFields.map((item, idx) => (
               <Fragment key={idx}>
                 <FormGroup item={item} control={control} errors={errors} />
               </Fragment>
             ))}
-            {institutionName.Institution.length == 0 ? (
+            {countryName.name.length == 0 ? (
               <>
                 <Col span={12}>
                   <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>
@@ -76,7 +76,7 @@ export default (props) => {
             ) : (
               <>
                 <Col span={12}>
-                  <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteEducationField}>
+                  <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteNationality}>
                     Delete
                   </Button>
                 </Col>

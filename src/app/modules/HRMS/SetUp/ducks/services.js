@@ -44,3 +44,14 @@ export const updateSingleInstitution = (id, payload) => {
 export const deleteSingleInstitution = (id) => {
   return axios.delete(`${apiresource}/Institutions/${id}`);
 };
+
+export const addCountry = (payload) => {
+  return axios.post(`${apiresource}/Country`, payload);
+};
+
+export const updateSingleCountry = (id, payload) => {
+  return axios.put(`${apiresource}/Country/${id}`, payload);
+};
+export const deleteSingleCountry = (id) => {
+  return axios.delete(`${apiresource}/Country/${id}`);
+};
