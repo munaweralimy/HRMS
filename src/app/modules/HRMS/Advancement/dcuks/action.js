@@ -92,6 +92,17 @@ export const getAdvancementdetails = (id) => {
   };
 };
 
+
+export const emptyStaffDetails = () => {
+  return (dispatch) => {
+    dispatch({
+      type: action_types.EMPTY_STAFF_DETAILS,
+      data: [],
+    });
+  };
+};
+
+
 export const getContracts = (id, page, limit, order, orderby) => {
   let ordering = '';
     if(order == "ascend") {

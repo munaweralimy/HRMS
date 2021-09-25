@@ -7,7 +7,7 @@ const { Title } = Typography;
 
 export default (props) => {
 
-  const { control, errors } = props;
+  const { control, errors, mode } = props;
 
   const passportFields = [
     {
@@ -81,11 +81,11 @@ export default (props) => {
             <FormGroup item={item} control={control} errors={errors} />
           </Fragment>
         ))}
-        <Col span={24}>
+        {mode == 'edit' && <Col span={24}>
           <Row gutter={20} justify='end'>
             <Col><Button type='primary' htmlType='submit' size='large' className='green-btn'>Save Changes</Button></Col>
           </Row>
-        </Col>
+        </Col>}
       </Row>
   );
 };

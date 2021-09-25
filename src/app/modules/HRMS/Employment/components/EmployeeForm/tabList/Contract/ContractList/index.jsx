@@ -134,7 +134,7 @@ export default (props) => {
             },
             {
               field: 'team',
-              value: record.team ? {label: record.team,value: record.team}: '' 
+              value: record.team ? {label: record.team_name,value: record.team}: '' 
             },
             {
               field: 'work_hour_template',
@@ -169,7 +169,8 @@ export default (props) => {
             })
             temps.push({
               field: 'work_hour_template_detail',
-              value: t, 
+              value: t,
+              notset: true, 
             })
           }
           setRecord(temps);
@@ -180,7 +181,9 @@ export default (props) => {
               set4: false,
           });
           setFormVisible(true);
-          doRefresh(prev => prev + 1)
+          if (record?.custom_work_hour_template == 0) {
+            doRefresh(prev => prev + 1)
+          }
         },
       };
     }
@@ -230,7 +233,7 @@ export default (props) => {
           contactPDF = val.contract_attachment.fileList[0].url
         }
       }
-      const body = {
+      let body = {
         party_name: id,
         contract_type: val?.contract_type?.value,
         employement_type: val?.employement_type?.value,
@@ -244,13 +247,13 @@ export default (props) => {
         supervisor: val?.supervisor?.value,
         employee_role: empRole,
         contract_attachment: contactPDF,
-        work_hour_template: val?.work_hour_template?.value,    
+        work_hour_template: val?.work_hour_template?.value != 'Custom Template' ? val?.work_hour_template?.value : '',    
         custom_work_hour_template: val?.work_hour_template?.value == 'Custom Template' ? 1 : 0,
         alternate_saturdays: val.alternate_saturdays ==  true ? 1 : 0,
         group: val.alternate_saturdays ==  true ? val?.group.value : ''
       }
       if (workhours.length > 0) {
-        body.push({work_hour_template_detail: workhours})
+        body['work_hour_template_detail'] = workhours;
       }
 
       let getID = null;

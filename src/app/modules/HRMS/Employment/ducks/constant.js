@@ -8,3 +8,5 @@ export const JOBS_LIST = 'JOBS_LIST';
 export const COMPANY_LIST = 'COMPANY_LIST';
 export const HOUR_TEMPLATE = 'HOUR_TEMPLATE';
 export const TEMPLATE_LIST = 'TEMPLATE_LIST';
+export const EMPTY_TEAMS = 'EMPTY_TEAMS';
+export const EMPTY_STAFF = 'EMPTY_STAFF';

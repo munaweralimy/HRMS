@@ -1,12 +1,8 @@
 import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod, apiresource } from '../../../../../configs/constants';
 
-export const addEmployer = (payload, id) => {
-  if (id) {
-    return axios.post(`${apiresource}/Employee/${id}`, payload);
-  } else {
+export const employAddApi = (payload) => {
     return axios.post(`${apiresource}/Employee`, payload);
-  }
 };
 
 export const employApi = (payload, id) => {

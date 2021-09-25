@@ -66,9 +66,18 @@ import moment from 'moment';
     },
   ]
 
+  const init = {
+    day: '',
+    time_hour: 0,
+    time_min: 0,
+    time_type: '',
+    work_hour_type: '',
+    work_hours: 0,
+  }
+
 export default (props) => {
 
-    const { control, errors, setValue, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh } = props;
+    const { control, errors, setValue, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh, temping } = props;
     const [noEdit, setNoedit] = useState(true);
     const [templateList, setTemplateList] = useState([]);
     
@@ -90,18 +99,26 @@ export default (props) => {
       }
     }, [templates]);
 
-    // useEffect(() => {
-    //   console.log('----', recordData)
-    //   if (recordData[16]?.value == 0) {
-    //     onWHChnage(recordData[13]?.value);
-    //   }  
-    // }, [refresh]);
-    
+    useEffect(() => {
+      if (recordData && recordData[16]?.value == 0) {
+        onWHChnage(recordData[13]?.value);
+      }
+    }, [refresh]);
+
     const { fields, append, remove} = useFieldArray({
-      control,
+      control: control,
       name: 'work_hour_template_detail',
+      defaultValue: init
     });
 
+    useEffect(() => {
+      if (recordData && recordData[16]?.value == 1) {
+        setValue('work_hour_template', {label: 'Custom Template', value: 'Custom Template'});
+        setValue('work_hour_template_detail', recordData[17].value);
+      }
+    }, [recordData]);
+
+    
     const onWHChnage = async (e) => {
       if(e.label == "Custom Template") {
         setNoedit(false);
@@ -380,6 +397,7 @@ export default (props) => {
         onBack={onBack}
         setValue={setValue}
         mode={mode}
+        noButton={mode == 'add' ? true : false}
         title={'Employment Contract'}
         fieldsList={contractDetails}
         backbtnTitle='Employment History'

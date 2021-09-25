@@ -28,6 +28,8 @@ export default (state = initialState, action) => {
       return { ...state, contractList: data };
     case action_types.FITINDEX_DETAILS:
       return { ...state, fitFigures: data };
+    case action_types.EMPTY_STAFF_DETAILS:
+      return { ...state, advData: {} };
       
     default:
       return state;

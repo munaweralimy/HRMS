@@ -55,12 +55,12 @@ export default (props) => {
         {visisble &&
         <Col span={24}>
           <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-            <MedicalInfo control={controlIn} errors={errorsIn} />
+            <MedicalInfo control={controlIn} errors={errorsIn} mode={mode} />
           </Form>
         </Col>}
       </Row>
       :
-      <MedicalInfo control={controlOut} errors={errorsOut} />}
+      <MedicalInfo control={controlOut} errors={errorsOut}  mode={mode} />}
     </>
   );
 };

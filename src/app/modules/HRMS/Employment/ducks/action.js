@@ -80,6 +80,24 @@ export const getTeams = (page, limit, order, orderby) => {
       };
   };
 
+  export const emptyTeams = () => {
+    return (dispatch) => {
+      dispatch({
+        type: action_types.EMPTY_TEAMS,
+        data: [],
+      });
+    };
+  };
+
+  export const emptyStaff = () => {
+    return (dispatch) => {
+      dispatch({
+        type: action_types.EMPTY_STAFF,
+        data: [],
+      });
+    };
+  };
+
   export const getEmployeeDetail = (id) => {
     return async (dispatch) => {
       const {
@@ -115,3 +133,4 @@ export const getTeams = (page, limit, order, orderby) => {
       });
     };
   };
+

@@ -11,7 +11,7 @@ const { Title } = Typography;
 
 export default (props) => {
 
-    const {control, errors } =  props;
+    const {control, errors, mode } =  props;
 
     const genderList = useSelector(state => state.global.genderData);
     const raceList = useSelector(state => state.global.raceData);
@@ -781,11 +781,11 @@ export default (props) => {
                 }
                 </Fragment>
             ))}
-            <Col span={24}>
+            {mode == 'edit' && <Col span={24}>
                 <Row gutter={20} justify='end'>
                     <Col><Button type='primary' htmlType='submit' size='large' className='green-btn'>Save Changes</Button></Col>
                 </Row>
-            </Col>
+            </Col>}
         </Row>
     )
 }

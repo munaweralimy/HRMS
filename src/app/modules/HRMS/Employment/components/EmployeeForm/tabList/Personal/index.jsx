@@ -238,10 +238,10 @@ export default (props) => {
     <>
     {mode == 'edit' ?
     <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-      <MainForm control={controlIn} errors={errorsIn}  />
+      <MainForm control={controlIn} errors={errorsIn} mode={mode}  />
     </Form>
     : 
-    <MainForm control={controlOut} errors={errorsOut}  />}
+    <MainForm control={controlOut} errors={errorsOut} mode={mode} />}
     </>
   );
 };

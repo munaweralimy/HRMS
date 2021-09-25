@@ -27,6 +27,10 @@ export default (state = initialState, action) => {
       return { ...state, tempData: data };
     case action_types.HOUR_TEMPLATE:
       return { ...state, hoursData: data };
+    case action_types.EMPTY_TEAMS:
+      return { ...state, memberList: {}, teamDetails: {} };
+    case action_types.EMPTY_STAFF:
+      return { ...state, empDetails: {} };
     default:
       return state;
   }

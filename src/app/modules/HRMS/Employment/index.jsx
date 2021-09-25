@@ -14,8 +14,8 @@ import { useHistory } from 'react-router';
 const colName = [
   {
     title: 'ID',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'employee_id',
+    key: 'employee_id',
     sorter: true,
   },
   {
