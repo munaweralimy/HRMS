@@ -15,6 +15,10 @@ import Finance from '../../modules/HRMS/Finance';
 import FinanceDetails from '../../modules/HRMS/Finance/FinanceDetail';
 import SetUp from '../../modules/HRMS/SetUp';
 import Requests from '../../modules/HRMS/Requests';
+import Reports from '../../modules/HRMS/Reports';
+import AddReports from '../../modules/HRMS/Reports/AddReports';
+import Leaves from '../../modules/HRMS/Leaves';
+import LeavesDetail from '../../modules/HRMS/Leaves/LeavesDetail';
 
 const Components = {
   Advancement,
@@ -32,7 +36,10 @@ const Components = {
   EmpAttendanceDetail,
   SetUp,
   Requests,
-  SetUp,
+  Reports,
+  AddReports,
+  Leaves,
+  LeavesDetail
 };
 
 export default (props) => {
