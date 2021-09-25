@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Typography, Button, Spin } from 'antd';
 import StaffDetails from '../../StaffDetails';
-import { getAdvancementdetails }  from '../../Advancement/dcuks/action';
+import { getAdvancementdetails, emptyStaffDetails }  from '../../Advancement/dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { LeftOutlined } from '@ant-design/icons';
 import { useParams, useHistory } from 'react-router-dom';
 import EmployeeForm from '../components/EmployeeForm';
-import {getEmployeeDetail} from '../ducks/action';
-import {LoadingOutlined} from '@ant-design/icons';
+import {emptyStaff, getEmployeeDetail} from '../ducks/action';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -23,6 +23,10 @@ export default (props) => {
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
     dispatch(getEmployeeDetail(id));
+    return () => {
+      dispatch(emptyStaff())
+      dispatch(emptyStaffDetails())
+    }
   }, []);
 
   const updateApi = () => {

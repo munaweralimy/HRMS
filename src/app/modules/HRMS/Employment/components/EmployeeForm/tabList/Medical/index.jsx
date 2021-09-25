@@ -1,55 +1,14 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { Row, Col, Typography, Button, Form, message } from 'antd';
-import FormGroup from '../../../../../../../molecules/FormGroup';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Typography, Form, message } from 'antd';
 import { useForm } from 'react-hook-form';
 import { employApi } from '../../../../ducks/services';
 import Insurance from './Insurance';
-
-const { Title } = Typography;
-const medicalFields = [
-  {
-    type: 'input',
-    label: 'Blood Type',
-    name: 'blood_group',
-    twocol: false,
-    colWidth: '1 0 200px',
-    placeholder: 'Blood Type',
-    req: true,
-    reqmessage: 'Please enter blood type',
-  },
-  {
-    type: 'input',
-    label: 'Height (cm)',
-    name: 'height',
-    twocol: false,
-    colWidth: '1 0 200px',
-    number: true,
-    req: true,
-    reqmessage: 'Please enter height',
-  },
-  {
-    type: 'input',
-    label: 'Weight (kg)',
-    name: 'weight',
-    twocol: false,
-    colWidth: '1 0 200px',
-    number: true,
-    req: true,
-    reqmessage: 'Please enter weight',
-  },
-  {
-    type: 'textarea',
-    label: 'Additional Notes',
-    name: 'health_details',
-    twocol: false,
-    req: false,
-  },
-];
+import MedicalInfo from './MedicalInfo';
 
 export default (props) => {
 
-  const { mode, data, updateApi, id, setLoad } = props;
-  const { control, errors, setValue, handleSubmit } = useForm();
+  const { mode, data, updateApi, id, setLoad, controlOut, errorsOut } = props;
+  const { control: controlIn, errors: errorsIn, setValue: setValueIn, handleSubmit:handleSubmitIn } = useForm();
   const [visisble, setVisible] = useState(true);
 
   useEffect(() => {
@@ -60,10 +19,10 @@ export default (props) => {
 
   const refreshForm = () => {
     setTimeout(() => {
-      setValue('weight', data?.weight);
-      setValue('height', data?.height);
-      setValue('blood_group', data?.blood_group);
-      setValue('health_details', data?.health_details);
+      setValueIn('weight', data?.weight);
+      setValueIn('height', data?.height);
+      setValueIn('blood_group', data?.blood_group);
+      setValueIn('health_details', data?.health_details);
     }, 1500)
   }
   
@@ -75,7 +34,6 @@ export default (props) => {
         weight: val.weight,
         health_details: val.health_details
     }
-
     employApi(body, id).then(res => {
       setLoad(false);
       updateApi();
@@ -89,36 +47,20 @@ export default (props) => {
 
   return (
     <>
-      <Col span={24}>
-        <Insurance {...props} setVisible={setVisible} refresh={refreshForm} />
-      </Col>
-      {visisble &&
-      <Col span={24}>
-      <Form layout='vertical' onFinish={handleSubmit(onFinish)}>
-        <Row gutter={[20, 30]}>
-          <Col span={24}>
-            <Title level={4} className="mb-0 c-default">Medical Record</Title>
-          </Col>
-          {medicalFields.map((item, index) => (
-            <Fragment key={index}>
-              {item?.subheader && (
-                <Col span={24}>
-                  <Title level={5} className="mb-0 c-default">
-                    {item.subheader}
-                  </Title>
-                </Col>
-              )}
-              <FormGroup item={item} control={control} errors={errors} />
-            </Fragment>
-          ))}
-          <Col span={24}>
-            <Row gutter={20} justify='end'>
-              <Col><Button type='primary' htmlType='submit' size='large' className='green-btn'>Save Changes</Button></Col>
-            </Row>
-          </Col>
-        </Row>
-      </Form>
-      </Col>}
+    {mode == 'edit' ?
+      <Row gutter={[20,20]}>
+        <Col span={24}>
+          <Insurance {...props} setVisible={setVisible} refresh={refreshForm} />
+        </Col>
+        {visisble &&
+        <Col span={24}>
+          <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
+            <MedicalInfo control={controlIn} errors={errorsIn} mode={mode} />
+          </Form>
+        </Col>}
+      </Row>
+      :
+      <MedicalInfo control={controlOut} errors={errorsOut}  mode={mode} />}
     </>
   );
 };

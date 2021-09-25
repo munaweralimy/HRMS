@@ -4,7 +4,9 @@ const initialState = {
   teamList: {},
   memberList: {},
   teamDetails: {},
-  empDetails: {}
+  empDetails: {},
+  tempData: [],
+  hoursData: [],
 };
 export default (state = initialState, action) => {
   const { type, data } = action;
@@ -21,7 +23,14 @@ export default (state = initialState, action) => {
     return { ...state, emplist: data };
     case action_types.EMPLOYEE_CARD:
       return { ...state, empcard: data };
-      
+    case action_types.TEMPLATE_LIST:
+      return { ...state, tempData: data };
+    case action_types.HOUR_TEMPLATE:
+      return { ...state, hoursData: data };
+    case action_types.EMPTY_TEAMS:
+      return { ...state, memberList: {}, teamDetails: {} };
+    case action_types.EMPTY_STAFF:
+      return { ...state, empDetails: {} };
     default:
       return state;
   }

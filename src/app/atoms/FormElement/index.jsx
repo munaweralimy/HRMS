@@ -27,7 +27,7 @@ export const InputField = (props) => {
         <Controller
           name={fieldname}
           control={control}
-          defaultValue={initValue || initValue == 0 ? initValue : ''}
+          defaultValue={initValue != undefined ? initValue : ''}
           rules={rules}
           render={({ onBlur, value, onChange }) => (
             <Input value={value} onChange={onChange} onBlur={props.onBlur} {...iProps} />
@@ -407,13 +407,16 @@ export const InputRadio = (props) => {
 };
 
 export const SwitchField = (props) => {
-  const { fieldname, control, initValue, rules, iProps } = props;
+  const { fieldname, control, initValue, rules, iProps, label } = props;
 
   useEffect(() => {
     props.valueGot && props.setValue(fieldname, props.valueGot);
   }, []);
   return (
-    <Form.Item className="mb-0">
+    <Form.Item 
+    className="mb-0 fullWidth-switch"
+    label={label}
+    >
       <Controller
         name={fieldname}
         control={control}
