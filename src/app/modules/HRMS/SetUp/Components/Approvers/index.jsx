@@ -43,7 +43,7 @@ export default (props) => {
   ];
   const btnList = [
     {
-      text: '+ New Approver',
+      text: '+ New Team',
       classes: 'green-btn',
       action: () => {
         setApproverFields({ name: '', approver_name: '' });
@@ -59,6 +59,21 @@ export default (props) => {
     content: <AddEditApprover approver={apparoaverFileds} title="Add New Policy" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
+  };
+
+  const deleteRecord = async (record) => {
+    //props.setLoading(true);
+    let url = `${apiresource}/HRMS Teams/${record.name}`;
+    try {
+      await axios.delete(url);
+      message.success('Record Successfully Deleted');
+      //props.setLoading(false);
+      dispatch(getApproversList(page, pageSize));
+    } catch (e) {
+      //props.setLoading(false);
+      const { response } = e;
+      message.error('Something went wrong');
+    }
   };
 
   const onClickRow = (record) => {
@@ -87,7 +102,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Approvers" btnList={btnList} />
+          <HeadingChip title="Teams" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard
@@ -103,6 +118,15 @@ export default (props) => {
             }}
             onChange={onTableChange}
           />
+          <div className="w-100 text-right mt-2">
+            <Pagination
+              pageSize={pageSize}
+              current={page}
+              hideOnSinglePage={true}
+              onChange={onPageChange}
+              total={approversListData?.count}
+            />
+          </div>
         </Col>
       </Row>
       <Popup {...popup} />

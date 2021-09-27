@@ -67,7 +67,7 @@ export default (props) => {
 
   const btnList = [
     {
-      text: '+ New Asset',
+      text: '+ New Team',
       classes: 'green-btn',
       action: () => {
         setAssetField({ name: '', status: '', assets_id: '', assets_name: '' });
@@ -83,6 +83,21 @@ export default (props) => {
     content: <AddEditAsset asset={assetField} title="Add New Asset" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
+  };
+
+  const deleteRecord = async (record) => {
+    //props.setLoading(true);
+    let url = `${apiresource}/HRMS Teams/${record.name}`;
+    try {
+      await axios.delete(url);
+      message.success('Record Successfully Deleted');
+      //props.setLoading(false);
+      dispatch(getAssetsList(page, pageSize));
+    } catch (e) {
+      //props.setLoading(false);
+      const { response } = e;
+      message.error('Something went wrong');
+    }
   };
 
   const onClickRow = (record) => {
@@ -109,11 +124,16 @@ export default (props) => {
     }
   };
 
+  const onPageChange = (pg) => {
+    setPage(pg);
+    dispatch(getAssetsList(pg, pageSize));
+  };
+
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Assets" btnList={btnList} />
+          <HeadingChip title="Teams" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

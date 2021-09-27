@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputField, DateField, SelectField, CheckboxGroup, UploadField, TextAreaField } from '../../atoms/FormElement';
+import { InputField, DateField, SelectField, CheckboxGroup, UploadField, TextAreaField, SwitchField } from '../../atoms/FormElement';
 import { Row, Col, Typography } from 'antd';
 import moment from 'moment';
 import { getFileName } from '../../../features/utility';
@@ -40,14 +40,16 @@ export default (props) => {
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
           control={control}
-          class={`mb-0 ${item.hidden ? 'd-none' : ''}`}
+          class={`mb-0 ${item.hidden ? 'd-none' : ''} ${item.arrow == false ? 'no-arrow' : ''}`}
           iProps={{
-            readOnly: props.static ? props.static : false,
+            readOnly: props.static ? props.static : item.static ? true : false,
             placeholder: item.placeholder,
             size: 'large',
             type: item.number && 'number',
+            min: item.min && item.min,
+            max: item.max && item.max,
           }}
-          initValue={elem && elem[item.name] ? elem[item.name] : ''}
+          initValue={elem && elem[item.name] ? elem[item.name] : item.number ? 0 : ''}
           rules={{
             required: { value: item.req, message: item.reqmessage },
             pattern: item.email
@@ -65,7 +67,8 @@ export default (props) => {
           class={`mb-0 w-100 ${item.hidden ? 'd-none' : ''}`}
           initValue={elem ? { label: elem[item.name], value: elem[item.name] } : ''}
           control={control}
-          iProps={{ placeholder: item.placeholder, isMulti: item.multiple ? item.multiple : false , isDisabled: item.disabled || props.static }}
+          onChange={item.onChange && item.onChange}
+          iProps={{ placeholder: item.placeholder, isMulti: item.multiple ? item.multiple : false , isDisabled: item.disabled ? item.disabled : props.static ? props.static : item.static ? item.static : false}}
           selectOption={item.options}
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
@@ -82,7 +85,7 @@ export default (props) => {
           initValue={elem && elem[item.name] ? moment(elem[item.name], 'YYYY-MM-DD') : ''}
           rules={{ 
             required: { value: item.req, message: item.reqmessage },
-            setValueAs: (value) => value ? moment(value).format('YYYY-MM-DD') : '',
+            setValueAs: (value) => value ? item.dateType == 'year' ? moment(value).format('YYYY') : moment(value).format('YYYY-MM-DD') : '',
            }}
           validate={setValidate(false)}
           validMessage={setValidate(true)}
@@ -96,6 +99,7 @@ export default (props) => {
           control={control}
           initValue=""
           option={item.options}
+          onChange={item.onChange && item.onChange}
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
           validMessage={setValidate(true)}
@@ -141,6 +145,16 @@ export default (props) => {
           initValue={elem && elem[item.name] ? elem[item.name] : ''}
         />
       )}
+      {item.type == 'switch' && (
+        <SwitchField
+          fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
+          label={item.label}
+          control={control}
+          iProps={{ size: 'large' }}
+          initValue={elem && elem[item.name] ? elem[item.name] : ''}
+        />
+      )}
+      
     </Col>
   );
 };

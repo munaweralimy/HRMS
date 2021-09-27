@@ -2,8 +2,6 @@ import * as action_types from './constant';
 
 const initialState = {
   jobopen: {},
-  companies: [],
-  jobslist: [],
   applicantlist: {},
   fitindexlist: {},
   fitindexcard: {},
@@ -16,10 +14,6 @@ export default (state = initialState, action) => {
   switch (type) {
     case action_types.JOB_OPENING:
       return { ...state, jobopen: data };
-    case action_types.COMPANY_LIST:
-      return { ...state, companies: data };
-    case action_types.JOBS_LIST:
-      return { ...state, jobslist: data };
     case action_types.SUITABLE_APPLICANTS:
       return { ...state, applicantlist: data };
     case action_types.EMPTY_APPLICANTS:
@@ -34,6 +28,8 @@ export default (state = initialState, action) => {
       return { ...state, contractList: data };
     case action_types.FITINDEX_DETAILS:
       return { ...state, fitFigures: data };
+    case action_types.EMPTY_STAFF_DETAILS:
+      return { ...state, advData: {} };
       
     default:
       return state;

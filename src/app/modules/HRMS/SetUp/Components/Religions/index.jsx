@@ -37,6 +37,7 @@ export default (props) => {
       key: 'Action',
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
+      width: '100px',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
           <CloseCircleFilled />

@@ -502,6 +502,20 @@ select:-webkit-autofill:focus {
   }
 }
 
+.member-icon {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100%;
+    .ant-avatar {
+      border: 0;
+      margin: 10px 0;
+      &:not(:first-child) {
+        margin: 10px 0;
+      }
+    }
+}
+
 // ant design customization
 .ant-layout-footer {
   padding-left: 0;

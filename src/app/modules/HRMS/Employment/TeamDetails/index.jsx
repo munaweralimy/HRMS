@@ -5,7 +5,7 @@ import SideDetails from '../../../../molecules/SideDetails';
 import SideDetailResponsive from '../../../../molecules/SideDetailResponsive';
 import UpdateSection from '../../../../molecules/UpdateSection';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMembers, getTeamsDetail } from '../ducks/action';
+import { emptyTeams, getMembers, getTeamsDetail } from '../ducks/action';
 import { useParams, useHistory } from 'react-router';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../../../configs/constantData';
@@ -51,6 +51,16 @@ export default (props) => {
   const commentsApi = useSelector((state) => state.global.comments);
   const teams = useSelector(state => state.employment.teamDetails);
 
+  useEffect(() => {
+    dispatch(getMembers(id, 1, 5, '', ''));
+    dispatch(getTeamsDetail(id))
+    updateComment();
+    return () => {
+      dispatch(emptyComments());
+      dispatch(emptyTeams());
+    }
+  }, []);
+
   const sideData = [
     {
       type: 'tag',
@@ -75,14 +85,17 @@ export default (props) => {
       noDivider: true,
       highlight: true,
     },
+    {
+      type: 'users',
+      title: '',
+      count: 5,
+      size: 80,
+      value: teams?.members || [],
+      noDivider: true,
+    },
   ];
   
-  useEffect(() => {
-    dispatch(getMembers(id, 1, 5, '', ''));
-    dispatch(getTeamsDetail(id))
-    updateComment();
-    return () => dispatch(emptyComments());
-  }, []);
+  
 
   const updateList = (page, limit, sort, sortby) => {
     dispatch(getMembers(id, page, limit, sort, sortby));

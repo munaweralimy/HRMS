@@ -110,6 +110,30 @@ export const getInstitution = () => {
   };
 };
 
+export const getTeams = () => {
+  return async(dispatch) => {
+      const {
+          data: { data },
+      } = await axios.get(`${apiresource}/HRMS Teams?fields=["name","team_name"]`);
+      dispatch({
+          type: action_types.TEAM_LISTING,
+          data: data,
+      });
+  };
+};
+
+export const getRoles = () => {
+  return async(dispatch) => {
+      const {
+          data: { data },
+      } = await axios.get(`${apiresource}/User Roles`);
+      dispatch({
+          type: action_types.ROLE_LIST,
+          data: data,
+      });
+  };
+};
+
 export const getEducationType = () => {
   return async(dispatch) => {
       const {
@@ -120,6 +144,42 @@ export const getEducationType = () => {
           data: data,
       });
   };
+};
+
+export const getCompany = () => {
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/Company`);
+    dispatch({
+      type: action_types.COMPANY_LIST,
+      data: data,
+    });
+  };
+};
+
+export const getStaffs = () => {
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/Employee?fields=["name","employee_name"]`);
+    dispatch({
+      type: action_types.SUPERVISOR_LIST,
+      data: data,
+    });
+  };
+};
+
+export const getJobs = () => {
+return async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get(`${apiresource}/Job Position`);
+  dispatch({
+    type: action_types.JOBS_LIST,
+    data: data,
+  });
+};
 };
 
 
