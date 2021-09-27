@@ -99,6 +99,7 @@ export default (props) => {
           control={control}
           initValue=""
           option={item.options}
+          onChange={item.onChange && item.onChange}
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
           validMessage={setValidate(true)}

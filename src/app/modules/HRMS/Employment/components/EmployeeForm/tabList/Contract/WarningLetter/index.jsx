@@ -1,67 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, message } from 'antd';
 import ListCard from '../../../../../../../../molecules/ListCard';
 import ListFormComp from '../../../../../../../../molecules/HRMS/ListFormComp';
 import { useForm } from 'react-hook-form';
-import { insuranceApi } from '../../../../../ducks/services';
+import { sendWarning, delWarning } from '../../../../../ducks/services';
+import { useDispatch, useSelector } from 'react-redux';
+import { getWarnLetter } from '../../../../../ducks/action';
+import moment from 'moment';
 
 const colName = [
   {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
-    sorter: true,
+    render: text => text ? moment(text).format('Do MMMM YYYY') : ''
   },
   {
     title: 'Type',
-    dataIndex: 'letter_type',
-    key: 'letter_type',
-    sorter: true,
+    dataIndex: 'type',
+    key: 'type',
   },
 ];
 
-const instype = [
-  {label: 'Waiting for Unauthorized Use of Company Asset', value: 'Waiting for Unauthorized Use of Company Asset'},
-  {label: 'Illegal Access', value: 'Illegal Access'},
-  {label: 'Late Coming', value: 'Late Coming'},
-]
-
-const insuranceFields = [
-    {
-      type: 'select',
-      label: 'letter_type',
-      name: 'letter_type',
-      twocol: false,
-      options: instype,
-      req: true,
-      reqmessage: 'Please enter type',
-    },
-  ]
-
-  const initq = {
-    warning_letter: '',
-  }
-
 export default (props) => {
 
-    const { data, updateApi, id, setLoad, setVisible } = props;
-    const { control, errors, setValue, reset, handleSubmit } = useForm({ defaultValues: initq});
+    const { data, updateApi, id, setLoad, setVisible, mode } = props;
+    const { control, errors, setValue, reset, handleSubmit } = useForm();
     const [formVisible, setFormVisible] = useState(false);
     const [recordData, setRecord] = useState(null);
+    const dispatch = useDispatch();
+    const letters = useSelector(state => state.employment.warnLetter);
+    const [letterList, setLetterList] = useState([]);
+    
+    useEffect(() => {
+      dispatch(getWarnLetter());
+    }, []);
+
+    const insuranceFields = [
+      {
+        type: 'select',
+        label: 'Warning Letter Type',
+        name: 'warning_letter',
+        twocol: false,
+        options: letterList,
+        req: true,
+        reqmessage: 'Please enter type',
+      },
+    ]
+
+    useEffect(() => {
+      if (letters && letters.length) {
+        let temp = [];
+        letters.map(x => {
+          temp.push({
+            value: x.writing_letter_name,
+            label: x.writing_letter_name,
+          });
+        })
+        setLetterList(temp);
+      }
+    }, [letters]);
+
 
     const onClickRow = (record) => {
 
       return {
         onClick: () => {
-          
           setRecord([
             {
-              field: 'name',
+              field: 'warning_letter',
               value: record.name
             },
             {
-              field: 'letter_type',
-              value: record.letter_type ? {label: record.letter_type, value: record.letter_type} : ''
+              field: 'warning_letter',
+              value: record.type ? {label: record.type, value: record.type} : ''
             },
           ]);
           setVisible({
@@ -98,7 +110,54 @@ export default (props) => {
     }
 
     const onFinish = async (val) => {
-      
+      setLoad(true)
+      const body = {
+        employee_id: id,
+        warning_letter: val.warning_letter.label
+      }
+
+      sendWarning(body).then(res => {
+        message.success('Warning letter send');
+        reset();
+        
+        setFormVisible(false);
+        setVisible({
+            set1: true,
+            set2: true,
+            set3: true,
+            set4: true,
+        });
+        setLoad(false);
+        updateApi();
+      }).catch(e => {
+        console.log(e);
+        setLoad(false);
+        const {response} = e;
+        message.error(response);
+      })
+    }
+
+    const onDelete = () => {
+      setLoad(true)
+      delWarning(recordData[0].value).then(res => {
+        message.success('Warning letter deleted');
+        reset();
+        setFormVisible(false);
+        setVisible({
+            set1: true,
+            set2: true,
+            set3: true,
+            set4: true,
+        });
+        setLoad(false);
+        updateApi();
+      }).catch(e => {
+        console.log(e);
+        setLoad(false);
+        const {response} = e;
+        message.error(response);
+      })
+
     }
 
     return (
@@ -110,7 +169,7 @@ export default (props) => {
                 title="Warning Letter History"
                 onRow={onClickRow}
                 ListCol={colName}
-                ListData={data?.employee_medical}
+                ListData={data?.warningLetter}
                 pagination={false}
                 extraBtn={'Issue Warning Letter'}
                 extraAction={addNew}
@@ -129,12 +188,19 @@ export default (props) => {
                 record={recordData}
                 onBack={onBack}
                 setValue={setValue}
+                mode={mode}
                 title={'Issue Warning Letter'}
                 fieldsList={insuranceFields}
                 backbtnTitle='Warning Letter History'
                 btnMain={{
+                  title: 'Proceed',
+                  class: 'red-btn',
+                  nomain: recordData != null,
+                }}
+                extrabtn={{
                     title: 'Delete',
-                    class: 'red-btn'
+                    class: 'red-btn',
+                    onAction: onDelete
                 }}
                 />
               </Form>

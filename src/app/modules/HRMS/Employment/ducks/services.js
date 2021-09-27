@@ -5,6 +5,14 @@ export const employAddApi = (payload) => {
     return axios.post(`${apiresource}/Employee`, payload);
 };
 
+export const sendWarning = (payload) => {
+  return axios.post(`${apiMethod}/hrms.api.add_employee_warning`, payload);
+};
+
+export const delWarning = (id) => {
+  return axios.post(`${apiresource}/EMP Warning Letter/${id}`);
+};
+
 export const employApi = (payload, id) => {
   if (id) {
     return axios.put(`${apiresource}/Employee/${id}`, payload);

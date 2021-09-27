@@ -134,3 +134,15 @@ export const getTeams = (page, limit, order, orderby) => {
     };
   };
 
+  export const getWarnLetter = () => {
+    return async (dispatch) => {
+      const {
+        data: { data },
+      } = await axios.get(`${apiresource}/Warning Letter?fields=["name","writing_letter_name"]`);
+      dispatch({
+        type: action_types.WARN_LETTERS,
+        data: data,
+      });
+    };
+  };
+  

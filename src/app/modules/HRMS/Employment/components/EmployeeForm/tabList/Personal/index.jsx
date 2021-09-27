@@ -10,9 +10,9 @@ import { employApi } from '../../../../ducks/services';
 
 export default (props) => {
 
-  const { mode, data, updateApi, id, setLoad, controlOut, errorsOut } = props;
+  const { mode, data, updateApi, id, setLoad, controlOut, errorsOut, setValueOut, getValuesOut } = props;
   const dispatch = useDispatch();
-  const { control: controlIn, errors: errorsIn, setValue: setValueIn, handleSubmit: handleSubmitIn } = useForm();
+  const { control: controlIn, errors: errorsIn, setValue: setValueIn, getValues: getValuesIn, handleSubmit: handleSubmitIn } = useForm();
 
   useEffect(() => {
     dispatch(getCountry());
@@ -238,10 +238,10 @@ export default (props) => {
     <>
     {mode == 'edit' ?
     <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-      <MainForm control={controlIn} errors={errorsIn} mode={mode}  />
+      <MainForm control={controlIn} errors={errorsIn} mode={mode} setValue={setValueIn} getValues={getValuesIn}  />
     </Form>
     : 
-    <MainForm control={controlOut} errors={errorsOut} mode={mode} />}
+    <MainForm control={controlOut} errors={errorsOut} mode={mode} setValue={setValueOut} getValues={getValuesOut} />}
     </>
   );
 };
