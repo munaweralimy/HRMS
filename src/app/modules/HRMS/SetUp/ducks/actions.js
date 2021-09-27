@@ -295,3 +295,15 @@ export const getSingleLeave = (id) => async (dispatch) => {
     data: data,
   });
 };
+
+export const getEmployeeList = (companyName) => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get(
+    `${apiresource}/Employee?filters=[["company","=","${companyName}"]]&fields=["name","employee_name"]`,
+  );
+  dispatch({
+    type: action_types.EMPLOYEE_LIST,
+    data: data,
+  });
+};

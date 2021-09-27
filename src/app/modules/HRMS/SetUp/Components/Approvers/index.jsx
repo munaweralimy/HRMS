@@ -3,7 +3,7 @@ import { Row, Col, message, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditApprover from './Components/AddEditApprover';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getApproversList } from '../../ducks/actions';
@@ -11,14 +11,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [apparoaverFileds, setApproverFields] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const approversList = useSelector((state) => state.setup.approversListData);
 
   useEffect(() => {
-    dispatch(getApproversList(page, limit, '', ''));
-  }, []);
+    if (!visible) dispatch(getApproversList(page, limit, '', ''));
+  }, [visible]);
 
   const ListCol = [
     {
@@ -45,23 +46,27 @@ export default (props) => {
       text: '+ New Approver',
       classes: 'green-btn',
       action: () => {
+        setApproverFields({ name: '', approver_name: '' });
         setVisible(true);
       },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: <AddEditApprover approver={apparoaverFileds} title="Add New Policy" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setApproverFields(record);
+        setVisible(true);
+      },
     };
   };
 

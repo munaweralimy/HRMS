@@ -3,22 +3,26 @@ import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditAsset from './Components/AddEditAssets';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getAssetsList } from '../../ducks/actions';
+import { getAssetsList, getEmployeeList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [assetField, setAssetField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const assetsList = useSelector((state) => state.setup.assetsListData);
 
   useEffect(() => {
-    dispatch(getAssetsList(page, limit, '', ''));
-  }, []);
+    if (!visible) {
+      dispatch(getAssetsList(page, limit, '', ''));
+    }
+    dispatch(getEmployeeList('Limkokwing University Creative Technology'));
+  }, [visible]);
 
   const ListCol = [
     {
@@ -66,23 +70,27 @@ export default (props) => {
       text: '+ New Asset',
       classes: 'green-btn',
       action: () => {
+        setAssetField({ name: '', status: '', assets_id: '', assets_name: '' });
         setVisible(true);
       },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: <AddEditAsset asset={assetField} title="Add New Asset" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setAssetField(record);
+        setVisible(true);
+      },
     };
   };
 

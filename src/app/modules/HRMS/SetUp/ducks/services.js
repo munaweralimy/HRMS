@@ -87,3 +87,13 @@ export const updateSingleRace = (id, payload) => {
 export const deleteSingleRace = (id) => {
   return axios.delete(`${apiresource}/Race/${id}`);
 };
+export const addSingleAsset = (payload) => {
+  return axios.post(`${apiresource}/HRMS Assets`, payload);
+};
+
+export const updateSingleAsset = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS Assets/${id}`, payload);
+};
+export const deleteSingleAsset = (id) => {
+  return axios.delete(`${apiresource}/HRMS Assets/${id}`);
+};

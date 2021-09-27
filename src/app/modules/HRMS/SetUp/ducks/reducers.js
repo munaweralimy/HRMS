@@ -20,6 +20,7 @@ const initialState = {
   assetsListData: [],
   requestFormsListData: [],
   singleLeave: {},
+  employeeList: [],
 };
 
 export default (state = initialState, action) => {
@@ -63,7 +64,8 @@ export default (state = initialState, action) => {
       return { ...state, requestFormsListData: data };
     case action_types.SINGLE_LEAVE:
       return { ...state, singleLeave: data };
-
+    case action_types.EMPLOYEE_LIST:
+      return { ...state, employeeList: data };
     default:
       return state;
   }
