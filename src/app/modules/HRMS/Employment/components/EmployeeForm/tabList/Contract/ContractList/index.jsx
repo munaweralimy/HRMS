@@ -87,6 +87,11 @@ export default (props) => {
               value: record?.name,
             },
             {
+              field: 'default_contract',
+              value: [record?.default_contract],
+            },
+            
+            {
               field: 'contract_type',
               value: record?.contract_type ? {label: record.contract_type,value: record.contract_type}: '' 
             },
@@ -235,6 +240,7 @@ export default (props) => {
       }
       let body = {
         party_name: id,
+        default_contract: val?.default_contract && val?.default_contract[0] == 1 ? 1 : 0, 
         contract_type: val?.contract_type?.value,
         employement_type: val?.employement_type?.value,
         start_date: val.start_date ? val.start_date : '',
@@ -246,7 +252,7 @@ export default (props) => {
         position_level: val?.position_level?.value,
         supervisor: val?.supervisor?.value,
         employee_role: empRole,
-        contract_attachment: contactPDF,
+        contract_attachment: contactPDF ? contactPDF.replace('http://cms2dev.limkokwing.net', '') : '',
         work_hour_template: val?.work_hour_template?.value != 'Custom Template' ? val?.work_hour_template?.value : '',    
         custom_work_hour_template: val?.work_hour_template?.value == 'Custom Template' ? 1 : 0,
         alternate_saturdays: val.alternate_saturdays ==  true ? 1 : 0,

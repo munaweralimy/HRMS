@@ -11,7 +11,7 @@ const { Title } = Typography;
 
 export default (props) => {
 
-    const {control, errors, mode } =  props;
+    const {control, errors, mode, setValue, getValues } =  props;
 
     const genderList = useSelector(state => state.global.genderData);
     const raceList = useSelector(state => state.global.raceData);
@@ -79,6 +79,16 @@ export default (props) => {
           dob: "",
           email: "",
           occupation: ""
+      }
+
+      const onSameAddress = (e) => {
+        if (e[0] == 1) {
+          setValue('current_address_1', getValues('permanent_address_1'));
+          setValue('current_state', getValues('permanent_state'));
+          setValue('current_post_code', getValues('permanent_post_code'));
+          setValue('current_country', getValues('permanent_country'));
+          setValue('current_city', getValues('permanent_city'));
+        }
       }
     
       const personalFields = [
@@ -281,7 +291,8 @@ export default (props) => {
           class: 'graycheckbox',
           twocol: true,
           reqmessage: '',
-          options: [{label: 'Same as permanent address', value: 1}]
+          options: [{label: 'Same as permanent address', value: 1}],
+          onChange: onSameAddress
         },
         {
           subheader: 'Permanent Address',
@@ -755,7 +766,6 @@ export default (props) => {
         },
     
       ];
-    
     
     return (
         <Row gutter={[24, 30]} align="bottom">

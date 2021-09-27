@@ -151,6 +151,18 @@ export default (props) => {
 
     const contractDetails = [
       {
+        name: 'default_contract',
+        label: '',
+        req: false,
+        placeholder: '',
+        type: 'checkbox',
+        class: 'graycheckbox',
+        twocol: false,
+        colWidth: '1 0 100%',
+        reqmessage: '',
+        options: [{label: 'Default Contract', value: 1}],
+      },
+      {
         type: 'select',
         name: 'contract_type',
         label: 'Contract Type',

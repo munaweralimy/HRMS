@@ -21,7 +21,7 @@ export default (props) => {
 
   const [ load, setLoad] = useState(false);
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
-  const { control, errors, setValue, reset, handleSubmit } = useForm();
+  const { control, errors, setValue, getValues, reset, handleSubmit } = useForm();
   const history = useHistory();
 
   const onFinish = async (val) => {
@@ -305,6 +305,7 @@ return (
                               errorsOut={errors}
                               resetOut={reset}
                               setValueOut={setValue}
+                              getValuesOut={getValues}
                               />
                             </Spin>
                           </Col>

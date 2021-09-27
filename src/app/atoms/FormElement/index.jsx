@@ -255,7 +255,7 @@ export const CheckboxGroup = (props) => {
             value={value}
             onChange={(e) => {
               onChange(e);
-              onChange(e);
+              props.onChange(e);
             }}
             className="w-100"
             options={option}

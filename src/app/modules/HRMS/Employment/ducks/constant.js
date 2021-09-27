@@ -10,3 +10,4 @@ export const HOUR_TEMPLATE = 'HOUR_TEMPLATE';
 export const TEMPLATE_LIST = 'TEMPLATE_LIST';
 export const EMPTY_TEAMS = 'EMPTY_TEAMS';
 export const EMPTY_STAFF = 'EMPTY_STAFF';
+export const WARN_LETTERS = 'WARN_LETTERS';
