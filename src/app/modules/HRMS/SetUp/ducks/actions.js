@@ -179,8 +179,8 @@ export const getRacesList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.race_pagination?page_number=${page}&limit=${limit}${
-        order ? `&order=${order}&orderby=creation` : ''
+      `${apiMethod}/hrms.api.race_pagination?page_number=${page}&limit=${limit}&orderby=creation${
+        order ? `&order=${order}` : ''
       }`,
     );
     dispatch({

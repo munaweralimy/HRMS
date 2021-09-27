@@ -3,24 +3,25 @@ import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditReligion from './Components/AddEditReligion';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getReligionsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [religionFiled, setReligionField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const religionsListData = useSelector((state) => state.setup.religionsListData);
 
   useEffect(() => {
-    dispatch(getReligionsList(page, limit, '', ''));
-  }, []);
+    if (!visible) {
+      dispatch(getReligionsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -49,38 +50,27 @@ export default (props) => {
       text: '+ New Religion',
       classes: 'green-btn',
       action: () => {
+        setReligionField({ name: '', religion: '' });
         setVisible(true);
       },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: <AddEditReligion religion={religionFiled} title="Add New Religion" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getReligionsList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  };
-
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setReligionField(record);
+        setVisible(true);
+      },
     };
   };
 

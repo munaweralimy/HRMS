@@ -66,3 +66,24 @@ export const updateSingleHoliday = (id, payload) => {
 export const deleteSingleHoliday = (id) => {
   return axios.delete(`${apiresource}/HRMS Holidays/${id}`);
 };
+
+export const addSingleReligion = (payload) => {
+  return axios.post(`${apiresource}/Religion`, payload);
+};
+
+export const updateSingleReligion = (id, payload) => {
+  return axios.put(`${apiresource}/Religion/${id}`, payload);
+};
+export const deleteSingleReligion = (id) => {
+  return axios.delete(`${apiresource}/Religion/${id}`);
+};
+export const addSingleRace = (payload) => {
+  return axios.post(`${apiresource}/Race`, payload);
+};
+
+export const updateSingleRace = (id, payload) => {
+  return axios.put(`${apiresource}/Race/${id}`, payload);
+};
+export const deleteSingleRace = (id) => {
+  return axios.delete(`${apiresource}/Race/${id}`);
+};
