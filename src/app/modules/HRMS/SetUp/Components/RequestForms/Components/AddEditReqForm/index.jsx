@@ -21,7 +21,11 @@ export default (props) => {
     <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
       <Row gutter={[24, 30]}>
         <Col span={24}>
-          <Title level={3}>{title}</Title>
+          <Row gutter={24} justify="center">
+            <Col>
+              <Title level={3}>{title}</Title>
+            </Col>
+          </Row>
         </Col>
         {formFields.map((item, idx) => (
           <Fragment key={idx}>

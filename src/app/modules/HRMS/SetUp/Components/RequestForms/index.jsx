@@ -72,7 +72,6 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    class: 'black-modal',
     content: <AddEditReqForm title="Add New Form" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),

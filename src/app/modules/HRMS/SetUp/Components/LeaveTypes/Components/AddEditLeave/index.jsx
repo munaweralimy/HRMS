@@ -75,9 +75,13 @@ export default (props) => {
 
   return (
     <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-      <Row gutter={[20, 30]}>
+      <Row gutter={[24, 30]}>
         <Col span={24}>
-          <Title level={3}>{title}</Title>
+          <Row gutter={24} justify="center">
+            <Col>
+              <Title level={3}>{title}</Title>
+            </Col>
+          </Row>
         </Col>
         {leaveFields.map((item, idx) => (
           <Fragment key={idx}>
@@ -92,12 +96,12 @@ export default (props) => {
               <Col span={24}>
                 <Space size={15} direction="vertical" className="w-100">
                   {fields.map((elem, index) => (
-                    <Row gutter={[20, 8]}>
+                    <Row gutter={[24, 8]}>
                       {item.child.map((x, i) => (
                         <Fragment key={i}>
                           {x?.subheader && (
                             <Col span={24}>
-                              <Row gutter={20} justify="space-between">
+                              <Row gutter={24} justify="space-between">
                                 <Col>
                                   <Text className="mb-0 c-gray">{`${x.subheader} ${index + 1}`}</Text>
                                 </Col>
@@ -139,9 +143,9 @@ export default (props) => {
           </Fragment>
         ))}
         <Col span={24}>
-          <Row gutter={[20, 4]} justify="start">
+          <Row gutter={[24, 4]} justify="start">
             <Col span={24}>
-              <Text className="mb-0 c-gray">Add Leave Statistics</Text>
+              <Text className="mb-0 c-gray">Add Leave Statistics?</Text>
             </Col>
             <Col span={24}>
               <InputRadio
@@ -149,7 +153,7 @@ export default (props) => {
                 control={control}
                 errors={errors}
                 options={
-                  <Row gutter={20}>
+                  <Row gutter={24}>
                     <Col span={24}>
                       <Radio value="Yes">Yes</Radio>
                     </Col>

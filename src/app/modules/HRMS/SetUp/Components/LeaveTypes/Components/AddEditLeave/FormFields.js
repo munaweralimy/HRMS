@@ -26,7 +26,7 @@ export const leaveFields = [
     placeholder: 'Select',
     type: 'select',
     twocol: false,
-    colWidth: '0 1 188px',
+    colWidth: '0 1 230px',
     reqmessage: 'Gender required',
     options: [
       { label: 'Male', value: 'Male' },
@@ -40,7 +40,7 @@ export const leaveFields = [
     req: true,
     placeholder: 'Select',
     type: 'select',
-    colWidth: '0 1 188px',
+    colWidth: '0 1 230px',
     twocol: false,
     reqmessage: 'Marital Status required',
     options: [
