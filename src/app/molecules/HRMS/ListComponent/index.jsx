@@ -18,7 +18,6 @@ export default (props) => {
     }, [parentUpdate]);
 
     const onClickRow = (record) => {
-        console.log('-----', linkKey, record)
         return {
             onClick: () => {
             history.push(`${link}${record[linkKey]}`)

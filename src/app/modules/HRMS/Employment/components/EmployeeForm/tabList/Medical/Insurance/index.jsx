@@ -183,11 +183,18 @@ export default (props) => {
     }
 
     const onFinish = async (val) => {
+
       setLoad(true);
       let doc = '';
+      let contactPDF = '';
       if (val.upload_document) {
-        let modifiedName = uniquiFileName(val.upload_document?.file?.originFileObj.name)
-        doc = await getSingleUpload(modifiedName, 'image',  val.upload_document?.file?.originFileObj, 'Employee', id);
+        if (val.upload_document.fileList[0].uid != '-1') {
+          let modifiedName = uniquiFileName(val.upload_document?.file?.originFileObj.name)
+          doc = await getSingleUpload(modifiedName, 'image',  val.upload_document?.file?.originFileObj, 'Employee', id);
+          contactPDF = doc?.file_url;
+        } else {
+          contactPDF = val.upload_document.fileList[0].url
+        }
       }
       let body = {};
       if (val.name) {
@@ -195,7 +202,7 @@ export default (props) => {
           insurance_type: val?.insurance_type.value,
           expiration_date: val?.expiration_date,
           insurance_no: val.insurance_no,
-          upload_document: doc.file_url || '',
+          upload_document: contactPDF ? contactPDF.replace('http://cms2dev.limkokwing.net', '') : '',
           description: val.description,
           status:"Active"
         }
@@ -206,7 +213,7 @@ export default (props) => {
               insurance_type: val?.insurance_type.value,
               expiration_date: val?.expiration_date,
               insurance_no: val.insurance_no,
-              upload_document: doc.file_url || '',
+              upload_document: contactPDF ? contactPDF.replace('http://cms2dev.limkokwing.net', '') : '',
               description: val.description,
               status:"Active"
           }

@@ -12,6 +12,11 @@ const initialState = {
     comments: [],
     institutions: [],
     educationType: [],
+    companies: [],
+    jobslist: [],
+    teams: [],
+    roles: [],
+    staff: [],
     menu: false
 };
 
@@ -44,6 +49,16 @@ export default (state = initialState, action) => {
             return {...state, institutions: data };
         case action_types.EDUCATION_TYPE:
             return {...state, educationType: data };
+        case action_types.COMPANY_LIST:
+            return { ...state, companies: data };
+        case action_types.JOBS_LIST:
+            return { ...state, jobslist: data };
+        case action_types.TEAM_LISTING:
+            return { ...state, teams: data };
+        case action_types.ROLE_LIST:
+            return { ...state, roles: data };
+        case action_types.SUPERVISOR_LIST:
+            return { ...state, staff: data };
             
         default:
             return state;

@@ -1,240 +1,321 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Card, Typography, Form, Space, Button, Image, Layout, message, Breadcrumb } from 'antd';
-import { useTranslate } from 'Translate';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import PlaceHolderImage from '../../../../../assets/img/scholarship-icon.svg';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Card, Typography, Button, Spin, Space, Form, message } from 'antd';
+import { LeftOutlined } from '@ant-design/icons';
 import HeadingChip from '../../../../molecules/HeadingChip';
-import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 import EmployeeForm from '../components/EmployeeForm';
-import { addEmployer, addContract } from '../ducks/services';
-import moment from 'moment';
+import { LoadingOutlined } from '@ant-design/icons';
+import SideDetails from '../../../../molecules/SideDetails';
+import SideDetailResponsive from '../../../../molecules/SideDetailResponsive';
+import { useMediaQuery } from 'react-responsive';
+import { useForm } from 'react-hook-form';
+import { BreakingPoint } from '../../../../../configs/constantData';
+import PlaceHolderImage from '../../../../../assets/img/scholarship-icon.svg';
 import { getSingleUpload, uniquiFileName } from '../../../../../features/utility';
+import { employApi, employAddApi, contractApi } from '../ducks/services';
 
-const AddEmployment = () => {
-  const { control, errors, getValues, setValue, handleSubmit, reset } = useForm();
+const { Title } = Typography;
+const antIcon = <LoadingOutlined spin />;
+
+export default (props) => {
+
+  const [ load, setLoad] = useState(false);
+  const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
+  const { control, errors, setValue, getValues, reset, handleSubmit } = useForm();
   const history = useHistory();
-  const dispatch = useDispatch();
-  const i18n = useTranslate();
-  const { t } = i18n;
-  const { Text } = Typography;
 
-  const uploadFiles = async (fileName, code) => {
-    let modifiedName = uniquiFileName(fileName.name);
-    let res = await getSingleUpload(modifiedName, 'image', fileName, 'Employee', code);
-    return res.file_url;
-  };
+  const onFinish = async (val) => {
+    console.log('value', val);
+    setLoad(true);
 
-  const finalUpload = async (values, code) => {
-    console.log({ code });
-    let {
-      current_address,
-      current_state,
-      current_post_code,
-      current_country,
-      current_city,
-      same_address,
-      permanent_address_1,
-      permanent_state,
-      permanent_post_code,
-      permanent_country,
-      permanent_city,
-      insurance_type,
-      expiration_date,
-      insurance_no,
-      upload_document,
-      descritpion,
-      contract_type,
-      employment_type,
-      start_date,
-      end_date,
-      endorser,
-      staff_category,
-      company,
-      job_title,
-      position_level,
-      supervisor,
-      contract_attachment,
-      work_hour_template,
-      program_requirements,
-      employee_role,
-      ...removeFirstFileds
-    } = values;
-    let updatePayload = {
-      ...removeFirstFileds,
-      salutation: values.salutation.label,
-      image: await uploadFiles(values.image?.file?.originFileObj, code),
-      spouse_salutation: values.spouse_salutation.label,
-      date_of_birth: values.date_of_birth ? moment(values.date_of_birth).format('YYYY-MM-DD') : '',
-      spouse_dob: values.spouse_dob ? moment(values.spouse_dob).format('YYYY-MM-DD') : '',
-      dob: values.dob ? moment(values.dob).format('YYYY-MM-DD') : '',
-      date_of_issue: values.date_of_issue ? moment(values.date_of_issue).format('YYYY-MM-DD') : '',
-      valid_upto: values.valid_upto ? moment(values.valid_upto).format('YYYY-MM-DD') : '',
-      emp_pass_expiration_date: values.emp_pass_expiration_date
-        ? moment(values.emp_pass_expiration_date).format('YYYY-MM-DD')
-        : '',
-      employee_children:
-        values.employee_children &&
-        values.employee_children.map((value) => ({
-          ...value,
-          gender: value.gender.label,
-          salutation: value.salutation.label,
-          dob: value.dob ? moment(value.dob).format('YYYY-MM-DD') : '',
-        })),
-      education:
-        values.education &&
-        (await Promise.all(
-          values.education.map(async (value) => ({
-            ...value,
-            year_of_passing: value.year_of_passing ? moment(value.year_of_passing).format('YYYY-MM-DD') : '',
-            from_date: value.from_date ? moment(value.from_date).format('YYYY-MM-DD') : '',
-            to_date: value.to_date ? moment(value.to_date).format('YYYY-MM-DD') : '',
-            attach_transcript: await uploadFiles(value.attach_transcript?.file?.originFileObj, code),
-          })),
-        )),
-      external_work_history:
-        values.external_work_history &&
-        values.external_work_history.map((value) => ({
-          ...value,
-          position: value.position.label,
-          from_date: value.from_date ? moment(value.from_date).format('YYYY-MM-DD') : '',
-          to_date: value.to_date ? moment(value.to_date).format('YYYY-MM-DD') : '',
-        })),
-      gender: values.gender.label,
-      marital_status: values.marital_status.label,
-      nationality: values.nationality.label,
-      race: values.race.label,
-      religious: values.religious.label,
-      spouse_martial_status: values.spouse_martial_status.label,
-      spouse_race: values.spouse_race.label,
-      spouse_religious: values.spouse_religious.label,
-      emergency_salutation: values.emergency_salutation.label,
-      current_permanent_address: [
-        {
-          current_address: values.current_address,
-          current_state: values.current_state,
-          current_post_code: values.current_post_code,
-          current_country: values.current_country.label,
-          current_city: values.current_city,
-          permanent_address_1: values.permanent_address_1,
-          permanent_state: values.permanent_state,
-          permanent_post_code: values.permanent_post_code,
-          permanent_country: values.permanent_country.label,
-          permanent_city: values.permanent_city,
-        },
-      ],
-      employee_medical: [
-        {
-          insurance_type: values.insurance_type,
-          expiration_date: values.expiration_date,
-          insurance_no: values.insurance_no,
-          upload_document: await uploadFiles(values.upload_document?.file?.originFileObj, code),
-          descritpion: values.descritpion,
-        },
-      ],
-    };
-    return updatePayload;
-  };
-  const contractUpload = async (values, code) => {
-    let contractFields = {
-      contract_type: values.contract_type,
-      employment_type: values.employment_type,
-      start_date: values.start_date ? moment(values.start_date).format('YYYY-MM-DD') : '',
-      end_date: values.end_date ? moment(values.end_date).format('YYYY-MM-DD') : '',
-      endorser: values.endorser,
-      staff_category: values.staff_category,
-      company: values.company,
-      job_title: values.job_title,
-      position_level: values.position_level,
-      supervisor: values.supervisor,
-      contract_attachment: await uploadFiles(values.contract_attachment?.file?.originFileObj, code),
-      work_hour_template: values.work_hour_template,
-      employee_role: values.employee_role && values.employee_role.map((value) => ({ role: value.label })),
-      program_requirements:
-        values.program_requirements &&
-        values.program_requirements.map((value) => ({
-          ...value,
-          day: value.day,
-          work_type: value.work_type.label,
-          time: moment(value.time).format('h:mm a'),
-          total_hours: value.total_hours.label,
-        })),
-    };
-    return contractFields;
-  };
-  const onSubmit = async (values) => {
-    console.log({ values });
-    const initialFileds = {
-      salutation: values.salutation.label,
-      first_name: values.first_name,
-    };
-    contractUpload(values);
+    let profileImg = '';
+    let educate = [];
+    let children = [];
+    let work = [];
+    let emergency = [];
 
-    addEmployer(initialFileds).then(async (response) => {
-      console.log({ response });
-      let finalPayload = await finalUpload(values, response?.data?.data.name);
-      addEmployer(finalPayload).then(async (res) => {
-        let contractUploadData = await contractUpload(values, response?.data?.data.name);
-        addContract(contractUploadData).then((response3) => {
-          console.log({ response3 });
-        });
-      });
-    });
+    if (val.external_work_history && val.external_work_history.length > 0) {
+      val.external_work_history.map(x => {
+        work.push({
+          company_name: x.company_name,
+          description: x.description,
+          designation: x.designation.value,
+          from_date: x.from_date,
+          to_date: x.to_date
 
-    // addEmployer(updatePayload).then((response) => {
-    //   console.log({ response });
-    // });
-  };
+        })
+      })
+    }
 
-  return (
-    <Fragment>
-      <Breadcrumb separator=">" className="mb-1">
-        <Breadcrumb.Item href="/hrms/employment">Employment</Breadcrumb.Item>
-        <Breadcrumb.Item>Employment Details</Breadcrumb.Item>
-      </Breadcrumb>
-      <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmit)}>
-        <Row gutter={[30, 24]}>
+    if (val.emergency_contact && val.emergency_contact.length > 0) {
+      val.emergency_contact.map(x => {
+        emergency.push({
+          title: x.title.value,
+          relation_name: x.relation_name,
+          relation: x.relation.value,
+          email: x.email,
+          phone: x.phone
+        })
+      })
+    }
+
+    if (val.employee_children && val.employee_children.length > 0) {
+      val.employee_children.map(x => {
+        children.push({
+          salutation: x.salutation.value,
+          dob: x.dob,
+          email: x.email,
+          full_name: x.full_name,
+          gender: x.gender.value,
+          occupation: x.occupation,
+        })
+      })
+    }
+
+    const body = {
+        //personal
+        salutation: val.salutation?.value,
+        first_name: val.first_name,
+        image: "",
+        gender: val.gender ? val.gender.value : '',
+        marital_status: val.marital_status?.value,
+        nationality: val.nationality?.value,
+        identification_type: val.identification_type?.value,
+        identification_no: val.identification_no,
+        date_of_birth: val.date_of_birth,
+        race: val.race?.value,
+        religious: val.religious?.value,
+        primary_phone_no: val.primary_phone_no,
+        secondary_phone_no: val.secondary_phone_no,
+        primary_email: val.primary_email,
+        secondary_email: val.secondary_email,
+
+        current_permanent_address: [
+          {
+              current_address_1: val.current_address_1,
+              current_city: val.current_city,
+              current_post_code: val.current_post_code,
+              current_country: val.current_country.value,
+              permanent_state: val.current_state,
+              current_address: 1
+          },
+          {
+              current_address_1: val.permanent_address_1,
+              current_city: val.permanent_city,
+              current_post_code: val.permanent_post_code,
+              current_country: val.permanent_country.value,
+              permanent_state: val.permanent_state,
+              permanent_address: 1
+          }
+        ],
+
+        spouse_salutation: val.spouse_salutation?.value,
+        spouse_name: val.spouse_name,
+        spouse_gender: val.spouse_gender?.value,
+        spouse_martial_status: val.spouse_martial_status?.value,
+        spouse_nationality: val.spouse_nationality?.value,
+        spouse_identification_type: val.spouse_identification_type?.value,
+        spouse_identification_no: val.spouse_identification_no,
+        spouse_dob: val.spouse_dob, 
+        spouse_race: val.spouse_race?.value,
+        spouse_religious: val.spouse_religious?.value,
+        spouse_employee_name: val.spouse_employee_name,
+        spouse_employee_email: val.spouse_employee_email?.value,
+        spouse_phone_no: val.spouse_phone_no,
+        spouse_income_tax_no: val.spouse_income_tax_no,
+
+        emergency_contact: emergency,
+        employee_children: children,
+        education: [],
+        external_work_history: work,
+
+      // passport
+        passport_number: val.passport_number,
+        passport_status: val.passport_status.value,
+        date_of_issue: val.date_of_issue,
+        valid_upto: val.valid_upto,
+        employment_pass_no: val.employment_pass_no,
+        emp_pass_expiration_date: val.emp_pass_expiration_date != 'Invalid date' ? val.emp_pass_expiration_date : '',
+
+      // medical
+        blood_group: val.blood_group,
+        height: val.height,
+        weight: val.weight,
+        health_details: val.health_details
+    }
+    await employAddApi(body).then(async (res) => {
+      console.log('res', res);
+      let id = res.data.data.name;      
+      if (val.image) {
+          let modifiedName = uniquiFileName(val.image?.file?.originFileObj.name)
+          let res   = await getSingleUpload(modifiedName, 'image',  val.image?.file?.originFileObj, 'Employee', id);
+          profileImg = res?.file_url;
+      }
+      if (val.education && val.education.length > 0) {
+        await Promise.all(val.education.map(async (x) => {
+          let url = '';
+          if (x.transcript) {
+              let modifiedName = uniquiFileName(x.transcript?.file?.originFileObj.name)
+              let res = await getSingleUpload(modifiedName, 'image',  x.transcript?.file?.originFileObj, 'Employee', id);
+              url = res?.file_url
+          }
+
+          educate.push({
+            cgpa: x.cgpa,
+            country: x.country?.value,
+            fields: x.fields.value,
+            year_of_passing: x.year_of_passing,
+            from_date: x.from_date,
+            level: x.level?.value,
+            school_univ: x.school_univ?.value,
+            to_date: x.to_date,
+            transcript: url ? url.replace('http://cms2dev.limkokwing.net', '') : '',
+          })
+        }));
+      }
+      let body2 = {
+        image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",
+        education: educate,
+      }
+      employApi(body2, id);
+
+      let empRole = [];
+      let workhours = [];
+      let contactPDF = '';
+
+      if (val?.work_hour_template?.value == "Custom Template") {
+        val.work_hour_template_detail.map(x => {
+          workhours.push({
+            day: x.day,
+            work_hour_type: x.work_hour_type.value,
+            start_time: `${x.time_hour}:${x.time_min}:00`,
+            time_type: x.time_type.value,
+            work_hours: x.work_hours
+          })
+        })
+      }
+
+      if (val.employee_role.length > 0) {
+        val.employee_role.map(x => {
+          empRole.push({
+            role_name: x.value
+          })
+        })
+      }
+      if (val.contract_attachment) {
+          let modifiedName = uniquiFileName(val.contract_attachment?.file?.originFileObj.name)
+          let res = await getSingleUpload(modifiedName, 'image',  val.contract_attachment?.file?.originFileObj, 'Employee', id);
+          contactPDF = res?.file_url;
+      }
+      let body3 = {
+        party_name: id,
+        default_contract: 1,
+        contract_type: val?.contract_type?.value,
+        employement_type: val?.employement_type?.value,
+        start_date: val.start_date ? val.start_date : '',
+        end_date: val.end_date ? val.end_date : "",
+        staff_category: val?.staff_category?.value,
+        company: val?.company?.value,
+        team: val?.team?.value,
+        job_title: val?.job_title?.value,
+        position_level: val?.position_level?.value,
+        supervisor: val?.supervisor?.value,
+        employee_role: empRole,
+        contract_attachment: contactPDF,
+        work_hour_template: val?.work_hour_template?.value != 'Custom Template' ? val?.work_hour_template?.value : '',    
+        custom_work_hour_template: val?.work_hour_template?.value == 'Custom Template' ? 1 : 0,
+        alternate_saturdays: val.alternate_saturdays ==  true ? 1 : 0,
+        group: val.alternate_saturdays ==  true ? val?.group.value : ''
+      }
+      if (workhours.length > 0) {
+        body['work_hour_template_detail'] = workhours;
+      }
+
+      contractApi(body3, null).then(res => {
+        setLoad(false);
+        message.success('Detaila Successfully Saved')
+        setTimeout(() =>  history.push('/employment'),2000)
+      }).catch(e => {
+        console.log(e);
+        setLoad(false);
+        message.error('Something went wrong')
+      })
+
+    }).catch(e => {
+      console.log(e);
+      setLoad(false);
+      message.error(e);
+    })
+
+  }
+
+  const sideData = {
+    image: PlaceHolderImage,
+    text: "Please fill up the details on the right. Once finished, click 'Save Draft' or 'Add Faculty' to proceed."
+}
+
+  const bottomList = [
+      {
+          title: 'Save Draft',
+          type: 'submit',
+          class: 'black-btn',
+      },
+      {
+          title: 'Add Employee',
+          type: 'submit',
+          class: 'green-btn',
+      }
+  ]
+  
+
+return (
+      <Form layout='vertical' onFinish={handleSubmit(onFinish)} scrollToFirstError>
+        <Row gutter={[20, 30]}>
           <Col span={24}>
-            <HeadingChip title="Add New Employee" />
+            <Space direction="vertical" size={18}>
+              <Button type="link" className="c-gray-linkbtn p-0" onClick={() => history.goBack()} htmlType="button">
+                <LeftOutlined /> Back
+              </Button>
+              <HeadingChip title="Add Employee" />
+            </Space>
           </Col>
-          <Col span={8}>
-            <Card bordered={false} className="uni-card side-panel">
-              <Layout className="empty-card">
-                <Space size={50} direction="vertical" className="text-center pt-1">
-                  <Image src={PlaceHolderImage} preview={false} />
-                  <Text>
-                    Please fill up the details on the right. Once finished, click 'Save Draft' or 'Add Employee' to
-                    proceed.
-                  </Text>
-                </Space>
-                <Space size={10} direction="vertical" className="w-100">
-                  <Button size="large" type="primary" htmlType="submit" className="w-100 black-btn">
-                    Save Draft
-                  </Button>
-                  <Button size="large" type="primary" htmlType="submit" className="w-100 green-btn">
-                    Add Employee
-                  </Button>
-                </Space>
-              </Layout>
-            </Card>
-          </Col>
-          <Col span={16}>
-            <Card bordered={false} className="scrolling-card">
-              <EmployeeForm
-                control={control}
-                errors={errors}
-                // setValue={setValue}
-                mode="add"
-                // deleted={deleted}
-                // setDeleted={setDeleted}
-                // t={t}
-              />
-            </Card>
-          </Col>
+          <Col span={24}>
+              <div className='twocol-3070'>
+                  <div className='side-detail'>
+                      {isHDScreen ?
+                      <SideDetails data={sideData} cardType='empty' type="button" bottom={bottomList} />
+                      :
+                      <SideDetailResponsive data={sideData} cardType='empty' type='button' bottom={bottomList} />
+                      }
+                  </div>
+                  <div className='side-form'>
+                    <Card bordered={false} className={`transparent-card ${isHDScreen ? 'scrolling-card' : ''}`}>
+                      <Card bordered={false} className="uni-card h-auto w-100">
+                        <Row gutter={[20, 30]}>
+                          <Col flex='auto'><Title level={4} className='mb-0'>Employment</Title></Col>
+                          <Col>
+                            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push('/requests')}>Categories</Button>
+                          </Col>
+                          <Col span={24}>
+                            <Spin indicator={antIcon} size="large" spinning={load}>
+                              <EmployeeForm 
+                              mode='add' 
+                              setLoad={setLoad}
+                              controlOut={control}
+                              errorsOut={errors}
+                              resetOut={reset}
+                              setValueOut={setValue}
+                              getValuesOut={getValues}
+                              />
+                            </Spin>
+                          </Col>
+                        </Row>
+                      </Card>
+                    </Card>
+                  </div>
+                </div>
+            </Col>
         </Row>
       </Form>
-    </Fragment>
   );
 };
-
-export default AddEmployment;

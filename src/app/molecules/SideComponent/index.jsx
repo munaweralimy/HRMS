@@ -1,7 +1,8 @@
 import React from 'react';
-import { Col, Typography, Space, Avatar, Divider, Tag, Radio } from 'antd';
+import { Col, Typography, Space, Avatar, Divider, Tag, Radio, Tooltip } from 'antd';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../configs/constantData';
+import { baseUrl } from '../../../configs/constants';
 
 const { Title, Text } = Typography;
 
@@ -15,6 +16,21 @@ export default (props) => {
         {item.type == 'image' && (
             <Col span={24} align='center'>
               <Avatar size={isHDScreen ? item.size : 85} src={item.url} className="mb-10PX" />
+            </Col>
+          )}
+
+          {item.type == 'users' && (
+            <Col span={24}>
+              <Avatar.Group
+                size={isHDScreen ? item.size : 50}
+                className='member-icon'
+                maxCount={item?.count}
+                maxStyle={{ color: '#BEBEBE', backgroundColor: '#0E0E0E' }}
+              >
+                {item?.value.map((x,i) => (
+                  <Avatar size={isHDScreen ? item.size : 50} src={x.image ? `${baseUrl}${x.image}` : ''} />
+                ))}
+              </Avatar.Group>
             </Col>
           )}
 

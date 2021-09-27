@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs } from 'antd';
 import * as TabCards from './tabList';
 
@@ -25,8 +25,13 @@ const tabs = [
 
 export default (props) => {
 
+  const [activeTab, setActiveTab] = useState("1");
+  const onTabChange = (e) => {
+    setActiveTab(e);
+  }
+
   return (
-      <Tabs defaultActiveKey="1" type="card" className="custom-tabs">
+      <Tabs activeKey={activeTab} onChange={onTabChange} type="card" className="custom-tabs">
         {tabs.map((item, index) => {
           const Cardi = TabCards[item.Comp];
           return (
