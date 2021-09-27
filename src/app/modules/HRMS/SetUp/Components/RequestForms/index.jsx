@@ -3,13 +3,14 @@ import { Row, Col, Button, Switch } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditReqForm from './Components/AddEditReqForm';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getRequestFormsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
+  const [formFields, setFormFields] = useState('');
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -17,8 +18,11 @@ export default (props) => {
   const requestFormsList = useSelector((state) => state.setup.requestFormsListData);
 
   useEffect(() => {
-    dispatch(getRequestFormsList(page, limit, '', ''));
-  }, []);
+    if (!visible) {
+      dispatch(getRequestFormsList(page, limit, '', ''));
+    }
+  }, [visible]);
+
   const ListCol = [
     {
       title: 'Form Name',
@@ -59,31 +63,33 @@ export default (props) => {
       text: '+ New Form',
       classes: 'green-btn',
       action: () => {
+        setFormFields({ form_name: '', name: '' });
         setVisible(true);
       },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: <AddEditReqForm title="Add New Form" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setFormFields(record);
+        setVisible(true);
+      },
     };
   };
-
   const onSearch = (value) => {
     console.log('check values', value);
   };
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
