@@ -4,7 +4,7 @@ import HeadingChip from '../../../../../molecules/HeadingChip';
 import { getMyLeaves, getMyAvailableLeaves  } from '../../ducks/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import ListCard from '../../../../../molecules/ListCard';
-import AddNewTimeSheet from './Component/AddNewTimeSheet';
+import ApplyLeave from './Component/ApplyLeave';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../../../../configs/constantData';
 import DetailsComponent from '../../../../../molecules/HRMS/DetailsComponent';
@@ -27,7 +27,9 @@ export default (props) => {
   const [limit, setLimit] = useState(10);
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
-  
+  const fullName = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].full_name;
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+
   const ListCol = [
     {
       title: 'Leave Type',
@@ -111,9 +113,9 @@ export default (props) => {
         <Tabs activeKey={activeKey} type="card" className='custom-tabs' onChange={(e) => setActiveKey(e)}>
           <TabPane key={'1'} tab='Leave Application'>
             {!rowDetails && !addVisible &&
-              <LeaveApplication id={id} updateApi={updateTimesheet} data={myTaskData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
+              <LeaveApplication id={id} updateApi={updateTimesheet} data={myTaskData} />
             }
-            {addVisible && <AddNewTimeSheet id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
+            {addVisible && <ApplyLeave id={id} fullName={fullName} company={company} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
             {rowDetails && (
               <DetailsComponent
                 setRecord={setRecord}
