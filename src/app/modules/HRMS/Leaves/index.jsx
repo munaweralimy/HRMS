@@ -7,8 +7,7 @@ import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, 
-        getLeaveStatisticListAnnual, getLeaveStatisticListReplacement, getLeaveStatisticListUnpaid,
-        getLeaveStatisticBar
+        getLeaveStatisticList, getLeaveStatisticBar
 } from './ducks/actions';
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
@@ -196,23 +195,13 @@ export default (props) => {
   const teamTaskDataList = useSelector(state => state.leaves.teamTaskDataWithStatus);
 
   const leaveStatAnnualList = useSelector(state => state.leaves.leaveStatAnnualList);
-  const leaveStatReplacementList = useSelector(state => state.leaves.leaveStatReplacementList);
-  const leaveStatUnpaidList = useSelector(state => state.leaves.leaveStatUnpaidList);
   const leaveStatisticsBar = useSelector(state => state.leaves.leaveStatisticsBar);
 
   useEffect(() => {
-    dispatch(getLeaveStatisticListReplacement());
-    dispatch(getLeaveStatisticListUnpaid());
     dispatch(getLeaveStatisticBar());
   }, [])
 
-  // console.log('leaveStatAnnualList', leaveStatAnnualList)
-  // console.log('leaveStatReplacementList', leaveStatReplacementList)
-  // console.log('leaveStatUnpaidList', leaveStatUnpaidList)
-  console.log('leaveStatisticsBar', leaveStatisticsBar)
-
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
-    // dispatch(emptyOverall());
     if (type == 'list') {
       dispatch(getOverallTasksWithStatus(filter, page, limit, sort,'HR-EMP-00002', sortby))
     } else {
@@ -227,7 +216,6 @@ export default (props) => {
       dispatch(getTeamTasks('Development', page, limit, sort, sortby));
     }
   }
-
 
   const leavesPanelHeader = (item,index) => (
     <>
@@ -423,10 +411,8 @@ export default (props) => {
   }
 
   function callback(key) {
-    dispatch(getLeaveStatisticListAnnual(leaveStatisticsBar[key]?.leave_type));
+    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type));
   }
-
-  console.log('leaveStatAnnualList', leaveStatAnnualList)
 
   const ListCol = [
     {
@@ -471,57 +457,6 @@ export default (props) => {
       },
     },
   ];
-
-  const ListData = [
-    {
-      name: 'Walter Gibson',
-      job_title: 'Senior Graphic Designer',
-      company: 'Center for Content Creation',
-      team: 'Development',
-      contract: 'Permanent',
-      leaves_taken: '93%',
-    },
-    {
-      name: 'Walter Gibson',
-      job_title: 'Senior Graphic Designer',
-      company: 'Center for Content Creation',
-      team: 'Development',
-      contract: 'Permanent',
-      leaves_taken: '93%',
-    },
-    {
-      name: 'Walter Gibson',
-      job_title: 'Senior Graphic Designer',
-      company: 'Center for Content Creation',
-      team: 'Development',
-      contract: 'Permanent',
-      leaves_taken: '93%',
-    },
-    {
-      name: 'Walter Gibson',
-      job_title: 'Senior Graphic Designer',
-      company: 'Center for Content Creation',
-      team: 'Development',
-      contract: 'Permanent',
-      leaves_taken: '93%',
-    },
-    {
-      name: 'Walter Gibson',
-      job_title: 'Senior Graphic Designer',
-      company: 'Center for Content Creation',
-      team: 'Development',
-      contract: 'Permanent',
-      leaves_taken: '93%',
-    },
-    {
-      name: 'Walter Gibson',
-      job_title: 'Senior Graphic Designer',
-      company: 'Center for Content Creation',
-      team: 'Development',
-      contract: 'Permanent',
-      leaves_taken: '93%',
-    },
-  ]
 
   return (
     <Row gutter={[24, 30]}>
