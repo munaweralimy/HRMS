@@ -3,7 +3,7 @@ import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditTeam from './Components/AddEditTeam';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getTeamList } from '../../ducks/actions';
@@ -13,6 +13,7 @@ import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [teamFiled, setTeamField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ export default (props) => {
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links" onClick={() => {}}>
           <CloseCircleFilled />
         </Button>
       ),
@@ -67,6 +68,7 @@ export default (props) => {
       text: '+ New Team',
       classes: 'green-btn',
       action: () => {
+        setTeamField({ company: '', name: '' });
         setVisible(true);
       },
     },
@@ -76,29 +78,17 @@ export default (props) => {
     closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
-    width: 536,
+    content: <AddEditTeam team={teamFiled} title="Add New Team" onClose={() => setVisible(false)} />,
+    width: 900,
     onCancel: () => setVisible(false),
-  };
-
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getTeamList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setTeamField(record);
+        setVisible(true);
+      },
     };
   };
 
