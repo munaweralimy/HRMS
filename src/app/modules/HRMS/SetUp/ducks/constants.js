@@ -18,3 +18,4 @@ export const ASSETS_LIST = 'ASSETS_LIST';
 export const REQUEST_FORMS_LIST = 'REQUEST_FORMS_LIST';
 export const SINGLE_LEAVE = 'SINGLE_LEAVE';
 export const EMPLOYEE_LIST = 'EMPLOYEE_LIST';
+export const LEAVE_TYPE = 'LEAVE_TYPE';

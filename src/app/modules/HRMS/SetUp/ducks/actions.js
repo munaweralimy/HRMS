@@ -307,3 +307,13 @@ export const getEmployeeList = (companyName) => async (dispatch) => {
     data: data,
   });
 };
+
+export const getLeaveList = () => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get('http://cms2dev.limkokwing.net/api/resource/HRMS Leave Type');
+  dispatch({
+    type: action_types.LEAVE_TYPE,
+    data: data,
+  });
+};

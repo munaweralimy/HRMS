@@ -97,3 +97,13 @@ export const updateSingleAsset = (id, payload) => {
 export const deleteSingleAsset = (id) => {
   return axios.delete(`${apiresource}/HRMS Assets/${id}`);
 };
+export const addSingleLeaveEntitlement = (payload) => {
+  return axios.post(`${apiresource}/HRMS Leave Entitlement`, payload);
+};
+
+export const updateSingleLeaveEntitlement = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS Leave Entitlement/${id}`, payload);
+};
+export const deleteSingleLeaveEntitlement = (id) => {
+  return axios.delete(`${apiresource}/HRMS Leave Entitlement/${id}`);
+};

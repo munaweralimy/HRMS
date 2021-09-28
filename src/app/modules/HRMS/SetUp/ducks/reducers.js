@@ -21,6 +21,7 @@ const initialState = {
   requestFormsListData: [],
   singleLeave: {},
   employeeList: [],
+  leaveList: [],
 };
 
 export default (state = initialState, action) => {
@@ -66,6 +67,8 @@ export default (state = initialState, action) => {
       return { ...state, singleLeave: data };
     case action_types.EMPLOYEE_LIST:
       return { ...state, employeeList: data };
+    case action_types.LEAVE_TYPE:
+      return { ...state, leaveList: data };
     default:
       return state;
   }

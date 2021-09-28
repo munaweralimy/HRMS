@@ -1,41 +1,31 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, message, Pagination, Button } from 'antd';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditEntitlmentLeave from './Components/AddEditLeaveEntitlement';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getLeaveEntitlementsList } from '../../ducks/actions';
+import { getLeaveEntitlementsList, getLeaveList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [entitlementLeave, setEntitlementLeave] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const leaveEntitlementsListData = useSelector((state) => state.setup.leaveEntitlementsListData);
 
   useEffect(() => {
-    dispatch(getLeaveEntitlementsList(page, limit, '', ''));
-  }, []);
-
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getLeaveEntitlementsList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
+    if (!visible) {
+      dispatch(getLeaveEntitlementsList(page, limit, '', ''));
     }
-  };
+  }, [visible]);
+
+  useEffect(() => {
+    dispatch(getLeaveList());
+  }, []);
 
   const ListCol = [
     {
@@ -146,23 +136,32 @@ export default (props) => {
       text: '+ New Entitlement',
       classes: 'green-btn',
       action: () => {
+        setEntitlementLeave({ name: '', leave_entitlement_name: '' });
         setVisible(true);
       },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
-    width: 536,
+    content: (
+      <AddEditEntitlmentLeave
+        leaveEtitlement={entitlementLeave}
+        title={`${entitlementLeave.name ? 'Edit' : 'Add'} Leave Entitlement`}
+        onClose={() => setVisible(false)}
+      />
+    ),
+    width: '800px',
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setEntitlementLeave(record);
+        setVisible(true);
+      },
     };
   };
 
