@@ -4,9 +4,8 @@ import StaffDetails from '../../StaffDetails';
 import { getAdvancementdetails, emptyStaffDetails }  from '../../Advancement/dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { LeftOutlined } from '@ant-design/icons';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import EmployeeForm from '../components/EmployeeForm';
-import {emptyStaff, getEmployeeDetail} from '../ducks/action';
 import { LoadingOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
@@ -15,23 +14,19 @@ const antIcon = <LoadingOutlined spin />;
 export default (props) => {
 
   const {id} = useParams();
-  const location = useLocation();
   const dispatch = useDispatch();
   const [ load, setLoad] = useState(false);
   const data = useSelector(state => state.advancement.advData);
-  const details = useSelector(state => state.employment.empDetails);
+  const details = useSelector(state => state.requests.empRequests);
 
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
-    dispatch(getEmployeeDetail(id));
     return () => {
-      dispatch(emptyStaff())
       dispatch(emptyStaffDetails())
     }
   }, []);
 
   const updateApi = () => {
-    dispatch(getEmployeeDetail(id));
   }
 
 return (
@@ -45,7 +40,7 @@ return (
           </Col>
           <Col span={24}>
             <Spin indicator={antIcon} size="large" spinning={load}>
-              <EmployeeForm mode='edit' data={details} updateApi={updateApi} id={id} setLoad={setLoad} dTab={location?.state} />
+              <EmployeeForm mode='edit' data={details} updateApi={updateApi} id={id} setLoad={setLoad} />
             </Spin>
           </Col>
         </Row>

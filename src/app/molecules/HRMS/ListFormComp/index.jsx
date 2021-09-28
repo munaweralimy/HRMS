@@ -8,7 +8,7 @@ const { Title } = Typography;
 
 export default (props) => {
 
-    const { control, errors, title, fieldsList, record, backbtnTitle, extrabtn, setValue, btnMain, onBack, mode, noButton } = props;
+    const { control, errors, title, fieldsList, record, backbtnTitle, extrabtn, setValue, btnMain, onBack, mode, noButton, extraComp } = props;
 
     useEffect(() => {
         if(record) {
@@ -51,6 +51,7 @@ export default (props) => {
                 }
                 </Fragment>
             ))}
+            {extraComp && record != null && <Col span={24}>{extraComp}</Col>}
             {noButton != true && 
             <Col span={24}>
             <Row gutter={20} justify='end'>

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import axios from '../../../../../../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../../../../../../configs/constants';
 import moment from 'moment';
+import Activations from '../Activations';
 
   const custom = [
     {
@@ -77,9 +78,10 @@ import moment from 'moment';
 
 export default (props) => {
 
-    const { control, errors, setValue, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh, temping } = props;
+    const { control, errors, setValue, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh, id } = props;
     const [noEdit, setNoedit] = useState(true);
     const [templateList, setTemplateList] = useState([]);
+    const [activeData, setActiveData] = useState();
     
     const jobList = useSelector(state => state.global.jobslist);
     const companyList = useSelector(state => state.global.companies);
@@ -413,6 +415,7 @@ export default (props) => {
         title={'Employment Contract'}
         fieldsList={contractDetails}
         backbtnTitle='Employment History'
+        extraComp={<Activations id={id} data={activeData} />}
         />
     )
 }

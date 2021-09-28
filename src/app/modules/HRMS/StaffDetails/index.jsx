@@ -158,7 +158,10 @@ export default (props) => {
       title: 'Issue Warning Letter',
       type: 'button',
       class: 'black-btn',
-      action: () => history.push('/task'),
+      action: () => history.push({
+        pathname: `/employment/${id}`,
+        state: { tab: "2", param: 'warn' }
+      })
     },
   ];
 

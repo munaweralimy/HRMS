@@ -1,19 +1,19 @@
 import React from 'react';
 import { Row, Col, Typography, Avatar, Card, Space } from 'antd';
 import SmallStatusCard from '../SmallStatusCard';
-import { ClockCircleOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { ClockCircleFilled, CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import { useHistory } from 'react-router';
 const { Title, Text } = Typography;
 
 export default (props) => {
-  const { data, link } = props;
+  const { data, link, stateKey } = props;
   const history = useHistory();
   return (
     <Card
       bordered={false}
       className="uni-card"
       style={{ cursor: 'pointer' }}
-      onClick={() => history.push({ pathname: link, state: { code: data['student id'] } })}
+      onClick={() => history.push({ pathname: link, state: {rstatus: stateKey, rid: data?.name}})}
     >
       <Row gutter={[20, 30]}>
         <Col span={24}>
@@ -29,9 +29,9 @@ export default (props) => {
         <Col span={24}>
           <Card
             bordered={false}
-            className={data?.status == 'Pending Request' ? 'uni-card req-card-pending' : 'uni-card req-card'}
+            className='mini-card b-black'
           >
-            <Row gutter={24} wrap={false} align="middle">
+            {/* <Row gutter={24} wrap={false} align="middle">
               {data?.status != 'Pending Request' && (
                 <>
                   <Col span={14}>
@@ -69,6 +69,35 @@ export default (props) => {
                   </Space>
                 </Col>
               )}
+            </Row> */}
+            <Row gutter={24} wrap={false} align="middle">
+              <Col flex='auto'>
+                <Space direction="vertical" size={0} className='w-100'>
+                  {data?.department && <Text className="d-block c-white op-6 smallFont12">{data?.department}</Text>}
+                  <Title level={5} className="text-cutout d-block mb-0 lineHeight20">
+                    {data?.form_name}
+                  </Title>
+                </Space>
+              </Col>
+              <Col flex='0 1 130px'>
+                <SmallStatusCard
+                  status={stateKey == 'yourrequests' ? 'Pending' : data?.status == 'Archive' ? data['department status'] : data?.status}
+                  icon={
+                    stateKey == 'yourrequests' ? <ClockCircleFilled /> : 
+                    (data?.status == 'Archive' ? data['department status'] == 'Approved' ? <CheckCircleFilled /> : data['department status'] == 'Reject' ? <CloseCircleFilled /> : '' : '') ||
+                    (data?.status == 'Pending' && <ClockCircleFilled />) ||
+                    (data?.status == 'Approved' && <CheckCircleFilled />) ||
+                    (data?.status == 'Rejected' && <CloseCircleFilled />)
+                  }
+                  iColor={
+                    stateKey == 'yourrequests' ? 'b-pending' : 
+                    (data?.status == 'Archive' ? data['department status'] == 'Reject' ? 'b-error' : 'b-success': '' ) ||
+                    (data?.status == 'Pending' && 'b-pending') ||
+                    (data?.status == 'Approved' && 'b-success') ||
+                    (data?.status == 'Reject' && 'b-error')
+                  }
+                />
+              </Col>
             </Row>
           </Card>
         </Col>
