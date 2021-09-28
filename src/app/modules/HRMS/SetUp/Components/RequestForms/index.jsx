@@ -132,15 +132,6 @@ export default (props) => {
             }}
             onChange={onTableChange}
           />
-          <div className="w-100 text-right mt-2">
-            <Pagination
-              pageSize={pageSize}
-              current={page}
-              hideOnSinglePage={true}
-              onChange={onPageChange}
-              total={requestFormsListData?.count}
-            />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

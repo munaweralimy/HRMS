@@ -24,18 +24,6 @@ export default (props) => {
       dataIndex: 'leave_type',
       key: 'leave_type',
       sorted: (a, b) => a.leave_type - b.leave_type,
-      render: (text, record) => (
-        <Button
-          type="link"
-          className="list-links"
-          onClick={() => {
-            setLeaveTpe(text);
-            setVisible(true);
-          }}
-        >
-          {text}
-        </Button>
-      ),
     },
     {
       title: 'Approval Level',
@@ -76,10 +64,10 @@ export default (props) => {
           type="link"
           className="list-links"
           onClick={() => {
-            deleteSingleLeave(record.leave_type).then((response) => {
-              message.success('Leave deleted successfully');
-              dispatch(getLeaveTypesList(page, limit, '', ''));
-            });
+            // deleteSingleLeave(record.leave_type).then((response) => {
+            //   message.success('Leave deleted successfully');
+            //   dispatch(getLeaveTypesList(page, limit, '', ''));
+            // });
           }}
         >
           <CloseCircleFilled />
@@ -92,7 +80,7 @@ export default (props) => {
       text: '+ New Leave Type',
       classes: 'green-btn',
       action: () => {
-        setLeaveTpe('');
+        setLeaveTpe({ name: '', leave_type: '' });
         setVisible(true);
       },
     },
@@ -109,7 +97,7 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
-        setLeaveTpe(record.leave_type);
+        setLeaveTpe(record);
         setVisible(true);
       },
     };
@@ -144,7 +132,7 @@ export default (props) => {
         </Col>
         <Col span={24}>
           <ListCard
-            // onRow={onClickRow}
+            onRow={onClickRow}
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}

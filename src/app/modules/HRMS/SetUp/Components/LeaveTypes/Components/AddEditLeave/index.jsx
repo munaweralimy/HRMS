@@ -4,7 +4,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { leaveFields } from './FormFields';
 import { InputRadio } from '../../../../../../../atoms/FormElement';
-import { createLeave, updateSingleLeave } from '../../../../ducks/services';
+import { createLeave, updateSingleLeave, deleteSingleLeave } from '../../../../ducks/services';
 import { getSingleLeave } from '../../../../ducks/actions';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 
@@ -24,8 +24,8 @@ export default (props) => {
   };
 
   useEffect(() => {
-    if (leaveType.length > 0) {
-      dispatch(getSingleLeave(leaveType));
+    if (leaveType.name.length > 0) {
+      dispatch(getSingleLeave(leaveType.name));
     } else {
       reset();
     }
@@ -41,7 +41,10 @@ export default (props) => {
         value: singleLeaveValues?.marital_status,
       });
       setValue('add_leave_statistics', singleLeaveValues?.add_leave_statistics);
-      setValue('approvers', singleLeaveValues?.approvers);
+      setValue(
+        'approvers',
+        singleLeaveValues?.approvers.map((value) => ({ label: value.approver, value: value.approver })),
+      );
     } else {
       reset();
     }
@@ -62,17 +65,31 @@ export default (props) => {
       })),
     };
 
-    leaveType.length == 0
-      ? createLeave(payload).then((response) => {
-          message.success('Leave created successfully');
-          onClose();
-        })
-      : updateSingleLeave(leaveType, payload).then((response) => {
-          message.success('Leave update successfully');
-          onClose();
-        });
+    leaveType.leave_type.length == 0
+      ? createLeave(payload)
+          .then((response) => {
+            message.success('Leave created successfully');
+            onClose();
+          })
+          .catch((error) => message.error('Leave type alrady exists'))
+      : updateSingleLeave(leaveType, payload)
+          .then((response) => {
+            message.success('Leave update successfully');
+            onClose();
+          })
+          .catch((error) => message.error('Leave type already exisits'));
   };
-
+  const onDeleteEducationField = () => {
+    deleteSingleLeave(leaveType.name)
+      .then((response) => {
+        message.success('Leave Deleted Successfully');
+        onClose();
+      })
+      .catch((error) => {
+        message.error('Leave Deleted Unsccessfully');
+        onClose();
+      });
+  };
   return (
     <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
       <Row gutter={[24, 30]}>
@@ -167,16 +184,33 @@ export default (props) => {
           </Row>
         </Col>
 
-        <Col span={12}>
-          <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>
-            Close
-          </Button>
-        </Col>
-        <Col span={12}>
-          <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-            Save
-          </Button>
-        </Col>
+        {leaveType.leave_type.length == 0 ? (
+          <>
+            <Col span={12}>
+              <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>
+                Close
+              </Button>
+            </Col>
+            <Col span={12}>
+              <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                Add
+              </Button>
+            </Col>
+          </>
+        ) : (
+          <>
+            <Col span={12}>
+              <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteEducationField}>
+                Delete
+              </Button>
+            </Col>
+            <Col span={12}>
+              <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                Save
+              </Button>
+            </Col>
+          </>
+        )}
       </Row>
     </Form>
   );
