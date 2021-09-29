@@ -120,3 +120,18 @@ export const updateSingleTeam = (id, payload) => {
 export const deleteSingleTeam = (id) => {
   return axios.delete(`${apiresource}/HRMS Teams/${id}`);
 };
+
+export const getSingleRole = (id) => {
+  return axios.get(`${apiresource}/User Roles/${id}`);
+};
+
+export const addUserRoles = (payload) => {
+  return axios.post(`${apiresource}/User Roles`, payload);
+};
+
+export const updateUserRoles = (id, payload) => {
+  return axios.put(`${apiresource}/User Roles/${id}`, payload);
+};
+export const deleteUserRoles = (id) => {
+  return axios.delete(`${apiresource}/User Roles/${id}`);
+};

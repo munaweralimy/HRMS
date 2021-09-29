@@ -22,6 +22,7 @@ const initialState = {
   singleLeave: {},
   employeeList: [],
   leaveList: [],
+  userList: [],
 };
 
 export default (state = initialState, action) => {
@@ -69,6 +70,8 @@ export default (state = initialState, action) => {
       return { ...state, employeeList: data };
     case action_types.LEAVE_TYPE:
       return { ...state, leaveList: data };
+    case action_types.USERS:
+      return { ...state, userList: data };
     default:
       return state;
   }

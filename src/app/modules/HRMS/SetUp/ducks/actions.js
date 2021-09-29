@@ -317,3 +317,17 @@ export const getLeaveList = () => async (dispatch) => {
     data: data,
   });
 };
+
+export const getUserList = (page, limit, order, orderby) => async (dispatch) => {
+  const {
+    data: { message },
+  } = await axios.get(
+    `${apiMethod}/hrms.api.hrms_user_role_pagination?page_number=${page}&limit=${limit}${
+      order ? `&order=${order}&orderby=creation` : ''
+    }`,
+  );
+  dispatch({
+    type: action_types.USERS,
+    data: message,
+  });
+};
