@@ -3,24 +3,25 @@ import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditProject from './Components/AddEditProject';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getProjectsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [projectFields, setProjectFields] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const projectsListData = useSelector((state) => state.setup.projectsListData);
 
   useEffect(() => {
-    dispatch(getProjectsList(page, limit, '', ''));
-  }, []);
+    if (!visible) {
+      dispatch(getProjectsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -42,7 +43,7 @@ export default (props) => {
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links" onClick={() => {}}>
           <CloseCircleFilled />
         </Button>
       ),
@@ -54,38 +55,26 @@ export default (props) => {
       text: '+ New Project',
       classes: 'green-btn',
       action: () => {
+        setProjectFields({ name: '', project_name: '' });
         setVisible(true);
       },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: <AddEditProject projectData={projectFields} title="Add New Project" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getProjectsList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  };
-
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setProjectFields(record);
+        setVisible(true);
+      },
     };
   };
 

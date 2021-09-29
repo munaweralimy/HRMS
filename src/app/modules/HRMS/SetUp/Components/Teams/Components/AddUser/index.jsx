@@ -40,7 +40,7 @@ const AddUser = (props) => {
       <Card bordered={false} className="uni-card b-black">
         <Row gutter={[20, 20]}>
           <Col span={24}>
-            <Row gutter={20} justify="start" style={{ textAlign: 'left' }}>
+            <Row gutter={20} justify="start">
               <Col span={24}>
                 <Title className="mb-0" level={3}>
                   {userData.length}

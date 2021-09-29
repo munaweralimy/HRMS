@@ -135,3 +135,18 @@ export const updateUserRoles = (id, payload) => {
 export const deleteUserRoles = (id) => {
   return axios.delete(`${apiresource}/User Roles/${id}`);
 };
+
+export const getSingleProject = (id) => {
+  return axios.get(`${apiresource}/HRMS Projects/${id}`);
+};
+
+export const addProject = (payload) => {
+  return axios.post(`${apiresource}/HRMS Projects`, payload);
+};
+
+export const updateProjecat = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS Projects/${id}`, payload);
+};
+export const deleteProject = (id) => {
+  return axios.delete(`${apiresource}/HRMS Projects/${id}`);
+};
