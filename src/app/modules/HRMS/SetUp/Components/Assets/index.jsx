@@ -6,7 +6,7 @@ import ListCard from '../../../../../molecules/ListCard';
 import AddEditAsset from './Components/AddEditAssets';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getAssetsList, getEmployeeList } from '../../ducks/actions';
+import { getAssetsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
@@ -21,7 +21,6 @@ export default (props) => {
     if (!visible) {
       dispatch(getAssetsList(page, limit, '', ''));
     }
-    dispatch(getEmployeeList('Limkokwing University Creative Technology'));
   }, [visible]);
 
   const ListCol = [

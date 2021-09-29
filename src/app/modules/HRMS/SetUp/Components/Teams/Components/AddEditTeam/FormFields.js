@@ -1,4 +1,6 @@
+import { useSelector } from 'react-redux';
 const addNewTeamFields = () => {
+  const employeeList = useSelector((state) => state.setup.employeeList);
   return [
     {
       label: 'Team Name',
@@ -29,7 +31,7 @@ const addNewTeamFields = () => {
       placeholder: 'Select staff',
       req: true,
       reqmessage: 'Staff required',
-      options: [{ label: 'Owais Zafer', value: 'HR-EMP-00006' }],
+      options: employeeList.map((value) => ({ label: value.employee_name, value: value.name })),
     },
   ];
 };

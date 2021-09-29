@@ -8,8 +8,6 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getTeamList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -20,8 +18,10 @@ export default (props) => {
   const teamListData = useSelector((state) => state.setup.teamsListData);
 
   useEffect(() => {
-    dispatch(getTeamList(page, limit, '', ''));
-  }, []);
+    if (!visible) {
+      dispatch(getTeamList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
