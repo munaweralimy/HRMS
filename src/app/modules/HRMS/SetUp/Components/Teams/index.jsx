@@ -77,7 +77,6 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    class: 'black-modal',
     content: <AddEditTeam team={teamFiled} title="Add New Team" onClose={() => setVisible(false)} />,
     width: 900,
     onCancel: () => setVisible(false),

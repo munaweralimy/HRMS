@@ -24,8 +24,8 @@ export default (props) => {
   };
 
   useEffect(() => {
-    if (approver.approver.length > 0) {
-      setValue('approver_name', approver.approver);
+    if (approver.approver_name.length > 0) {
+      setValue('approver_name', approver.approver_name);
     } else {
       reset();
     }

@@ -56,24 +56,11 @@ export default (props) => {
     closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddEditApprover approver={apparoaverFileds} title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditApprover approver={apparoaverFileds} title="Add New Approvals" onClose={() => setVisible(false)} />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
-  };
-
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getApproversList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
   };
 
   const onClickRow = (record) => {
@@ -118,15 +105,6 @@ export default (props) => {
             }}
             onChange={onTableChange}
           />
-          <div className="w-100 text-right mt-2">
-            <Pagination
-              pageSize={pageSize}
-              current={page}
-              hideOnSinglePage={true}
-              onChange={onPageChange}
-              total={approversListData?.count}
-            />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />
