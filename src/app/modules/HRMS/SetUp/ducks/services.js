@@ -150,3 +150,17 @@ export const updateProjecat = (id, payload) => {
 export const deleteProject = (id) => {
   return axios.delete(`${apiresource}/HRMS Projects/${id}`);
 };
+
+export const addjobPosition = (payload) => {
+  return axios.post(`${apiresource}/Job Position`, payload);
+};
+
+export const updatejobPosition = (id, payload) => {
+  return axios.put(`${apiresource}/Job Position/${id}`, payload);
+};
+export const deletejobPosition = (id) => {
+  return axios.delete(`${apiresource}/Job Position/${id}`);
+};
+export const getSingleJob = (id) => {
+  return axios.get(`${apiresource}/Job Position/${id}`);
+};

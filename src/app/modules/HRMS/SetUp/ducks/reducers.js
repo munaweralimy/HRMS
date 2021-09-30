@@ -23,6 +23,7 @@ const initialState = {
   employeeList: [],
   leaveList: [],
   userList: [],
+  skillsList: [],
 };
 
 export default (state = initialState, action) => {
@@ -72,6 +73,8 @@ export default (state = initialState, action) => {
       return { ...state, leaveList: data };
     case action_types.USERS:
       return { ...state, userList: data };
+    case action_types.SKILLS_LIST:
+      return { ...state, skillsList: data };
     default:
       return state;
   }

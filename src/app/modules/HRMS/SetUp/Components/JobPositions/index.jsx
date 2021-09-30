@@ -1,15 +1,13 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Button, Pagination, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import AddEditPosition from './Components/AddEditPosition';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getJobPositionsList } from '../../ducks/actions';
+import { getJobPositionsList, getSkillList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -24,6 +22,10 @@ export default (props) => {
       dispatch(getJobPositionsList(page, limit, '', ''));
     }
   }, [visible]);
+
+  useEffect(() => {
+    dispatch(getSkillList());
+  }, []);
 
   const ListCol = [
     {
@@ -93,11 +95,10 @@ export default (props) => {
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddEditPosition title="Add New Position" onClose={() => {}} />,
-    width: 536,
+    content: <AddEditPosition jobPosition={positionFields} title="Add New Position" onClose={() => {}} />,
+    width: 1199,
     onCancel: () => setVisible(false),
   };
 

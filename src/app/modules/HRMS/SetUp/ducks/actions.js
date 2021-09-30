@@ -331,3 +331,13 @@ export const getUserList = (page, limit, order, orderby) => async (dispatch) => 
     data: message,
   });
 };
+
+export const getSkillList = () => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get('http://cms2dev.limkokwing.net/api/resource/Skill');
+  dispatch({
+    type: action_types.SKILLS_LIST,
+    data: data,
+  });
+};

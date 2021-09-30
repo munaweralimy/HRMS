@@ -10,8 +10,8 @@ export default (props) => {
   const { title, onClose, team } = props;
   const { Title, Text } = Typography;
   const [teamData, setTeamData] = useState('');
-  const { control, errors, setValue, reset, handleSubmit } = useForm();
   const [userData, setUserData] = useState([]);
+  const { control, errors, setValue, reset, handleSubmit } = useForm();
 
   useEffect(() => {
     if (team.name.length > 0) {

@@ -20,3 +20,4 @@ export const SINGLE_LEAVE = 'SINGLE_LEAVE';
 export const EMPLOYEE_LIST = 'EMPLOYEE_LIST';
 export const LEAVE_TYPE = 'LEAVE_TYPE';
 export const USERS = 'USERS';
+export const SKILLS_LIST = 'SKILLS_LIST';
