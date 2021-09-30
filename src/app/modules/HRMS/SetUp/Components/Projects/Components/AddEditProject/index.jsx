@@ -33,7 +33,7 @@ export default (props) => {
 
   useEffect(() => {
     if (Object.entries(teamData).length > 0) {
-      setValue('project_name', teamData.project);
+      setValue('project', teamData.project);
     }
   }, [teamData]);
 

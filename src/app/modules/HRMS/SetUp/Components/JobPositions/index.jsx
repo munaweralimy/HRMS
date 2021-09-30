@@ -3,7 +3,7 @@ import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditPosition from './Components/AddEditPosition';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getJobPositionsList } from '../../ducks/actions';
@@ -13,14 +13,17 @@ import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [positionFields, setPositionFields] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const jobPositionsListData = useSelector((state) => state.setup.jobPositionsListData);
 
   useEffect(() => {
-    dispatch(getJobPositionsList(page, limit, '', ''));
-  }, []);
+    if (!visible) {
+      dispatch(getJobPositionsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -83,6 +86,7 @@ export default (props) => {
       text: '+ New Job Position',
       classes: 'green-btn',
       action: () => {
+        setPositionFields({ name: '', job_title: '' });
         setVisible(true);
       },
     },
@@ -92,32 +96,19 @@ export default (props) => {
     closable: false,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
+    content: <AddEditPosition title="Add New Position" onClose={() => {}} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getJobPositionsList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  };
-
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setPositionFields(record);
+        setVisible(true);
+      },
     };
   };
-
   const onSearch = (value) => {
     console.log('check values', value);
   };
