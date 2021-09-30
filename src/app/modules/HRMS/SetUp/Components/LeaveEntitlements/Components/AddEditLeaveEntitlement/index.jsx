@@ -8,11 +8,15 @@ import {
   updateSingleLeaveEntitlement,
   deleteSingleLeaveEntitlement,
 } from '../../../../ducks/services';
-import moment from 'moment';
+
 export default (props) => {
   const { title, onClose, leaveEtitlement } = props;
-  const { Title, Text } = Typography;
-  const { control, errors, reset, setValue, handleSubmit } = useForm();
+  const { Title } = Typography;
+  const [leaves, setLeaves] = useState('');
+  const { control, errors, reset, setValue, watch, handleSubmit } = useForm();
+
+  const leaveType = watch('leave_type');
+  console.log({ leaveType });
 
   const onFinish = (values) => {
     console.log({ values });
