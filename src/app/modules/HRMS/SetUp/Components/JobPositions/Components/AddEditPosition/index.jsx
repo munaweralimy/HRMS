@@ -1,11 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Button, Row, Col, Typography, Form, InputNumber } from 'antd';
+import { Button, Row, Col, Typography, Form, InputNumber, message } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { jobFields } from './FormFields';
 import { useForm, useFieldArray } from 'react-hook-form';
 import AddUser from '../../../Teams/Components/AddUser';
 import { SliderFiled } from '../../../../../../../atoms/FormElement';
-import { getSingleJob } from '../../../../ducks/services';
+import { getSingleJob, addjobPosition, updatejobPosition, deletejobPosition } from '../../../../ducks/services';
 
 export default (props) => {
   const { title, onClose, jobPosition } = props;
@@ -14,18 +14,12 @@ export default (props) => {
   const { control, errors, setValue, watch, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
 
-  const quality = watch('work_quality');
-  const speed = watch('work_speed');
-  const leadership = watch('leadership');
-  const thinking = watch('critical_thinking');
-  const team = watch('team_work');
-
   const skillSet = [
-    { label: 'Work Quality', fieldname: 'work_quality', updateVal: quality },
-    { label: 'Work Speed', fieldname: 'work_speed', updateVal: speed },
-    { label: 'Leadership', fieldname: 'leadership', updateVal: leadership },
-    { label: 'Critical Thinking', fieldname: 'critical_thinking', updateVal: thinking },
-    { label: 'Team Work', fieldname: 'team_work', updateVal: team },
+    { label: 'Work Quality', fieldname: 'work_quality', updateVal: watch('work_quality') },
+    { label: 'Work Speed', fieldname: 'work_speed', updateVal: watch('work_speed') },
+    { label: 'Leadership', fieldname: 'leadership', updateVal: watch('leadership') },
+    { label: 'Critical Thinking', fieldname: 'critical_thinking', updateVal: watch('critical_thinking') },
+    { label: 'Team Work', fieldname: 'team_work', updateVal: watch('team_work') },
   ];
 
   useEffect(() => {
@@ -58,10 +52,9 @@ export default (props) => {
     }
   }, [teamData]);
 
-  const onDeleteTeam = () => {};
-
   const onFinish = async (val) => {
     const payload = {
+      company: 'Limkokwing University Creative Technology',
       job_position_name: val.job_position_name,
       work_quality: val.work_quality,
       work_speed: val.work_speed,
@@ -71,7 +64,24 @@ export default (props) => {
       skills: val.skills.map((value) => ({ skill_name: value.value })),
       user_staff: userData.map((value) => ({ employee: value.id })),
     };
-    console.log({ payload });
+    jobPosition.name.length == 0
+      ? addjobPosition(payload).then((response) => {
+          message.success('Crated New Job');
+          onClose();
+        })
+      : updatejobPosition(jobPosition.name, payload).then((response) => {
+          message.success('Updated Job Successfully');
+          onClose();
+        });
+  };
+
+  const onDeleteJobPosition = () => {
+    deletejobPosition(jobPosition.name)
+      .then((response) => {
+        message.success('Job Deleted Successfully');
+        onClose(false);
+      })
+      .catch((error) => message.error('Cant delete a Job'));
   };
 
   return (
@@ -131,7 +141,7 @@ export default (props) => {
                         type="primary"
                         htmlType="button"
                         className="red-btn w-100"
-                        onClick={onDeleteTeam}
+                        onClick={onDeleteJobPosition}
                       >
                         Delete
                       </Button>

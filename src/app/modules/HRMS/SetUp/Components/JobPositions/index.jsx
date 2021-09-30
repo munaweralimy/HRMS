@@ -97,7 +97,15 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditPosition jobPosition={positionFields} title="Add New Position" onClose={() => {}} />,
+    content: (
+      <AddEditPosition
+        jobPosition={positionFields}
+        title="Add New Position"
+        onClose={() => {
+          setVisible(false);
+        }}
+      />
+    ),
     width: 1199,
     onCancel: () => setVisible(false),
   };
