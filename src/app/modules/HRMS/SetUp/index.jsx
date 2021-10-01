@@ -22,6 +22,7 @@ import {
   Approvers,
   Assets,
   RequestForms,
+  Departments,
 } from './Components';
 
 export default (props) => {
@@ -118,6 +119,11 @@ export default (props) => {
     {
       tabTitle: 'Request Forms',
       comp: <RequestForms />,
+      permission: true,
+    },
+    {
+      tabTitle: 'Departments',
+      comp: <Departments />,
       permission: true,
     },
   ];

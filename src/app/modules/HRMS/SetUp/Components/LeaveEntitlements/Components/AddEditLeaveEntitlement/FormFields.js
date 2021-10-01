@@ -1,6 +1,17 @@
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 const leaveEntitlementLeaves = () => {
+  const [leave, leaveType] = useState(false);
   const leaveList = useSelector((state) => state.setup.leaveList);
+
+  const onChnageLeaveType = (val) => {
+    if (val.value === 'Annual Leave') {
+      leaveType(true);
+    } else {
+      leaveType(false);
+    }
+  };
+
   return [
     {
       label: 'Leave Entilement Name',
@@ -20,6 +31,7 @@ const leaveEntitlementLeaves = () => {
       req: true,
       reqmessage: 'Leave Type required',
       options: leaveList.map((value) => ({ label: value.name, value: value.name })),
+      onChange: onChnageLeaveType,
     },
     {
       label: 'Entitlement',
@@ -51,6 +63,7 @@ const leaveEntitlementLeaves = () => {
       subheading: 'Options',
       name: 'is_limit',
       label: '',
+      // class:hid===true?`d-none`:'',
       req: false,
       placeholder: '',
       type: 'checkbox',
@@ -80,6 +93,7 @@ const leaveEntitlementLeaves = () => {
     },
     {
       name: 'carries_forward',
+      class: leave != true ? 'd-none' : '',
       label: '',
       req: false,
       placeholder: '',
@@ -101,10 +115,11 @@ const leaveEntitlementLeaves = () => {
     {
       label: 'Carry Forward Cut Off Date',
       name: 'carry_forward_days',
-      type: 'date',
+      type: 'input',
       twocol: false,
       req: true,
       reqmessage: 'Date required',
+      hidden: !leave,
     },
   ];
 };
