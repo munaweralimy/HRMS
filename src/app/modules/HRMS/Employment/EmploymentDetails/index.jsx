@@ -16,6 +16,7 @@ export default (props) => {
 
   const {id} = useParams();
   const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
   const [ load, setLoad] = useState(false);
   const data = useSelector(state => state.advancement.advData);
@@ -41,7 +42,7 @@ return (
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Employment</Title></Col>
           <Col>
-            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push('/requests')}>Categories</Button>
+            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push(`/requests/${id}`)}>Categories</Button>
           </Col>
           <Col span={24}>
             <Spin indicator={antIcon} size="large" spinning={load}>

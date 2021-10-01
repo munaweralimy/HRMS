@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Typography, Tabs, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { closeAllOpenForms, getFinanceDetail } from '../ducks/action';
 import StaffDetails from '../../StaffDetails';
 import { getSingleTaskDetail } from '../../Tasks/ducks/actions';
@@ -14,6 +14,7 @@ import SalaryAdvance from './AddEditSalaryAdvance';
 const FinanceDetail = () => {
   const { Title } = Typography;
   const { id } = useParams();
+  const history = useHistory();
   const { TabPane } = Tabs;
   const dispatch = useDispatch();
   const [tags, setTags] = useState();
@@ -56,7 +57,7 @@ const FinanceDetail = () => {
               icon={<LeftOutlined />}
               size="middle"
               className="c-graybtn small-btn"
-              onClick={() => history.push('/requests')}
+              onClick={() => history.push(`/requests/${id}`)}
             >
               Categories
             </Button>

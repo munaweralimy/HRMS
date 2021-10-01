@@ -340,6 +340,15 @@
   }
 }
 
+.category-card {
+  height:100%;
+  background-color: $element-color;
+  cursor: pointer;
+  &:hover {
+    background-color: #303030;
+  }
+}
+
 .status-card {
   .ant-card-body {
     color: #fff;
