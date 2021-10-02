@@ -137,7 +137,6 @@ export default (props) => {
   ];
 
   const onFinish = (values) => {
-    console.log({ values });
     const payload = {
       leave_entitlement_name: values.leave_entitlement_name,
       leave_type: values.leave_type.value,
