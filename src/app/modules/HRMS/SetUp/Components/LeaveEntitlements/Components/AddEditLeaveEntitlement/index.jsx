@@ -180,10 +180,12 @@ export default (props) => {
 
   useEffect(() => {
     if (leaveEtitlement.leave_entitlement_name.length > 0) {
+      console.log({ leaveEtitlement });
       setValue('leave_entitlement_name', leaveEtitlement.leave_entitlement_name);
       setValue('leave_type', { label: leaveEtitlement.leave_type, value: leaveEtitlement.leave_type });
-      setValue('entitlement', { label: leaveEtitlement.entitlement, value: leaveEtitlement.entitlement });
-      setValue('min_years', { label: leaveEtitlement.min_years, value: leaveEtitlement.min_years });
+      setValue('entitlement', leaveEtitlement.entitlement);
+      setValue('min_years', leaveEtitlement.min_years);
+      setValue('max_years', leaveEtitlement.max_years);
       setValue('is_limit', leaveEtitlement.is_limit == 'Yes' ? [1] : [0]);
       setValue('overdraft', leaveEtitlement.overdraft == 'Yes' ? [1] : [0]);
       setValue('apply_before_current_date', leaveEtitlement.apply_before_current_date == 'Yes' ? [1] : [0]);

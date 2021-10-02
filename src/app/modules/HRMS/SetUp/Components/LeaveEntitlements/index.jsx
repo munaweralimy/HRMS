@@ -53,13 +53,13 @@ export default (props) => {
       key: 'is_limit',
       sorted: (a, b) => a.is_limit - b.is_limit,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No';
-        } else {
-          return 'Yes';
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'Apply Before',
@@ -67,13 +67,13 @@ export default (props) => {
       key: 'apply_before_current_date',
       sorted: (a, b) => a.apply_before_current_date - b.apply_before_current_date,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No';
-        } else {
-          return 'Yes';
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'Prorated',
@@ -81,13 +81,13 @@ export default (props) => {
       key: 'is_prorate',
       sorted: (a, b) => a.is_prorate - b.is_prorate,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No';
-        } else {
-          return 'Yes';
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'Overdraft',
@@ -95,13 +95,13 @@ export default (props) => {
       key: 'overdraft',
       sorted: (a, b) => a.overdraft - b.overdraft,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No';
-        } else {
-          return 'Yes';
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'CF',
@@ -109,13 +109,13 @@ export default (props) => {
       key: 'carries_forward',
       sorted: (a, b) => a.carries_forward - b.carries_forward,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No';
-        } else {
-          return 'Yes';
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'Action',
