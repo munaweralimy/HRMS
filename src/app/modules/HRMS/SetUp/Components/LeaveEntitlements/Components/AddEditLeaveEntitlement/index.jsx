@@ -150,20 +150,19 @@ export default (props) => {
       is_prorate: values.is_prorate[0],
       carry_forward_days: values.carry_forward_days,
     };
-    console.log({ payload });
-    // leaveEtitlement.leave_entitlement_name.length == 0
-    //   ? addSingleLeaveEntitlement(payload)
-    //       .then((response) => {
-    //         message.success('Leave Entitlement Added Successfully');
-    //         onClose();
-    //       })
-    //       .catch((error) => message.error('Leave Entitlemen exists'))
-    //   : updateSingleLeaveEntitlement(leaveEtitlement.name, payload)
-    //       .then((response) => {
-    //         message.success('Leave Etitlement Updated Successfully');
-    //         onClose();
-    //       })
-    //       .catch((error) => message.error('Update Failed'));
+    leaveEtitlement.leave_entitlement_name.length == 0
+      ? addSingleLeaveEntitlement(payload)
+          .then((response) => {
+            message.success('Leave Entitlement Added Successfully');
+            onClose();
+          })
+          .catch((error) => message.error('Leave Entitlemen exists'))
+      : updateSingleLeaveEntitlement(leaveEtitlement.name, payload)
+          .then((response) => {
+            message.success('Leave Etitlement Updated Successfully');
+            onClose();
+          })
+          .catch((error) => message.error('Update Failed'));
   };
 
   const onDeleteHoliday = () => {
@@ -180,7 +179,11 @@ export default (props) => {
 
   useEffect(() => {
     if (leaveEtitlement.leave_entitlement_name.length > 0) {
-      console.log({ leaveEtitlement });
+      if (leaveEtitlement.leave_type == 'Annual Leave') {
+        leaveType(true);
+      } else {
+        leaveType(false);
+      }
       setValue('leave_entitlement_name', leaveEtitlement.leave_entitlement_name);
       setValue('leave_type', { label: leaveEtitlement.leave_type, value: leaveEtitlement.leave_type });
       setValue('entitlement', leaveEtitlement.entitlement);
@@ -192,9 +195,6 @@ export default (props) => {
       setValue('carries_forward', leaveEtitlement.carries_forward == 'Yes' ? [1] : [0]);
       setValue('is_prorate', leaveEtitlement.is_prorate == 'Yes' ? [1] : [0]);
       setValue('carry_forward_days', leaveEtitlement.carry_forward_days);
-      if (leaveEtitlement.leave_type == 'Annual Leave') {
-        leaveType(true);
-      }
     } else {
       reset();
     }
