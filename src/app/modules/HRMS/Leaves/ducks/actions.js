@@ -92,37 +92,13 @@ export const getMyAvailableLeaves = (id) => {
     };
 };
 
-export const getLeaveStatisticListAnnual = (status) => {
+export const getLeaveStatisticList = (status) => {
   return async (dispatch) => {
     const {
       data: { message },
     } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_statistics_list?orderby=employee_id&order=ASC&leave_type=${status}`);
     dispatch({
-      type: action_types.STATISTIC_LIST_ANNUAL,
-      data: message,
-    });
-  };
-};
-
-export const getLeaveStatisticListReplacement = (status) => {
-  return async (dispatch) => {
-    const {
-      data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_statistics_list?orderby=employee_id&order=ASC&leave_type=Replacement Leave`);
-    dispatch({
-      type: action_types.STATISTIC_LIST_REPLACEMENT,
-      data: message,
-    });
-  };
-};
-
-export const getLeaveStatisticListUnpaid = (status) => {
-  return async (dispatch) => {
-    const {
-      data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_statistics_list?orderby=employee_id&order=ASC&leave_type=Unpaid Leave`);
-    dispatch({
-      type: action_types.STATISTIC_LIST_UNPAID,
+      type: action_types.STATISTIC_LIST,
       data: message,
     });
   };
@@ -140,29 +116,73 @@ export const getLeaveStatisticBar = () => {
   };
 };
 
-// export const getLeaveStatisticBarReplacement = () => {
-//   return async (dispatch) => {
-//     const {
-//       data: { message },
-//     } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_statistics_bar?leave_type=Replacement Leave`);
-//     dispatch({
-//       type: action_types.STATISTIC_BAR_REPLACEMENT,
-//       data: message,
-//     });
-//   };
-// };
+export const getSingleLeaveDetail = (id) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.getting_my_leaves?employee_id=${id}`);
+    dispatch({
+      type: action_types.SINGLE_LEAVE_DETAIL,
+      data: message,
+    });
+  };
+};
 
-// export const getLeaveStatisticBarUnpaid = () => {
-//   return async (dispatch) => {
-//     const {
-//       data: { message },
-//     } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_statistics_bar?leave_type=Unpaid Leave`);
-//     dispatch({
-//       type: action_types.STATISTIC_BAR_UNPAID,
-//       data: message,
-//     });
-//   };
-// };
+export const getLeaveApplicationDetail = (id,status) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.getting_my_leaves_list_with_status?employee_id=${id}&status=${status}`);
+    dispatch({
+      type: action_types.APPLICATION_LEAVE_DETAIL,
+      data: message,
+    });
+  };
+};
+
+
+
+
+
+export const getLeaveType = () => {
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/HRMS Leave Type`);
+    dispatch({
+      type: action_types.LEAVE_TYPE,
+      data: data,
+    });
+  };
+};
+
+export const getLeaveData = (type,company) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_data?employee_id=HR-EMP-00002&leave_type=${type}&company=${company}`);
+    dispatch({
+      type: action_types.LEAVE_DATA,
+      data: message,
+    });
+  };
+};
+
+export const getLeaveApprovers = (type,company) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.get_leave_type_approvers?leave_type=${type}&company=${company}`);
+    dispatch({
+      type: action_types.LEAVE_APPROVERS,
+      data: message,
+    });
+  };
+};
+
+
+
+
 
 
 export const getAddProjectName = () => {
@@ -189,17 +209,7 @@ export const getProjectName = () => {
   };
 };
 
-export const getSingleTaskDetail = (id) => {
-  return async (dispatch) => {
-    const {
-      data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_employee_task_data?employee_id=${id}`);
-    dispatch({
-      type: action_types.SINGLE_TASK_DETAIL,
-      data: message,
-    });
-  };
-};
+
 
 export const emptyOverall = () => {
   return (dispatch) => {

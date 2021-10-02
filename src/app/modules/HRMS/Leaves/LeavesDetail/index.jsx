@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Typography, Card, Tabs, Form, Spin, message } from 'antd';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleTaskDetail, getAddProjectName, getTimesheet} from '../ducks/actions';
+import { getSingleLeaveDetail, getLeaveApplicationDetail, } from '../ducks/actions';
 import StaffDetails from '../../StaffDetails';
-import Timesheet from './components/Timesheet';
-import Projects from './components/Projects';
+import LeaveApplication from './components/LeaveApplication';
+import LeaveSummary from './components/LeaveSummary';
 import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../configs/constants';
 import { useForm } from 'react-hook-form';
@@ -19,58 +19,22 @@ export default (props) => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const location = useLocation();
-  const [tags, setTags] = useState([]);
   const [deleted, setDeleted] = useState([]);
-  const [options, setOptions] = useState([]);
   const [load, setLoad] = useState(false);
-  const singleTaskDetail = useSelector((state) => state.tasks.singleTaskData);
-  const projectName = useSelector((state) => state.tasks.myAddProjectData);
-  const timesheetData = useSelector((state) => state.tasks.timesheetData);
+  const singleLeaveDetail = useSelector((state) => state.leaves.singleLeaveData);
+  const applicationLeaveData = useSelector((state) => state.leaves.applicationLeaveData);
   const { control, errors, handleSubmit, reset } = useForm();
 
+  console.log('singleLeaveDetail?.summary', singleLeaveDetail?.summary)
+
   useEffect(() => {
-    dispatch(getSingleTaskDetail(id));
-    if (location?.state?.tab) {
-      if (location.state.tab == 'Missed') {
-        dispatch(getTimesheet(id, 'Issues', 1, 10, '', ''));
-      } else {
-        dispatch(getTimesheet(id, location?.state?.tab, 1, 10, '', ''));
-      }
-    } else {
-      dispatch(getTimesheet(id, 'Pending', 1, 10, '', ''));
-    }
-    dispatch(getAddProjectName());
+    dispatch(getSingleLeaveDetail(id));
+    dispatch(getLeaveApplicationDetail(id, 'Pending'));
   }, []);
 
-  const updateApi = () => {
-    dispatch(getSingleTaskDetail(id));
+  const updateStatus = (status, page, limit, sort, sortby) => {
+    dispatch(getLeaveApplicationDetail(id, status, page, limit, sort, sortby));
   }
-
-  const updateTimesheet = (status, page, limit, sort, sortby) => {
-    dispatch(getTimesheet(id, status, page, limit, sort, sortby));
-  }
-
-  useEffect(() => {
-    if (projectName) {
-      let temp = [];
-      projectName.map((item) => temp.push({ label: item.project, value: item.project_code }));
-      setOptions(temp);
-    }
-  }, [projectName]);
-
-  useEffect(() => {
-    if (singleTaskDetail && singleTaskDetail?.projects) {
-      let projects = [];
-      singleTaskDetail?.projects.map((item) => {
-        projects.push({
-          name: item.row_name,
-          project_code: item.name,
-          project: item.project,
-        });
-      });
-      setTags(projects);
-    }
-  }, [singleTaskDetail]);
 
   const onFinish = async (val) => {
     setLoad(true);
@@ -80,7 +44,6 @@ export default (props) => {
         await axios.post(url, { projects: deleted });
         if (val.form_projects.length == 0) {
           message.success('Projects Successfully Updated');
-          updateApi();
           setLoad(false);
           reset();
         }
@@ -106,7 +69,6 @@ export default (props) => {
       try {
         await axios.post(url, json);
         message.success('Projects Successfully Updated');
-        updateApi();
         setLoad(false);
         reset();
       } catch (e) {
@@ -120,32 +82,25 @@ export default (props) => {
   };
 
   return (
-    <StaffDetails id={id} section='Tasks' data={singleTaskDetail} title={'Tasks'}>
+    <StaffDetails id={id} section='Tasks' data={singleLeaveDetail} title={'Tasks'}>
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>
-          <Col flex='auto'><Title level={4} className='mb-0'>Tasks</Title></Col>
+          <Col flex='auto'><Title level={4} className='mb-0'>Leaves</Title></Col>
           <Col>
             <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push('/requests')}>Categories</Button>
           </Col>
           <Col span={24}>
         <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
-            <TabPane tab="Timesheet" key="1">
-                <Timesheet id={id} updateApi={updateTimesheet} data={timesheetData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
+            <TabPane tab="Leave Application" key="1">
+                <LeaveApplication id={id} updateApi={updateStatus} data={applicationLeaveData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
             </TabPane>
-            <TabPane tab="Projects" key="2">
+            <TabPane tab="Summary" key="2">
+                <LeaveSummary title="Leave Statistics" id={id} data={singleLeaveDetail?.summary} />
+            </TabPane>
+            <TabPane tab="Availability" key="3">
                 <Form onFinish={handleSubmit(onFinish)} layout="vertical" scrollToFirstError={true}>
                   <Spin indicator={antIcon} size="large" spinning={load}>
-                    <Projects 
-                    title='Projects in Hand'
-                    btnTitle='+ Add other project'
-                    data={options} 
-                    deleted={deleted}
-                    setDeleted={setDeleted} 
-                    tags={tags} 
-                    setTags={setTags} 
-                    control={control}
-                    errors={errors}
-                    />
+                    
                   </Spin>
                 </Form>
             </TabPane>
