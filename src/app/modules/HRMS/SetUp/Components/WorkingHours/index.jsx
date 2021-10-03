@@ -3,7 +3,7 @@ import { Row, Col, message, Pagination, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditWorkingHour from './Components/AddEditWorkingHour';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getWorkingHoursList } from '../../ducks/actions';
@@ -13,29 +13,17 @@ import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [workingHourFields, setWorkingHourFields] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const workingHoursListData = useSelector((state) => state.setup.workingHoursListData);
 
   useEffect(() => {
-    dispatch(getWorkingHoursList(page, limit, '', ''));
-  }, []);
-
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/Work Hour Template/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getWorkingHoursList(page, limit));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
+    if (!visible) {
+      dispatch(getWorkingHoursList(page, limit, '', ''));
     }
-  };
+  }, [visible]);
 
   const ListCol = [
     {
@@ -75,6 +63,7 @@ export default (props) => {
       text: '+ New Working Hours',
       classes: 'green-btn',
       action: () => {
+        setWorkingHourFields({ name: '', template_name: '' });
         setVisible(true);
       },
     },
@@ -83,18 +72,25 @@ export default (props) => {
   const popup = {
     closable: false,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddPopup title="Add New Policy" onClose={() => setVisible(false)} />,
-    width: 536,
+    content: (
+      <AddEditWorkingHour
+        workingHourTemp={workingHourFields}
+        title="Add New Working Hours"
+        onClose={() => setVisible(false)}
+      />
+    ),
+    width: 1199,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => {},
+      onClick: () => {
+        setWorkingHourFields(record);
+        setVisible(true);
+      },
     };
   };
-
   const onSearch = (value) => {
     console.log('check values', value);
   };

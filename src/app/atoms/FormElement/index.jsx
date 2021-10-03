@@ -109,7 +109,7 @@ export const SelectField = (props) => {
                   ...styles,
                   backgroundColor: '#0e0e0e',
                   borderRadius: 8,
-                  padding: '0 4px'
+                  padding: '0 4px',
                 };
               },
               multiValueLabel: (styles) => ({
@@ -413,10 +413,7 @@ export const SwitchField = (props) => {
     props.valueGot && props.setValue(fieldname, props.valueGot);
   }, []);
   return (
-    <Form.Item 
-    className="mb-0 fullWidth-switch"
-    label={label}
-    >
+    <Form.Item className="mb-0 fullWidth-switch" label={label}>
       <Controller
         name={fieldname}
         control={control}

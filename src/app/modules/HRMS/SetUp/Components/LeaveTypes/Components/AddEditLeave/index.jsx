@@ -1,12 +1,33 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Space, Button, Row, Col, Typography, Form, Radio, message } from 'antd';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { Space, Button, Row, Col, Typography, Form, Radio, message, Select } from 'antd';
+import { useForm, useFieldArray, useWatch, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { leaveFields } from './FormFields';
 import { InputRadio } from '../../../../../../../atoms/FormElement';
 import { createLeave, updateSingleLeave, deleteSingleLeave } from '../../../../ducks/services';
-import { getSingleLeave } from '../../../../ducks/actions';
+import { getSingleLeave, leaveTypeSelect } from '../../../../ducks/actions';
 import FormGroup from '../../../../../../../molecules/FormGroup';
+import { SelectField } from '../../../../../../../atoms/FormElement';
+
+const ConditionalInput = ({ control, index }) => {
+  const approverList = useSelector((state) => state.setup.allApprovers);
+  const value = useWatch({
+    name: 'approvers',
+    control,
+  });
+  return value?.[index]?.approver_level.value === 'Individual' ? (
+    <Col span={24}>
+      <SelectField
+        fieldname="individual"
+        label="Approver"
+        control={control}
+        class={`mb-0 w-100`}
+        iProps={{ placeholder: 'Please select' }}
+        selectOption={approverList.map((value) => ({ label: value.name, value: value.name }))}
+      />
+    </Col>
+  ) : null;
+};
 
 export default (props) => {
   const { title, onClose, onUpdate, leaveType } = props;
@@ -18,7 +39,10 @@ export default (props) => {
     control,
     name: 'approvers',
   });
-
+  const value = useWatch({
+    name: 'approvers',
+    control,
+  });
   const initQ = {
     approver_select: '',
   };
@@ -51,6 +75,7 @@ export default (props) => {
   }, [singleLeaveValues]);
 
   const onFinish = (values) => {
+    console.log({ values });
     const payload = {
       leave_type: values?.leave_type,
       contract_type: values?.contract_type.label,
@@ -58,26 +83,32 @@ export default (props) => {
       marital_status: values?.marital_status.label,
       add_leave_statistics: values?.add_leave_statistics,
       doctype: 'HRMS Leave Type',
-      approvers: values?.approvers.map((value) => ({
-        approver: value.approver_select.label,
-        approver_id: value.approver_select.id,
-        doctype: 'HRMS Leave Type Approvers',
-      })),
+      approvers: values?.approvers.map((value) =>
+        value.approver_level.label === 'Individual'
+          ? { approver_level: value.approver_level.value, approver: values.individual.value }
+          : { approver_level: value.approver_level.value },
+      ),
+      // approvers: values?.approvers.map((value) => ({
+      //   approver: value.approver_select.label,
+      //   approver_id: value.approver_select.id,
+      //   doctype: 'HRMS Leave Type Approvers',
+      // })),
     };
+    console.log({ payload });
 
-    leaveType.leave_type.length == 0
-      ? createLeave(payload)
-          .then((response) => {
-            message.success('Leave created successfully');
-            onClose();
-          })
-          .catch((error) => message.error('Leave type alrady exists'))
-      : updateSingleLeave(leaveType, payload)
-          .then((response) => {
-            message.success('Leave update successfully');
-            onClose();
-          })
-          .catch((error) => message.error('Leave type already exisits'));
+    // leaveType.leave_type.length == 0
+    //   ? createLeave(payload)
+    //       .then((response) => {
+    //         message.success('Leave created successfully');
+    //         onClose();
+    //       })
+    //       .catch((error) => message.error('Leave type alrady exists'))
+    //   : updateSingleLeave(leaveType, payload)
+    //       .then((response) => {
+    //         message.success('Leave update successfully');
+    //         onClose();
+    //       })
+    //       .catch((error) => message.error('Leave type already exisits'));
   };
   const onDeleteEducationField = () => {
     deleteSingleLeave(leaveType.name)
@@ -90,6 +121,15 @@ export default (props) => {
         onClose();
       });
   };
+
+  const onRemoveSelect = (index) => {
+    if (value[index].approver_level.value == 'Individual') {
+      dispatch(leaveTypeSelect(false));
+    }
+    console.log(value[index]);
+    remove(index);
+  };
+
   return (
     <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
       <Row gutter={[24, 30]}>
@@ -100,7 +140,7 @@ export default (props) => {
             </Col>
           </Row>
         </Col>
-        {leaveFields.map((item, idx) => (
+        {leaveFields().map((item, idx) => (
           <Fragment key={idx}>
             {item.title && (
               <Col span={24}>
@@ -128,7 +168,7 @@ export default (props) => {
                                     type="link"
                                     htmlType="button"
                                     className="p-0 h-auto c-gray-linkbtn"
-                                    onClick={() => remove(index)}
+                                    onClick={() => onRemoveSelect(index)}
                                   >
                                     Remove
                                   </Button>
@@ -144,6 +184,7 @@ export default (props) => {
                             control={control}
                             errors={errors}
                           />
+                          <ConditionalInput control={control} errors={errors} index={index} />
                         </Fragment>
                       ))}
                     </Row>

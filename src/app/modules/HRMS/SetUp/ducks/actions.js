@@ -341,3 +341,18 @@ export const getSkillList = () => async (dispatch) => {
     data: data,
   });
 };
+export const getAllApprovers = () => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get('http://cms2dev.limkokwing.net/api/resource/HRMS Approver');
+  dispatch({
+    type: action_types.ALL_APPROVERS,
+    data: data,
+  });
+};
+export const leaveTypeSelect = (boolean) => (dispach) => {
+  dispach({
+    type: action_types.LEAVE_SELECT_TYPE,
+    data: boolean,
+  });
+};

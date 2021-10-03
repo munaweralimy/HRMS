@@ -24,6 +24,8 @@ const initialState = {
   leaveList: [],
   userList: [],
   skillsList: [],
+  allApprovers: [],
+  selectedLeave: false,
 };
 
 export default (state = initialState, action) => {
@@ -75,6 +77,10 @@ export default (state = initialState, action) => {
       return { ...state, userList: data };
     case action_types.SKILLS_LIST:
       return { ...state, skillsList: data };
+    case action_types.ALL_APPROVERS:
+      return { ...state, allApprovers: data };
+    case action_types.LEAVE_SELECT_TYPE:
+      return { ...state, selectedLeave: data };
     default:
       return state;
   }

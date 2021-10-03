@@ -6,7 +6,7 @@ import ListCard from '../../../../../molecules/ListCard';
 import AddEditLeave from './Components/AddEditLeave';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getLeaveTypesList } from '../../ducks/actions';
+import { getLeaveTypesList, getAllApprovers } from '../../ducks/actions';
 import { deleteSingleLeave } from '../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -108,7 +108,6 @@ export default (props) => {
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
@@ -123,6 +122,10 @@ export default (props) => {
       dispatch(getLeaveTypesList(page, limit, '', ''));
     }
   }, [visible]);
+
+  useEffect(() => {
+    dispatch(getAllApprovers());
+  }, []);
 
   return (
     <>
