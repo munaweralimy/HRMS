@@ -20,6 +20,7 @@ import AddReports from '../../modules/HRMS/Reports/AddReports';
 import Leaves from '../../modules/HRMS/Leaves';
 import LeavesDetail from '../../modules/HRMS/Leaves/LeavesDetail';
 import RequestDetails from '../../modules/HRMS/Requests/RequestDetails';
+import AddRequest from '../../modules/HRMS/Requests/AddRequest';
 
 const Components = {
   Advancement,
@@ -42,6 +43,7 @@ const Components = {
   AddReports,
   Leaves,
   LeavesDetail,
+  AddRequest
 };
 
 export default (props) => {

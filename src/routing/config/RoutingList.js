@@ -199,6 +199,15 @@ export default [
     parent: true,
   },
   {
+    component: 'AddRequest',
+    path: '/requests/addnew',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'requests',
+    menu: 'Requests',
+    parent: false,
+  },
+  {
     component: 'RequestDetails',
     path: '/requests/:id',
     title: titles.HRMS,
@@ -207,6 +216,7 @@ export default [
     menu: 'Requests',
     parent: false,
   },
+  
   {
     component: 'SetUp',
     path: '/setup',

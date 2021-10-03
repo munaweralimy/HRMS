@@ -15,20 +15,20 @@ export default (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [activeKey, setActiveKey] = useState('pending');
-  const dataPending = useSelector((state) => state.request.requestListPending);
-  const dataYour = useSelector((state) => state.request.requestListYourRequest);
-  const dataArchive = useSelector((state) => state.request.requestListArchive);
+  const dataPending = useSelector((state) => state.hrmsrequests.requestListPending);
+  const dataYour = useSelector((state) => state.hrmsrequests.requestListYourRequest);
+  const dataArchive = useSelector((state) => state.hrmsrequests.requestListArchive);
   
   const onAction1 = (status, page, sort) => {
-      dispatch(getRequestPending('AQA', page, sort));
+      dispatch(getRequestPending(page, sort));
   }
 
   const onAction2 = (status, page, sort) => {
-    dispatch(getYourRequest('AQA', page, sort));
+    dispatch(getYourRequest(page, sort));
   }
 
   const onAction3 = (status, page, sort) => {
-      dispatch(getRequestArchive('AQA', page, sort));
+      dispatch(getRequestArchive(page, sort));
   }
 
   const onAdd = () => {

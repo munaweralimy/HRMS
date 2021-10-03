@@ -63,10 +63,11 @@ export default (props) => {
             type: 'tag',
             title: 'Request',
             noDivider: true,
+            highlight: true,
         },
         {
             type: 'simpletext',
-            title: 'Please select the form and attach the student on the right.',
+            title: 'Please select the form and attach the staff on the right.',
             noDivider: true,
         },
         
@@ -124,7 +125,7 @@ export default (props) => {
     return (
         <>
         <Breadcrumb separator=">" className='mb-1'>
-            <Breadcrumb.Item href={`${depart?.link}/requests`}>Requests</Breadcrumb.Item>
+            <Breadcrumb.Item href={`/requests`}>Requests</Breadcrumb.Item>
             <Breadcrumb.Item>Add New Request</Breadcrumb.Item>
         </Breadcrumb>
             

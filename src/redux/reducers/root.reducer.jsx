@@ -23,6 +23,7 @@ import setup from '../../app/modules/HRMS/SetUp/ducks/reducers';
 import attendance from '../../app/modules/HRMS/Attendance/ducks/reducers';
 import leaves from '../../app/modules/HRMS/Leaves/ducks/reducers';
 import employment from '../../app/modules/HRMS/Employment/ducks/reducer';
+import hrmsrequests from '../../app/modules/HRMS/Requests/ducks/reducers';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -48,7 +49,8 @@ const rootReducer = combineReducers({
   setup,
   attendance,
   leaves,
-  employment
+  employment,
+  hrmsrequests
 });
 
 export default rootReducer;

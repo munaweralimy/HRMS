@@ -16,7 +16,7 @@ export default (props) => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const formList = useSelector(state => state.request.formList)
+    const formList = useSelector(state => state.hrmsrequests.formList)
     const [forming, setForming] = useState([]);
     const { title, control, errors, Department } = props;
     const user = localStorage.getItem('user');
@@ -26,7 +26,9 @@ export default (props) => {
     }, []);
 
     const onChangeForm = (e) => {
-        setForming(e.fields);
+        if(e.fields) {
+            setForming(e.fields);
+        }
     }
 
     const panelHeader = () => {
@@ -37,8 +39,8 @@ export default (props) => {
             iColor={'b-error'}
           />
           <Space direction='vertical' size={5}>
-            <Text className="smallFont12 c-white op-6">{Department?.department}</Text>
-            <Title level={5} className='lineHeight20 mb-0'>Request Title</Title>
+            <Text className="smallFont12 c-white op-6">Reciever</Text>
+            <Title level={5} className='c-gray lineHeight20 mb-0'>Please select request form below</Title>
           </Space>
         </Space>
     }
@@ -71,7 +73,7 @@ export default (props) => {
                     control={control}
                     onChange={onChangeForm}
                     rules={{required: 'Please Select Form'}}
-                    selectOption={formList?.map(e => ({label: e.form_name, value: e.form_name, fields: e.form_field, departments: e.departments}))}
+                    selectOption={formList?.map(e => ({label: e.form_name, value: e.name, fields: e.form_field}))}
                     initValue={''}
                     validate={errors.formName && 'error'}
                     validMessage={errors.formName && errors.formName.message}
@@ -85,7 +87,7 @@ export default (props) => {
                             label={item.field_name}
                             class='labeldefaultFont'
                             control={control}
-                            iProps={{placeholder: 'Please state'}}
+                            iProps={{placeholder: 'Select Request Form'}}
                             rules={{required: 'Please state'}}
                             initValue={''}
                             validate={errors[item.field_name] && 'error'}
@@ -115,11 +117,11 @@ export default (props) => {
             </Collapse>
             </Col>
             <Col span={24}>
-                <Row gutter={20}>
-                    <Col span={12}>
+                <Row gutter={[20, 20]} justify='end'>
+                    <Col span={9}>
                         <Button size='large' type='primary' htmlType='button' className='w-100 black-btn' onClick={() => history.push(`${Department.link}/requests`)}>Cancel</Button>
                     </Col>
-                    <Col span={12}>
+                    <Col span={9}>
                         <Button size='large' type='primary' htmlType='submit' className='w-100 green-btn'>Save Changes</Button>
                     </Col>
                 </Row>

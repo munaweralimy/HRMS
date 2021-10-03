@@ -18,6 +18,11 @@ export default (props) => {
               <Avatar size={isHDScreen ? item.size : 85} src={item.url} className="mb-10PX" />
             </Col>
           )}
+          {item.type == 'simpletext' && 
+            <Col span={24} align='center'>
+              <Text className='c-gray'>{item.title}</Text>
+            </Col>
+          }
 
           {item.type == 'users' && (
             <Col span={24}>
