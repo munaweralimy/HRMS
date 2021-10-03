@@ -1,33 +1,34 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, Button, Pagination, message } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditInstitution from './Components/AddEditInstitution';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getInstitutionsList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getInstitutionsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [institutionFiled, setInstitutionField] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const institutionsListData = useSelector((state) => state.setup.institutionsListData);
 
   useEffect(() => {
-    dispatch(getInstitutionsList(page,pageSize));
-  }, []);
+    if (!visible) {
+      dispatch(getInstitutionsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
       title: 'Institution',
-      dataIndex: 'name',
-      key: 'name',
-      sorted: (a, b) => a.name - b.name,
+      dataIndex: 'Institution',
+      key: 'Institution',
+      sorted: (a, b) => a.Institution - b.Institution,
     },
     {
       title: 'Action',
@@ -37,7 +38,7 @@ export default (props) => {
       align: 'center',
       width: '100px',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links">
           <CloseCircleFilled />
         </Button>
       ),
@@ -48,52 +49,51 @@ export default (props) => {
     {
       text: '+ New Institution',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setInstitutionField({ Institution: '', name: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
+    content: (
+      <AddEditInstitution
+        institutionName={institutionFiled}
+        title="Add New Institution"
         onClose={() => setVisible(false)}
-    />,
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getInstitutionsList(page,pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  }
-
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setInstitutionField(record);
+        setVisible(true);
+      },
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
 
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getInstitutionsList(pg,pageSize));
-  }
-
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -107,17 +107,13 @@ export default (props) => {
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={institutionsListData?.rows}
-            pagination={false}
+            pagination={{
+              total: institutionsListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={institutionsListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

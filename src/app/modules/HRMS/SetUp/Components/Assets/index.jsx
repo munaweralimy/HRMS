@@ -1,26 +1,27 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, Button, Pagination, message } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditAsset from './Components/AddEditAssets';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getAssetsList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getAssetsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [assetField, setAssetField] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
-  const assetsListData = useSelector((state) => state.setup.assetsListData);
+  const assetsList = useSelector((state) => state.setup.assetsListData);
 
   useEffect(() => {
-    dispatch(getAssetsList(page,pageSize));
-  }, []);
+    if (!visible) {
+      dispatch(getAssetsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -39,12 +40,11 @@ export default (props) => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      sorted: (a, b) => a.status - b.status,
       render: (text) => {
         let clname = '';
-        if (text == 'In Staff Passession') {
+        if (text == 'In Staff Possession') {
           clname = 'c-pending';
-        } else {
+        } else if (text == 'With Company') {
           clname = 'c-success';
         }
         return <span className={`SentanceCase ${clname}`}>{text}</span>;
@@ -56,9 +56,8 @@ export default (props) => {
       key: 'Action',
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
-      width: '100px',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links" onClick={() => {}}>
           <CloseCircleFilled />
         </Button>
       ),
@@ -69,18 +68,18 @@ export default (props) => {
     {
       text: '+ New Team',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setAssetField({ name: '', status: '', assets_id: '', assets_name: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: <AddEditAsset asset={assetField} title="Add New Asset" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -92,28 +91,42 @@ export default (props) => {
       await axios.delete(url);
       message.success('Record Successfully Deleted');
       //props.setLoading(false);
-      dispatch(getAssetsList(page,pageSize));
+      dispatch(getAssetsList(page, pageSize));
     } catch (e) {
       //props.setLoading(false);
       const { response } = e;
       message.error('Something went wrong');
     }
-  }
+  };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setAssetField(record);
+        setVisible(true);
+      },
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
+
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
 
   const onPageChange = (pg) => {
     setPage(pg);
-    dispatch(getAssetsList(pg,pageSize));
-  }
+    dispatch(getAssetsList(pg, pageSize));
+  };
 
   return (
     <>
@@ -127,18 +140,14 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={assetsListData?.rows}
-            pagination={false}
+            ListData={assetsList?.rows}
+            pagination={{
+              total: assetsList?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={assetsListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

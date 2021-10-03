@@ -1,41 +1,31 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, message, Pagination, Button } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditEntitlmentLeave from './Components/AddEditLeaveEntitlement';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getLeaveEntitlementsList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getLeaveEntitlementsList, getLeaveList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [entitlementLeave, setEntitlementLeave] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const leaveEntitlementsListData = useSelector((state) => state.setup.leaveEntitlementsListData);
 
   useEffect(() => {
-    dispatch(getLeaveEntitlementsList(page,pageSize));
-  }, []);
-
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getLeaveEntitlementsList(page,pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
+    if (!visible) {
+      dispatch(getLeaveEntitlementsList(page, limit, '', ''));
     }
-  }
+  }, [visible]);
+
+  useEffect(() => {
+    dispatch(getLeaveList());
+  }, []);
 
   const ListCol = [
     {
@@ -63,13 +53,13 @@ export default (props) => {
       key: 'is_limit',
       sorted: (a, b) => a.is_limit - b.is_limit,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No'
-        } else {
-          return 'Yes'
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'Apply Before',
@@ -77,13 +67,13 @@ export default (props) => {
       key: 'apply_before_current_date',
       sorted: (a, b) => a.apply_before_current_date - b.apply_before_current_date,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No'
-        } else {
-          return 'Yes'
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'Prorated',
@@ -91,13 +81,13 @@ export default (props) => {
       key: 'is_prorate',
       sorted: (a, b) => a.is_prorate - b.is_prorate,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No'
-        } else {
-          return 'Yes'
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'Overdraft',
@@ -105,13 +95,13 @@ export default (props) => {
       key: 'overdraft',
       sorted: (a, b) => a.overdraft - b.overdraft,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No'
-        } else {
-          return 'Yes'
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'CF',
@@ -119,13 +109,13 @@ export default (props) => {
       key: 'carries_forward',
       sorted: (a, b) => a.carries_forward - b.carries_forward,
       align: 'center',
-      render: (text) => {
-        if (text == 0) {
-          return 'No'
-        } else {
-          return 'Yes'
-        }
-      },
+      // render: (text) => {
+      //   if (text == 0) {
+      //     return 'No';
+      //   } else {
+      //     return 'Yes';
+      //   }
+      // },
     },
     {
       title: 'Action',
@@ -145,37 +135,50 @@ export default (props) => {
     {
       text: '+ New Entitlement',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setEntitlementLeave({ name: '', leave_entitlement_name: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
+    content: (
+      <AddEditEntitlmentLeave
+        leaveEtitlement={entitlementLeave}
+        title={`${entitlementLeave.name ? 'Edit' : 'Add'} Leave Entitlement`}
         onClose={() => setVisible(false)}
-    />,
-    width: 536,
+      />
+    ),
+    width: '800px',
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setEntitlementLeave(record);
+        setVisible(true);
+      },
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
 
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getLeaveEntitlementsList(pg,pageSize));
-  }
-
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getLeaveEntitlementsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+    } else {
+      dispatch(getLeaveEntitlementsList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -183,23 +186,19 @@ export default (props) => {
           <HeadingChip title="Leave Entitlements" btnList={btnList} />
         </Col>
         <Col span={24}>
-        <ListCard
+          <ListCard
             onRow={onClickRow}
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={leaveEntitlementsListData?.rows}
-            pagination={false}
+            pagination={{
+              total: leaveEntitlementsListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={leaveEntitlementsListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

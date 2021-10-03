@@ -1,34 +1,36 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditReligion from './Components/AddEditReligion';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getReligionsList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getReligionsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [religionFiled, setReligionField] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const religionsListData = useSelector((state) => state.setup.religionsListData);
 
   useEffect(() => {
-    dispatch(getReligionsList(page,pageSize));
-  }, []);
+    if (!visible) {
+      dispatch(getReligionsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
       title: 'Religion',
-      dataIndex: 'name',
-      key: 'name',
-      sorted: (a, b) => a.name - b.name,
+      dataIndex: 'religion',
+      key: 'religion',
+      sorted: (a, b) => a.religion - b.religion,
     },
+
     {
       title: 'Action',
       dataIndex: 'Action',
@@ -48,52 +50,45 @@ export default (props) => {
     {
       text: '+ New Religion',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setReligionField({ name: '', religion: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: <AddEditReligion religion={religionFiled} title="Add New Religion" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getReligionsList(page,pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  }
-
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setReligionField(record);
+        setVisible(true);
+      },
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
 
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getReligionsList(pg,pageSize));
-  }
-
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getReligionsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getReligionsList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -107,17 +102,13 @@ export default (props) => {
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={religionsListData?.rows}
-            pagination={false}
+            pagination={{
+              total: religionsListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={religionsListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />
