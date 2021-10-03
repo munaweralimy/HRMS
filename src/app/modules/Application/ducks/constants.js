@@ -1,3 +1,8 @@
+export const PENDING_ISSUES = "PENDING_ISSUES";
+export const POLICY_LIST = "POLICY_LIST";
+export const TIMESHEET_DATA = "TIMESHEET_DATA";
+export const CHECK_IN_DATA = "CHECK_IN_DATA";
+
 export const COUNTRY = "COUNTRY";
 export const RACE = "RACE";
 export const RELIGION = "RELIGION";
