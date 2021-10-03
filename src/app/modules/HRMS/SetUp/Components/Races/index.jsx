@@ -1,26 +1,27 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditRace from './Components/AddEditRace';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getRacesList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getRacesList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
+  const [raceField, setRaceField] = useState('');
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const racesListData = useSelector((state) => state.setup.racesListData);
 
   useEffect(() => {
-    dispatch(getRacesList(page,pageSize));
-  }, []);
+    if (!visible) {
+      dispatch(getRacesList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -48,51 +49,44 @@ export default (props) => {
     {
       text: '+ New Race',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setRaceField({ name: '', race: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: <AddEditRace race={raceField} title="Add New Race" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getRacesList(page,pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  }
-
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setRaceField(record);
+        setVisible(true);
+      },
     };
-  }
-
+  };
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
 
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getRacesList(pg,pageSize));
-  }
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getRacesList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getRacesList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
 
   return (
     <>
@@ -107,17 +101,13 @@ export default (props) => {
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={racesListData?.rows}
-            pagination={false}
+            pagination={{
+              total: racesListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={racesListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

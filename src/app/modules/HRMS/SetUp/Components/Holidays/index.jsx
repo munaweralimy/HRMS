@@ -1,45 +1,47 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditHolidays from './Components/AddEditHolidays';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getHolidaysList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getHolidaysList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [holidayFields, setHolidayFields] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const holidaysListData = useSelector((state) => state.setup.holidaysListData);
 
   useEffect(() => {
-    dispatch(getHolidaysList(page,pageSize));
-  }, []);
+    if (!visible) {
+      dispatch(getHolidaysList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
       title: 'Holiday Name',
-      dataIndex: 'holiday_name',
-      key: 'holiday_name',
-      sorted: (a, b) => a.holiday_name - b.holiday_name,
+      dataIndex: 'holiday',
+      key: 'holiday',
+      sorted: (a, b) => a.holiday - b.holiday,
     },
     {
       title: 'Date',
-      dataIndex: 'holiday_date',
-      key: 'holiday_date',
-      sorted: (a, b) => a.holiday_date - b.holiday_date,
+      dataIndex: 'date',
+      key: 'date',
+      sorted: (a, b) => a.date - b.date,
     },
     {
       title: 'Note',
       dataIndex: 'note',
       key: 'note',
       sorted: (a, b) => a.note - b.note,
+      render: (text) => (text ? text : '-'),
     },
     {
       title: 'Action',
@@ -48,7 +50,7 @@ export default (props) => {
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links">
           <CloseCircleFilled />
         </Button>
       ),
@@ -59,51 +61,43 @@ export default (props) => {
     {
       text: '+ New Holiday',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setHolidayFields({ name: '', holiday: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: (
+      <AddEditHolidays holidayFields={holidayFields} title="Add New Holiday" onClose={() => setVisible(false)} />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getHolidaysList(page,pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  }
-
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setHolidayFields(record);
+        setVisible(true);
+      },
     };
-  }
+  };
 
-  const onSearch = (value) => {
-    console.log('check values', value);
-  }
-
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getHolidaysList(pg,pageSize));
-  }
+  const onTableChange = (pagination, filters, sorter) => {
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getHolidaysList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getHolidaysList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
+  const onSearch = () => {};
 
   return (
     <>
@@ -118,17 +112,13 @@ export default (props) => {
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={holidaysListData?.rows}
-            pagination={false}
+            pagination={{
+              total: holidaysListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={holidaysListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

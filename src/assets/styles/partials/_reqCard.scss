@@ -56,3 +56,19 @@
     border: 0;
   }
 }
+.add-user {
+  .ant-descriptions-view {
+    border: 0;
+  }
+  .ant-descriptions-item-label {
+    background: transparent;
+    border: 0;
+    color: $white;
+    padding: 10px 0;
+  }
+  .ant-descriptions-item-content {
+    background: transparent;
+    padding: 10px 0;
+    border: 0;
+  }
+}

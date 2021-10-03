@@ -40,6 +40,8 @@ export default (props) => {
         return 'b-success';
       case 'Rest Day':
         return 'b-success';
+      case 'HolidayMalaysia Day':
+        console.log(status);
     }
   };
 
