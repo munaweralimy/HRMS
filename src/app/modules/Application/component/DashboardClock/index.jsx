@@ -31,6 +31,7 @@ export default (props) => {
             })
         }, 1000);
     }, []);
+    
 
     return (
         <Card bordered={false} className='uni-card'>
