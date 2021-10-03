@@ -5,7 +5,8 @@ import moment from 'moment';
 const { Title, Text} = Typography;
 
 export default (props) => {
-
+    const {checkInData} = props;
+    console.log('checkInData', checkInData)
     const clockin = '11:00';
     const clockout = '18:20';
 

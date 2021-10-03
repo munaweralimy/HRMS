@@ -8,6 +8,8 @@ import { BreakingPoint } from '../../../configs/constantData';
 import Dashboard from './Dashboard';
 import PendingRequests from './PendingRequests';
 import RequestList from '../HRMS/Requests/RequestList';
+import moment from 'moment';
+import { getPendingIssues, getPolicyList, getTimesheetData, getCheckInData } from './ducks/actions';
 
 const { Title } = Typography;
 
@@ -16,18 +18,32 @@ export default (props) => {
     const dispatch = useDispatch();
     const i18n = useTranslate();
     const { t } = i18n;
+    //const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+    const id = 'HR-EMP-00006'
+    const todayDate = moment().format('YYYY-MM-DD');
     const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
+    const pendingData = useSelector(state => state.global.pendingData);
+    const policyData = useSelector(state => state.global.policyData);
+    const timesheetData = useSelector(state => state.global.timesheetData);
+    const checkInData = useSelector(state => state.global.checkInData);
+    
+    useEffect(() => {
+        dispatch(getPendingIssues());
+        dispatch(getPolicyList());
+        dispatch(getTimesheetData());
+        dispatch(getCheckInData(id, todayDate));
+    }, [])
 
     return (
        <Row gutter={[20, 50]}>
            <Col span={24}>
-               <Dashboard />
+               <Dashboard policyData={policyData} timesheetData={timesheetData} checkInData={checkInData}/>
            </Col>
            <Col span={24}>
                <RequestList />
            </Col>
            <Col span={24}>
-                <PendingRequests />
+                <PendingRequests pendingData={pendingData} />
             </Col>
        </Row>
     )
