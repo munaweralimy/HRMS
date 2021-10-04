@@ -42,6 +42,9 @@ select:-webkit-autofill:focus {
   height: auto !important;
 }
 
+.ultra-550 {
+  height: 400px !important;
+}
 .text-center {
   text-align: center !important;
 }
@@ -53,7 +56,7 @@ select:-webkit-autofill:focus {
   justify-content: flex-end;
 }
 .justify-cetner {
-    justify-content: center;
+  justify-content: center;
 }
 
 .position-relative {
@@ -62,8 +65,8 @@ select:-webkit-autofill:focus {
 
 .right-fixed {
   position: absolute;
-  top:0;
-  right:10px;
+  top: 0;
+  right: 10px;
 }
 
 .p-0 {
@@ -83,7 +86,7 @@ select:-webkit-autofill:focus {
 }
 
 .mb-10PX {
-    margin-bottom: 10px !important;
+  margin-bottom: 10px !important;
 }
 
 .mt-0 {
@@ -202,7 +205,7 @@ select:-webkit-autofill:focus {
 }
 
 .b-dark-gray {
-    background-color: $element-color;
+  background-color: $element-color;
 }
 
 .b-gray {
@@ -503,17 +506,17 @@ select:-webkit-autofill:focus {
 }
 
 .member-icon {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    width: 100%;
-    .ant-avatar {
-      border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+  .ant-avatar {
+    border: 0;
+    margin: 10px 0;
+    &:not(:first-child) {
       margin: 10px 0;
-      &:not(:first-child) {
-        margin: 10px 0;
-      }
     }
+  }
 }
 
 // ant design customization

@@ -1,33 +1,38 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, Button, Pagination, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditPosition from './Components/AddEditPosition';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getJobPositionsList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getJobPositionsList, getSkillList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [positionFields, setPositionFields] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const jobPositionsListData = useSelector((state) => state.setup.jobPositionsListData);
 
   useEffect(() => {
-    dispatch(getJobPositionsList(page,pageSize));
+    if (!visible) {
+      dispatch(getJobPositionsList(page, limit, '', ''));
+    }
+  }, [visible]);
+
+  useEffect(() => {
+    dispatch(getSkillList());
   }, []);
 
   const ListCol = [
     {
       title: 'Job Title',
-      dataIndex: 'job_position_name',
-      key: 'job_position_name',
-      sorted: (a, b) => a.job_position_name - b.job_position_name,
+      dataIndex: 'job_title',
+      key: 'job_title',
+      sorted: (a, b) => a.job_title - b.job_title,
     },
     {
       title: 'Work Quality',
@@ -82,52 +87,51 @@ export default (props) => {
     {
       text: '+ New Job Position',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setPositionFields({ name: '', job_title: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
-    width: 536,
+    content: (
+      <AddEditPosition
+        jobPosition={positionFields}
+        title="Add New Position"
+        onClose={() => {
+          setVisible(false);
+        }}
+      />
+    ),
+    width: 1199,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getJobPositionsList(page,pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  }
-
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setPositionFields(record);
+        setVisible(true);
+      },
     };
-  }
-
+  };
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
 
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getJobPositionsList(pg,pageSize));
-  }
-
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getJobPositionsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getJobPositionsList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -141,17 +145,13 @@ export default (props) => {
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={jobPositionsListData?.rows}
-            pagination={false}
+            pagination={{
+              total: jobPositionsListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={jobPositionsListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

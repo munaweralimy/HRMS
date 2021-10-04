@@ -1,26 +1,27 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import { Row, Col, Button, Pagination, message, Switch } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Button, Switch } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditReqForm from './Components/AddEditReqForm';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getRequestFormsList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getRequestFormsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
+  const [formFields, setFormFields] = useState('');
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
-  const requestFormsListData = useSelector((state) => state.setup.requestFormsListData);
+  const requestFormsList = useSelector((state) => state.setup.requestFormsListData);
 
   useEffect(() => {
-    dispatch(getRequestFormsList(page,pageSize));
-  }, []);
+    if (!visible) {
+      dispatch(getRequestFormsList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -31,19 +32,17 @@ export default (props) => {
     },
     {
       title: 'Fields',
-      dataIndex: 'form_fields_count',
-      key: 'form_fields_count',
-      align: 'center',
-      sorted: (a, b) => a.form_fields_count - b.form_fields_count,
+      dataIndex: 'fields',
+      key: 'fields',
+      sorted: (a, b) => a.fields - b.fields,
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
       sorted: (a, b) => a.status - b.status,
-      render: (text, record) => (
-        <Switch defaultChecked={text == 'Archive'} />
-      ),
+      align: 'center',
+      render: (text, record) => <Switch checked={text == 1 ? true : false} disabled />,
     },
     {
       title: 'Action',
@@ -51,9 +50,8 @@ export default (props) => {
       key: 'Action',
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
-      width: '100px',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links" onClick={() => {}}>
           <CloseCircleFilled />
         </Button>
       ),
@@ -64,18 +62,17 @@ export default (props) => {
     {
       text: '+ New Team',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setFormFields({ form_name: '', name: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
+    content: <AddEditReqForm title="Add New Form" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -87,29 +84,34 @@ export default (props) => {
       await axios.delete(url);
       message.success('Record Successfully Deleted');
       //props.setLoading(false);
-      dispatch(getRequestFormsList(page,pageSize));
+      dispatch(getRequestFormsList(page, pageSize));
     } catch (e) {
       //props.setLoading(false);
       const { response } = e;
       message.error('Something went wrong');
     }
-  }
+  };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setFormFields(record);
+        setVisible(true);
+      },
     };
-  }
-
+  };
   const onSearch = (value) => {
     console.log('check values', value);
-  }
-
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getRequestFormsList(pg,pageSize));
-  }
-
+  };
+  const onTableChange = (pagination, filters, sorter) => {
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
   return (
     <>
       <Row gutter={[20, 30]}>
@@ -122,18 +124,14 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={requestFormsListData?.rows}
-            pagination={false}
+            ListData={requestFormsList?.rows}
+            pagination={{
+              total: requestFormsList?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={requestFormsListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

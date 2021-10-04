@@ -1,26 +1,27 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Button, Pagination, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditTeam from './Components/AddEditTeam';
 import Search from './Components/Search';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {getTeamList} from '../../ducks/actions';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { getTeamList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [teamFiled, setTeamField] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const teamListData = useSelector((state) => state.setup.teamsListData);
 
   useEffect(() => {
-    dispatch(getTeamList(page,pageSize));
-  }, []);
+    if (!visible) {
+      dispatch(getTeamList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   const ListCol = [
     {
@@ -37,14 +38,14 @@ export default (props) => {
     },
     {
       title: 'Team Leader',
-      dataIndex: 'team_leader_name',
-      key: 'team_leader_name',
+      dataIndex: 'team_leader',
+      key: 'team_leader',
       sorted: (a, b) => a.team_leader_name - b.team_leader_name,
     },
     {
       title: 'Team Member',
-      dataIndex: 'total_staff_count',
-      key: 'total_staff_count',
+      dataIndex: 'team_member',
+      key: 'team_member',
       sorted: (a, b) => a.total_staff_count - b.total_staff_count,
       align: 'center',
     },
@@ -55,7 +56,7 @@ export default (props) => {
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links" onClick={() => {}}>
           <CloseCircleFilled />
         </Button>
       ),
@@ -66,51 +67,44 @@ export default (props) => {
     {
       text: '+ New Team',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setTeamField({ company: '', name: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
-    width: 536,
+    content: <AddEditTeam team={teamFiled} title="Add New Team" onClose={() => setVisible(false)} />,
+    width: 900,
     onCancel: () => setVisible(false),
   };
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getTeamList(page,pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
-      message.error('Something went wrong');
-    }
-  }
-
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setTeamField(record);
+        setVisible(true);
+      },
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
 
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getTeamList(pg,pageSize));
-  }
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getTeamList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
 
   return (
     <>
@@ -125,17 +119,13 @@ export default (props) => {
             onSearch={onSearch}
             ListCol={ListCol}
             ListData={teamListData?.rows}
-            pagination={false}
+            pagination={{
+              total: teamListData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
-          <div className='w-100 text-right mt-2'>
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={teamListData?.count}
-              />
-          </div>
         </Col>
       </Row>
       <Popup {...popup} />

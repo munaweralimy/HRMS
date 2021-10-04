@@ -1,6 +1,11 @@
 import * as action_types from "./constants";
 
 const initialState = {
+    pendingData: [],
+    policyData: [],
+    timesheetData: [],
+    checkInData: [],
+
     countryData: [],
     religionData: [],
     raceData: [],
@@ -23,6 +28,15 @@ const initialState = {
 export default (state = initialState, action) => {
     const { type, data } = action;
     switch (type) {
+        case action_types.PENDING_ISSUES:
+            return {...state, pendingData: data };
+        case action_types.POLICY_LIST:
+            return {...state, policyData: data };
+        case action_types.TIMESHEET_DATA:
+            return {...state, timesheetData: data };
+        case action_types.CHECK_IN_DATA:
+            return {...state, checkInData: data };
+
         case action_types.COUNTRY:
             return {...state, countryData: data };
         case action_types.RELIGION:

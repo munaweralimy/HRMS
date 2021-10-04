@@ -1,64 +1,28 @@
 import React from 'react';
 import { Row, Col, Calendar } from "antd";
 import DashboardClock from '../component/DashboardClock';
-import PendingRequestCard from '../../../molecules/PendingRequestCard';
+import PolicyRequestCard from '../../../molecules/PolicyRequestCard';
 import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 import ProgressCard from '../../../molecules/HRMS/ProgressCard';
 
 export default (props) => {
-
-    const policyData = [
-        {
-            user_image: '',
-            name: '1234565533',
-            applicant_name: 'Rebecca Holmes'
-        },
-        {
-            user_image: '',
-            name: '454654654',
-            applicant_name: 'Rose Chaves'
-        },
-        {
-            user_image: '',
-            name: '987265466',
-            applicant_name: 'Harry Boyed'
-        },
-        {
-            user_image: '',
-            name: '1234565533',
-            applicant_name: 'Rebecca Holmes'
-        },
-        {
-            user_image: '',
-            name: '454654654',
-            applicant_name: 'Rose Chaves'
-        },
-        {
-            user_image: '',
-            name: '987265466',
-            applicant_name: 'Harry Boyed'
-        },
-    ]
-
+    const {policyData, timesheetData, checkInData} = props;
+    
     return (
         <Row gutter={[20,20]}>
             <Col span={24}>
-                <DashboardClock />
+                <DashboardClock checkInData={checkInData} />
             </Col>
             <Col flex='1 0 398px'>
-                <PendingRequestCard
-                data={policyData}
-                title={'Policy'}
-                link={''}
-                innerlink={''}
-                level={4}
-                space={10}
-                status='none'
-                reverse={true}
-                />
+                {policyData?.rows?.length > 0 && <PolicyRequestCard
+                    data={policyData?.rows[0]}
+                    title={'Policy'}
+                    level={4}
+                    spacing={10}
+                />}
             </Col>
             <Col flex='1 0 398px'>
-                <ProgressCard />
+                <ProgressCard timesheetData={timesheetData} />
             </Col>
             <Col flex='1 0 398px'>
                 <LeaveCalendar />
