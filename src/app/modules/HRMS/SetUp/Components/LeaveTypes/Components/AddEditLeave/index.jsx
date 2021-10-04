@@ -23,7 +23,11 @@ const ConditionalInput = ({ control, index }) => {
         control={control}
         class={`mb-0 w-100`}
         iProps={{ placeholder: 'Please select' }}
-        selectOption={approverList.map((value) => ({ label: value.name, value: value.name }))}
+        selectOption={approverList.map((value) => ({
+          label: value.name,
+          value: value.name,
+          approver_id: value.approver_id,
+        }))}
       />
     </Col>
   ) : null;
@@ -44,7 +48,7 @@ export default (props) => {
     control,
   });
   const initQ = {
-    approver_select: '',
+    approver_level: '',
   };
 
   useEffect(() => {
@@ -85,30 +89,29 @@ export default (props) => {
       doctype: 'HRMS Leave Type',
       approvers: values?.approvers.map((value) =>
         value.approver_level.label === 'Individual'
-          ? { approver_level: value.approver_level.value, approver: values.individual.value }
-          : { approver_level: value.approver_level.value },
+          ? {
+              approver_level: value.approver_level.value,
+              approver: values.individual.value,
+              approver_id: values.individual.approver_id,
+              doctype: 'HRMS Leave Type Approvers',
+            }
+          : { approver_level: value.approver_level.value, doctype: 'HRMS Leave Type Approvers' },
       ),
-      // approvers: values?.approvers.map((value) => ({
-      //   approver: value.approver_select.label,
-      //   approver_id: value.approver_select.id,
-      //   doctype: 'HRMS Leave Type Approvers',
-      // })),
     };
-    console.log({ payload });
 
-    // leaveType.leave_type.length == 0
-    //   ? createLeave(payload)
-    //       .then((response) => {
-    //         message.success('Leave created successfully');
-    //         onClose();
-    //       })
-    //       .catch((error) => message.error('Leave type alrady exists'))
-    //   : updateSingleLeave(leaveType, payload)
-    //       .then((response) => {
-    //         message.success('Leave update successfully');
-    //         onClose();
-    //       })
-    //       .catch((error) => message.error('Leave type already exisits'));
+    leaveType.leave_type.length == 0
+      ? createLeave(payload)
+          .then((response) => {
+            message.success('Leave created successfully');
+            onClose();
+          })
+          .catch((error) => message.error('Leave type alrady exists'))
+      : updateSingleLeave(leaveType, payload)
+          .then((response) => {
+            message.success('Leave update successfully');
+            onClose();
+          })
+          .catch((error) => message.error('Leave type already exisits'));
   };
   const onDeleteEducationField = () => {
     deleteSingleLeave(leaveType.name)
@@ -126,7 +129,6 @@ export default (props) => {
     if (value[index].approver_level.value == 'Individual') {
       dispatch(leaveTypeSelect(false));
     }
-    console.log(value[index]);
     remove(index);
   };
 
@@ -152,43 +154,45 @@ export default (props) => {
             {item.type == 'array' ? (
               <Col span={24}>
                 <Space size={15} direction="vertical" className="w-100">
-                  {fields.map((elem, index) => (
-                    <Row gutter={[24, 8]}>
-                      {item.child.map((x, i) => (
-                        <Fragment key={i}>
-                          {x?.subheader && (
-                            <Col span={24}>
-                              <Row gutter={24} justify="space-between">
-                                <Col>
-                                  <Text className="mb-0 c-gray">{`${x.subheader} ${index + 1}`}</Text>
-                                </Col>
+                  {fields.map((elem, index) => {
+                    return (
+                      <Row gutter={[24, 8]}>
+                        {item.child.map((x, i) => (
+                          <Fragment key={i}>
+                            {x?.subheader && (
+                              <Col span={24}>
+                                <Row gutter={24} justify="space-between">
+                                  <Col>
+                                    <Text className="mb-0 c-gray">{`${x.subheader} ${index + 1}`}</Text>
+                                  </Col>
 
-                                <Col>
-                                  <Button
-                                    type="link"
-                                    htmlType="button"
-                                    className="p-0 h-auto c-gray-linkbtn"
-                                    onClick={() => onRemoveSelect(index)}
-                                  >
-                                    Remove
-                                  </Button>
-                                </Col>
-                              </Row>
-                            </Col>
-                          )}
-                          <FormGroup
-                            elem={elem}
-                            index={index}
-                            parent={item}
-                            item={x}
-                            control={control}
-                            errors={errors}
-                          />
-                          <ConditionalInput control={control} errors={errors} index={index} />
-                        </Fragment>
-                      ))}
-                    </Row>
-                  ))}
+                                  <Col>
+                                    <Button
+                                      type="link"
+                                      htmlType="button"
+                                      className="p-0 h-auto c-gray-linkbtn"
+                                      onClick={() => onRemoveSelect(index)}
+                                    >
+                                      Remove
+                                    </Button>
+                                  </Col>
+                                </Row>
+                              </Col>
+                            )}
+                            <FormGroup
+                              elem={elem}
+                              index={index}
+                              parent={item}
+                              item={x}
+                              control={control}
+                              errors={errors}
+                            />
+                            <ConditionalInput control={control} errors={errors} index={index} />
+                          </Fragment>
+                        ))}
+                      </Row>
+                    );
+                  })}
 
                   <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={() => append(initQ)}>
                     + Add approver level

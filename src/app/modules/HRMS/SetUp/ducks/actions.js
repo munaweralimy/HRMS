@@ -344,7 +344,9 @@ export const getSkillList = () => async (dispatch) => {
 export const getAllApprovers = () => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get('http://cms2dev.limkokwing.net/api/resource/HRMS Approver');
+  } = await axios.get(
+    'http://cms2dev.limkokwing.net/api/resource/HRMS%20Approver?%20filters=[[company,=,Limkokwing%20University%20Creative%20Technology]]%20&fields=[%22name%22,%22approver_name%22,%22approver_id%22]',
+  );
   dispatch({
     type: action_types.ALL_APPROVERS,
     data: data,
