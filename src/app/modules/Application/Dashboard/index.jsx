@@ -6,12 +6,12 @@ import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 import ProgressCard from '../../../molecules/HRMS/ProgressCard';
 
 export default (props) => {
-    const {policyData, timesheetData, checkInData} = props;
+    const {policyData, timesheetData } = props;
     
     return (
         <Row gutter={[20,20]}>
             <Col span={24}>
-                <DashboardClock checkInData={checkInData} />
+                <DashboardClock />
             </Col>
             <Col flex='1 0 398px'>
                 {policyData?.rows?.length > 0 && <PolicyRequestCard
