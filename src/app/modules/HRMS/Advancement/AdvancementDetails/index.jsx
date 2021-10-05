@@ -6,7 +6,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import Management from './Managment';
 import PostEmployment from './PostEmployment';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdvancementdetails, getFitFigure } from '../dcuks/action';
+import { getAdvancementdetails, getFitFigure, emptyStaffDetails } from '../dcuks/action';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -23,6 +23,9 @@ export default (props) => {
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
     dispatch(getFitFigure(id));
+    return () => {
+      dispatch(emptyStaffDetails())
+    }
   }, []);
 
   return (

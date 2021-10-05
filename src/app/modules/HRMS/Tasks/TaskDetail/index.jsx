@@ -10,6 +10,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../configs/constants';
 import { useForm } from 'react-hook-form';
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
+import { emptyStaffDetails, getAdvancementdetails } from '../../Advancement/dcuks/action';
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -31,6 +32,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getSingleTaskDetail(id));
+    dispatch(getAdvancementdetails(id));
     if (location?.state?.tab) {
       if (location.state.tab == 'Missed') {
         dispatch(getTimesheet(id, 'Issues', 1, 10, '', ''));
@@ -41,6 +43,9 @@ export default (props) => {
       dispatch(getTimesheet(id, 'Pending', 1, 10, '', ''));
     }
     dispatch(getAddProjectName());
+    return () => {
+      dispatch(emptyStaffDetails())
+    }
   }, []);
 
   const updateApi = () => {
@@ -60,9 +65,9 @@ export default (props) => {
   }, [projectName]);
 
   useEffect(() => {
-    if (singleTaskDetail && singleTaskDetail?.projects) {
+    if (singleTaskDetail.length > 0) {
       let projects = [];
-      singleTaskDetail?.projects.map((item) => {
+      singleTaskDetail.map((item) => {
         projects.push({
           name: item.row_name,
           project_code: item.name,
@@ -121,7 +126,7 @@ export default (props) => {
   };
 
   return (
-    <StaffDetails id={id} section='HRMS Tasks' data={singleTaskDetail} title={'Tasks'}>
+    <StaffDetails id={id} section='HRMS Tasks' title={'Tasks'}>
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Tasks</Title></Col>

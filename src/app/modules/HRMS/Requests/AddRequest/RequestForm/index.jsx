@@ -8,6 +8,7 @@ import { WarningIcon } from '../../../../../atoms/CustomIcons';
 import { useHistory } from 'react-router-dom';
 import { getFormFields } from '../../ducks/actions';
 import { Fragment } from 'react';
+import moment from 'moment';
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -17,7 +18,7 @@ export default (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const formList = useSelector(state => state.hrmsrequests.formList)
-    const [forming, setForming] = useState([]);
+    const [forming, setForming] = useState();
     const { title, control, errors, Department } = props;
     const user = localStorage.getItem('user');
 
@@ -26,8 +27,8 @@ export default (props) => {
     }, []);
 
     const onChangeForm = (e) => {
-        if(e.fields) {
-            setForming(e.fields);
+        if(e) {
+            setForming(e);
         }
     }
 
@@ -78,7 +79,36 @@ export default (props) => {
                     validate={errors.formName && 'error'}
                     validMessage={errors.formName && errors.formName.message}
                     />
-                    {forming.map((item,index) => (
+                    {forming?.fields.length > 0 && 
+                    <>
+                    <InputField 
+                        fieldname={'requester'}
+                        label={'Requester'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ readOnly: true }}
+                        initValue={''}
+                    />
+                    <InputField 
+                        fieldname={'requester_team'}
+                        label={'Requester Team'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ readOnly: true }}
+                        initValue={''}
+                    />
+                    <DateField 
+                        fieldname={'current_date'}
+                        label={'Date'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ disabled: true, format: 'Do MMMM YYYY' }}
+                        initValue={moment()}
+                    />
+                    <Divider />
+                    </>
+                    }
+                    {forming?.fields.map((item,index) => (
                         <Fragment key={index}>
                         {item.field_type == 'Date' ?
                             <DateField 
@@ -104,10 +134,7 @@ export default (props) => {
                             : item.field_name == 'Requester' ? user : false
                             }}
                             rules={{required: 'Please state'}}
-                            initValue={
-                                item.field_name == 'Department' ? Department?.department
-                                : item.field_name == 'Requester' ? user : ''
-                            }
+                            initValue={''}
                             validate={errors[item.field_name] && 'error'}
                             />
                         }

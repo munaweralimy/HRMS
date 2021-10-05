@@ -19,7 +19,6 @@ export default (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [ load, setLoad] = useState(false);
-  const data = useSelector(state => state.advancement.advData);
   const details = useSelector(state => state.employment.empDetails);
 
   useEffect(() => {
@@ -36,7 +35,7 @@ export default (props) => {
   }
 
 return (
-    <StaffDetails id={id} section='Employee' data={data}>
+    <StaffDetails id={id} section='Employee'>
       
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>

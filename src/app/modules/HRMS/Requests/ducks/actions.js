@@ -41,11 +41,11 @@ export const getYourRequest = (page, sort) => {
 export const getFormFields = () => {
     return async (dispatch) => {
         const {
-            data: { data },
-        } = await axios.get(`${apiresource}/HRMS Form Listing?fields=["name","form_name"]`);
+            data: { message },
+        } = await axios.get(`${apiMethod}/hrms.api.get_form_fields`);
         dispatch({
             type: action_types.FORMS_LIST,
-            data: data,
+            data: message,
         });
     };
 };
