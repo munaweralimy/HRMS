@@ -6,7 +6,7 @@ import ListCard from '../../../../../molecules/ListCard';
 import AddEditLeave from './Components/AddEditLeave';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getLeaveTypesList, getAllApprovers } from '../../ducks/actions';
+import { getLeaveTypesList, getAllApprovers, getLeaveList } from '../../ducks/actions';
 import { deleteSingleLeave } from '../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -125,6 +125,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getAllApprovers());
+    dispatch(getLeaveList());
   }, []);
 
   return (

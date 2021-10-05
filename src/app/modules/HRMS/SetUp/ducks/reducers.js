@@ -25,6 +25,7 @@ const initialState = {
   userList: [],
   skillsList: [],
   allApprovers: [],
+  reqFormFieldList: [],
   selectedLeave: false,
 };
 
@@ -81,6 +82,8 @@ export default (state = initialState, action) => {
       return { ...state, allApprovers: data };
     case action_types.LEAVE_SELECT_TYPE:
       return { ...state, selectedLeave: data };
+    case action_types.REQ_FORM_FIELDS:
+      return { ...state, reqFormFieldList: data };
     default:
       return state;
   }

@@ -23,3 +23,4 @@ export const USERS = 'USERS';
 export const SKILLS_LIST = 'SKILLS_LIST';
 export const ALL_APPROVERS = 'ALL_APPROVERS';
 export const LEAVE_SELECT_TYPE = 'LEAVE_SELECT_TYPE';
+export const REQ_FORM_FIELDS = 'REQ_FORM_FIELDS';

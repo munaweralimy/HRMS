@@ -4,6 +4,7 @@ const leaveEntitlementLeaves = () => {
   const [leave, leaveType] = useState(false);
   const leaveList = useSelector((state) => state.setup.leaveList);
 
+  console.log({ leaveList });
   const onChnageLeaveType = (val) => {
     if (val.value === 'Annual Leave') {
       leaveType(true);
@@ -30,7 +31,7 @@ const leaveEntitlementLeaves = () => {
       placeholder: 'Select leave type',
       req: true,
       reqmessage: 'Leave Type required',
-      options: leaveList.map((value) => ({ label: value.name, value: value.name })),
+      options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
       onChange: onChnageLeaveType,
     },
     {

@@ -2,7 +2,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import { apiresource, apiMethod } from '../../../../../configs/constants';
 
 export const createLeave = (payload) => {
-  return axios.post(`${apiresource}/HRMS Leave Type`, payload);
+  return axios.post(`${apiMethod}/hrms.api.hrms_leave_type_create_records`, payload);
 };
 
 export const getSingleLeave = (id) => {

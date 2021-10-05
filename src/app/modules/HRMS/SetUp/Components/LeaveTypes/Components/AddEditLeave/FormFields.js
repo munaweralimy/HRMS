@@ -3,6 +3,7 @@ import { leaveTypeSelect } from '../../../../ducks/actions';
 const leaveFields = () => {
   const dispatch = useDispatch();
   const disabled = useSelector((state) => state.setup.selectedLeave);
+  const leaveList = useSelector((state) => state.setup.leaveList);
   const onSelectChange = (e) => {
     console.log({ e });
     if (e.value === 'Individual') {
@@ -16,9 +17,10 @@ const leaveFields = () => {
       label: 'Leave Type Name',
       req: true,
       placeholder: 'Type leave name',
-      type: 'input',
+      type: 'select',
       twocol: false,
       reqmessage: 'Please enter name',
+      options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
     },
     {
       title: 'Avaliabale for the following',
@@ -78,8 +80,8 @@ const leaveFields = () => {
           options: [
             { label: 'Individual', value: 'Individual', isDisabled: disabled },
             { label: 'Manager', value: 'Manager' },
-            { label: 'Team Leader', value: 'Team Leader' },
-            { label: 'Supaervisor', value: 'Supaervisor' },
+            { label: 'Team Lead', value: 'Team Lead' },
+            { label: 'Supervisor', value: 'Supervisor' },
           ],
         },
       ],
