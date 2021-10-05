@@ -8,6 +8,7 @@ import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, get
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
 import MyTasks from './components/MyTasks';
+import { useLocation } from 'react-router-dom';
 
 const filtersOverall = [
   {
@@ -144,7 +145,7 @@ const ListColTeams = [
 ];
 
 export default (props) => {
-
+  const location = useLocation();
   const dispatch = useDispatch();
   const il8n = useTranslate();
   const { t } = il8n;
@@ -152,7 +153,7 @@ export default (props) => {
   const overallDataList = useSelector(state => state.tasks.overallTaskDataWithStatus);
   const teamTaskData = useSelector(state => state.tasks.teamTaskData);
   const teamTaskDataList = useSelector(state => state.tasks.teamTaskDataWithStatus);
-
+  
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     // dispatch(emptyOverall());
     if (type == 'list') {
@@ -219,13 +220,22 @@ export default (props) => {
       title: 'My Tasks',
       key: 'mytask',
       Comp: MyTasks,
+      iProps : {
+        activeAddTimeSheet: location?.state?.addTimeSheet ? location?.state?.addTimeSheet : false
+      }
     },
   ]
+
+  let activeTabs = tabs[0].key;
+
+  if(location?.state?.addTimeSheet) {
+    activeTabs = tabs[2].key;
+  }
 
   return (
     <Row gutter={[24, 30]}>
       <Col span={24}>
-        <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
+        <CardListSwitchLayout tabs={tabs} active={activeTabs} />
       </Col>
     </Row>
     )
