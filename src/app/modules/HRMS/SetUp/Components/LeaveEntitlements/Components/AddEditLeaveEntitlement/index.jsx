@@ -44,7 +44,7 @@ export default (props) => {
       placeholder: 'Select leave type',
       req: true,
       reqmessage: 'Leave Type required',
-      options: leaveList.map((value) => ({ label: value.name, value: value.name })),
+      options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
       onChange: onChnageLeaveType,
     },
     {
@@ -138,7 +138,7 @@ export default (props) => {
 
   const onFinish = (values) => {
     const payload = {
-      leave_entitlement_name: values.leave_entitlement_name,
+      leave_entitlement_name: values.leave_entitlement_name.value,
       leave_type: values.leave_type.value,
       entitlement: values.entitlement,
       max_years: values.max_years,

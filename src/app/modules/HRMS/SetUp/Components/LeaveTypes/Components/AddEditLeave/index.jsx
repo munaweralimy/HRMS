@@ -15,6 +15,7 @@ const ConditionalInput = ({ control, index }) => {
     name: 'approvers',
     control,
   });
+
   return value?.[index]?.approver_level.value === 'Individual' ? (
     <Col span={24}>
       <SelectField
@@ -43,6 +44,7 @@ export default (props) => {
     control,
     name: 'approvers',
   });
+
   const value = useWatch({
     name: 'approvers',
     control,
@@ -61,6 +63,7 @@ export default (props) => {
 
   useEffect(() => {
     if (Object.entries(singleLeaveValues).length > 0) {
+      console.log({ singleLeaveValues });
       setValue('leave_type', singleLeaveValues?.leave_type);
       setValue('contract_type', { label: singleLeaveValues?.contract_type, value: singleLeaveValues?.contract_type });
       setValue('gender', { label: singleLeaveValues?.gender, value: singleLeaveValues?.gender });
@@ -69,10 +72,8 @@ export default (props) => {
         value: singleLeaveValues?.marital_status,
       });
       setValue('add_leave_statistics', singleLeaveValues?.add_leave_statistics);
-      setValue(
-        'approvers',
-        singleLeaveValues?.approvers.map((value) => ({ label: value.approver, value: value.approver })),
-      );
+      setValue('approvers', singleLeaveValues?.approvers);
+      setValue('individual', { label: 'Zain kafeel', value: 'zain kafeel' });
     } else {
       reset();
     }
@@ -81,7 +82,7 @@ export default (props) => {
   const onFinish = (values) => {
     console.log({ values });
     const payload = {
-      leave_type: values?.leave_type,
+      leave_type: values?.leave_type.value,
       contract_type: values?.contract_type.label,
       gender: values?.gender.label,
       marital_status: values?.marital_status.label,
