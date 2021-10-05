@@ -148,7 +148,7 @@ export const getLeaveType = () => {
   return async (dispatch) => {
     const {
       data: { data },
-    } = await axios.get(`${apiresource}/HRMS Leave Type`);
+    } = await axios.get(`${apiresource}/HRMS Leave Type?filters=[["company","=","Limkokwing University Creative Technology"]]&fields=["name","leave_type"]`);
     dispatch({
       type: action_types.LEAVE_TYPE,
       data: data,

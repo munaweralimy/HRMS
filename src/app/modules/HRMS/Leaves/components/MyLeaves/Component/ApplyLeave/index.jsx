@@ -43,10 +43,14 @@ export default (props) => {
       approvers.push({
         approver: resp?.approver,
         status: "Pending",
-        doctype: "HRMS Leave Application Approver"
+        doctype: "HRMS Leave Application Approver",
+        approver_id: resp?.employee_id
       })
     })
     console.log('approvers', approvers)
+
+    
+
 
     let temp = {
       employee_id: id,
@@ -65,7 +69,9 @@ export default (props) => {
       reason: val?.reason,
       attachment: "/private/files/CMS2_03_AQA_Flowchart.pdf",
       doctype: "HRMS Leave Application",
-      leave_approvers: approvers
+      leave_approvers: approvers,
+      role: '',
+      leave_type_name: ''
     }
 
     console.log('val', temp)
@@ -105,7 +111,7 @@ export default (props) => {
               selectOption={
                 leaveTypeData &&
                 leaveTypeData?.map((e) => {
-                    return { value: e.name, label: e.name };
+                    return { value: e.name, label: e.leave_type };
                 })
               }
             />
