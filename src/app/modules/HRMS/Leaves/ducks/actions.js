@@ -156,11 +156,11 @@ export const getLeaveType = () => {
   };
 };
 
-export const getLeaveData = (type,company) => {
+export const getLeaveData = (type,company,employeeID) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_data?employee_id=HR-EMP-00002&leave_type=${type}&company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_data?employee_id=${employeeID}&leave_type=${type}&company=${company}`);
     dispatch({
       type: action_types.LEAVE_DATA,
       data: message,
@@ -168,11 +168,11 @@ export const getLeaveData = (type,company) => {
   };
 };
 
-export const getLeaveApprovers = (type,company) => {
+export const getLeaveApprovers = (type,company,employeeID) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_leave_type_approvers?leave_type=${type}&company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.api.get_leave_type_approvers?leave_type=${type}&company=${company}&employee_id=${employeeID}`);
     dispatch({
       type: action_types.LEAVE_APPROVERS,
       data: message,
