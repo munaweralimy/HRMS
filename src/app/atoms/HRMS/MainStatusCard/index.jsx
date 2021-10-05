@@ -16,7 +16,7 @@ export default (props) => {
         return 'b-pending';
       case 'Fit Index':
         return 'b-success';
-      case 'Low Fit Index':
+      case 'Low Index':
         return 'b-error';
       case 'Medium Fit Index':
         return 'b-pending';

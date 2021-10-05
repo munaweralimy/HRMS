@@ -24,7 +24,7 @@ const colName = [
 
 export default (props) => {
 
-    const { data, updateApi, id, setLoad, setVisible, mode } = props;
+    const { data, updateApi, id, setLoad, setVisible, mode, dTab } = props;
     const { control, errors, setValue, reset, handleSubmit } = useForm();
     const [formVisible, setFormVisible] = useState(false);
     const [recordData, setRecord] = useState(null);
@@ -35,6 +35,12 @@ export default (props) => {
     useEffect(() => {
       dispatch(getWarnLetter());
     }, []);
+
+    useEffect(() => {
+      if(dTab?.param) {
+        addNew();
+      }
+    }, [dTab]);
 
     const insuranceFields = [
       {

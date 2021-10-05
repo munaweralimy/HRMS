@@ -2,6 +2,59 @@ import axios from '../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../configs/constants';
 
+
+
+export const getPendingIssues = () => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.pending_issues`);
+    dispatch({
+      type: action_types.PENDING_ISSUES,
+      data: message,
+    });
+  };
+};
+
+export const getPolicyList = () => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.get_policy_list?company=Limkokwing University Creative Technology`);
+    dispatch({
+      type: action_types.POLICY_LIST,
+      data: message,
+    });
+  };
+};
+
+export const getTimesheetData = () => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.get_current_month_timesheet`);
+    dispatch({
+      type: action_types.TIMESHEET_DATA,
+      data: message,
+    });
+  };
+};
+
+export const getCheckInData = (id, date) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.checkin_dashboard?employee_id=${id}&attendance_date=${date}`);
+    dispatch({
+      type: action_types.CHECK_IN_DATA,
+      data: message,
+    });
+  };
+};
+
+
+
+
 export const getCountry = () => {
   return async (dispatch) => {
     const {

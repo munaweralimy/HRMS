@@ -118,3 +118,10 @@ export { default as LineChartIcon} from './LineChartIcon';
 export { default as BarIcon} from './BarIcon';
 export { default as PieIcon} from './PieIcon';
 export { default as CircleIcon} from './CircleIcon';
+
+export { default as StaffIcon} from './StaffIcon';
+export { default as ClockIcon} from './ClockIcon';
+export { default as TaskIcon} from './TaskIcon';
+export { default as AdvancementIcon} from './AdvancementIcon';
+export { default as PolicyIcon} from './PolicyIcon';
+export { default as SetupIcon} from './SetupIcon';

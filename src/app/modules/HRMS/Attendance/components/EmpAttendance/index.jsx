@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Typography, Button, Space } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ListCard from '../../../../../molecules/ListCard';
 import EditAttendance from '../AttendanceDetail';
@@ -70,6 +70,7 @@ const ListCol = [
 export default (props) => {
   const { Title, Text } = Typography;
   const { id } = useParams();
+  const history = useHistory();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(6);
   const dispatch = useDispatch();
@@ -122,7 +123,7 @@ export default (props) => {
             icon={<LeftOutlined />}
             size="middle"
             className="c-graybtn small-btn"
-            onClick={() => history.push('/requests')}
+            onClick={() => history.push(`/requests/${id}`)}
           >
             Categories
           </Button>

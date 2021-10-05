@@ -51,7 +51,7 @@ const colName = [
     key: 'index_ratio',
     align: 'center',
     sorter: true,
-    render: (text, record) => <span className={`${record?.index_status == 'Fit Index' ? 'c-success' : record?.index_status == 'Low Fit Index' ? 'c-error' : 'c-pending'}`}>{text}</span>
+    render: text => <span className={`${Number(text) > 65 ? 'c-success' : Number(text) > 35 ? 'c-pending' : 'c-error'}`}>{text}</span>
   },
 ];
 

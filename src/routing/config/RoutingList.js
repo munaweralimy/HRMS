@@ -1,9 +1,6 @@
 import Finance from '../../app/modules/HRMS/Finance';
 import Roles from './Roles';
 
-const marketing = [Roles.ADMIN, Roles.MARKETING];
-const aqa = [Roles.ADMIN, Roles.AQA];
-const registry = [Roles.ADMIN, Roles.REGISTRY];
 const hrms = [Roles.ADMIN, Roles.HRMS];
 
 const titles = {
@@ -37,7 +34,7 @@ export default [
     permission: hrms,
     menu: 'Tasks',
     key: 'tasks',
-    icon: 'ApplicationsIcon',
+    icon: 'TaskIcon',
     parent: true,
   },
   {
@@ -47,7 +44,6 @@ export default [
     permission: hrms,
     menu: 'Tasks',
     key: 'tasks',
-    icon: 'ApplicationsIcon',
     parent: false,
   },
   {
@@ -57,7 +53,7 @@ export default [
     permission: hrms,
     key: 'advancement',
     menu: 'Advancement',
-    icon: 'ApplicationsIcon',
+    icon: 'AdvancementIcon',
     parent: true,
   },
   {
@@ -67,7 +63,6 @@ export default [
     permission: hrms,
     key: 'advancement',
     menu: 'Advancement',
-    icon: 'ApplicationsIcon',
     parent: false,
   },
   {
@@ -77,7 +72,7 @@ export default [
     permission: hrms,
     key: 'employment',
     menu: 'Employment',
-    icon: 'ApplicationsIcon',
+    icon: 'StaffIcon',
     parent: true,
   },
   {
@@ -87,7 +82,6 @@ export default [
     permission: hrms,
     key: 'employment',
     menu: 'Employment',
-    icon: 'ApplicationsIcon',
     parent: false,
   },
   {
@@ -97,7 +91,6 @@ export default [
     permission: hrms,
     key: 'employment',
     menu: 'Employment',
-    icon: 'ApplicationsIcon',
     parent: false,
   },
   {
@@ -107,7 +100,6 @@ export default [
     permission: hrms,
     key: 'employment',
     menu: 'Employment',
-    icon: 'ApplicationsIcon',
     parent: false,
   },
   {
@@ -117,7 +109,7 @@ export default [
     permission: hrms,
     key: 'Finance',
     menu: 'Finance',
-    icon: 'ApplicationsIcon',
+    icon: 'FacultyIcon',
     parent: true,
   },
   {
@@ -127,7 +119,6 @@ export default [
     permission: hrms,
     key: 'finance',
     menu: 'Finance',
-    icon: 'ApplicationIcon',
     parent: false,
   },
   {
@@ -137,7 +128,7 @@ export default [
     permission: hrms,
     key: 'leaves',
     menu: 'Leaves',
-    icon: 'ApplicationsIcon',
+    icon: 'CalendarIcon',
     parent: true,
   },
   {
@@ -147,7 +138,6 @@ export default [
     permission: hrms,
     menu: 'Leaves',
     key: 'leaves',
-    icon: 'ApplicationsIcon',
     parent: false,
   },
   {
@@ -157,7 +147,7 @@ export default [
     permission: hrms,
     key: 'attendance',
     menu: 'Attendance',
-    icon: 'ApplicationsIcon',
+    icon: 'ClockIcon',
     parent: true,
   },
   {
@@ -167,7 +157,6 @@ export default [
     permission: hrms,
     menu: 'Attendance',
     key: 'attendance',
-    icon: 'ApplicationsIcon',
     parent: false,
   },
   {
@@ -177,7 +166,7 @@ export default [
     permission: hrms,
     key: 'policy',
     menu: 'Policy',
-    icon: 'ApplicationsIcon',
+    icon: 'PolicyIcon',
     parent: true,
   },
   {
@@ -187,7 +176,7 @@ export default [
     permission: hrms,
     key: 'reports',
     menu: 'Reports',
-    icon: 'ApplicationsIcon',
+    icon: 'ReportsIcon',
     parent: true,
   },
   {
@@ -197,7 +186,6 @@ export default [
     permission: hrms,
     key: 'reports',
     menu: 'Reports',
-    icon: 'ApplicationsIcon',
     parent: false,
   },
   {
@@ -207,9 +195,28 @@ export default [
     permission: hrms,
     key: 'requests',
     menu: 'Requests',
-    icon: 'ApplicationsIcon',
+    icon: 'RequestIcon',
     parent: true,
   },
+  {
+    component: 'AddRequest',
+    path: '/requests/addnew',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'requests',
+    menu: 'Requests',
+    parent: false,
+  },
+  {
+    component: 'RequestDetails',
+    path: '/requests/:id',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'requests',
+    menu: 'Requests',
+    parent: false,
+  },
+  
   {
     component: 'SetUp',
     path: '/setup',
@@ -217,7 +224,7 @@ export default [
     permission: hrms,
     key: 'setup',
     menu: 'Setup',
-    icon: 'ApplicationsIcon',
+    icon: 'SetupIcon',
     parent: true,
   },
 ];
