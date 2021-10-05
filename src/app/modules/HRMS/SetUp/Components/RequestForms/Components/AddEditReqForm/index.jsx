@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Space, Button, Row, Col, Typography, Form, message } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { formFields } from './FormFields';
+import { reqFormFields } from './FormFields';
 import { UnorderedListOutlined } from '@ant-design/icons';
 export default (props) => {
   const { title, onClose, onUpdate } = props;
@@ -27,7 +27,7 @@ export default (props) => {
             </Col>
           </Row>
         </Col>
-        {formFields.map((item, idx) => (
+        {reqFormFields().map((item, idx) => (
           <Fragment key={idx}>
             {item.title && (
               <Col span={24}>

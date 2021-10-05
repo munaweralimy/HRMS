@@ -311,7 +311,9 @@ export const getEmployeeList = (companyName) => async (dispatch) => {
 export const getLeaveList = () => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get('http://cms2dev.limkokwing.net/api/resource/HRMS Leave Type');
+  } = await axios.get(
+    'http://cms2dev.limkokwing.net/api/resource/HRMS Leave Type?filters=[["company","=","Limkokwing University Creative Technology"]]&fields=["name","leave_type"]',
+  );
   dispatch({
     type: action_types.LEAVE_TYPE,
     data: data,
@@ -344,7 +346,9 @@ export const getSkillList = () => async (dispatch) => {
 export const getAllApprovers = () => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get('http://cms2dev.limkokwing.net/api/resource/HRMS Approver');
+  } = await axios.get(
+    'http://cms2dev.limkokwing.net/api/resource/HRMS%20Approver?%20filters=[[company,=,Limkokwing%20University%20Creative%20Technology]]%20&fields=[%22name%22,%22approver_name%22,%22approver_id%22]',
+  );
   dispatch({
     type: action_types.ALL_APPROVERS,
     data: data,
@@ -355,4 +359,8 @@ export const leaveTypeSelect = (boolean) => (dispach) => {
     type: action_types.LEAVE_SELECT_TYPE,
     data: boolean,
   });
+};
+
+export const formFieldsDD = () => async (dispatch) => {
+  dispa;
 };
