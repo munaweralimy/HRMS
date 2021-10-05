@@ -4,6 +4,7 @@ import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { reqFormFields } from './FormFields';
 import { UnorderedListOutlined } from '@ant-design/icons';
+
 export default (props) => {
   const { title, onClose, onUpdate } = props;
   const { control, errors, reset, setValue, handleSubmit } = useForm();
@@ -23,7 +24,7 @@ export default (props) => {
         <Col span={24}>
           <Row gutter={24} justify="center">
             <Col>
-              <Title level={3}>{title}</Title>
+              <Title level={3} className='mb-0'>{title}</Title>
             </Col>
           </Row>
         </Col>
@@ -31,9 +32,7 @@ export default (props) => {
           <Fragment key={idx}>
             {item.title && (
               <Col span={24}>
-                <Title className="mb-0" level={4}>
-                  {item.title}
-                </Title>
+                <Title className="mb-0" level={4}>{item.title}</Title>
                 {item.subheader && <Text className="mb-0 c-gray">{item.subheader}</Text>}
               </Col>
             )}
