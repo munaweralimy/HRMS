@@ -3,7 +3,8 @@ import { Row, Col, Form, Button, Typography, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
 import FormGroup from '../../../../../molecules/FormGroup';
 import ListCard from '../../../../../molecules/ListCard';
-import { getJobs, getCompany, getSuitableApplicants, emptyApplicant } from '../../dcuks/action';
+import { getJobs, getCompany } from '../../../../Application/ducks/actions';
+import { getSuitableApplicants, emptyApplicant } from '../../dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import axios from '../../../../../../services/axiosInterceptor';
@@ -55,8 +56,8 @@ export default ({data, updateApi}) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [load, setLoad] = useState(false);
-  const companies = useSelector(state => state.advancement.companies)
-  const jobslist = useSelector(state => state.advancement.jobslist)
+  const companies = useSelector(state => state.global.companies)
+  const jobslist = useSelector(state => state.global.jobslist)
   const applicantList = useSelector(state => state.advancement.applicantlist)
   const { control, errors, setValue, handleSubmit } = useForm();
   

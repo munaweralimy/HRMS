@@ -49,7 +49,7 @@ export default (props) => {
     <Link
       to={{
         pathname: link ? `${link}${data.employee_id}` : '',
-        state: { tab: data?.status },
+        state: { tab: link == '/employment/' ? "1" : data?.status },
       }}
     >
       <Card bordered={false} className="uni-card">
