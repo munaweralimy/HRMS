@@ -26,6 +26,7 @@ const initialState = {
   skillsList: [],
   allApprovers: [],
   reqFormFieldList: [],
+  departmentList: [],
   selectedLeave: false,
 };
 
@@ -84,6 +85,8 @@ export default (state = initialState, action) => {
       return { ...state, selectedLeave: data };
     case action_types.REQ_FORM_FIELDS:
       return { ...state, reqFormFieldList: data };
+    case action_types.DEPARTMENT_LSIT:
+      return { ...state, departmentList: data };
     default:
       return state;
   }
