@@ -6,7 +6,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import Management from './Managment';
 import PostEmployment from './PostEmployment';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdvancementdetails, getFitFigure } from '../dcuks/action';
+import { getAdvancementdetails, getFitFigure, emptyStaffDetails } from '../dcuks/action';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -23,6 +23,9 @@ export default (props) => {
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
     dispatch(getFitFigure(id));
+    return () => {
+      dispatch(emptyStaffDetails())
+    }
   }, []);
 
   return (
@@ -31,7 +34,7 @@ export default (props) => {
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Advancement</Title></Col>
           <Col>
-            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push('/requests')}>Categories</Button>
+            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push(`/requests/${id}`)}>Categories</Button>
           </Col>
           <Col span={24}>
             <Tabs defaultActiveKey="1" type="card" className="custom-tabs">

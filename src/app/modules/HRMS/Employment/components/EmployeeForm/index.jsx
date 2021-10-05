@@ -25,7 +25,7 @@ const tabs = [
 
 export default (props) => {
 
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState(props?.dTab?.tab || "1");
   const onTabChange = (e) => {
     setActiveTab(e);
   }

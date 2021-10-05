@@ -10,7 +10,7 @@ export default (props) => {
 
     return (
         <Card bordered={false} className={`smallcard-wicon ${iColor}`}>
-            <Row gutter={[5, 20]} wrap={false}>
+            <Row gutter={5} wrap={false} align='middle'>
                 <Col flex='auto'>
                     <Title level={5} className='mb-0 lineHeight20'>{status}</Title>
                 </Col>

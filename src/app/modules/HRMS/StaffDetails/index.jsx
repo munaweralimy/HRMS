@@ -50,12 +50,13 @@ const ListData = [
 export default (props) => {
   const i18n = useTranslate();
   const { t } = i18n;
-  const { section, id, data, onChangePos } = props;
+  const { section, id, onChangePos } = props;
   const [pos, setPos] = useState('');
   const history = useHistory();
   const dispatch = useDispatch();
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const commentsApi = useSelector((state) => state.global.comments);
+  const data = useSelector(state => state.advancement.advData);
 
   const ListCol = [
     {
@@ -158,7 +159,10 @@ export default (props) => {
       title: 'Issue Warning Letter',
       type: 'button',
       class: 'black-btn',
-      action: () => history.push('/task'),
+      action: () => history.push({
+        pathname: `/employment/${id}`,
+        state: { tab: "2", param: 'warn' }
+      })
     },
   ];
 

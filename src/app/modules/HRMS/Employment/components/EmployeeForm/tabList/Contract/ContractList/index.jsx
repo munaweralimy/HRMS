@@ -313,7 +313,7 @@ export default (props) => {
                 <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />
               </Form>
               :
-              <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />}
+              <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} />}
             </Col>}
         </Row>
 

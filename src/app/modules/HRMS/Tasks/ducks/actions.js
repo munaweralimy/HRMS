@@ -120,7 +120,7 @@ export const getSingleTaskDetail = (id) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_employee_task_data?employee_id=${id}`);
+    } = await axios.get(`${apiMethod}/hrms.api.get_employee_projects?employee_id=${id}`);
     dispatch({
       type: action_types.SINGLE_TASK_DETAIL,
       data: message,
