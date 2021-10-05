@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Typography, Card, Tabs, Form, Spin, message } from 'antd';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleTaskDetail, getAddProjectName, getTimesheet} from '../ducks/actions';
 import StaffDetails from '../../StaffDetails';
@@ -10,6 +10,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../configs/constants';
 import { useForm } from 'react-hook-form';
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
+import { emptyStaffDetails, getAdvancementdetails } from '../../Advancement/dcuks/action';
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -18,6 +19,7 @@ const antIcon = <LoadingOutlined spin />;
 export default (props) => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const history = useHistory();
   const location = useLocation();
   const [tags, setTags] = useState([]);
   const [deleted, setDeleted] = useState([]);
@@ -30,6 +32,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getSingleTaskDetail(id));
+    dispatch(getAdvancementdetails(id));
     if (location?.state?.tab) {
       if (location.state.tab == 'Missed') {
         dispatch(getTimesheet(id, 'Issues', 1, 10, '', ''));
@@ -40,6 +43,9 @@ export default (props) => {
       dispatch(getTimesheet(id, 'Pending', 1, 10, '', ''));
     }
     dispatch(getAddProjectName());
+    return () => {
+      dispatch(emptyStaffDetails())
+    }
   }, []);
 
   const updateApi = () => {
@@ -59,9 +65,9 @@ export default (props) => {
   }, [projectName]);
 
   useEffect(() => {
-    if (singleTaskDetail && singleTaskDetail?.projects) {
+    if (singleTaskDetail.length > 0) {
       let projects = [];
-      singleTaskDetail?.projects.map((item) => {
+      singleTaskDetail.map((item) => {
         projects.push({
           name: item.row_name,
           project_code: item.name,
@@ -120,12 +126,12 @@ export default (props) => {
   };
 
   return (
-    <StaffDetails id={id} section='HRMS Tasks' data={singleTaskDetail} title={'Tasks'}>
+    <StaffDetails id={id} section='HRMS Tasks' title={'Tasks'}>
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Tasks</Title></Col>
           <Col>
-            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push('/requests')}>Categories</Button>
+            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push(`/requests/${id}`)}>Categories</Button>
           </Col>
           <Col span={24}>
         <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>

@@ -1,49 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col, Card, Typography, Tabs, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { closeAllOpenForms, getFinanceDetail } from '../ducks/action';
 import StaffDetails from '../../StaffDetails';
-import { getSingleTaskDetail } from '../../Tasks/ducks/actions';
 import { LeftOutlined } from '@ant-design/icons';
 import AccountSalary from './AddEditAccountSalary';
 import Assets from './AddEditAssets';
 import Loans from './AddEditLoans';
 import SalaryAdvance from './AddEditSalaryAdvance';
+import { getAdvancementdetails, emptyStaffDetails } from '../../Advancement/dcuks/action';
 
-const FinanceDetail = () => {
-  const { Title } = Typography;
+const { Title } = Typography;
+const { TabPane } = Tabs;
+
+export default (props) => {
+
   const { id } = useParams();
-  const { TabPane } = Tabs;
   const dispatch = useDispatch();
-  const [tags, setTags] = useState();
-  const singleTaskDetail = useSelector((state) => state.tasks.singleTaskData);
+  const history = useHistory();
   const financeDetails = useSelector((state) => state.finance.financeDetailData);
+
+  useEffect(() => {
+    dispatch(getFinanceDetail(id));
+    dispatch(getAdvancementdetails(id));
+    return () => {
+      dispatch(emptyStaffDetails())
+    }
+  },[]);
 
   const onTabChangeHandler = (e) => {
     dispatch(closeAllOpenForms(false));
   };
 
-  useEffect(() => {
-    dispatch(getFinanceDetail(id));
-    dispatch(getSingleTaskDetail(id));
-  }, [id]);
-
-  useEffect(() => {
-    if (singleTaskDetail && singleTaskDetail?.projects) {
-      let projects = [];
-      singleTaskDetail?.projects.map((item) => {
-        projects.push({
-          name: item.name,
-          project: item.project,
-        });
-      });
-      setTags(projects);
-    }
-  }, [singleTaskDetail]);
-
   return (
-    <StaffDetails id={id} section="Finance" data={singleTaskDetail} title={'Finance'}>
+    <StaffDetails id={id} section="Finance" title={'Finance'}>
       <Card bordered={false} className="uni-card h-auto">
         <Row gutter={[20, 30]}>
           <Col flex="auto">
@@ -56,7 +47,7 @@ const FinanceDetail = () => {
               icon={<LeftOutlined />}
               size="middle"
               className="c-graybtn small-btn"
-              onClick={() => history.push('/requests')}
+              onClick={() => history.push(`/requests/${id}`)}
             >
               Categories
             </Button>
@@ -87,5 +78,3 @@ const FinanceDetail = () => {
     </StaffDetails>
   );
 };
-
-export default FinanceDetail;

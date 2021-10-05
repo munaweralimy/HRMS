@@ -5,16 +5,15 @@ import {
     DashboardIcon2,
     ApplicationsIcon,
     FacultyIcon,
-    ProgrammeIcon,
-    ModuleIcon,
     RequestIcon,
-    FormsIcon,
-    LetterIcon,
     CalendarIcon,
     ReportsIcon,
-    OverviewIcon,
-    StudentsIcon,
-    ScholarshipIcon
+    TaskIcon,
+    PolicyIcon,
+    SetupIcon,
+    AdvancementIcon,
+    StaffIcon,
+    ClockIcon,
 } from '../../atoms/CustomIcons';
 import {Link, useLocation} from 'react-router-dom';
 import RoutingList from '../../../routing/config/RoutingList';
@@ -27,17 +26,16 @@ const { SubMenu } = Menu;
 const IconList = {
     DashboardIcon2,
     ApplicationsIcon,
+    TaskIcon,
+    AdvancementIcon,
+    StaffIcon,
+    ClockIcon,
     FacultyIcon,
-    ProgrammeIcon,
-    ModuleIcon,
     RequestIcon,
-    FormsIcon,
-    LetterIcon,
     CalendarIcon,
     ReportsIcon,
-    OverviewIcon,
-    StudentsIcon,
-    ScholarshipIcon
+    PolicyIcon,
+    SetupIcon,
 }
 
 export default (props) => {
@@ -83,6 +81,11 @@ export default (props) => {
 
       };
 
+      const mainIcon = (icon) => {
+        const IconComp = IconList[icon];
+        return <IconComp />
+      } 
+
     return (
         <Card bordered={false} className='navBar'>
         <Row gutter={[30, 24]}>
@@ -113,7 +116,7 @@ export default (props) => {
                                     </SubMenu>
                                     :
                                     <>
-                                    <Menu.Item key={val.path} className="menu-item" icon={<DashboardIcon2 />}>
+                                    <Menu.Item key={val.path} className="menu-item" icon={mainIcon(val.icon)}>
                                         <Link to={val.path}>{val.menu}</Link>
                                     </Menu.Item>
                                     {val.menu == 'Dashbaord' && 

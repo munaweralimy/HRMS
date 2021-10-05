@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Typography, Card, Tabs, Form, Spin, message } from 'antd';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleLeaveDetail, getLeaveApplicationDetail, } from '../ducks/actions';
 import StaffDetails from '../../StaffDetails';
@@ -18,6 +18,7 @@ const antIcon = <LoadingOutlined spin />;
 export default (props) => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const history = useHistory();
   const location = useLocation();
   const [deleted, setDeleted] = useState([]);
   const [load, setLoad] = useState(false);
@@ -87,7 +88,7 @@ export default (props) => {
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Leaves</Title></Col>
           <Col>
-            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push('/requests')}>Categories</Button>
+            <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push(`/requests/${id}`)}>Categories</Button>
           </Col>
           <Col span={24}>
         <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>

@@ -152,7 +152,7 @@ export default (props) => {
             ))}
           </div>
           <div className="w-100 text-right mt-2">
-            <Pagination pageSize={6} current={page} hideOnSinglePage={true} onChange={onPageChange} total={cardcount} />
+            <Pagination pageSize={6} current={page} hideOnSinglePage={true} showSizeChanger={false} onChange={onPageChange} total={cardcount} />
           </div>
         </>
       )}

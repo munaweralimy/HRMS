@@ -285,9 +285,10 @@
 }
 
 .smallcard-wicon {
+  width: 130px;
+  height: 40px;
   .ant-card-body {
-    padding: 8px 13px;
-    width: 130px;
+    padding: 10px;
   }
   .anticon {
     line-height: 20px;
@@ -337,6 +338,15 @@
 .main-card-hover {
   &:hover {
     background-color: $element-color;
+  }
+}
+
+.category-card {
+  height:100%;
+  background-color: $element-color;
+  cursor: pointer;
+  &:hover {
+    background-color: #303030;
   }
 }
 

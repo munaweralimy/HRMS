@@ -1,7 +1,5 @@
 import React from 'react';
 import { Row, Col, Typography, Avatar, Card, Space } from 'antd';
-import SmallStatusCard from '../SmallStatusCard';
-import { ClockCircleOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router';
 import './_taskCard.scss';
 const { Title, Text } = Typography;
