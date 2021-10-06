@@ -32,7 +32,6 @@ export default (props) => {
           extraBtn={'Request Show Cause'}
           extraAction={() => history.push(`/requests/${id}`)}
           btnClass='red-btn'
-          scrolling={500}
           listClass="nospace-card"
           />
     )

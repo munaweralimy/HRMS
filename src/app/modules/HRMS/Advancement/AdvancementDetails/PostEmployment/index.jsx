@@ -112,8 +112,8 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
-        setRowData(record);
-        setViewJobOpenings(true);
+        // setRowData(record);
+        // setViewJobOpenings(true);
       },
     };
   };

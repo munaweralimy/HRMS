@@ -1,4 +1,5 @@
 import React from 'react';
+import {Row, Col} from 'antd';
 import ListCard from '../../../../../../../../molecules/ListCard';
 import moment from 'moment';
 
@@ -41,8 +42,10 @@ export default (props) => {
     const { data, updateApi, id, setLoad, setVisible, mode } = props;
 
     return (
+      <Row gutter={[20,20]}>
+        <Col span={24}>
           <ListCard
-          scrolling={500}
+          scrolling={data?.term_Resign && data?.term_Resign.length > 0 ? 500 : '100%'}
           title="Termination & Resignation"
           ListCol={colName}
           ListData={data?.term_Resign}
@@ -50,8 +53,9 @@ export default (props) => {
           extraBtn={'Terminate Employee'}
           extraAction={() => console.log('---')}
           btnClass='red-btn'
-          scrolling={500}
           listClass="nospace-card"
           />
+          </Col>
+          </Row>
     )
 }

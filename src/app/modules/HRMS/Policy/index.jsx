@@ -64,7 +64,6 @@ export default (props) => {
     const attachment = data?.attachment;
     attachment && window.open(`http://cms2dev.limkokwing.net${attachment}`, "_blank");
 
-    console.log('data', data)
     const json = {
         data: {
           name: data?.name,

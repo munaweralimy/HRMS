@@ -9,8 +9,8 @@ export const sendWarning = (payload) => {
   return axios.post(`${apiMethod}/hrms.api.add_employee_warning`, payload);
 };
 
-export const delWarning = (id) => {
-  return axios.post(`${apiresource}/EMP Warning Letter/${id}`);
+export const delWarning = (id, json) => {
+  return axios.put(`${apiresource}/EMP Warning Letter/${id}`, json);
 };
 
 export const employApi = (payload, id) => {

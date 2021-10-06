@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import ListCard from '../../ListCard';
-import { Radio, Space, Typography, Row, Col, Pagination, Button } from 'antd';
+import { Radio, Space, Typography, Select, Pagination, Button } from 'antd';
 import { useHistory } from 'react-router';
 import { AppstoreFilled, DatabaseFilled } from '@ant-design/icons';
 import MainStatusCard from '../../../atoms/HRMS/MainStatusCard';
@@ -8,35 +8,45 @@ import { useForm } from 'react-hook-form';
 
 const _ = require('lodash');
 const { Title } = Typography;
+const { Option } = Select;
 
 export default (props) => {
   const { control } = useForm()
   const { iProps } = props;
   const history = useHistory();
-  const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey, addonkey, listLink, topbtn, extraComp } = iProps;
+  const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey, addonkey, listLink, topbtn, teamDrop } = iProps;
   const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
   const [page, setPage] = useState(1);
   const [limit,setLimit] = useState(6);
   const [view, setView] = useState('card');
   const [sorting, setSorting] = useState('');
   const [searchVal, setSearchVal] = useState(null);
+  const [teamSelected, setTeamSelected] = useState('');
+  
   useEffect(() => {
-    updateApi(filterVal, page, limit, '', '', view, null);
+    updateApi(filterVal, page, limit, '', '', view, null, teamSelected);
   }, []);
+
+  useEffect(() => {
+    if (teamDrop) {
+      setTeamSelected(teamDrop[0]?.team_name);
+      updateApi(filterVal, page, limit, '', '', view, null, teamDrop[0]?.team_name);
+    }
+  }, [teamDrop]);
 
   // Card Pagination
   const onPageChange = (pg) => {
     setPage(pg);
-    updateApi(filterVal, pg, 6, sorting, '', view, null);
+    updateApi(filterVal, pg, 6, sorting, '', view, null, teamSelected);
   };
 
   const onSorting = () => {
     if (sorting == 'ASC') {
       setSorting('DESC');
-      updateApi(filterVal, page, limit, 'DESC', '', view, null);
+      updateApi(filterVal, page, limit, 'DESC', '', view, null, teamSelected);
     } else {
       setSorting('ASC');
-      updateApi(filterVal, page, limit, 'ASC', '', view, null);
+      updateApi(filterVal, page, limit, 'ASC', '', view, null, teamSelected);
     }
   };
 
@@ -47,10 +57,10 @@ export default (props) => {
     setPage(1);
     if (e.target.value == 'list') {
       setLimit(10);
-      updateApi(filterVal, 1, 10, '', '', e.target.value, null);
+      updateApi(filterVal, 1, 10, '', '', e.target.value, null, teamSelected);
     } else {
       setLimit(6);
-      updateApi(filterVal, 1, 6, '', '', e.target.value, null);
+      updateApi(filterVal, 1, 6, '', '', e.target.value, null, teamSelected);
     }
   };
 
@@ -92,13 +102,13 @@ export default (props) => {
 
   const onFilter = (e) => {
     setFilterVal(e.target.value);
-    updateApi(e.target.value, 1, 10, '', '', view, null);
+    updateApi(e.target.value, 1, 10, '', '', view, null, teamSelected);
   };
 
   const onSearch = (val) => {
     setSearchVal(val);
     setPage(1);
-    updateApi(e.target.value, 1, 10, '', '', view, val);
+    updateApi(e.target.value, 1, 10, '', '', view, val, teamSelected);
   };
 
   const onClickRow = (record) => {
@@ -113,16 +123,36 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      updateApi(filterVal, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, view, searchVal);
+      updateApi(filterVal, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, view, searchVal, teamSelected);
     } else {
-      updateApi(filterVal, pagination.current, pagination.pageSize, '', '', view, searchVal);
+      updateApi(filterVal, pagination.current, pagination.pageSize, '', '', view, searchVal, teamSelected);
     }
   };
+
+  const onTeamChange = (e) => {
+    setTeamSelected(e);
+    setPage(1);
+    updateApi(filterVal, 1, limit, '', '', view, null, e);
+  }
 
   return (
     <>
       <SwitchView />
-      {extraComp && extraComp}
+      {teamDrop && 
+      <Select 
+        className="customSelect"
+        value={teamSelected}
+        onChange={onTeamChange}
+        className='mb-1'
+        size='large'
+        style={{width: 200}}
+        >
+        {teamDrop?.map((item,ind) => (
+          <Fragment key={ind}>
+            <Option value={item?.team_name}>{item?.team_name}</Option>
+          </Fragment>
+        ))}
+      </Select>}
       {view == 'list' ? (
         <ListCard
           classes='clickRow'

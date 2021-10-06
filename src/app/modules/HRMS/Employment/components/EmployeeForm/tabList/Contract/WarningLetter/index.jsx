@@ -119,7 +119,8 @@ export default (props) => {
       setLoad(true)
       const body = {
         employee_id: id,
-        warning_letter: val.warning_letter.label
+        warning_letter: val.warning_letter.label,
+        status:"Active"
       }
 
       sendWarning(body).then(res => {
@@ -145,7 +146,7 @@ export default (props) => {
 
     const onDelete = () => {
       setLoad(true)
-      delWarning(recordData[0].value).then(res => {
+      delWarning(recordData[0].value, {status:"Deleted"}).then(res => {
         message.success('Warning letter deleted');
         reset();
         setFormVisible(false);
@@ -180,7 +181,6 @@ export default (props) => {
                 extraBtn={'Issue Warning Letter'}
                 extraAction={addNew}
                 btnClass='red-btn'
-                scrolling={500}
                 listClass="nospace-card"
                 classes='clickRow'
                 />

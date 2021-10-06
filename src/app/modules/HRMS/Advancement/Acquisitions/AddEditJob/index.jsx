@@ -59,7 +59,7 @@ export default ({data, updateApi}) => {
   const companies = useSelector(state => state.global.companies)
   const jobslist = useSelector(state => state.global.jobslist)
   const applicantList = useSelector(state => state.advancement.applicantlist)
-  const { control, errors, setValue, handleSubmit } = useForm();
+  const { control, errors, reset, setValue, handleSubmit } = useForm();
   
   useEffect(() => {
     dispatch(getJobs());
@@ -105,15 +105,15 @@ export default ({data, updateApi}) => {
     }
     let url = `${apiresource}/HRMS Job Openings`
     try {
-      if(data.job_title) {
+      if(data?.job_title) {
         await axios.post(`url/${data.job_title}`, body)
       } else {
         await axios.post(url, body)
       }
       message.success(`Job ${data ? 'Updated' : 'Added'} Successfully`)
       setLoad(false);
-      reset();
       updateApi();
+      reset();
     } catch(e) {
       const {response} = e;
       console.log('error', response);
