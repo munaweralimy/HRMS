@@ -105,7 +105,7 @@ const insuranceFields = [
 
 export default (props) => {
 
-    const { data, updateApi, id, setLoad, setVisible,  refresh } = props;
+    const { data, updateApi, id, setLoad, setVisible, refresh, mode } = props;
     const { control, errors, setValue, reset, handleSubmit } = useForm({ defaultValues: initq});
     const [formVisible, setFormVisible] = useState(false);
     const [recordData, setRecord] = useState(null);
@@ -265,6 +265,7 @@ export default (props) => {
                 record={recordData}
                 onBack={onBack}
                 setValue={setValue}
+                mode={mode}
                 title={'Insurance Details'}
                 fieldsList={insuranceFields}
                 backbtnTitle='Insurance History'
@@ -279,4 +280,4 @@ export default (props) => {
         </Row>
 
     )
-}
+} 

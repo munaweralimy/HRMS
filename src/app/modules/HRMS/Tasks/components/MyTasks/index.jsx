@@ -63,7 +63,7 @@ const ListCol = [
 ]
 
 export default (props) => {
-
+  const { iProps } = props;
   const dispatch = useDispatch();
   const [addVisible, setAddVisible] = useState(false)
   const myTaskData = useSelector(state => state.tasks.myTaskData);
@@ -90,6 +90,14 @@ export default (props) => {
       action: () => { setAddVisible(true); setActiveKey('1'); setMode('add')},
     },
   ];
+
+  
+
+  useEffect(() => {
+    if(iProps?.activeAddTimeSheet) {
+      setAddVisible(true);setActiveKey('1'); setMode('add');
+    }
+  }, [iProps?.activeAddTimeSheet])
 
   const updateApi = () => {
     setRecord(null);

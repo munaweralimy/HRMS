@@ -33,6 +33,11 @@ export default (props) => {
     }
   }, [data]);
 
+
+  const disabledDate = (current) => {
+    return current && current.valueOf() > Date.now();
+  }
+
   const onFinish = async (val) => {
     
     setLoad(true);
@@ -86,7 +91,7 @@ export default (props) => {
                 label='Timesheet Date'
                 control={control}
                 class='mb-0'
-                iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY"}}
+                iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY", disabledDate:disabledDate}}
                 initValue=''
             />
           </Col>
