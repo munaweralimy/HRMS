@@ -110,11 +110,15 @@ export default (props) => {
       };
       let url = `${apiMethod}/hrms.api.add_projects`;
       try {
-        await axios.post(url, json);
-        message.success('Projects Successfully Updated');
-        updateApi();
+        const res = await axios.post(url, json);
+        if (res.data.message.success ==  false) {
+          message.error(res.data.message.message);
+        } else {
+          message.success(res.data.message.message);
+          updateApi();
+          reset();
+        }
         setLoad(false);
-        reset();
       } catch (e) {
         setLoad(false);
         const { response } = e;

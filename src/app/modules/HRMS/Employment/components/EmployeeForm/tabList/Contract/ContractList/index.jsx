@@ -301,7 +301,6 @@ export default (props) => {
                 pagination={false}
                 extraBtn={'+ Add New Contract'}
                 extraAction={addNew}
-                scrolling={500}
                 listClass="nospace-card"
                 classes='clickRow'
                 />
