@@ -5,7 +5,9 @@ const initialState = {
     policyData: [],
     timesheetData: [],
     checkInData: [],
+    teamsDetailData: [],
 
+    checkInData: [],
     countryData: [],
     religionData: [],
     raceData: [],
@@ -36,6 +38,9 @@ export default (state = initialState, action) => {
             return {...state, timesheetData: data };
         case action_types.CHECK_IN_DATA:
             return {...state, checkInData: data };
+
+        case action_types.EMPLOYEE_ID:
+            return {...state, teamsDetailData: data };
 
         case action_types.COUNTRY:
             return {...state, countryData: data };

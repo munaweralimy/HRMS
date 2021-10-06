@@ -53,7 +53,17 @@ export const getCheckInData = (id, date) => {
 };
 
 
-
+export const getTeamsDetail = (employeeid) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.teams_dropdown?employee_id=${employeeid}`);
+    dispatch({
+      type: action_types.EMPLOYEE_ID,
+      data: message,
+    });
+  };
+};
 
 export const getCountry = () => {
   return async (dispatch) => {

@@ -17,12 +17,12 @@ export default (props) => {
                     <Fragment key={index}>
                         <Col flex='1 1 300px'>
                             <PendingRequestCard
-                                data={item.rows}
-                                title={item.title}
-                                count={item.count}
-                                link={item.title}
-                                label={item.title}
-                                innerlink={item.title}
+                                data={item?.rows}
+                                title={item?.title}
+                                count={item?.count}
+                                link={item?.title}
+                                label={item?.title}
+                                innerlink={item?.title}
                                 status='b-error'
                                 level={4}
                             />
