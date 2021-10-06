@@ -63,11 +63,15 @@ export default (props) => {
     }
     let url = `${apiMethod}/hrms.api.add_single_timesheet`;
     try {
-        await axios.post(url, json);
-        message.success('TimeSheet Added Successfully');
+        const res = await axios.post(url, json);
         setLoad(false);
+        if(res.data.message.success == true) {
+          message.success(res.data.message.message);
+          setTimeout(() => {setAddVisible(false); updateApi()}, 1000)
+        } else {
+          message.error(res.data.message.message);
+        }
         
-        setTimeout(() => {setAddVisible(false); updateApi()}, 1000)
     } catch(e) {
         const { response } = e;
         message.error(e);
@@ -91,7 +95,7 @@ export default (props) => {
                 label='Timesheet Date'
                 control={control}
                 class='mb-0'
-                iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY", disabledDate:disabledDate}}
+                iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY", disabledDate: disabledDate}}
                 initValue=''
             />
           </Col>
@@ -119,7 +123,7 @@ export default (props) => {
                 label='Total Hours'
                 control={control}
                 class='mb-0'
-                iProps={{ placeholder: 'Please state', size: 'large'}}
+                iProps={{ placeholder: 'Please state', size: 'large', type: 'number'}}
                 initValue=''
             />
           </Col>

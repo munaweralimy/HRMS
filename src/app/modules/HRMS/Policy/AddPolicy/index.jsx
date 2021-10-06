@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import {Space, Button, Row, Col, Typography, Form, message } from 'antd';
+import {Space, Button, Row, Col, Typography, Form, message, Spin } from 'antd';
 import FormGroup from '../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import {getRolesList} from '../ducks/actions';
@@ -7,14 +7,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { apiresource } from '../../../../../configs/constants';
 import axios from '../../../../../services/axiosInterceptor';
 import { uniquiFileName, getSingleUpload } from '../../../../../features/utility';
+import { LoadingOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
+const antIcon = <LoadingOutlined spin />;
+
 
 export default (props) => {
     
-    const { control, errors, setValue, handleSubmit } = useForm();
+    const { control, errors, reset, handleSubmit } = useForm();
     const { title, onClose, onUpdate } = props;
     const dispatch = useDispatch();
+    const [load, setLoad] = useState(false);
     const rolesListData = useSelector((state) => state.policy.rolesListData);
 
     const formFields = [
@@ -54,26 +58,31 @@ export default (props) => {
     }, []);
 
     const onFinish = async (val) => {
-        console.log('val', val)
+        console.log('hello', val);
+        setLoad(true);
+        let userRole = [{
+            parentfield: "policy_user_group",
+            parenttype: "HRMS Policy",
+            user_roles: val?.user_roles.label,
+            doctype: "HRMS Policy User Group"
+        }]
+        // if(val?.user_roles.length > 0){
+        //     val.user_roles.map(resp => {
+        //         userRole.push({
+        //             parentfield: "policy_user_group",
+        //             parenttype: "HRMS Policy",
+        //             user_roles: resp?.value,
+        //             doctype: "HRMS Policy User Group"
+        //         })
+        //     })
+        // }
 
-        let userRole = []
-        if(val?.user_roles.length > 0){
-            val.user_roles.map(resp => {
-                userRole.push({
-                    parentfield: "policy_user_group",
-                    parenttype: "HRMS Policy",
-                    user_roles: resp?.value,
-                    doctype: "HRMS Policy User Group"
-                })
-            })
-        }
-        
+
+       
         const json = {
             data: {
                 policy_title: val?.policy_title,
-                //attachment: '/private/files/CMS2_03_AQA_Flowchart.pdf',
                 doctype: "HRMS Policy",
-                //policy_user_group: userRole
             }
         }
         console.log('json', json)
@@ -84,7 +93,6 @@ export default (props) => {
             const resp = await axios.post(url, json);
 
             if (resp?.status == 200) {
-                console.log('resp', resp)
                 const policyName = resp['data']?.data.name;
                 let policyAttatchment = [];
                 if (val?.attachment) {
@@ -107,9 +115,10 @@ export default (props) => {
                 try {
                     await axios.put(url2, payLoad);
                     message.success('Policy Successfully Added');
-                    setTimeout(() => onClose, 1000)
-                    setTimeout(() => onUpdate, 1200)
+                    setLoad(false);
+                    setTimeout(() => {reset(); onClose(); onUpdate()}, 1000)
                 } catch(e) {
+                    setLoad(false);
                     const { response } = e;
                     message.error(response?.data?.message);
                 }
@@ -123,6 +132,7 @@ export default (props) => {
     };
 
     return (
+        <Spin indicator={antIcon} size="large" spinning={load}>
         <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
 
             <Row gutter={[20, 50]}>
@@ -151,5 +161,6 @@ export default (props) => {
                 </Col>
             </Row>
         </Form>
+        </Spin>
     )
 }
