@@ -181,7 +181,6 @@ export default (props) => {
                 extraBtn={'Issue Warning Letter'}
                 extraAction={addNew}
                 btnClass='red-btn'
-                scrolling={500}
                 listClass="nospace-card"
                 classes='clickRow'
                 />
