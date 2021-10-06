@@ -4,21 +4,22 @@ import { Radio, Space, Typography, Row, Col, Pagination, Button } from 'antd';
 import { useHistory } from 'react-router';
 import { AppstoreFilled, DatabaseFilled } from '@ant-design/icons';
 import MainStatusCard from '../../../atoms/HRMS/MainStatusCard';
+import { useForm } from 'react-hook-form';
 
 const _ = require('lodash');
 const { Title } = Typography;
 
 export default (props) => {
-    const { iProps } = props;
-    const history = useHistory();
-    const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey, addonkey, listLink, topbtn } = iProps;
-    const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
-    const [page, setPage] = useState(1);
-    const [limit,setLimit] = useState(6);
-    const [view, setView] = useState('card');
-    const [sorting, setSorting] = useState('');
-    const [searchVal, setSearchVal] = useState(null);
-
+  const { control } = useForm()
+  const { iProps } = props;
+  const history = useHistory();
+  const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey, addonkey, listLink, topbtn, extraComp } = iProps;
+  const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
+  const [page, setPage] = useState(1);
+  const [limit,setLimit] = useState(6);
+  const [view, setView] = useState('card');
+  const [sorting, setSorting] = useState('');
+  const [searchVal, setSearchVal] = useState(null);
   useEffect(() => {
     updateApi(filterVal, page, limit, '', '', view, null);
   }, []);
@@ -121,6 +122,7 @@ export default (props) => {
   return (
     <>
       <SwitchView />
+      {extraComp && extraComp}
       {view == 'list' ? (
         <ListCard
           classes='clickRow'

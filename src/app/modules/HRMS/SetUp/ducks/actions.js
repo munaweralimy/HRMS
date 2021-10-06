@@ -361,6 +361,16 @@ export const leaveTypeSelect = (boolean) => (dispach) => {
   });
 };
 
-export const formFieldsDD = () => async (dispatch) => {
-  dispa;
+export const getDepartments = (page, limit, order, orderby) => async(dispatch) => {
+  const {
+    data: { message },
+  } = await axios.get(
+    `${apiMethod}/hrms.api.hrms_department_pagination?page_number=${page}&limit=${limit}${
+      order ? `&order=${order}&orderby=creation` : ''
+    }`,
+  );
+  dispatch({
+    type: action_types.DEPARTMENT_LSIT,
+    data: message,
+  });
 };

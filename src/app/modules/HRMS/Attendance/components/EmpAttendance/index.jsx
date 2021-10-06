@@ -83,7 +83,6 @@ export default (props) => {
   const onRowClick = (record) => {
     return {
       onClick: () => {
-        console.log({ record });
         setViewForm(true);
         setEmpID(record?.name);
       },
@@ -145,8 +144,8 @@ export default (props) => {
           </Col>
         ) : (
           <>
-            <Col span={24}>
-              {totalAbsent && (
+            {totalAbsent > 0 && (
+              <Col span={24}>
                 <Card bordered={false} className={`mini-card req-card-pending`}>
                   <Row gutter={[20, 30]}>
                     <Col span={24}>
@@ -159,8 +158,9 @@ export default (props) => {
                     </Col>
                   </Row>
                 </Card>
-              )}
-            </Col>
+              </Col>
+            )}
+
             <Col span={24}>
               <ListCard
                 title="Attendance History"

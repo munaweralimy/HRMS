@@ -1,18 +1,19 @@
-import React, { useEffect } from 'react';
-import { Row, Col, Typography, Form, Button, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Typography, Form, Button, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
 import FormGroup from '../../../../../../molecules/FormGroup';
 import { addAllowences } from './FormFields';
 import { updateAllowance, addNewAllowance, deleteAllowance } from '../../../ducks/services';
 import { uniquiFileName, getSingleUpload, getFileName } from '../../../../../../../features/utility';
-
 import { useParams } from 'react-router-dom';
-
 import moment from 'moment';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined spin />;
 
 const AddAllowences = (props) => {
   const { selectedAllowance, onCloseForm } = props;
   const { id } = useParams();
+  const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
   const { Title } = Typography;
 
@@ -40,6 +41,7 @@ const AddAllowences = (props) => {
   }, [selectedAllowance]);
 
   const onSubmitHandler = async (values) => {
+    setLoad(true);
     let res = '';
     if (values.document.file) {
       let modifiedName = uniquiFileName(values.document?.file?.originFileObj.name);
@@ -56,58 +58,64 @@ const AddAllowences = (props) => {
     selectedAllowance?.name
       ? updateAllowance(selectedAllowance.name, payload).then((response) => {
           message.success(`Allowance ${selectedAllowance?.name} Updated Seccussfully`);
+          setLoad(false);
           onCloseForm('', '');
         })
       : addNewAllowance({ employee_id: id, allowance: { ...payload } }).then((response) => {
           message.success(`Allowance Addeda Seccussfully`);
+          setLoad(false);
           onCloseForm('', '');
         });
   };
 
   const onDeleteHandler = () => {
+    setLoad(true);
     deleteAllowance(selectedAllowance.name, { status: 'Inactive' }).then((response) => {
       message.success(`Allowance ${selectedAllowance.name} Deleted Seccussfully`);
+      setLoad(false);
       onCloseForm('', '');
     });
   };
 
   return (
-    <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
-      <Row gutter={[24, 30]} align="bottom">
-        <Col span={24}>
-          <Title level={4} className="mb-0">
-            Allowance Details
-          </Title>
-        </Col>
-        {addAllowences.map((value, key) => (
-          <FormGroup key={key} item={value} control={control} errors={errors} />
-        ))}
-        <Col span={24}>
-          <Row gutter={24} justify="end">
-            {selectedAllowance?.name ? (
-              <>
-                <Col>
-                  <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
-                    Delete Allowance
-                  </Button>
-                </Col>
+    <Spin indicator={antIcon} size="large" spinning={load}>
+      <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
+        <Row gutter={[24, 30]} align="bottom">
+          <Col span={24}>
+            <Title level={4} className="mb-0">
+              Allowance Details
+            </Title>
+          </Col>
+          {addAllowences.map((value, key) => (
+            <FormGroup key={key} item={value} control={control} errors={errors} />
+          ))}
+          <Col span={24}>
+            <Row gutter={24} justify="end">
+              {selectedAllowance?.name ? (
+                <>
+                  <Col>
+                    <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
+                      Delete Allowance
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button size="large" type="primary" htmlType="submit" className="green-btn">
+                      Save Changes
+                    </Button>
+                  </Col>
+                </>
+              ) : (
                 <Col>
                   <Button size="large" type="primary" htmlType="submit" className="green-btn">
-                    Save Changes
+                    Add Allowance
                   </Button>
                 </Col>
-              </>
-            ) : (
-              <Col>
-                <Button size="large" type="primary" htmlType="submit" className="green-btn">
-                  Add Allowance
-                </Button>
-              </Col>
-            )}
-          </Row>
-        </Col>
-      </Row>
-    </Form>
+              )}
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </Spin>
   );
 };
 

@@ -1,10 +1,11 @@
-import React from 'react';
-import { Row, Col } from 'antd';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Row, Col, Select } from 'antd';
 import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, emptyOverall } from './ducks/actions';
+import { getTeamsDetail } from '../../Application/ducks/actions';
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
 import MyTasks from './components/MyTasks';
@@ -153,7 +154,10 @@ export default (props) => {
   const overallDataList = useSelector(state => state.tasks.overallTaskDataWithStatus);
   const teamTaskData = useSelector(state => state.tasks.teamTaskData);
   const teamTaskDataList = useSelector(state => state.tasks.teamTaskDataWithStatus);
-  
+  const teamsDetailData = useSelector(state => state.global.teamsDetailData);
+  const employeeId = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const [dropData, setDropData] = useState(teamsDetailData.length > 0 && teamsDetailData[0].team_name)
+
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     // dispatch(emptyOverall());
     if (type == 'list') {
@@ -168,8 +172,24 @@ export default (props) => {
       dispatch(getTeamTasksWithStatus('Development', filter, page, limit, sort, sortby))
     } else {
       dispatch(getTeamTasks('Development', page, limit, sort, sortby));
-    }
+    }    
   }
+
+  useEffect(() => {
+    dispatch(getTeamsDetail(employeeId));
+  }, [])
+
+  console.log('teamsDetailData',teamsDetailData.length > 0,  teamsDetailData.length > 0 && teamsDetailData[0].team_name)
+
+  const dropDownComp = (
+    <Select defaultValue={teamsDetailData.length > 0 && teamsDetailData[0].team_name} className="customSelect" style={{width:'33%'}}>
+      {teamsDetailData?.map((item,ind) => (
+        <Fragment key={ind}>
+          <Option value={item?.team_name}>{item?.team_name}</Option>
+        </Fragment>
+      ))}
+    </Select>
+  );
 
   const tabs = [
     {
@@ -213,7 +233,8 @@ export default (props) => {
         searchDropdowns: {
           field1: [{label: 'All', value: 'All'}],
         },
-        statusKey:'status'
+        statusKey:'status',
+        //extraComp: dropDownComp
       },
       Comp: MultiView,
     },
