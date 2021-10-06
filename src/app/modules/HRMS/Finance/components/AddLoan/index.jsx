@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Row, Col, Typography, Form, Button, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Typography, Form, Button, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import FormGroup from '../../../../../molecules/FormGroup';
@@ -7,10 +7,13 @@ import { addLoan } from './FormFileds';
 import { SwitchField } from '../../../../../atoms/FormElement';
 import { updateLoan, addNewLoan, deleteLoan } from '../../ducks/services';
 import moment from 'moment';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined spin />;
 
 const AddLoan = (props) => {
   const { data, onUpdateComplete } = props;
   const { id } = useParams();
+  const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
   const { Title } = Typography;
 
@@ -27,7 +30,6 @@ const AddLoan = (props) => {
   }, [data]);
 
   const onSubmitHandler = (values) => {
-    console.log({ values });
     const payload = {
       amount: values?.amount,
       loan_start_date: moment(values?.loan_start_date).format('YYYY-MM-DD'),
@@ -36,77 +38,83 @@ const AddLoan = (props) => {
       status: values?.status,
       loan_status: 'Active',
     };
+    setLoad(true);
     data?.name
       ? updateLoan(data.name, payload).then((response) => {
           message.success(`${data.name} Updated Successfully`);
+          setLoad(false);
           onUpdateComplete();
         })
       : addNewLoan({ employee_id: id, loan: { ...payload } }).then((response) => {
           message.success(`New Loan Added Successfully`);
+          setLoad(false);
           onUpdateComplete();
         });
   };
 
   const onDeleteHandler = () => {
+    setLoad(true);
     deleteLoan(data.name, { loan_status: 'Inactive' }).then((response) => {
       message.success(`Loan ${data.name} Deleted Seccussfully`);
+      setLoad(false);
       onUpdateComplete();
     });
   };
 
   return (
-    <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
-      <Row gutter={[24, 30]} align="bottom">
-        <Col span={24}>
-          <Title level={4} className="mb-0">
-            Loan Details
-          </Title>
-        </Col>
-        {addLoan.map((value, key) => (
-          <FormGroup key={key} item={value} control={control} errors={errors} />
-        ))}
-        <Col span={24}>
-          <Row gutter={[20, 30]} justify="space-between">
-            <Col>
-              <Title level={5} className="c-gray">
-                Loan Completed
-              </Title>
-            </Col>
-            <Col>
-              <SwitchField
-                fieldname="status"
-                control={control}
-                iProps={{ size: 'large' }}
-                rules={{
-                  setValueAs: (value) => (value == true ? 'Completed' : value != false ? value : 'Incomplete'),
-                }}
-              />
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
-          <Row gutter={24} justify="end">
-            {data?.name ? (
-              <>
-                <Col>
-                  <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
-                    Delete Loan
-                  </Button>
-                </Col>
+    <Spin indicator={antIcon} size="large" spinning={load}>
+      <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
+        <Row gutter={[24, 30]} align="bottom">
+          <Col span={24}>
+            <Title level={4} className="mb-0">
+              Loan Details
+            </Title>
+          </Col>
+          {addLoan.map((value, key) => (
+            <FormGroup key={key} item={value} control={control} errors={errors} />
+          ))}
+          <Col span={24}>
+            <Row gutter={[20, 30]} justify="space-between">
+              <Col>
+                <Title level={5} className="c-gray">
+                  Loan Completed
+                </Title>
+              </Col>
+              <Col>
+                <SwitchField
+                  fieldname="status"
+                  control={control}
+                  iProps={{ size: 'large' }}
+                  rules={{
+                    setValueAs: (value) => (value == true ? 'Completed' : value != false ? value : 'Incomplete'),
+                  }}
+                />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Row gutter={24} justify="end">
+              {data?.name ? (
+                <>
+                  <Col>
+                    <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
+                      Delete Loan
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button size="large" type="primary" htmlType="submit" className="green-btn">
+                      Save Changes
+                    </Button>
+                  </Col>
+                </>
+              ) : (
                 <Col>
                   <Button size="large" type="primary" htmlType="submit" className="green-btn">
-                    Save Changes
+                    Add Loan
                   </Button>
                 </Col>
-              </>
-            ) : (
-              <Col>
-                <Button size="large" type="primary" htmlType="submit" className="green-btn">
-                  Add Loan
-                </Button>
-              </Col>
-            )}
-            {/* <Col>
+              )}
+              {/* <Col>
               <Button size="large" type="primary" htmlType="submit" className="red-btn">
                 Delete Loan
               </Button>
@@ -116,10 +124,11 @@ const AddLoan = (props) => {
                 Save Changes
               </Button>
             </Col> */}
-          </Row>
-        </Col>
-      </Row>
-    </Form>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </Spin>
   );
 };
 

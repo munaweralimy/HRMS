@@ -1,14 +1,18 @@
-import React, { Fragment, useEffect } from 'react';
-import { Row, Col, Typography, Form, Button, message } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Typography, Form, Button, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { updateSalaryInformation } from '../../../ducks/services';
 import FormGroup from '../../../../../../molecules/FormGroup';
 import { salaryInformation } from './FormFields';
+import { LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
+const antIcon = <LoadingOutlined spin />;
+
 const SalaryInformation = (props) => {
   const { id } = props;
   const { Title } = Typography;
+  const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
   const financeDetails = useSelector((state) => state.finance.financeDetailData);
 
@@ -37,42 +41,46 @@ const SalaryInformation = (props) => {
       effective_date: moment(values.effective_date).format('YYYY-MM-DD'),
       tax_amount: values.tax_amount,
     };
+    setLoad(true);
     updateSalaryInformation(id, payload).then((response) => {
       message.success('Salary Information Update Successfully');
+      setLoad(false);
     });
   };
 
   return (
-    <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
-      <Row gutter={[24, 30]} align="bottom">
-        <Col span={24}>
-          <Title level={4} className="mb-0">
-            Salary Information
-          </Title>
-        </Col>
-        {salaryInformation.map((item, index) => (
-          <Fragment key={index}>
-            {item?.subheader && (
-              <Col span={24}>
-                <Title level={5} className="mb-0 c-default">
-                  {item.subheader}
-                </Title>
+    <Spin indicator={antIcon} size="large" spinning={load}>
+      <Form layout="vertical" scrollToFirstError={true} onFinish={handleSubmit(onSubmitHandler)}>
+        <Row gutter={[24, 30]} align="bottom">
+          <Col span={24}>
+            <Title level={4} className="mb-0">
+              Salary Information
+            </Title>
+          </Col>
+          {salaryInformation.map((item, index) => (
+            <Fragment key={index}>
+              {item?.subheader && (
+                <Col span={24}>
+                  <Title level={5} className="mb-0 c-default">
+                    {item.subheader}
+                  </Title>
+                </Col>
+              )}
+              <FormGroup item={item} control={control} errors={errors} />
+            </Fragment>
+          ))}
+          <Col span={24}>
+            <Row gutter={24} justify="end">
+              <Col>
+                <Button size="large" type="primary" htmlType="submit" className="green-btn save-btn">
+                  Save Changes
+                </Button>
               </Col>
-            )}
-            <FormGroup item={item} control={control} errors={errors} />
-          </Fragment>
-        ))}
-        <Col span={24}>
-          <Row gutter={24} justify="end">
-            <Col>
-              <Button size="large" type="primary" htmlType="submit" className="green-btn save-btn">
-                Save Changes
-              </Button>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Form>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </Spin>
   );
 };
 
