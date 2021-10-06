@@ -19,21 +19,22 @@ export default (props) => {
   const { control, handleSubmit, setValue } = useForm();
   const [forming, setForming] = useState([]);
   const leaveTypeData = useSelector(state => state.leaves.leaveTypeData);
+  const { setAddVisible, id, updateApi, fullName, company } = props;
   const leaveInfoData = useSelector(state => state.leaves.leaveInfoData);
   const leaveApproversData = useSelector(state => state.leaves.leaveApproversData);
-  const { setAddVisible, id, updateApi, fullName, company } = props;
-
-  console.log('leaveInfoData', leaveInfoData, leaveApproversData, forming)
 
   useEffect(() => {
     dispatch(getLeaveType());
-    dispatch(getLeaveData('Annual Leave', company));
-    dispatch(getLeaveApprovers('Annual Leave', company));
   }, []);
 
-  const onFinish = async (val) => {
-    setLoad(true);
 
+  const onLeaveChange = (e) => {
+    dispatch(getLeaveData(e.label, company, id));
+    dispatch(getLeaveApprovers(e.label, company, id));
+  }
+
+  const onFinish = async (val) => {
+    setLoad(true);    
     const startDate = moment(val?.leaveStart);
     const endDate = moment(val?.leaveEnd);
     const daysDiff = endDate.diff(startDate, 'days');
@@ -43,17 +44,21 @@ export default (props) => {
       approvers.push({
         approver: resp?.approver,
         status: "Pending",
-        doctype: "HRMS Leave Application Approver"
+        doctype: "HRMS Leave Application Approver",
+        approver_id: resp?.approver_id
       })
     })
     console.log('approvers', approvers)
+
+    
+
 
     let temp = {
       employee_id: id,
       employee_name: fullName,
       company: company,
       date_of_joining: "2020-03-01",
-      leave_type: val?.leaveType.value,
+      leave_type_name: val?.leaveType.value,
       total_leaves: leaveInfoData[0]?.total_leaves,
       available_leaves: leaveInfoData[0]?.available_leaves,
       leaves_taken: leaveInfoData[0]?.taken_leaves,
@@ -65,7 +70,9 @@ export default (props) => {
       reason: val?.reason,
       attachment: "/private/files/CMS2_03_AQA_Flowchart.pdf",
       doctype: "HRMS Leave Application",
-      leave_approvers: approvers
+      leave_approvers: approvers,
+      role: '',
+      leave_type: val?.leaveType.label
     }
 
     console.log('val', temp)
@@ -102,10 +109,11 @@ export default (props) => {
               class='mb-0'
               iProps={{ placeholder: 'Please select'}}
               initValue=''
+              onChange={onLeaveChange}
               selectOption={
                 leaveTypeData &&
                 leaveTypeData?.map((e) => {
-                    return { value: e.name, label: e.name };
+                    return { value: e.name, label: e.leave_type };
                 })
               }
             />

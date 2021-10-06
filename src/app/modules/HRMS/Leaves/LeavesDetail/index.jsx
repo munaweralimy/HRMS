@@ -10,6 +10,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../configs/constants';
 import { useForm } from 'react-hook-form';
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
+import { getAdvancementdetails, emptyStaffDetails } from '../../Advancement/dcuks/action';
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -31,6 +32,11 @@ export default (props) => {
   useEffect(() => {
     dispatch(getSingleLeaveDetail(id));
     dispatch(getLeaveApplicationDetail(id, 'Pending'));
+
+    dispatch(getAdvancementdetails(id));
+    return () => {
+      dispatch(emptyStaffDetails())
+    }
   }, []);
 
   const updateStatus = (status, page, limit, sort, sortby) => {
