@@ -179,7 +179,7 @@ export default (props) => {
     dispatch(getTeamsDetail(employeeId));
   }, [])
 
-  console.log('teamsDetailData',teamsDetailData.length > 0,  teamsDetailData.length > 0 && teamsDetailData[0].team_name)
+  //console.log('teamsDetailData',teamsDetailData.length > 0,  teamsDetailData.length > 0 && teamsDetailData[0].team_name)
 
   const dropDownComp = (
     <Select defaultValue={teamsDetailData.length > 0 && teamsDetailData[0].team_name} className="customSelect" style={{width:'33%'}}>
