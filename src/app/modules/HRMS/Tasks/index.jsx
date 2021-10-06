@@ -212,7 +212,8 @@ export default (props) => {
         Search: SearchTeam,
         searchDropdowns: {
           field1: [{label: 'All', value: 'All'}],
-        }
+        },
+        statusKey:'status'
       },
       Comp: MultiView,
     },
