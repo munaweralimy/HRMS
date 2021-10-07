@@ -164,3 +164,14 @@ export const deletejobPosition = (id) => {
 export const getSingleJob = (id) => {
   return axios.get(`${apiresource}/Job Position/${id}`);
 };
+
+export const addSingleDepartment = (payload) => {
+  return axios.post(`${apiresource}/HRMS Department`, payload);
+};
+export const updateDepartment = (id, payload) => {
+  let { department_name, ...updatePayload } = payload;
+  return axios.put(`${apiresource}/HRMS Department/${id}`, updatePayload);
+};
+export const deleteDepartment = (id, payload) => {
+  return axios.put(`${apiresource}/HRMS Department/${id}`, payload);
+};

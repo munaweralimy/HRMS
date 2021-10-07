@@ -6,16 +6,17 @@ import ListCard from '../../../../../molecules/ListCard';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getDepartments } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddEditDepartment } from './Component/AddEditDepartment';
+import AddEditDepartment from './Component/AddEditDepartment';
+import Search from './Component/Search';
 
-const Departments = () => {
+export default (props) => {
   const [visible, setVisible] = useState(false);
-  const [positionFields, setPositionFields] = useState('');
+  const [departmentFields, setDepartmentFields] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const departmentList = useSelector((state) => state.setup.departmentList);
-
+  console.log({ departmentList });
   useEffect(() => {
     if (!visible) {
       dispatch(getDepartments(page, limit, '', ''));
@@ -25,9 +26,9 @@ const Departments = () => {
   const ListCol = [
     {
       title: 'Department',
-      dataIndex: 'Department',
-      key: 'Department',
-      sorted: (a, b) => a.Department - b.Department,
+      dataIndex: 'department_name',
+      key: 'department_name',
+      sorted: (a, b) => a.department_name - b.department_name,
       align: 'center',
     },
     {
@@ -69,7 +70,7 @@ const Departments = () => {
       text: '+ New Job Position',
       classes: 'green-btn',
       action: () => {
-        // setPositionFields({ name: '', job_title: '' });
+        setDepartmentFields({ name: '', company: '' });
         setVisible(true);
       },
     },
@@ -80,21 +81,19 @@ const Departments = () => {
     visibility: visible,
     content: (
       <AddEditDepartment
-        jobPosition={positionFields}
-        title="Add New Position"
-        onClose={() => {
-          setVisible(false);
-        }}
+        departmentField={departmentFields}
+        title="Add New Department"
+        onClose={() => setVisible(false)}
       />
     ),
-    width: 1199,
+    width: 550,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
       onClick: () => {
-        setPositionFields(record);
+        setDepartmentFields(record);
         setVisible(true);
       },
     };
@@ -140,5 +139,3 @@ const Departments = () => {
     </>
   );
 };
-
-export default Departments;
