@@ -192,7 +192,7 @@ export default (props) => {
   return (
       <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={(e) => setActiveTab(e)}>
         {Object.entries(data).map(([key,value]) => (
-          <TabPane tab={<span className='SentanceCase'>{key == 'yourrequests' ? 'Your Requests' :  key}</span>} key={key}>
+          <TabPane tab={<span className='SentanceCase'>{key == 'yourrequests' ? 'My Requests' :  key}</span>} key={key}>
             <Collapse accordion className='reqPanel' bordered={false} defaultActiveKey={selectedPanel} 
             expandIcon={({isActive}) => panelRight(isActive)}
             expandIconPosition='right'>

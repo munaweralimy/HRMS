@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Button, Switch } from 'antd';
+import { Row, Col, Button, Switch, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
@@ -8,12 +8,14 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getRequestFormsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { delRequest } from '../../ducks/services';
 
 export default (props) => {
-  const [formFields, setFormFields] = useState('');
+  const [formFields, setFormFields] = useState();
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  
   const dispatch = useDispatch();
   const requestFormsList = useSelector((state) => state.setup.requestFormsListData);
 
@@ -29,6 +31,9 @@ export default (props) => {
       dataIndex: 'form_name',
       key: 'form_name',
       sorted: (a, b) => a.form_name - b.form_name,
+      render: (text, record) => (
+        <Button type="link" className="list-links" onClick={() => onClickRow(record)}>{text}</Button>
+      ),
     },
     {
       title: 'Fields',
@@ -51,7 +56,7 @@ export default (props) => {
       sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => {}}>
+        <Button type="link" className="list-links" onClick={() => deleteRequest(record.form_name)}>
           <CloseCircleFilled />
         </Button>
       ),
@@ -63,42 +68,40 @@ export default (props) => {
       text: '+ New Team',
       classes: 'green-btn',
       action: () => {
-        setFormFields({ form_name: '', name: '' });
         setVisible(true);
       },
     },
   ];
 
+  const onUpdate = () => {
+    setVisible(false);
+    dispatch(getRequestFormsList(page, limit, '', ''));
+  }
+
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditReqForm title="Add New Form" onClose={() => setVisible(false)} />,
+    content: <AddEditReqForm title="Add New Form" data={formFields} onClose={() => setVisible(false)} onUpdate={onUpdate} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
+  
 
-  const deleteRecord = async (record) => {
-    //props.setLoading(true);
-    let url = `${apiresource}/HRMS Teams/${record.name}`;
-    try {
-      await axios.delete(url);
-      message.success('Record Successfully Deleted');
-      //props.setLoading(false);
-      dispatch(getRequestFormsList(page, pageSize));
-    } catch (e) {
-      //props.setLoading(false);
-      const { response } = e;
+  const deleteRequest = async (name) => {
+    props.setLoading(true);
+    delRequest(name).then(res => {
+      message.success('Request Deleted');
+      onUpdate();
+      props.setLoading(false);
+    }).catch(e => {
+      props.setLoading(false);
       message.error('Something went wrong');
-    }
+    });
   };
 
   const onClickRow = (record) => {
-    return {
-      onClick: () => {
-        setFormFields(record);
-        setVisible(true);
-      },
-    };
+      setFormFields(record);
+      setVisible(true);
   };
   const onSearch = (value) => {
     console.log('check values', value);
@@ -120,7 +123,6 @@ export default (props) => {
         </Col>
         <Col span={24}>
           <ListCard
-            onRow={onClickRow}
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}

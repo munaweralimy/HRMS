@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 import {
   getRequestPending, 
@@ -31,6 +31,10 @@ export default (props) => {
       dispatch(getRequestArchive(page, sort));
   }
 
+  useEffect(() => {
+    console.log('pending', dataPending)
+  }, [dataPending]);
+
   const onAdd = () => {
     history.push('/requests/addnew')
   }
@@ -46,13 +50,13 @@ export default (props) => {
         data: dataPending?.rows || [],
         count: dataPending?.count || 0,
         link: '/requests/',
-        innerKey: 'student id',
+        innerKey: 'employee_id',
         activeTab: activeKey,
         updateApi: onAction1,
       },
     },
     {
-      title: 'Your Requests',
+      title: 'Myr Requests',
       key: 'yourrequests',
       count: dataYour?.count,
       Comp: RequestSection,
@@ -61,10 +65,11 @@ export default (props) => {
         data: dataYour?.rows || [],
         count: dataYour?.count || 0,
         link: '/requests/',
-        innerKey: 'student id',
+        innerKey: 'employee_id',
         activeTab: activeKey,
         updateApi: onAction2,
         addbtn: '+ New Request',
+        btnclass: 'green-btn',
         btnAction: onAdd
       },
     },
@@ -76,8 +81,8 @@ export default (props) => {
         key: 'archive',
         data: dataArchive?.rows || [],
         count: dataArchive?.count || 0,
-        link: '/aqa/requests/',
-        innerKey: 'student id',
+        link: '/requests/',
+        innerKey: 'employee_id',
         activeTab: activeKey,
         updateApi: onAction3,
       },

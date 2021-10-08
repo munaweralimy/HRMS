@@ -6,7 +6,7 @@ export const getRequestPending = (page, sort) => {
     return async (dispatch) => {
         const {
             data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_request_listing?&status=Pending${sort && '&order='+sort+'&orderby='+creation}${page ? '&page_number='+page: ''}&limit=6`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_request_listing?&status=Staff Request${sort && '&order='+sort+'&orderby='+creation}${page ? '&page_number='+page: ''}&limit=6`);
         dispatch({
             type: action_types.REQUEST_LIST_PENDING,
             data: message,

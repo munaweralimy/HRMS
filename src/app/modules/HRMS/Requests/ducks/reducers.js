@@ -1,9 +1,9 @@
 import * as action_types from "./constants";
 
 const initialState = {
-    requestListPending: [],
-    requestListArchive: [],
-    requestListYourRequest: [],
+    requestListPending: {},
+    requestListArchive: {},
+    requestListYourRequest: {},
     formList: []
 };
 
