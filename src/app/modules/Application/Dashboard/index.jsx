@@ -6,7 +6,7 @@ import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 import ProgressCard from '../../../molecules/HRMS/ProgressCard';
 
 export default (props) => {
-    const {policyData, timesheetData } = props;
+    const {policyData, timesheetData} = props;
     
     return (
         <Row gutter={[20,20]}>

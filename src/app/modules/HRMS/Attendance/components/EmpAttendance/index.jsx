@@ -39,8 +39,8 @@ const ListCol = [
   },
   {
     title: 'Hours',
-    dataIndex: 'total_job_hour',
-    key: 'total_job_hour',
+    dataIndex: 'total_work_hour',
+    key: 'total_work_hour',
     align: 'center',
   },
   {
