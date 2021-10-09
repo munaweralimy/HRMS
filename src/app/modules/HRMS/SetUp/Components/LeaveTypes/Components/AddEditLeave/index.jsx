@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Space, Button, Row, Col, Typography, Form, Radio, message, Select } from 'antd';
+import { Space, Button, Row, Col, Typography, Form, Radio, message } from 'antd';
 import { useForm, useFieldArray, useWatch, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { leaveFields } from './FormFields';
@@ -8,30 +8,73 @@ import { createLeave, updateSingleLeave, deleteSingleLeave } from '../../../../d
 import { getSingleLeave, leaveTypeSelect } from '../../../../ducks/actions';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { SelectField } from '../../../../../../../atoms/FormElement';
+import Select from 'react-select';
 
-const ConditionalInput = ({ control, index }) => {
+const ConditionalInput = (props) => {
+  const { control, index, field } = props;
   const approverList = useSelector((state) => state.setup.allApprovers);
-  const value = useWatch({
+  const fieldVales = useWatch({
     name: 'approvers',
     control,
   });
-
-  return value?.[index]?.approver_level.value === 'Individual' ? (
+  console.log({ fieldVales, field });
+  return (
     <Col span={24}>
-      <SelectField
-        fieldname="individual"
-        label="Approver"
+      <Controller
+        name={`approvers.${index}.approver`}
         control={control}
-        class={`mb-0 w-100`}
-        iProps={{ placeholder: 'Please select' }}
-        selectOption={approverList.map((value) => ({
-          label: value.name,
-          value: value.name,
-          approver_id: value.approver_id,
-        }))}
+        defaultValue={
+          props.field.approver
+            ? {
+                label: props.field.approver.value,
+                value: props.field.approver.value,
+                id: props.field.approver.approver_id,
+              }
+            : ''
+        }
+        render={({ onBlur, onChange, value }) => {
+          if (fieldVales?.[index]?.approver_level.value === 'Individual') {
+            return (
+              <Select
+                value={value}
+                className="customSelect"
+                styles={{
+                  control: (val) => ({ ...val, minHeight: 32 }),
+                  valueContainer: (vcontain) => ({
+                    ...vcontain,
+                    padding: '5px 15px',
+                    textTransform: 'capitalize',
+                  }),
+                  dropdownIndicator: (icontain) => ({ ...icontain, padding: 5 }),
+                  indicatorSeparator: (icontain) => ({
+                    ...icontain,
+                    backgroundColor: '#000',
+                  }),
+                  option: (vcontain, state) => ({
+                    ...vcontain,
+                    textTransform: 'capitalize',
+                    color: '#BEBEBE',
+                    backgroundColor: state.isFocused ? '#0077B6' : '#171717',
+                  }),
+                }}
+                onChange={(e) => {
+                  onChange(e);
+                }}
+                options={approverList.map((value) => ({
+                  label: value.approver_name,
+                  value: value.approver_name,
+                  id: value.approver_id,
+                }))}
+                {...props.field}
+              />
+            );
+          } else {
+            return <></>;
+          }
+        }}
       />
     </Col>
-  ) : null;
+  );
 };
 
 export default (props) => {
@@ -40,6 +83,7 @@ export default (props) => {
   const { control, errors, reset, setValue, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const singleLeaveValues = useSelector((state) => state.setup.singleLeave);
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'approvers',
@@ -54,6 +98,7 @@ export default (props) => {
   };
 
   useEffect(() => {
+    console.log({ leaveType });
     if (leaveType.name.length > 0) {
       dispatch(getSingleLeave(leaveType.name));
     } else {
@@ -72,8 +117,17 @@ export default (props) => {
         value: singleLeaveValues?.marital_status,
       });
       setValue('add_leave_statistics', singleLeaveValues?.add_leave_statistics);
-      setValue('approvers', singleLeaveValues?.approvers);
-      setValue('individual', { label: 'Zain kafeel', value: 'zain kafeel' });
+
+      let approvers = singleLeaveValues?.approvers.map((value) =>
+        value.approver_level === 'Individual'
+          ? {
+              approver_level: 'Individual',
+              approver: { label: value.approver, value: value.approver, approver_id: value.approver_id },
+            }
+          : { approver_level: value.approver_level },
+      );
+      console.log({ approvers });
+      setValue('approvers', approvers);
     } else {
       reset();
     }
@@ -84,6 +138,7 @@ export default (props) => {
     const payload = {
       leave_type: values?.leave_type.value,
       contract_type: values?.contract_type.label,
+      company: 'Limkokwing University Creative Technology',
       gender: values?.gender.label,
       marital_status: values?.marital_status.label,
       add_leave_statistics: values?.add_leave_statistics,
@@ -92,14 +147,14 @@ export default (props) => {
         value.approver_level.label === 'Individual'
           ? {
               approver_level: value.approver_level.value,
-              approver: values.individual.value,
-              approver_id: values.individual.approver_id,
+              approver: value.approver.value,
+              approver_id: value.approver.id,
               doctype: 'HRMS Leave Type Approvers',
             }
           : { approver_level: value.approver_level.value, doctype: 'HRMS Leave Type Approvers' },
       ),
     };
-
+    console.log({ payload });
     leaveType.leave_type.length == 0
       ? createLeave(payload)
           .then((response) => {
@@ -156,6 +211,7 @@ export default (props) => {
               <Col span={24}>
                 <Space size={15} direction="vertical" className="w-100">
                   {fields.map((elem, index) => {
+                    console.log({ elem });
                     return (
                       <Row gutter={[24, 8]}>
                         {item.child.map((x, i) => (
@@ -188,7 +244,7 @@ export default (props) => {
                               control={control}
                               errors={errors}
                             />
-                            <ConditionalInput control={control} errors={errors} index={index} />
+                            <ConditionalInput control={control} errors={errors} index={index} field={elem} />
                           </Fragment>
                         ))}
                       </Row>

@@ -93,7 +93,6 @@ export default (props) => {
     width: 536,
     onCancel: () => setVisible(false),
   };
-
   const onClickRow = (record) => {
     return {
       onClick: () => {
