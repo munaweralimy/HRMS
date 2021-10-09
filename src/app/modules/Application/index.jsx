@@ -38,7 +38,7 @@ export default (props) => {
                <Dashboard policyData={policyData} timesheetData={timesheetData} />
            </Col>
            <Col span={24}>
-               <RequestList />
+               <RequestList dashboard={true} />
            </Col>
            <Col span={24}>
                 <PendingRequests pendingData={pendingData} />

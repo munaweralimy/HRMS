@@ -18,9 +18,6 @@ import {
 import {Link, useLocation} from 'react-router-dom';
 import RoutingList from '../../../routing/config/RoutingList';
 import { allowedRoutes } from '../../../routing/config/utils';
-import { getRequestListingPending} from '../../modules/AQA/Requests/ducks/actions';
-import { studentsStatus } from '../../modules/Registry/Students/ducks/actions';
-import { useDispatch, useSelector } from 'react-redux';
 
 const { SubMenu } = Menu;
 const IconList = {
@@ -42,27 +39,13 @@ export default (props) => {
 
     const [menuList, setMenuList] = useState([]);
     const location = useLocation().pathname;
-    const dispatch = useDispatch();
     const subkey = location.split('/')[1];
-    const dataPending = useSelector((state) => state.request.requestListPending);
-    const pendingList = useSelector((state) => state.students.pendingList);
     const selected = location.split('/').length > 1 ? `/${location.split('/')[1]}` : location;
 
     useEffect(() => {
         ModifyJson(allowedRoutes(RoutingList));
-        dispatch(getRequestListingPending());
-        dispatch(studentsStatus());
     }, []);
 
-    const getCounting = (menu) => {
-        if (menu ==  'Requests') {
-            return <Badge className='menu-badge' count={dataPending.length} />
-        } else if(menu ==  'Students') {
-            return <Badge className='menu-badge' count={
-                (pendingList.length > 0 ? pendingList[0]?.pending_offer_letter[0]?.visa_total : 0) + (pendingList.length > 0 ? pendingList[0]?.pending_student_registration[0]?.enrollment_total : 0)
-            } />
-        }
-    }
 
     const ModifyJson = (data) => {
         var result = data.reduce(function (r, a) {
@@ -106,7 +89,6 @@ export default (props) => {
                                                 {item.badge ? 
                                                 <Row gutter={20}>
                                                     <Col flex='auto'>{item.submenu}</Col>
-                                                    <Col>{getCounting(item.submenu)}</Col>
                                                 </Row>
                                                 : item.submenu}
                                             </Link>

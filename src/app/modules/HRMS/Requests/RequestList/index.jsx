@@ -19,16 +19,16 @@ export default (props) => {
   const dataYour = useSelector((state) => state.hrmsrequests.requestListYourRequest);
   const dataArchive = useSelector((state) => state.hrmsrequests.requestListArchive);
   
-  const onAction1 = (status, page, sort) => {
-      dispatch(getRequestPending(page, sort));
+  const onAction1 = (status, page, sort, limit) => {
+      dispatch(getRequestPending(page, sort,limit));
   }
 
-  const onAction2 = (status, page, sort) => {
-    dispatch(getYourRequest(page, sort));
+  const onAction2 = (status, page, sort, limit) => {
+    dispatch(getYourRequest(page, sort,limit));
   }
 
-  const onAction3 = (status, page, sort) => {
-      dispatch(getRequestArchive(page, sort));
+  const onAction3 = (status, page, sort, limit) => {
+      dispatch(getRequestArchive(page, sort,limit));
   }
 
   useEffect(() => {
@@ -53,6 +53,7 @@ export default (props) => {
         innerKey: 'employee_id',
         activeTab: activeKey,
         updateApi: onAction1,
+        limit: props.dashboard== true ? 3 : 6
       },
     },
     {
@@ -70,7 +71,8 @@ export default (props) => {
         updateApi: onAction2,
         addbtn: '+ New Request',
         btnclass: 'green-btn',
-        btnAction: onAdd
+        btnAction: onAdd,
+        limit: props.dashboard== true ? 3 : 6
       },
     },
     {
@@ -85,6 +87,7 @@ export default (props) => {
         innerKey: 'employee_id',
         activeTab: activeKey,
         updateApi: onAction3,
+        limit: props.dashboard== true ? 3 : 6
       },
     },
   ]

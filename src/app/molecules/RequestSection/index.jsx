@@ -9,26 +9,27 @@ const { Title } = Typography;
 export default (props) => {
     const { iProps } = props;
     const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
-    const { data, link, updateApi, count, innerKey, key, addbtn, btnAction, btnclass  } = iProps;
+    const { data, link, updateApi, count, innerKey, key, addbtn, btnAction, btnclass, limit  } = iProps;
     const [page, setPage] = useState(1);
     const [sorting, setSorting] = useState('');
 
     useEffect(() => {
-        updateApi(key, 1, sorting);
+        console.log('check', limit)
+        updateApi(key, 1, sorting, limit);
     }, []);
 
     const onPageChange = (pg) => {
         setPage(pg);
-        updateApi(key, pg, sorting);
+        updateApi(key, pg, sorting, limit);
     }
 
     const onSorting = () => {
         if(sorting == 'ASC') {
             setSorting('DESC')
-            updateApi(key, page, 'DESC');
+            updateApi(key, page, 'DESC', limit);
         } else {
             setSorting('ASC');
-            updateApi(key, page, 'ASC');
+            updateApi(key, page, 'ASC', limit);
         }
     }
 
@@ -61,7 +62,7 @@ export default (props) => {
             </div>
             <div className='w-100 text-right mt-2'>
                 <Pagination
-                pageSize={6}
+                pageSize={limit}
                 current={page}
                 hideOnSinglePage={true}
                 onChange={onPageChange}
