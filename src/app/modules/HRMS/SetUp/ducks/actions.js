@@ -361,7 +361,7 @@ export const leaveTypeSelect = (boolean) => (dispach) => {
   });
 };
 
-export const getDepartments = (page, limit, order, orderby) => async(dispatch) => {
+export const getDepartments = (page, limit, order, orderby) => async (dispatch) => {
   const {
     data: { message },
   } = await axios.get(
@@ -372,5 +372,12 @@ export const getDepartments = (page, limit, order, orderby) => async(dispatch) =
   dispatch({
     type: action_types.DEPARTMENT_LSIT,
     data: message,
+  });
+};
+
+export const showWarningLetter = (data) => (dispatch) => {
+  dispatch({
+    type: action_types.SHOW_WARNING_LETTER,
+    data: data,
   });
 };

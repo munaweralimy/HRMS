@@ -175,3 +175,16 @@ export const updateDepartment = (id, payload) => {
 export const deleteDepartment = (id, payload) => {
   return axios.put(`${apiresource}/HRMS Department/${id}`, payload);
 };
+export const addSingleWarningLetter = (payload) => {
+  return axios.post(`${apiresource}/Warning Letter`, payload);
+};
+export const updateWarningLetter = (id, payload) => {
+  let { department_name, ...updatePayload } = payload;
+  return axios.put(`${apiresource}/Warning Letter/${id}`, updatePayload);
+};
+export const deleteWarningLetter = (id, payload) => {
+  return axios.delete(`${apiresource}/Warning Letter/${id}`, payload);
+};
+export const getWarningLetterDetail = (id) => {
+  return axios.get(`${apiresource}/Warning Letter/${id}`);
+};

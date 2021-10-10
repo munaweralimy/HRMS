@@ -28,6 +28,7 @@ const initialState = {
   reqFormFieldList: [],
   departmentList: [],
   selectedLeave: false,
+  viewWarninLette: { name: '', warning_letter_template: '', visible: false },
 };
 
 export default (state = initialState, action) => {
@@ -87,6 +88,8 @@ export default (state = initialState, action) => {
       return { ...state, reqFormFieldList: data };
     case action_types.DEPARTMENT_LSIT:
       return { ...state, departmentList: data };
+    case action_types.SHOW_WARNING_LETTER:
+      return { ...state, viewWarninLette: data };
     default:
       return state;
   }

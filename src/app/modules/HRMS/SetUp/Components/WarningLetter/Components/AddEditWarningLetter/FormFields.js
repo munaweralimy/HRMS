@@ -1,0 +1,44 @@
+import { useSelector } from 'react-redux';
+const warningLetterFilds = () => {
+  const approverList = useSelector((state) => state.setup.allApprovers);
+  return [
+    {
+      label: 'Warning Letter Name',
+      name: 'writing_letter_name',
+      type: 'input',
+      placeholder: 'Type warning letter name',
+      twocol: false,
+      req: true,
+      reqMessage: 'warning letter name required',
+    },
+    {
+      label: 'Letter Template',
+      name: 'letter_template',
+      type: 'select',
+      placeholder: 'Select template',
+      colWidth: '1 0 188px',
+      req: true,
+      reqMessage: 'warning letter name required',
+      options: [{ label: '1', value: '1' }],
+    },
+    {
+      label: '',
+      name: 'signature',
+      type: 'checkbox',
+      placeholder: '',
+      colWidth: '1 0 188px',
+      req: false,
+      reqMessage: '',
+      options: [{ label: 'Require Signature', value: 1 }],
+    },
+    {
+      label: 'Signee',
+      name: 'signee',
+      type: 'select',
+      placeholder: 'Select approver',
+      colWidth: '1 0 188px',
+      options: approverList.map((value) => ({ label: value.name, value: value.name })),
+    },
+  ];
+};
+export { warningLetterFilds };
