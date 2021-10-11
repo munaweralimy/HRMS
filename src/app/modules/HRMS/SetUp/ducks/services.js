@@ -203,3 +203,18 @@ export const deleteApprover = (id, payload) => {
 export const getApproverDetail = (id) => {
   return axios.get(`${apiresource}/HRMS Approver/${id}`);
 };
+
+export const addSingleLetterTemp = (payload) => {
+  return axios.post(`${apiresource}/Letter Template`, payload);
+};
+export const updateletterTemp = (id, payload) => {
+  let { department_name, ...updatePayload } = payload;
+  return axios.put(`${apiresource}/Letter Template/${id}`, updatePayload);
+};
+export const deleteletterTemp = (id, payload) => {
+  return axios.delete(`${apiresource}/Letter Template/${id}`, payload);
+};
+
+export const getLetterTempDetail = (id) => {
+  return axios.get(`${apiresource}/Letter Template/${id}`);
+};

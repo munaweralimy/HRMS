@@ -27,6 +27,7 @@ const initialState = {
   allApprovers: [],
   reqFormFieldList: [],
   departmentList: [],
+  tempList: [],
   selectedLeave: false,
   viewWarninLette: { name: '', warning_letter_template: '', visible: false },
 };
@@ -90,6 +91,8 @@ export default (state = initialState, action) => {
       return { ...state, departmentList: data };
     case action_types.SHOW_WARNING_LETTER:
       return { ...state, viewWarninLette: data };
+    case action_types.TEMP_LIST:
+      return { ...state, tempList: data };
     default:
       return state;
   }

@@ -381,3 +381,13 @@ export const showWarningLetter = (data) => (dispatch) => {
     data: data,
   });
 };
+
+export const getTempList = () => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get(`${apiresource}/Letter Template `);
+  dispatch({
+    type: action_types.TEMP_LIST,
+    data: data,
+  });
+};

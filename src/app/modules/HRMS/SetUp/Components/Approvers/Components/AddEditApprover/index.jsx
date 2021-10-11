@@ -19,7 +19,6 @@ export default (props) => {
   const { control, errors, setValue, handleSubmit, reset } = useForm();
 
   const onFinish = async (values) => {
-    console.log({ values, image });
     let res = '';
     if (image?.fileObj) {
       let modifiedName = uniquiFileName(image?.fileObj.name);
@@ -146,7 +145,9 @@ export default (props) => {
         <Col span={24}>
           <Row gutter={24} justify="center" align="middle">
             <Col>
-              <Title level={3}>{title}</Title>
+              <Title className="mb-0" level={3}>
+                {title}
+              </Title>
             </Col>
             <Col>
               <Text className="mb-0 c-gray">To ensure best fit. please use the dimensions50mmx25mm</Text>

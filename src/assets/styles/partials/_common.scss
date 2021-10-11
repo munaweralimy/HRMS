@@ -597,7 +597,10 @@ select:-webkit-autofill:focus {
   width: 100%;
   height: 225px;
 }
-
+.uploadTemplate > .ant-upload {
+  width: 100%;
+  height: 110px;
+}
 .ant-btn-dashed:hover,
 .ant-btn-dashed:focus {
   color: #fff;

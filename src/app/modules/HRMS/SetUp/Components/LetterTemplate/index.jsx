@@ -1,47 +1,27 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, message } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
+import { getLetterTemplateList } from '../../ducks/actions';
 import ListCard from '../../../../../molecules/ListCard';
-import AddPopup from './Components/AddPopup';
+import AddEditLetterTemplate from './Components/AddEditLetteremplate';
 import Search from './Components/Search';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [teamplateData, setTemplateData] = useState('');
 
+  const dispatch = useDispatch();
+  const tempData = useSelector((state) => state.setup.letterTemplateListData);
   const ListCol = [
     {
-      title: 'Job Title',
-      dataIndex: 'jobtitle',
-      key: 'jobtitle',
-      sorted: (a, b) => a.jobtitle - b.jobtitle,
-    },
-    {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
-    },
-    {
-      title: 'Date Open',
-      dataIndex: 'dateopen',
-      key: 'dateopen',
-      sorted: (a, b) => a.dateopen - b.dateopen,
-    },
-    {
-      title: 'Suitable Application',
-      dataIndex: 'suitableappalication',
-      key: 'suitableappalication',
-      sorted: (a, b) => a.suitableappalication - b.suitableappalication,
-      align: 'center',
-    },
-  ];
-  const ListData = [
-    {
-      jobtitle: 'Graphic Designer',
-      company: 'Centre for Content Creation Sdn. Bhd.',
-      dateopen: '15th February 2021',
-      suitableappalication: '3',
+      title: 'Template Name',
+      dataIndex: 'name',
+      key: 'name',
+      sorted: (a, b) => a.name - b.name,
     },
   ];
 
@@ -49,31 +29,54 @@ export default (props) => {
     {
       text: '+ New Letter Template',
       classes: 'green-btn',
-      action: () => { setVisible(true);},
+      action: () => {
+        setTemplateData({ name: '', template_name: '' });
+        setVisible(true);
+      },
     },
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
-    class: 'black-modal',
-    content: <AddPopup
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-    />,
-    width: 536,
-    onCancel: () => setVisible(false),
+    content: (
+      <AddEditLetterTemplate templateData={teamplateData} title="Add New Policy" onClose={() => setVisible(false)} />
+    ),
+    width: 750,
+    onCancel: () => {
+      setVisible(false);
+    },
   };
 
   const onClickRow = (record) => {
     return {
-      onClick: () => { },
+      onClick: () => {
+        setTemplateData(record);
+        setVisible(true);
+      },
     };
-  }
+  };
 
   const onSearch = (value) => {
     console.log('check values', value);
-  }
+  };
+
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log('heloo', pagination);
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getLetterTemplateList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+    } else {
+      dispatch(getLetterTemplateList(pagination.current, pagination.pageSize, '', ''));
+    }
+  };
+
+  useEffect(() => {
+    if (!visible) {
+      dispatch(getLetterTemplateList(page, limit, '', ''));
+    }
+  }, [visible]);
 
   return (
     <>
@@ -87,8 +90,13 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={ListData}
-            pagination={true}
+            ListData={tempData?.rows}
+            pagination={{
+              total: tempData?.count,
+              current: page,
+              pageSize: limit,
+            }}
+            onChange={onTableChange}
           />
         </Col>
       </Row>
