@@ -52,6 +52,18 @@ export const getCheckInData = (id, date) => {
   };
 };
 
+export const getCalenderData = (sDate, eDate, company) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}&company=${company}`);
+    dispatch({
+      type: action_types.CALENDER_DATA,
+      data: message,
+    });
+  };
+};
+
 
 export const getTeamsDetail = (employeeid) => {
   return async (dispatch) => {

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, Fragment} from 'react';
 import { Row, Col, ConfigProvider, Calendar, Card, Button, Typography, Space, Badge, Collapse, Avatar } from 'antd';
 import en_GB from 'antd/lib/locale-provider/en_GB';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
@@ -217,13 +217,23 @@ export default (props) => {
     }
   }
 
+  const getCompanyPercent = (totalLeaves, totalTaken) => {
+    const percent = totalTaken/totalLeaves * 100;
+    return percent ? parseFloat(percent).toFixed(2) : 0;
+  }
+
+  const getStaffPercent = (totalLeaves, totalTaken) => {
+    const percent = totalTaken/totalLeaves * 100
+    return percent ? parseFloat(percent).toFixed(2) : 0;
+  }
+
   const leavesPanelHeader = (item,index) => (
-    <>
+    <Fragment key={index}>
       <Row justify="space-between">
         <Col>
           <Title level={4} className="m-0">{item?.leave_type}</Title>
           <Title level={5} className="m-0">Company Average</Title>
-          <Title level={3} className="m-0">80%</Title>
+          <Title level={3} className="m-0">{getCompanyPercent(item?.total_employees_entitlement, item?.total_taken_employees_leaves)}%</Title>
         </Col>
         <Col>
           <Space className='w-100' size={30} align="start">
@@ -231,35 +241,19 @@ export default (props) => {
               maxCount={5}  
               size={70}
             >
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>95%</Text>
-              </Space>
-  
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>93%</Text>
-              </Space>
-  
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>82%</Text>
-              </Space>
-  
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>81%</Text>
-              </Space>
-  
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>81%</Text>
-              </Space>
+              {item?.employee_list?.length > 0 && item?.employee_list?.map((list, ind) => (
+                <Fragment key={ind}>
+                  <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
+                    <Avatar src={list?.image ? `http://cms2dev.limkokwing.net${list?.image}` : ''} size={70} />
+                    <Text className='c-error'>{getStaffPercent(list?.employee_total_entitlement, list?.taken_employee_leaves)}%</Text>
+                  </Space>
+                </Fragment>
+              ))}
             </Avatar.Group>
           </Space>
         </Col>
       </Row>
-    </>
+    </Fragment>
   );
 
   const tabs = [

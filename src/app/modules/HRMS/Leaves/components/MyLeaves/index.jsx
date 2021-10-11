@@ -113,7 +113,7 @@ export default (props) => {
         <Tabs activeKey={activeKey} type="card" className='custom-tabs' onChange={(e) => setActiveKey(e)}>
           <TabPane key={'1'} tab='Leave Application'>
             {!rowDetails && !addVisible &&
-              <LeaveApplication id={id} updateApi={updateTimesheet} data={myTaskData} />
+              <LeaveApplication id={id} updateApi={updateTimesheet} ListData={myAvailableLeaves?.availibility} data={myTaskData} />
             }
             {addVisible && <ApplyLeave id={id} fullName={fullName} company={company} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
             {rowDetails && (

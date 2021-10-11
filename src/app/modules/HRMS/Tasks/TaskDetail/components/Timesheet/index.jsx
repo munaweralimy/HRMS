@@ -99,7 +99,7 @@ export default (props) => {
 
     const onApprove = async (name) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved`
+        let url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved`
         try {
             await axios.get(url);
             setLoad(false)
@@ -116,7 +116,7 @@ export default (props) => {
 
     const onReject = async (name) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected`
+        let url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected`
         try {
             await axios.get(url);
             setLoad(false)
