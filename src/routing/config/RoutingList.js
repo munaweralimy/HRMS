@@ -227,4 +227,14 @@ export default [
     icon: 'SetupIcon',
     parent: true,
   },
+  {
+    component: 'Profile',
+    path: '/myprofile',
+    title: titles.HRMS,
+    permission: hrms,
+    key: 'myprofile',
+    menu: 'My Profile',
+    icon: 'SetupIcon',
+    parent: true,
+  },
 ];

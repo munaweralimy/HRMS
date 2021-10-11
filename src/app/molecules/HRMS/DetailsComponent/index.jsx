@@ -7,14 +7,16 @@ const {Title} = Typography;
 
 export default (props) => {
   
-  const { setRowDetail, backbtnTitle, btn1title, btn2title, btn3title, onAction1, onAction2, onAction3, data, mainTitle, btnClass1, btnClass2, btnClass3 } = props;
-
-
+  const { setRowDetail, backbtnTitle, btn1title, btn2title, btn3title, onAction1, onAction2, onAction3, data, ApproverID, mainTitle, btnClass1, btnClass2, btnClass3 } = props;
+  const userID = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  console.log('ApproverID', ApproverID)
   return (
       <Row gutter={[20, 30]}>
         <Col span={24}>
           <Space direction='vertical' size={20}>
-            <Button type="link" className='c-gray-linkbtn p-0 mt-1' onClick={() => {setRowDetail(false); props?.setRecord(null)}} htmlType="button"><LeftOutlined />{backbtnTitle}</Button>
+            {backbtnTitle && (
+              <Button type="link" className='c-gray-linkbtn p-0 mt-1' onClick={() => {setRowDetail(false); props?.setRecord(null)}} htmlType="button"><LeftOutlined />{backbtnTitle}</Button>
+            )}
             <Title level={4} className='c-default mb-0'>{mainTitle}</Title>
           </Space>
         </Col>
@@ -29,8 +31,8 @@ export default (props) => {
         </Col>
           <Col span={24}>
             <Row gutter={[20, 20]} justify="end">
-              {onAction1 && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='button' className={`w-100 ${btnClass1 ? btnClass1 : ''}`} onClick={() => {onAction1(data[0].value); setRowDetail(false)}}>{btn1title}</Button></Col>}
-              {onAction2 && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='submit' className={`w-100 ${btnClass2 ? btnClass2 : ''}`} onClick={() => {onAction2(data[0].value); setRowDetail(false)}}>{btn2title}</Button></Col>}
+              {onAction1 && ApproverID == userID && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='button' className={`w-100 ${btnClass1 ? btnClass1 : ''}`} onClick={() => {onAction1(data[0].value); setRowDetail(false)}}>{btn1title}</Button></Col>}
+              {onAction2 && ApproverID == userID && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='submit' className={`w-100 ${btnClass2 ? btnClass2 : ''}`} onClick={() => {onAction2(data[0].value); setRowDetail(false)}}>{btn2title}</Button></Col>}
               {onAction3 && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='submit' className={`w-100 ${btnClass3 ? btnClass3 : ''}`} onClick={() => {onAction3(); setRowDetail(false)}}>{btn3title}</Button></Col>}
             </Row>
           </Col>

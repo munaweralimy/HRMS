@@ -43,7 +43,7 @@ export default (props) => {
         tasks: val?.task,
       }]
     }
-    let url = `${apiMethod}/hrms.api.add_single_timesheet`;
+    let url = `${apiMethod}/hrms.tasks_api.add_single_timesheet`;
     try {
         await axios.post(url, json);
         message.success('TimeSheet Added Successfully');
