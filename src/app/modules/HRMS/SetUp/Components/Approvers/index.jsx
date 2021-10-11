@@ -55,11 +55,10 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    class: 'black-modal',
     content: (
       <AddEditApprover approver={apparoaverFileds} title="Add New Approvals" onClose={() => setVisible(false)} />
     ),
-    width: 536,
+    width: 654,
     onCancel: () => setVisible(false),
   };
 

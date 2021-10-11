@@ -188,3 +188,18 @@ export const deleteWarningLetter = (id, payload) => {
 export const getWarningLetterDetail = (id) => {
   return axios.get(`${apiresource}/Warning Letter/${id}`);
 };
+
+export const addSingleApprover = (payload) => {
+  return axios.post(`${apiresource}/HRMS Approver`, payload);
+};
+export const updateApprover = (id, payload) => {
+  let { department_name, ...updatePayload } = payload;
+  return axios.put(`${apiresource}/HRMS Approver/${id}`, updatePayload);
+};
+export const deleteApprover = (id, payload) => {
+  return axios.delete(`${apiresource}/HRMS Approver/${id}`, payload);
+};
+
+export const getApproverDetail = (id) => {
+  return axios.get(`${apiresource}/HRMS Approver/${id}`);
+};
