@@ -71,7 +71,7 @@ export default (props) => {
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
       <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-        <Row gutter={[20, 50]}>
+        <Row gutter={[20, 30]}>
           <Col span={24}>
             <Title level={3}>{title}</Title>
           </Col>

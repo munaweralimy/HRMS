@@ -41,6 +41,7 @@ export default (props) => {
       setValue('team_name', teamData.team_name);
       setValue('company', { label: teamData.company, value: teamData.company });
       setValue('team_leader', { label: teamData.team_leader_name, value: teamData.team_leader_name });
+      setValue('department', { label: teamData.department, value: teamData.department });
     }
   }, [teamData]);
 
@@ -51,13 +52,18 @@ export default (props) => {
       team_leader: values.team_leader.value,
       company: values.company.value,
       user_staff: userData.map((value) => ({ employee: value.id })),
+      department: values.department.value,
     };
     team.name.length == 0
-      ? addSingleTeam(payload).then((response) => {
-          message.success('Team Added Successfully');
-          setLoad(false);
-          onClose(false);
-        })
+      ? addSingleTeam(payload)
+          .then((response) => {
+            message.success('Team Added Successfully');
+            setLoad(false);
+            onClose(false);
+          })
+          .catch((error) => {
+            setLoad(false);
+          })
       : updateSingleTeam(team.name, payload).then((response) => {
           message.success('Team Updated Successfully');
           setLoad(false);

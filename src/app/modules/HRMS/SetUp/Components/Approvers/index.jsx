@@ -56,7 +56,11 @@ export default (props) => {
     closable: true,
     visibility: visible,
     content: (
-      <AddEditApprover approver={apparoaverFileds} title="Add New Approvals" onClose={() => setVisible(false)} />
+      <AddEditApprover
+        approver={apparoaverFileds}
+        title={`${apparoaverFileds.name ? 'Edit' : 'Add New'} Approver`}
+        onClose={() => setVisible(false)}
+      />
     ),
     width: 654,
     onCancel: () => setVisible(false),
@@ -88,7 +92,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Approvers" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

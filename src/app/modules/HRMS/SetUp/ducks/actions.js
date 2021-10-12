@@ -391,3 +391,15 @@ export const getTempList = () => async (dispatch) => {
     data: data,
   });
 };
+
+export const getAllDepartmentList = () => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get(
+    `http://cms2dev.limkokwing.net/api/resource/Department?filters=[["company","=", "Limkokwing University Creative Technology" ]]&fields=["name","department_name"]&order_by=name&start=1 `,
+  );
+  dispatch({
+    type: action_types.GET_DEAPRTMENTS,
+    data: data,
+  });
+};

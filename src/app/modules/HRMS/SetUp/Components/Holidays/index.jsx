@@ -73,7 +73,11 @@ export default (props) => {
     visibility: visible,
     class: 'black-modal',
     content: (
-      <AddEditHolidays holidayFields={holidayFields} title="Add New Holiday" onClose={() => setVisible(false)} />
+      <AddEditHolidays
+        holidayFields={holidayFields}
+        title={`${holidayFields.name ? 'Edit' : 'Add New'} Holidays`}
+        onClose={() => setVisible(false)}
+      />
     ),
     width: 536,
     onCancel: () => setVisible(false),
@@ -103,7 +107,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Holidays" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

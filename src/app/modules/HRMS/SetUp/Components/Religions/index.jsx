@@ -61,7 +61,13 @@ export default (props) => {
     closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddEditReligion religion={religionFiled} title="Add New Religion" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditReligion
+        religion={religionFiled}
+        title={`${religionFiled.name ? 'Edit' : 'Add New'} Religion`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };

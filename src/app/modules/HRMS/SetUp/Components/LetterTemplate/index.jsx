@@ -40,7 +40,11 @@ export default (props) => {
     closable: true,
     visibility: visible,
     content: (
-      <AddEditLetterTemplate templateData={teamplateData} title="Add New Policy" onClose={() => setVisible(false)} />
+      <AddEditLetterTemplate
+        templateData={teamplateData}
+        title={`${teamplateData.name ? 'Edit' : 'Add New'} Letter Template`}
+        onClose={() => setVisible(false)}
+      />
     ),
     width: 750,
     onCancel: () => {

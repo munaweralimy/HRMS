@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Button, Row, Col, Typography, Form, message, Spin } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
@@ -84,8 +84,8 @@ export default (props) => {
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
       <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-        <Row gutter={[20, 50]}>
-          <Col span={24}>
+        <Row gutter={[20, 30]} justify="center">
+          <Col>
             <Title level={3}>{title}</Title>
           </Col>
           <Col span={24}>

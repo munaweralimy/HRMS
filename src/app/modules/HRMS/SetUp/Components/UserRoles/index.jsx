@@ -70,7 +70,13 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditRoles roleData={userFields} title="Add New User Roles" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditRoles
+        roleData={userFields}
+        title={`${userFields.name ? 'Edit' : 'Add New'} Roles`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 1199,
     onCancel: () => setVisible(false),
   };

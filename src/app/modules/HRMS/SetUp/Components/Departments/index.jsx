@@ -82,7 +82,7 @@ export default (props) => {
     content: (
       <AddEditDepartment
         departmentField={departmentFields}
-        title="Add New Department"
+        title={`${departmentFields.name ? 'Edit' : 'Add New'} Department`}
         onClose={() => setVisible(false)}
       />
     ),
@@ -117,7 +117,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Departments" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

@@ -148,7 +148,7 @@ export default (props) => {
     content: (
       <AddEditEntitlmentLeave
         leaveEtitlement={entitlementLeave}
-        title={`${entitlementLeave.name ? 'Edit' : 'Add'} Leave Entitlement`}
+        title={`${entitlementLeave.name ? 'Edit' : 'Add New'} Leave Entitlement`}
         onClose={() => setVisible(false)}
       />
     ),

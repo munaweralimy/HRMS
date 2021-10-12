@@ -63,7 +63,7 @@ export default (props) => {
     content: (
       <AddEditInstitution
         institutionName={institutionFiled}
-        title="Add New Institution"
+        title={`${institutionFiled.name ? 'Edit' : 'Add New'} Institutions`}
         onClose={() => setVisible(false)}
       />
     ),
@@ -98,7 +98,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Institutions" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

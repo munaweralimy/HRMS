@@ -66,7 +66,7 @@ export default (props) => {
 
   const btnList = [
     {
-      text: '+ New Team',
+      text: '+ New Asset',
       classes: 'green-btn',
       action: () => {
         setAssetField({ name: '', status: '', assets_id: '', assets_name: '' });
@@ -79,7 +79,13 @@ export default (props) => {
     closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddEditAsset asset={assetField} title="Add New Asset" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditAsset
+        asset={assetField}
+        title={`${assetField.name ? 'Edit' : 'Add New'} Asset`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -113,7 +119,6 @@ export default (props) => {
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
@@ -132,7 +137,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Assets" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

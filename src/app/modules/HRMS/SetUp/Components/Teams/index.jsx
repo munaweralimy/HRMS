@@ -6,7 +6,7 @@ import ListCard from '../../../../../molecules/ListCard';
 import AddEditTeam from './Components/AddEditTeam';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getTeamList } from '../../ducks/actions';
+import { getTeamList, getAllDepartmentList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
@@ -23,6 +23,9 @@ export default (props) => {
       dispatch(getTeamList(page, limit, '', ''));
     }
   }, [visible]);
+  useEffect(() => {
+    dispatch(getAllDepartmentList());
+  }, []);
 
   const ListCol = [
     {
@@ -81,7 +84,7 @@ export default (props) => {
     content: (
       <AddEditTeam
         team={teamFiled}
-        title={teamFiled?.name.length > 0 ? 'Edit New Team' : 'Add New Team'}
+        title={`${teamFiled?.name.length ? 'Edit' : 'Add New'} Team`}
         onClose={() => setVisible(false)}
       />
     ),

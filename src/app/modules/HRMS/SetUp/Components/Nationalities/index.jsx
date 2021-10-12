@@ -63,7 +63,7 @@ export default (props) => {
     content: (
       <AddEditNationality
         countryName={nationalityField}
-        title="Add New Nationality"
+        title={`${nationalityField.name ? 'Edit' : 'Add New'} Nationality`}
         onClose={() => setVisible(false)}
       />
     ),
@@ -98,7 +98,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Nationality" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

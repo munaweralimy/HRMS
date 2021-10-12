@@ -64,7 +64,13 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditProject projectData={projectFields} title="Add New Project" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditProject
+        projectData={projectFields}
+        title={`${projectFields.name ? 'Edit' : 'Add New'} Projects`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -97,7 +103,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Projects" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

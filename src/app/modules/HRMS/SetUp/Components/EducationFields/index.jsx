@@ -71,7 +71,11 @@ export default (props) => {
     visibility: visible,
     class: 'black-modal',
     content: (
-      <AddEditEducation educationField={field} title="Add New Education Field" onClose={() => setVisible(false)} />
+      <AddEditEducation
+        educationField={field}
+        title={`${field.name ? 'Edit' : 'Add New'} Education Fields`}
+        onClose={() => setVisible(false)}
+      />
     ),
     width: 536,
     onCancel: () => setVisible(false),
@@ -105,7 +109,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Education Fields" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

@@ -89,7 +89,13 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditLeave leaveType={leaveType} title="Add New Leave Type" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditLeave
+        leaveType={leaveType}
+        title={`${leaveType?.name ? 'Edit' : 'Add New'} Leave Type`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };

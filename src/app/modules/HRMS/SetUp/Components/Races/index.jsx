@@ -60,7 +60,13 @@ export default (props) => {
     closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddEditRace race={raceField} title="Add New Race" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditRace
+        race={raceField}
+        title={`${raceField.name ? 'Edit' : 'Add New'} Race`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -92,7 +98,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Race" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

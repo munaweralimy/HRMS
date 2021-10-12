@@ -100,7 +100,7 @@ export default (props) => {
     content: (
       <AddEditPosition
         jobPosition={positionFields}
-        title="Add New Position"
+        title={`${positionFields.name ? 'Edit' : 'Add New'} Job Position`}
         onClose={() => {
           setVisible(false);
         }}
@@ -136,7 +136,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Job Positions" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

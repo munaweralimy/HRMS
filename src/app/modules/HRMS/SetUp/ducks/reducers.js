@@ -28,6 +28,7 @@ const initialState = {
   reqFormFieldList: [],
   departmentList: [],
   tempList: [],
+  getAllDepartments: [],
   selectedLeave: false,
   viewWarninLette: { name: '', warning_letter_template: '', visible: false },
 };
@@ -93,6 +94,8 @@ export default (state = initialState, action) => {
       return { ...state, viewWarninLette: data };
     case action_types.TEMP_LIST:
       return { ...state, tempList: data };
+    case action_types.GET_DEAPRTMENTS:
+      return { ...state, getAllDepartments: data };
     default:
       return state;
   }
