@@ -11,8 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
-  const [teamFiled, setTeamField] = useState('');
+  const [teamFiled, setTeamField] = useState({ company: '', name: '' });
   const [page, setPage] = useState(1);
+
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const teamListData = useSelector((state) => state.setup.teamsListData);
@@ -77,7 +78,13 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditTeam team={teamFiled} title="Add New Team" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditTeam
+        team={teamFiled}
+        title={teamFiled?.name.length > 0 ? 'Edit New Team' : 'Add New Team'}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 900,
     onCancel: () => setVisible(false),
   };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Button, Row, Col, Typography, Form, message, Upload } from 'antd';
+import { Space, Button, Row, Col, Typography, Form, message, Upload, Spin } from 'antd';
 import { useForm, Controller } from 'react-hook-form';
 import { uniquiFileName, getSingleUpload } from '../../../../../../../../features/utility';
 import { PlusCircleFilled } from '@ant-design/icons';
@@ -9,6 +9,8 @@ import {
   deleteletterTemp,
   getLetterTempDetail,
 } from '../../../../ducks/services';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined spin />;
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -19,6 +21,7 @@ function getBase64(img, callback) {
 export default (props) => {
   const { title, onClose, templateData } = props;
   const { Title, Text } = Typography;
+  const [load, setLoad] = useState(false);
   const [header, setHeader] = useState({
     headerloading: true,
     footerloading: true,
@@ -72,9 +75,15 @@ export default (props) => {
     return res;
   };
   const onDeleteTemplate = () => {
+    setLoad(true);
     deleteletterTemp(templateData.name)
       .then((response) => {
-        message.success('Country Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
+        setLoad(false);
         onClose();
       })
       .catch((error) => {
@@ -83,6 +92,7 @@ export default (props) => {
       });
   };
   const onFinish = async (val) => {
+    setLoad(true);
     let letter_head = '';
     let letter_footer = '';
     if (val.header.file) {
@@ -104,6 +114,7 @@ export default (props) => {
           } else {
             message.error(response.data.message.message);
           }
+          setLoad(false);
           onClose();
         })
       : updateletterTemp(templateData.name, { ...payload, template_name: templateData.template_name }).then(
@@ -113,6 +124,7 @@ export default (props) => {
             } else {
               message.error(response.data.message.message);
             }
+            setLoad(false);
             onClose();
           },
         );
@@ -133,6 +145,7 @@ export default (props) => {
 
   useEffect(() => {
     if (templateData.name.length > 0) {
+      setLoad(true);
       getLetterTempDetail(templateData.name).then((response) => {
         let data = response?.data?.data;
         let tempsHeadandFoot = {
@@ -145,6 +158,7 @@ export default (props) => {
         setHeader(tempsHeadandFoot);
         setValue('header', data.letter_head);
         setValue('footer', data.letter_footer);
+        setLoad(false);
       });
     } else {
       let tempsHeadandFoot = {
@@ -159,160 +173,162 @@ export default (props) => {
     }
   }, [templateData]);
   return (
-    <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-      <Row gutter={[24, 30]}>
-        <Col span={24}>
-          <Row gugutter={24} justify="center" align="middle">
-            <Col>
-              <Title level={3} className="mb-0">
-                {title}
-              </Title>
-            </Col>
-            <Col>
-              <Text className="mb-0 c-gray">
-                To ensure best fit please use the dimensions 210mm x 32mm for both header & footer with 15mm margin on
-                the side
-              </Text>
-            </Col>
-          </Row>
-        </Col>
+    <Spin indicator={antIcon} size="large" spinning={load}>
+      <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
+        <Row gutter={[24, 30]}>
+          <Col span={24}>
+            <Row gugutter={24} justify="center" align="middle">
+              <Col>
+                <Title level={3} className="mb-0">
+                  {title}
+                </Title>
+              </Col>
+              <Col>
+                <Text className="mb-0 c-gray">
+                  To ensure best fit please use the dimensions 210mm x 32mm for both header & footer with 15mm margin on
+                  the side
+                </Text>
+              </Col>
+            </Row>
+          </Col>
 
-        <Col span={24}>
-          <Row gutter={24} justify="space-between">
-            <Col>
-              <Text className="mb-0 c-gray">Letter Header</Text>
-            </Col>
-            {templateData.name.length > 0 && (
+          <Col span={24}>
+            <Row gutter={24} justify="space-between">
               <Col>
-                <Button
-                  type="link"
-                  htmlType="button"
-                  className="p-0 h-auto c-gray-linkbtn"
-                  onClick={() => onRemovePicture('header')}
-                >
-                  Remove
-                </Button>
+                <Text className="mb-0 c-gray">Letter Header</Text>
               </Col>
-            )}
-          </Row>
-          <Controller
-            name="header"
-            control={control}
-            render={({ value, fileList, onChange }) => (
-              <Upload
-                listType="picture-card"
-                className="uploadTemplate"
-                showUploadList={false}
-                accept="image"
-                maxCount={1}
-                fileList={fileList}
-                onChange={(e) => {
-                  onChange(e);
-                  handleChange(e, 'header');
-                }}
-                beforeUpload={beforeUpload}
-              >
-                {!header.headerloading ? (
-                  <img
-                    src={
-                      header?.imageUrlHeader.length < 100
-                        ? `http://cms2dev.limkokwing.net${header.imageUrlHeader}`
-                        : header.imageUrlHeader
-                    }
-                    alt={<PlusCircleFilled />}
-                    style={{ width: '100%' }}
-                  />
-                ) : (
-                  <PlusCircleFilled style={{ fontSize: '30px' }} />
-                )}
-              </Upload>
-            )}
-          ></Controller>
-        </Col>
-        <Col span={24}>
-          <Row gutter={24} justify="space-between">
-            <Col>
-              <Text className="mb-0 c-gray">Letter Footer</Text>
-            </Col>
-            {templateData.name.length > 0 && (
+              {templateData.name.length > 0 && (
+                <Col>
+                  <Button
+                    type="link"
+                    htmlType="button"
+                    className="p-0 h-auto c-gray-linkbtn"
+                    onClick={() => onRemovePicture('header')}
+                  >
+                    Remove
+                  </Button>
+                </Col>
+              )}
+            </Row>
+            <Controller
+              name="header"
+              control={control}
+              render={({ value, fileList, onChange }) => (
+                <Upload
+                  listType="picture-card"
+                  className="uploadTemplate"
+                  showUploadList={false}
+                  accept="image"
+                  maxCount={1}
+                  fileList={fileList}
+                  onChange={(e) => {
+                    onChange(e);
+                    handleChange(e, 'header');
+                  }}
+                  beforeUpload={beforeUpload}
+                >
+                  {!header.headerloading ? (
+                    <img
+                      src={
+                        header?.imageUrlHeader.length < 100
+                          ? `http://cms2dev.limkokwing.net${header.imageUrlHeader}`
+                          : header.imageUrlHeader
+                      }
+                      alt={<PlusCircleFilled />}
+                      style={{ width: '100%' }}
+                    />
+                  ) : (
+                    <PlusCircleFilled style={{ fontSize: '30px' }} />
+                  )}
+                </Upload>
+              )}
+            ></Controller>
+          </Col>
+          <Col span={24}>
+            <Row gutter={24} justify="space-between">
               <Col>
-                <Button
-                  type="link"
-                  htmlType="button"
-                  className="p-0 h-auto c-gray-linkbtn"
-                  onClick={() => onRemovePicture('footer')}
-                >
-                  Remove
-                </Button>
+                <Text className="mb-0 c-gray">Letter Footer</Text>
               </Col>
-            )}
-          </Row>
-          <Controller
-            name="footer"
-            control={control}
-            render={({ value, fileList, onChange }) => (
-              <Upload
-                listType="picture-card"
-                className="uploadTemplate"
-                showUploadList={false}
-                accept="image"
-                maxCount={1}
-                fileList={fileList}
-                onChange={(e) => {
-                  onChange(e);
-                  handleChange(e, 'footer');
-                }}
-                beforeUpload={beforeUpload}
-              >
-                {!header.footerloading ? (
-                  <img
-                    src={
-                      header?.imageUrlFooter.length < 100
-                        ? `http://cms2dev.limkokwing.net${header.imageUrlFooter}`
-                        : header.imageUrlFooter
-                    }
-                    alt={<PlusCircleFilled />}
-                    style={{ width: '100%' }}
-                  />
-                ) : (
-                  <PlusCircleFilled style={{ fontSize: '30px' }} />
-                )}
-              </Upload>
-            )}
-          ></Controller>
-        </Col>
-        <Col span={24}>
-          <Row gutter={24} justify="center">
-            {templateData.name.length == 0 ? (
-              <>
-                <Col span={8}>
-                  <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>
-                    Close
+              {templateData.name.length > 0 && (
+                <Col>
+                  <Button
+                    type="link"
+                    htmlType="button"
+                    className="p-0 h-auto c-gray-linkbtn"
+                    onClick={() => onRemovePicture('footer')}
+                  >
+                    Remove
                   </Button>
                 </Col>
-                <Col span={8}>
-                  <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                    Add
-                  </Button>
-                </Col>
-              </>
-            ) : (
-              <>
-                <Col span={8}>
-                  <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteTemplate}>
-                    Delete
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                    Save
-                  </Button>
-                </Col>
-              </>
-            )}
-          </Row>
-        </Col>
-      </Row>
-    </Form>
+              )}
+            </Row>
+            <Controller
+              name="footer"
+              control={control}
+              render={({ value, fileList, onChange }) => (
+                <Upload
+                  listType="picture-card"
+                  className="uploadTemplate"
+                  showUploadList={false}
+                  accept="image"
+                  maxCount={1}
+                  fileList={fileList}
+                  onChange={(e) => {
+                    onChange(e);
+                    handleChange(e, 'footer');
+                  }}
+                  beforeUpload={beforeUpload}
+                >
+                  {!header.footerloading ? (
+                    <img
+                      src={
+                        header?.imageUrlFooter.length < 100
+                          ? `http://cms2dev.limkokwing.net${header.imageUrlFooter}`
+                          : header.imageUrlFooter
+                      }
+                      alt={<PlusCircleFilled />}
+                      style={{ width: '100%' }}
+                    />
+                  ) : (
+                    <PlusCircleFilled style={{ fontSize: '30px' }} />
+                  )}
+                </Upload>
+              )}
+            ></Controller>
+          </Col>
+          <Col span={24}>
+            <Row gutter={24} justify="center">
+              {templateData.name.length == 0 ? (
+                <>
+                  <Col span={8}>
+                    <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>
+                      Close
+                    </Button>
+                  </Col>
+                  <Col span={8}>
+                    <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                      Add
+                    </Button>
+                  </Col>
+                </>
+              ) : (
+                <>
+                  <Col span={8}>
+                    <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteTemplate}>
+                      Delete
+                    </Button>
+                  </Col>
+                  <Col span={8}>
+                    <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                      Save
+                    </Button>
+                  </Col>
+                </>
+              )}
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </Spin>
   );
 };

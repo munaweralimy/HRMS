@@ -33,6 +33,16 @@ const addNewTeamFields = () => {
       reqmessage: 'Staff required',
       options: employeeList.map((value) => ({ label: value.employee_name, value: value.name })),
     },
+    {
+      label: 'Department',
+      name: 'department',
+      type: 'select',
+      twocol: false,
+      placeholder: 'Select department',
+      req: true,
+      reqmessage: 'department required',
+      options: employeeList.map((value) => ({ label: value.employee_name, value: value.name })),
+    },
   ];
 };
 export { addNewTeamFields };

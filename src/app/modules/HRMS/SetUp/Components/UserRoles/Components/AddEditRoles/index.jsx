@@ -1,15 +1,18 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Space, Button, Row, Col, Typography, Form, message } from 'antd';
+import { Space, Button, Row, Col, Typography, Form, message, Spin } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import AddUser from '../../../Teams/Components/AddUser';
 import { rolesFields } from './FormFields';
 import { getSingleRole, addUserRoles, updateUserRoles, deleteUserRoles } from '../../../../ducks/services';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
   const { title, onClose, roleData } = props;
   const { Title, Text } = Typography;
   const [teamData, setTeamData] = useState('');
+  const [load, setLoad] = useState(false);
   const [userData, setUserData] = useState([]);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
 
@@ -43,7 +46,7 @@ export default (props) => {
   }, [teamData]);
 
   const onFinish = (values) => {
-    console.log({ values });
+    setLoad(true);
     const newObj = {};
     const keys = Object.keys(values);
     for (const key of keys) {
@@ -67,6 +70,7 @@ export default (props) => {
           } else {
             message.error(response.data.message.message);
           }
+          setLoad(false);
           onClose();
         })
       : updateUserRoles(roleData.name, payload).then((response) => {
@@ -75,11 +79,13 @@ export default (props) => {
           } else {
             message.error(response.data.message.message);
           }
+          setLoad(false);
           onClose();
         });
   };
 
   const onDeleteTeam = () => {
+    setLoad(true);
     deleteUserRoles(roleData.name)
       .then((response) => {
         if (response.data.message.success == true) {
@@ -87,88 +93,91 @@ export default (props) => {
         } else {
           message.error(response.data.message.message);
         }
+        setLoad(false);
         onClose();
       })
       .catch((error) => message.error('Cant delte a user role'));
   };
   return (
-    <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-      <Row gutter={[24, 30]}>
-        <Col span={24}>
-          <Row gutter={24} justify="center">
-            <Col>
-              <Title level={3} className="mb-0">
-                {title}
-              </Title>
-            </Col>
-          </Row>
-        </Col>
+    <Spin indicator={antIcon} size="large" spinning={load}>
+      <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
+        <Row gutter={[24, 30]}>
+          <Col span={24}>
+            <Row gutter={24} justify="center">
+              <Col>
+                <Title level={3} className="mb-0">
+                  {title}
+                </Title>
+              </Col>
+            </Row>
+          </Col>
 
-        <Col span={16}>
-          <Row gutter={[24, 18]}>
-            {rolesFields().map((item, idx) => (
-              <Fragment key={idx}>
-                {item.subheading && (
-                  <Col span={24}>
-                    <Text className="mb-0 c-gray">{item.subheading}</Text>
-                  </Col>
-                )}
-                <FormGroup item={item} control={control} errors={errors} />
-              </Fragment>
-            ))}
-          </Row>
-        </Col>
-        <Col span={8}>
-          <Row gutter={[24, 20]}>
-            <Col span={24}>
-              <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
-            </Col>
-            <Col span={24}>
-              <Row gutter={24}>
-                {roleData.name ? (
-                  <>
-                    <Col span={12}>
-                      <Button
-                        size="large"
-                        type="primary"
-                        htmlType="button"
-                        className="red-btn w-100"
-                        onClick={onDeleteTeam}
-                      >
-                        Delete
-                      </Button>
+          <Col span={16}>
+            <Row gutter={[24, 18]}>
+              {rolesFields().map((item, idx) => (
+                <Fragment key={idx}>
+                  {item.subheading && (
+                    <Col span={24}>
+                      <Text className="mb-0 c-gray">{item.subheading}</Text>
                     </Col>
-                    <Col span={12}>
-                      <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                        Save
-                      </Button>
-                    </Col>
-                  </>
-                ) : (
-                  <>
-                    <Col span={12}>
-                      <Button
-                        size="large"
-                        type="primary"
-                        htmlType="button"
-                        className="black-btn w-100"
-                        onClick={onClose}
-                      >
-                        Close
-                      </Button>
-                    </Col>
-                    <Col span={12}>
-                      <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                        Add
-                      </Button>
-                    </Col>
-                  </>
-                )}
-              </Row>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Form>
+                  )}
+                  <FormGroup item={item} control={control} errors={errors} />
+                </Fragment>
+              ))}
+            </Row>
+          </Col>
+          <Col span={8}>
+            <Row gutter={[24, 20]}>
+              <Col span={24}>
+                <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
+              </Col>
+              <Col span={24}>
+                <Row gutter={24}>
+                  {roleData.name ? (
+                    <>
+                      <Col span={12}>
+                        <Button
+                          size="large"
+                          type="primary"
+                          htmlType="button"
+                          className="red-btn w-100"
+                          onClick={onDeleteTeam}
+                        >
+                          Delete
+                        </Button>
+                      </Col>
+                      <Col span={12}>
+                        <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                          Save
+                        </Button>
+                      </Col>
+                    </>
+                  ) : (
+                    <>
+                      <Col span={12}>
+                        <Button
+                          size="large"
+                          type="primary"
+                          htmlType="button"
+                          className="black-btn w-100"
+                          onClick={onClose}
+                        >
+                          Close
+                        </Button>
+                      </Col>
+                      <Col span={12}>
+                        <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                          Add
+                        </Button>
+                      </Col>
+                    </>
+                  )}
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </Spin>
   );
 };

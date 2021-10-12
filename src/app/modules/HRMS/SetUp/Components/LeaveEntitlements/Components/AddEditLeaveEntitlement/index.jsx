@@ -1,17 +1,20 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Button, Row, Col, Typography, Form, message } from 'antd';
+import { Button, Row, Col, Typography, Form, message, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
-// import { leaveEntitlementLeaves } from './FormFields';
 import {
   addSingleLeaveEntitlement,
   updateSingleLeaveEntitlement,
   deleteSingleLeaveEntitlement,
 } from '../../../../ducks/services';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined spin />;
+
 export default (props) => {
   const { title, onClose, leaveEtitlement } = props;
   const { Title } = Typography;
+  const [load, setLoad] = useState(false);
   const { control, errors, reset, setValue, watch, handleSubmit } = useForm();
   const [leave, leaveType] = useState(false);
   const leaveList = useSelector((state) => state.setup.leaveList);
@@ -137,6 +140,7 @@ export default (props) => {
   ];
 
   const onFinish = (values) => {
+    setLoad(true);
     const payload = {
       leave_entitlement_name: values.leave_entitlement_name.value,
       leave_type: values.leave_type.value,
@@ -158,6 +162,7 @@ export default (props) => {
             } else {
               message.error(response.data.message.message);
             }
+            setLoad(false);
             onClose();
           })
           .catch((error) => message.error('Leave Entitlemen exists'))
@@ -168,12 +173,14 @@ export default (props) => {
             } else {
               message.error(response.data.message.message);
             }
+            setLoad(false);
             onClose();
           })
           .catch((error) => message.error('Update Failed'));
   };
 
   const onDeleteHoliday = () => {
+    setLoad(true);
     deleteSingleLeaveEntitlement(leaveEtitlement.name)
       .then((response) => {
         if (response.data.message.success == true) {
@@ -181,6 +188,7 @@ export default (props) => {
         } else {
           message.error(response.data.message.message);
         }
+        setLoad(false);
         onClose();
       })
       .catch((error) => {
@@ -191,6 +199,7 @@ export default (props) => {
 
   useEffect(() => {
     if (leaveEtitlement.leave_entitlement_name.length > 0) {
+      console.log({ leaveEtitlement });
       if (leaveEtitlement.leave_type == 'Annual Leave') {
         leaveType(true);
       } else {
@@ -213,72 +222,74 @@ export default (props) => {
   }, [leaveEtitlement]);
 
   return (
-    <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-      <Row gutter={[24, 30]}>
-        <Col span={24}>
-          <Row gutter={24} justify="center">
-            <Col>
-              <Title level={3} className="mb-0">
-                {title}
-              </Title>
-            </Col>
-          </Row>
-        </Col>
+    <Spin indicator={antIcon} size="large" spinning={load}>
+      <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
+        <Row gutter={[24, 30]}>
+          <Col span={24}>
+            <Row gutter={24} justify="center">
+              <Col>
+                <Title level={3} className="mb-0">
+                  {title}
+                </Title>
+              </Col>
+            </Row>
+          </Col>
 
-        <Col span={24}>
-          <Row gutter={[24, 30]}>
-            {leaveEntitlementLeaves.map((item, idx) => (
-              <Fragment key={idx}>
-                {item.subheading && (
-                  <Col span={24}>
-                    <Title className="mb-0" level={4}>
-                      {item.subheading}
-                    </Title>
-                  </Col>
-                )}
-                <FormGroup item={item} control={control} errors={errors} />
-              </Fragment>
-            ))}
-            <Col span={24}>
-              <Row gutter={24} justify="end">
-                {leaveEtitlement.leave_entitlement_name.length == 0 ? (
-                  <>
-                    <Col span={6}>
-                      <Button
-                        size="large"
-                        type="primary"
-                        htmlType="button"
-                        className="black-btn w-100"
-                        onClick={onClose}
-                      >
-                        Close
-                      </Button>
+          <Col span={24}>
+            <Row gutter={[24, 30]}>
+              {leaveEntitlementLeaves.map((item, idx) => (
+                <Fragment key={idx}>
+                  {item.subheading && (
+                    <Col span={24}>
+                      <Title className="mb-0" level={4}>
+                        {item.subheading}
+                      </Title>
                     </Col>
-                    <Col span={6}>
-                      <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                        Add
-                      </Button>
-                    </Col>
-                  </>
-                ) : (
-                  <>
-                    <Col span={6}>
-                      <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
-                        Delete
-                      </Button>
-                    </Col>
-                    <Col span={6}>
-                      <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                        Save
-                      </Button>
-                    </Col>
-                  </>
-                )}
-              </Row>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Form>
+                  )}
+                  <FormGroup item={item} control={control} errors={errors} />
+                </Fragment>
+              ))}
+              <Col span={24}>
+                <Row gutter={24} justify="end">
+                  {leaveEtitlement.leave_entitlement_name.length == 0 ? (
+                    <>
+                      <Col span={6}>
+                        <Button
+                          size="large"
+                          type="primary"
+                          htmlType="button"
+                          className="black-btn w-100"
+                          onClick={onClose}
+                        >
+                          Close
+                        </Button>
+                      </Col>
+                      <Col span={6}>
+                        <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                          Add
+                        </Button>
+                      </Col>
+                    </>
+                  ) : (
+                    <>
+                      <Col span={6}>
+                        <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
+                          Delete
+                        </Button>
+                      </Col>
+                      <Col span={6}>
+                        <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                          Save
+                        </Button>
+                      </Col>
+                    </>
+                  )}
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </Spin>
   );
 };

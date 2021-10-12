@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Space, Button, Row, Col, Typography, Form, Card, Breadcrumb, message } from 'antd';
+import { Space, Button, Row, Col, Typography, Form, Card, Breadcrumb, message, Spin } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -14,10 +14,13 @@ import {
   updateWarningLetter,
   deleteWarningLetter,
 } from '../../../../ducks/services';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
   const { letterData } = props;
   const { Title, Text } = Typography;
+  const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
   const dispatch = useDispatch();
 
@@ -26,7 +29,7 @@ export default (props) => {
   };
 
   const onFinish = (values) => {
-    console.log({ values });
+    setLoad(true);
     const payload = {
       writing_letter_name: values?.writing_letter_name,
       letter_template: 'CCC Letter Template A',
@@ -42,6 +45,7 @@ export default (props) => {
             } else {
               message.error(response.data.message.message);
             }
+            setLoad(false);
             closeForn();
           })
           .catch((error) => message.error('Race exists'))
@@ -52,12 +56,14 @@ export default (props) => {
             } else {
               message.error(response.data.message.message);
             }
+            setLoad(false);
             closeForn();
           })
           .catch((error) => message.error('Update Failed'));
   };
 
   const onDeleteNationality = () => {
+    setLoad(true);
     deleteWarningLetter(letterData.name)
       .then((response) => {
         if (response.data.message.success == true) {
@@ -65,6 +71,7 @@ export default (props) => {
         } else {
           message.error(response.data.message.message);
         }
+        setLoad(false);
         closeForn();
       })
       .catch((error) => {
@@ -75,6 +82,7 @@ export default (props) => {
 
   useEffect(() => {
     if (letterData.name.length > 0) {
+      setLoad(true);
       getWarningLetterDetail(letterData.name).then((response) => {
         let data = response?.data?.data;
         setValue('writing_letter_name', data.writing_letter_name);
@@ -82,16 +90,18 @@ export default (props) => {
         setValue('signature', data.signature == '1' ? [1] : [0]);
         setValue('signee', { label: data.signee, value: data.signee });
         setValue('detail', data.detail);
+        setLoad(false);
       });
     }
   }, [letterData]);
 
   return (
-    <>
+    <Spin indicator={antIcon} size="large" spinning={load}>
       <Breadcrumb separator=">" className="mb-1">
         <Breadcrumb.Item onClick={closeForn}>Setup</Breadcrumb.Item>
         <Breadcrumb.Item>Add New Warning Letter</Breadcrumb.Item>
       </Breadcrumb>
+
       <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
         <Row gutter={[24, 30]}>
           <Col span={24}>
@@ -174,6 +184,6 @@ export default (props) => {
           </Col>
         </Row>
       </Form>
-    </>
+    </Spin>
   );
 };
