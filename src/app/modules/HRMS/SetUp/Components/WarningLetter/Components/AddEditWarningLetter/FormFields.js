@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 const warningLetterFilds = () => {
   const approverList = useSelector((state) => state.setup.allApprovers);
+  const letterTemp = useSelector((state) => state.setup.letterTempList);
   return [
     {
       label: 'Warning Letter Name',
@@ -20,7 +21,7 @@ const warningLetterFilds = () => {
       colWidth: '1 0 200px',
       req: true,
       reqMessage: 'warning letter name required',
-      options: [{ label: '1', value: '1' }],
+      options: letterTemp.map((value) => ({ label: value.name, value: value.name })),
     },
     {
       label: '',

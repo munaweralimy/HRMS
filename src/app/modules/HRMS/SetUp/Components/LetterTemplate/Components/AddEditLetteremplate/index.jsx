@@ -10,6 +10,7 @@ import {
   getLetterTempDetail,
 } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
+import { InputField } from '../../../../../../../atoms/FormElement';
 const antIcon = <LoadingOutlined spin />;
 
 function getBase64(img, callback) {
@@ -102,7 +103,7 @@ export default (props) => {
     }
 
     const payload = {
-      template_name: 'CCC Letter Template A',
+      template_name: val?.template_name,
       letter_head: letter_head?.file_url ? letter_head?.file_url : val.header,
       letter_footer: letter_footer?.file_url ? letter_footer?.file_url : val.footer,
       company: 'Limkokwing University Creative Technology',
@@ -158,6 +159,7 @@ export default (props) => {
         setHeader(tempsHeadandFoot);
         setValue('header', data.letter_head);
         setValue('footer', data.letter_footer);
+        setValue('template_name', data.template_name);
         setLoad(false);
       });
     } else {
@@ -190,6 +192,18 @@ export default (props) => {
                 </Text>
               </Col>
             </Row>
+          </Col>
+          <Col span={24}>
+            <InputField
+              fieldname="template_name"
+              label="Temmplate Name"
+              control={control}
+              iProps={{ placeholder: 'Type template name', size: 'large' }}
+              rules={{ required: 'Enter tempalte name' }}
+              initValue=""
+              validate={errors.template_name && 'error'}
+              validMessage={errors.template_name && errors.template_name.message}
+            />
           </Col>
 
           <Col span={24}>

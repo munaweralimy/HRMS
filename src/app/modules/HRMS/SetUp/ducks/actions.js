@@ -521,3 +521,13 @@ export const getAllDepartmentList = () => async (dispatch) => {
     data: data,
   });
 };
+
+export const getALlLetterTemp = () => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get(`http://cms2dev.limkokwing.net/api/resource/Letter Template`);
+  dispatch({
+    type: action_types.LETTER_TEMP,
+    data: data,
+  });
+};

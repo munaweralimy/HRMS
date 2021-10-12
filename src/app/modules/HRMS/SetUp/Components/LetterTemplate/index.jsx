@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, message } from 'antd';
+import { Row, Col, Card, Image } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
@@ -16,6 +16,7 @@ export default (props) => {
 
   const dispatch = useDispatch();
   const tempData = useSelector((state) => state.setup.letterTemplateListData);
+  console.log({ tempData });
   const ListCol = [
     {
       title: 'Template Name',
@@ -50,6 +51,10 @@ export default (props) => {
     onCancel: () => {
       setVisible(false);
     },
+  };
+  const onCardHandler = (e) => {
+    setTemplateData(e);
+    setVisible(true);
   };
 
   const onClickRow = (record) => {
@@ -89,7 +94,35 @@ export default (props) => {
           <HeadingChip title="Letter Template" btnList={btnList} />
         </Col>
         <Col span={24}>
-          <ListCard
+          <Card bordered={false} className="uni-card">
+            <Row gutter={[24, 20]}>
+              {tempData && tempData.rows ? (
+                tempData?.rows.map((value) => (
+                  <Col>
+                    <Card
+                      hoverable={true}
+                      className="mini-card b-dark-gray"
+                      bordered={false}
+                      onClick={() => onCardHandler({ name: value.name, template_name: value.template_name })}
+                      cover={
+                        <Image
+                          preview={false}
+                          width={310}
+                          height={110}
+                          src={`http://cms2dev.limkokwing.net${value.letter_head}`}
+                        />
+                      }
+                    >
+                      <Card.Meta title={value.name} />
+                    </Card>
+                  </Col>
+                ))
+              ) : (
+                <></>
+              )}
+            </Row>
+          </Card>
+          {/* <ListCard
             onRow={onClickRow}
             Search={Search}
             onSearch={onSearch}
@@ -101,7 +134,7 @@ export default (props) => {
               pageSize: limit,
             }}
             onChange={onTableChange}
-          />
+          /> */}
         </Col>
       </Row>
       <Popup {...popup} />

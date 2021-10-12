@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { leaveTypeSelect } from '../../../../ducks/actions';
+import { ctypeListLeave } from '../../../../../../../../configs/constantData';
 const leaveFields = () => {
   const dispatch = useDispatch();
   const disabled = useSelector((state) => state.setup.selectedLeave);
@@ -30,7 +31,7 @@ const leaveFields = () => {
       type: 'select',
       twocol: false,
       reqmessage: 'Please select type',
-      options: [{ value: 'All', label: 'All' }],
+      options: ctypeListLeave,
     },
     {
       name: 'gender',
@@ -57,8 +58,9 @@ const leaveFields = () => {
       twocol: false,
       reqmessage: 'Marital Status required',
       options: [
+        { label: 'Divorced', value: 'Divorced' },
         { label: 'Married', value: 'Married' },
-        { label: 'Unmarried', value: 'Unmarried' },
+        { label: 'Single', value: 'Single' },
         { label: 'All', value: 'All' },
       ],
     },

@@ -5,7 +5,7 @@ import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getWarningLetterList, showWarningLetter, getAllApprovers } from '../../ducks/actions';
+import { getWarningLetterList, showWarningLetter, getAllApprovers, getALlLetterTemp } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
@@ -17,6 +17,7 @@ export default (props) => {
   useEffect(() => {
     dispatch(getWarningLetterList(page, limit, '', ''));
     dispatch(getAllApprovers());
+    dispatch(getALlLetterTemp());
   }, []);
 
   const ListCol = [

@@ -29,6 +29,7 @@ const initialState = {
   departmentList: [],
   tempList: [],
   getAllDepartments: [],
+  letterTempList: [],
   selectedLeave: false,
   viewWarninLette: { name: '', warning_letter_template: '', visible: false },
 };
@@ -96,6 +97,8 @@ export default (state = initialState, action) => {
       return { ...state, tempList: data };
     case action_types.GET_DEAPRTMENTS:
       return { ...state, getAllDepartments: data };
+    case action_types.LETTER_TEMP:
+      return { ...state, letterTempList: data };
     default:
       return state;
   }

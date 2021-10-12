@@ -42,7 +42,7 @@ export default (props) => {
   ];
   const btnList = [
     {
-      text: '+ New Team',
+      text: '+ New Approver',
       classes: 'green-btn',
       action: () => {
         setApproverFields({ name: '', approver_name: '' });
