@@ -7,9 +7,10 @@ import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../configs/constantData';
 import Dashboard from './Dashboard';
 import PendingRequests from './PendingRequests';
+import StaffPerformance from './StaffPerformance';
 import RequestList from '../HRMS/Requests/RequestList';
 import moment from 'moment';
-import { getPendingIssues, getPolicyList, getTimesheetData } from './ducks/actions';
+import { getPendingIssues, getPolicyList, getTimesheetData, getCalenderData } from './ducks/actions';
 
 const { Title } = Typography;
 
@@ -24,12 +25,13 @@ export default (props) => {
     const pendingData = useSelector(state => state.global.pendingData);
     const policyData = useSelector(state => state.global.policyData);
     const timesheetData = useSelector(state => state.global.timesheetData);
-    
+    //const calenderData = useSelector(state => state.global.calenderData);
     
     useEffect(() => {
         dispatch(getPendingIssues());
         dispatch(getPolicyList());
         dispatch(getTimesheetData());
+        //dispatch(getCalenderData());
     }, [])
 
     return (
@@ -39,6 +41,9 @@ export default (props) => {
            </Col>
            <Col span={24}>
                <RequestList dashboard={true} />
+           </Col>
+           <Col span={24}>
+               <StaffPerformance />
            </Col>
            <Col span={24}>
                 <PendingRequests pendingData={pendingData} />

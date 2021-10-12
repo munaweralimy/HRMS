@@ -34,6 +34,27 @@ export default (props) => {
     
       const menu = (
         <Menu>
+          {/* <Menu.Item>
+            <Button
+              onClick={history.push("/myprofile")}
+              type="link"
+              className="btn-link"
+              icon={<LogoutOutlined />}
+            >
+              My Profile
+            </Button>
+          </Menu.Item>
+
+          <Menu.Item>
+            <Button
+              type="link"
+              className="btn-link"
+              icon={<LogoutOutlined />}
+            >
+              Change Password
+            </Button>
+          </Menu.Item> */}
+
           <Menu.Item>
             <Button
               onClick={logoutHandler}

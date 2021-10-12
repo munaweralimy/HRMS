@@ -4,13 +4,19 @@ import DetailsComponent from '../../../../../../molecules/HRMS/DetailsComponent'
 import { Row, Col, Card, Progress } from 'antd';
 import moment from 'moment';
 
-export default ({details, updateApi}) => {
+export default ({details, updateApi, progressData}) => {
 
-  const { title, key, heading, data, column, nodetail, detailTitle, onAction1,onAction2 } = details;
+  const { title, key, heading, data, column, nodetail, detailTitle, onAction1, onAction2 } = details;
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  
+
+  progressData?.find(element => {
+    const elem = element?.leave_type == 'Annual Leave';
+    console.log('elem', elem)
+  })
 
   const pending = 5;
   const approved = 15;
