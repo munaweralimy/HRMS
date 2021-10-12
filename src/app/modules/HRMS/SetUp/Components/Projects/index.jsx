@@ -28,19 +28,18 @@ export default (props) => {
       title: 'Project Name',
       dataIndex: 'project_name',
       key: 'project_name',
-      sorted: (a, b) => a.project_name - b.project_name,
+      sorter: true,
     },
     {
       title: 'Staff',
       dataIndex: 'staff',
       key: 'staff',
-      sorted: (a, b) => a.staff - b.staff,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => {}}>
@@ -93,7 +92,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getProjectsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getProjectsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getProjectsList(pagination.current, pagination.pageSize, '', ''));
     }

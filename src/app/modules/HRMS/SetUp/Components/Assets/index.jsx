@@ -28,18 +28,19 @@ export default (props) => {
       title: 'Asset No.',
       dataIndex: 'assets_id',
       key: 'assets_id',
-      sorted: (a, b) => a.assets_id - b.assets_id,
+      sorter: true,
     },
     {
       title: 'Asset Name',
       dataIndex: 'assets_name',
       key: 'assets_name',
-      sorted: (a, b) => a.assets_name - b.assets_name,
+      sorter: true,
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      sorter: true,
       render: (text) => {
         let clname = '';
         if (text == 'In Staff Possession') {
@@ -122,7 +123,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getAssetsList(pagination.current, pagination.pageSize, '', ''));
     }

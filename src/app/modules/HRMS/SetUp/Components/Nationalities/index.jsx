@@ -28,7 +28,7 @@ export default (props) => {
       title: 'Nationality',
       dataIndex: 'name',
       key: 'name',
-      sorted: (a, b) => a.name - b.name,
+      sorter: true,
     },
     {
       title: 'Action',
@@ -84,11 +84,10 @@ export default (props) => {
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getNationalitiesList(pagination.current, pagination.pageSize, '', ''));
     }

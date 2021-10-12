@@ -13,6 +13,7 @@ export default (props) => {
   const [visible, setVisible] = useState(false);
   const [teamFiled, setTeamField] = useState({ company: '', name: '' });
   const [page, setPage] = useState(1);
+  const [sorting, setSorting] = useState('');
 
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
@@ -32,25 +33,25 @@ export default (props) => {
       title: 'Team Name',
       dataIndex: 'team_name',
       key: 'team_name',
-      sorted: (a, b) => a.team_name - b.team_name,
+      sorter: true,
     },
     {
       title: 'Company',
       dataIndex: 'company',
       key: 'company',
-      sorted: (a, b) => a.company - b.company,
+      sorter: true,
     },
     {
       title: 'Team Leader',
       dataIndex: 'team_leader',
       key: 'team_leader',
-      sorted: (a, b) => a.team_leader_name - b.team_leader_name,
+      sorter: true,
     },
     {
       title: 'Team Member',
       dataIndex: 'team_member',
       key: 'team_member',
-      sorted: (a, b) => a.total_staff_count - b.total_staff_count,
+      sorter: true,
       align: 'center',
     },
     {
@@ -106,11 +107,11 @@ export default (props) => {
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
+    console.log('heloo', pagination, sorter);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getTeamList(pagination.current, pagination.pageSize, '', ''));
     }

@@ -28,13 +28,13 @@ export default (props) => {
       title: 'Institution',
       dataIndex: 'Institution',
       key: 'Institution',
-      sorted: (a, b) => a.Institution - b.Institution,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
+
       align: 'center',
       width: '100px',
       render: (text, record) => (
@@ -89,7 +89,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getInstitutionsList(pagination.current, pagination.pageSize, '', ''));
     }

@@ -28,13 +28,12 @@ export default (props) => {
       title: 'Race',
       dataIndex: 'name',
       key: 'name',
-      sorted: (a, b) => a.name - b.name,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       width: '100px',
       render: (text, record) => (
@@ -88,7 +87,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getRacesList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getRacesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getRacesList(pagination.current, pagination.pageSize, '', ''));
     }

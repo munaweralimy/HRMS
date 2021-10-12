@@ -28,34 +28,33 @@ export default (props) => {
       title: 'Department',
       dataIndex: 'department_name',
       key: 'department_name',
-      sorted: (a, b) => a.department_name - b.department_name,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Company',
       dataIndex: 'company',
       key: 'company',
-      sorted: (a, b) => a.company - b.company,
+      sorter: true,
     },
     {
       title: 'Employee Name',
       dataIndex: 'employee_name',
       key: 'employee_name',
-      sorted: (a, b) => a.employee_name - b.employee_name,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      sorted: (a, b) => a.status - b.status,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => {}}>
@@ -107,7 +106,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getDepartments(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getDepartments(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getDepartments(pagination.current, pagination.pageSize, '', ''));
     }

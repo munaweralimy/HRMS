@@ -14,15 +14,26 @@ import {
   updateWarningLetter,
   deleteWarningLetter,
 } from '../../../../ducks/services';
+import { Popup } from '../../../../../../../atoms/Popup';
+import TagList from '../Tags';
 import { LoadingOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
   const { letterData } = props;
   const { Title, Text } = Typography;
+  const [visible, setVisible] = useState(false);
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
   const dispatch = useDispatch();
+
+  const popup = {
+    closable: true,
+    visibility: visible,
+    content: <TagList onClose={() => setVisible(false)} />,
+    width: 400,
+    onCancel: () => setVisible(false),
+  };
 
   const closeForn = () => {
     dispatch(showWarningLetter({ name: '', warning_letter_tempalte: '', visible: false }));
@@ -80,6 +91,10 @@ export default (props) => {
       });
   };
 
+  const onTagViewHandler = () => {
+    setVisible(true);
+  };
+
   useEffect(() => {
     if (letterData.name.length > 0) {
       setLoad(true);
@@ -96,94 +111,101 @@ export default (props) => {
   }, [letterData]);
 
   return (
-    <Spin indicator={antIcon} size="large" spinning={load}>
-      <Breadcrumb separator=">" className="mb-1">
-        <Breadcrumb.Item onClick={closeForn}>Setup</Breadcrumb.Item>
-        <Breadcrumb.Item>Add New Warning Letter</Breadcrumb.Item>
-      </Breadcrumb>
+    <>
+      <Spin indicator={antIcon} size="large" spinning={load}>
+        <Breadcrumb separator=">" className="mb-1">
+          <Breadcrumb.Item onClick={closeForn}>Setup</Breadcrumb.Item>
+          <Breadcrumb.Item>Add New Warning Letter</Breadcrumb.Item>
+        </Breadcrumb>
 
-      <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-        <Row gutter={[24, 30]}>
-          <Col span={24}>
-            <HeadingChip title="Add New Warning Letter" />
-          </Col>
-          <Col span={24}>
-            <Card bordered={false} className="uni-card">
-              <Row gutter={[24, 30]}>
-                {warningLetterFilds().map((item, idx) => (
-                  <Fragment key={idx}>
-                    <FormGroup item={item} control={control} errors={errors} />
-                  </Fragment>
-                ))}
+        <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
+          <Row gutter={[24, 30]}>
+            <Col span={24}>
+              <HeadingChip title="Add New Warning Letter" />
+            </Col>
+            <Col span={24}>
+              <Card bordered={false} className="uni-card">
+                <Row gutter={[24, 30]}>
+                  {warningLetterFilds().map((item, idx) => (
+                    <Fragment key={idx}>
+                      <FormGroup item={item} control={control} errors={errors} />
+                    </Fragment>
+                  ))}
 
-                <Col span={24}>
-                  <Card
-                    className="small-card8 b-dark-gray"
-                    extra={
-                      <a href="#">
-                        List of tags <QuestionCircleFilled className />
-                      </a>
-                    }
-                  >
-                    <Row gutter={24}>
-                      <Col span={24}>
-                        <TextAreaField
-                          fieldname="detail"
-                          label=""
-                          control={control}
-                          class="mb-0"
-                          rules={{
-                            required: 'detail required',
-                          }}
-                          iProps={{ placeholder: 'Type your letter', size: 'large' }}
-                          initValue=""
-                        />
-                      </Col>
+                  <Col span={24}>
+                    <Card
+                      className="small-card8 b-dark-gray"
+                      extra={
+                        <a onClick={onTagViewHandler}>
+                          List of tags <QuestionCircleFilled />
+                        </a>
+                      }
+                    >
+                      <Row gutter={24}>
+                        <Col span={24}>
+                          <TextAreaField
+                            fieldname="detail"
+                            label=""
+                            control={control}
+                            class="mb-0"
+                            rules={{
+                              required: 'detail required',
+                            }}
+                            iProps={{
+                              placeholder: 'Type your letter...',
+                              size: 'large',
+                              autoSize: { minRows: 2, maxRows: 6 },
+                            }}
+                            initValue=""
+                          />
+                        </Col>
+                      </Row>
+                    </Card>
+                  </Col>
+                  <Col span={24}>
+                    <Row gutter={24} justify="end">
+                      {letterData.name.length == 0 ? (
+                        <>
+                          <Col span={5}>
+                            <Button
+                              size="large"
+                              type="primary"
+                              htmlType="button"
+                              className="black-btn w-100"
+                              onClick={closeForn}
+                            >
+                              Close
+                            </Button>
+                          </Col>
+                          <Col span={5}>
+                            <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                              Save
+                            </Button>
+                          </Col>
+                        </>
+                      ) : (
+                        <>
+                          <Col span={5}>
+                            <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteNationality}>
+                              Delete
+                            </Button>
+                          </Col>
+                          <Col span={5}>
+                            <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                              Save
+                            </Button>
+                          </Col>
+                        </>
+                      )}
                     </Row>
-                  </Card>
-                </Col>
-                <Col span={24}>
-                  <Row gutter={24} justify="end">
-                    {letterData.name.length == 0 ? (
-                      <>
-                        <Col span={5}>
-                          <Button
-                            size="large"
-                            type="primary"
-                            htmlType="button"
-                            className="black-btn w-100"
-                            onClick={closeForn}
-                          >
-                            Close
-                          </Button>
-                        </Col>
-                        <Col span={5}>
-                          <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                            Save
-                          </Button>
-                        </Col>
-                      </>
-                    ) : (
-                      <>
-                        <Col span={5}>
-                          <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteNationality}>
-                            Delete
-                          </Button>
-                        </Col>
-                        <Col span={5}>
-                          <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                            Save
-                          </Button>
-                        </Col>
-                      </>
-                    )}
-                  </Row>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-        </Row>
-      </Form>
-    </Spin>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+        </Form>
+      </Spin>
+      <Popup {...popup} />
+    </>
   );
 };

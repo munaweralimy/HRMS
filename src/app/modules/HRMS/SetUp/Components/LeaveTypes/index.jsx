@@ -23,34 +23,34 @@ export default (props) => {
       title: 'Leave Type',
       dataIndex: 'leave_type',
       key: 'leave_type',
-      sorted: (a, b) => a.leave_type - b.leave_type,
+      sorter: true,
     },
     {
       title: 'Approval Level',
       dataIndex: 'approval_level',
       key: 'approval_level',
-      sorted: (a, b) => a.approval_level - b.approval_level,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Contract Type',
       dataIndex: 'contract_type',
       key: 'contract_type',
-      sorted: (a, b) => a.contract_type - b.contract_type,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Gender',
       dataIndex: 'gender',
       key: 'gender',
-      sorted: (a, b) => a.gender - b.gender,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Marital Status',
       dataIndex: 'marital_status',
       key: 'marital_status',
-      sorted: (a, b) => a.marital_status - b.marital_status,
+      sorter: true,
       align: 'center',
     },
     {
@@ -116,7 +116,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, sorter.order, sorter, columnKey));
+      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, '', ''));
     }

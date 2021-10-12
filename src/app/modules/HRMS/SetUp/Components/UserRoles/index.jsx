@@ -28,25 +28,25 @@ export default (props) => {
       title: 'User Role',
       dataIndex: 'role_name',
       key: 'role_name',
-      sorted: (a, b) => a.role_name - b.role_name,
+      sorter: true,
     },
     {
       title: 'Role Access',
       dataIndex: 'role_access',
       key: 'role_access',
-      sorted: (a, b) => a.role_access - b.role_access,
+      sorter: true,
     },
     {
       title: 'Users',
       dataIndex: 'users',
       key: 'users',
-      sorted: (a, b) => a.users - b.users,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
+      sorter: true,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => {}}>
@@ -97,7 +97,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getTeamList(pagination.current, pagination.pageSize, '', ''));
     }

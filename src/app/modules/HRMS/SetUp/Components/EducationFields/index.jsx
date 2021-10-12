@@ -29,13 +29,12 @@ export default (props) => {
       title: 'Education Field',
       dataIndex: 'education_field',
       key: 'education_field',
-      sorted: (a, b) => a.education_field - b.education_field,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       width: '100px',
       render: (text, record) => (
@@ -90,7 +89,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, '', ''));
     }
