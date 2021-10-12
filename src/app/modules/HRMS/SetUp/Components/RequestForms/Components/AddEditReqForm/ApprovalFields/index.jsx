@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'antd';
 import { SelectField } from '../../../../../../../../atoms/FormElement';
+import { useSelector } from 'react-redux';
 
 
 const approveList = [
@@ -14,10 +15,19 @@ const approveList = [
 export default (props) => {
 
     const [detailList, setDetailList] = useState([]);
+    const [visible, setVisible] = useState(false);
     const { control, errors, item, index } = props;
+    const position = useSelector(state =>  state.global.roles)
+
 
     const onChange = (e) => {
-        console.log('----', e);
+        if (e.label == 'Job Position') {
+            setVisible(true);
+            setDetailList(position.map(x => ({label: x.name, value: x.name})));
+            console.log('chek', position)
+        } else if(e.label == 'Individual') {
+            setVisible(true);
+        }
     }
 
     return (
@@ -39,7 +49,7 @@ export default (props) => {
                   fieldname={`approvers_fields[${index}].approvers_detail`}
                   label={''}
                   control={control}
-                  class={`mb-0`}
+                  class={`mb-0 ${!visible ? 'd-none' : ''}`}
                   iProps={{ placeholder: 'Please select' }}
                   initValue={item?.approvers_detail ? { label: item?.approvers_detail, value: item?.approvers_detail } : ''}
                   selectOption={detailList}

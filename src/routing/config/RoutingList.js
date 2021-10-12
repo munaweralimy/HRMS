@@ -1,13 +1,28 @@
-import Finance from '../../app/modules/HRMS/Finance';
 import Roles from './Roles';
 
-const hrms = [Roles.ADMIN, Roles.HRMS];
+const user = [
+  Roles.TASK_INDIVIDUAL,
+  Roles.ATTENDANCE_INDIVIDUAL,
+  Roles.LEAVES_INDIVIDUAL,
+  Roles.POLICY_INDIVIDUAL,
+  Roles.DASHBOARD_USER,
+  Roles.REQUESTS_INDIVIDUAL,
+];
+const managers = [
+  Roles.TASK_INDIVIDUAL,
+  Roles.TASK_TEAMS,
+  Roles.ATTENDANCE_INDIVIDUAL,
+  Roles.ATTENDANCE_TEAMS,
+  Roles.LEAVES_INDIVIDUAL,
+  Roles.LEAVES_TEAMS,
+  Roles.POLICY_INDIVIDUAL,
+  Roles.DASHBOARD_USER,
+  Roles.REQUESTS,
+  Roles.ADVANCEMENT_TEAMS
+];
 
 const titles = {
   DASHBOARD: 'Dashboard',
-  MARKETING: 'Marketing',
-  REGISTRY: 'Registry',
-  AQA: 'QualityAssurance',
   HRMS: 'HumanResource',
 };
 
@@ -31,7 +46,7 @@ export default [
     component: 'Tasks',
     path: '/tasks',
     title: titles.HRMS,
-    permission: hrms,
+    permission: Roles.TASK_INDIVIDUAL,
     menu: 'Tasks',
     key: 'tasks',
     icon: 'TaskIcon',
@@ -41,7 +56,7 @@ export default [
     component: 'TaskDetail',
     path: '/tasks/:id',
     title: titles.HRMS,
-    permission: hrms,
+    permission: Roles.TASK_INDIVIDUAL,
     menu: 'Tasks',
     key: 'tasks',
     parent: false,
@@ -50,7 +65,7 @@ export default [
     component: 'Advancement',
     path: '/advancement',
     title: titles.HRMS,
-    permission: hrms,
+    permission: Roles.ADVANCEMENT,
     key: 'advancement',
     menu: 'Advancement',
     icon: 'AdvancementIcon',

@@ -9,6 +9,7 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import { getRequestFormsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { delRequest } from '../../ducks/services';
+import { getRoles } from '../../../../Application/ducks/actions';
 
 export default (props) => {
   const [formFields, setFormFields] = useState();
@@ -20,6 +21,7 @@ export default (props) => {
   const requestFormsList = useSelector((state) => state.setup.requestFormsListData);
 
   useEffect(() => {
+    dispatch(getRoles());
     if (!visible) {
       dispatch(getRequestFormsList(page, limit, '', ''));
     }
