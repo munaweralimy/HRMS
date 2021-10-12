@@ -17,7 +17,6 @@ export default (props) => {
     
     const checkInData = useSelector(state => state.global.checkInData);
     const todayDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
-    console.log('todayDateTime', todayDateTime)
     const todayDate = moment().format('YYYY-MM-DD');
     const clockin = checkInData?.last_log_time ? moment(checkInData?.last_log_time).format("hh:mm") : '';
     const clockout = '18:20';

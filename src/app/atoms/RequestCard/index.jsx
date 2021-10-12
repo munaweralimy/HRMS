@@ -8,7 +8,6 @@ const { Title, Text } = Typography;
 export default (props) => {
   const { data, link, stateKey } = props;
   const history = useHistory();
-  console.log('----', link, stateKey)
   return (
     <Card
       bordered={false}

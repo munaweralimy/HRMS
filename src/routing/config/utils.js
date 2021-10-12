@@ -8,17 +8,30 @@ export function isArrayWithLength(arr) {
  return (Array.isArray(arr) && arr.length)
 }
 
+function conversion() {
+    const roles = JSON.parse(localStorage.getItem('access'));
+    let temp = [];
+    Object.entries(roles).forEach(([key, val]) => {
+        if (key != 'employee_id') {
+            Object.entries(val).forEach(([k, v]) => {
+                temp.push(k)
+            })
+        }
+    })
+    return temp;
+}
+
 export function checkPermission(permission) {
-    const roles = JSON.parse(localStorage.getItem('userdetails'));
+    let permit =  conversion();
     if(!isArrayWithLength(permission)) return true;
-    else return intersection(permission, roles?.role_list).length;
+    else return intersection(permission, permit).length;
 }
 
 export function allowedRoutes(routes) {
-    const roles = JSON.parse(localStorage.getItem('userdetails'));
+    let permit =  conversion();
     return routes.filter(({ permission }) => {
         if(!permission) return true;
         else if(!isArrayWithLength(permission)) return true;
-        else return intersection(permission, roles?.role_list).length;
+        else return intersection(permission, permit).length;
     });
 }

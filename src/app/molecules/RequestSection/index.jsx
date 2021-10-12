@@ -14,7 +14,6 @@ export default (props) => {
     const [sorting, setSorting] = useState('');
 
     useEffect(() => {
-        console.log('check', limit)
         updateApi(key, 1, sorting, limit);
     }, []);
 
