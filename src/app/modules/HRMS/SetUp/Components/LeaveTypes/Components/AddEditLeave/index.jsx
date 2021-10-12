@@ -156,29 +156,32 @@ export default (props) => {
     };
     console.log({ payload });
     leaveType.leave_type.length == 0
-      ? createLeave(payload)
-          .then((response) => {
-            message.success('Leave created successfully');
-            onClose();
-          })
-          .catch((error) => message.error('Leave type alrady exists'))
-      : updateSingleLeave(leaveType.name, payload)
-          .then((response) => {
-            message.success('Leave update successfully');
-            onClose();
-          })
-          .catch((error) => message.error('Leave type already exisits'));
+      ? createLeave(payload).then((response) => {
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
+          onClose();
+        })
+      : updateSingleLeave(leaveType.name, payload).then((response) => {
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
+          onClose();
+        });
   };
   const onDeleteEducationField = () => {
-    deleteSingleLeave(leaveType.name)
-      .then((response) => {
-        message.success('Leave Deleted Successfully');
-        onClose();
-      })
-      .catch((error) => {
-        message.error('Leave Deleted Unsccessfully');
-        onClose();
-      });
+    deleteSingleLeave(leaveType.name).then((response) => {
+      if (response.data.message.success == true) {
+        message.success(response.data.message.message);
+      } else {
+        message.error(response.data.message.message);
+      }
+      onClose();
+    });
   };
 
   const onRemoveSelect = (index) => {

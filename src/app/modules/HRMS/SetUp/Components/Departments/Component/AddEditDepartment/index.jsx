@@ -25,13 +25,21 @@ export default (props) => {
     departmentField.name.length == 0
       ? addSingleDepartment(payload)
           .then((response) => {
-            message.success('Holiday Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Holiday exists'))
       : updateDepartment(departmentField.name, payload)
           .then((response) => {
-            message.success('Holiday Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Update Failed'));
@@ -40,7 +48,11 @@ export default (props) => {
   const onDeleteHoliday = () => {
     deleteDepartment(departmentField.name, { status: 'Inactive' })
       .then((response) => {
-        message.success('Holiday Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         onClose();
       })
       .catch((error) => {

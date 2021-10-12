@@ -14,18 +14,30 @@ export default (props) => {
   const onFinish = (values) => {
     educationField.education_field.length == 0
       ? addEducationField(values).then((response) => {
-          message.success('Education Field Added Successfully');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         })
       : updateSingleEducation(educationField.name, values).then((response) => {
-          message.success('Education Field Updated Successfully');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         });
   };
   const onDeleteEducationField = () => {
     deleteSingleEducation(educationField.name)
       .then((response) => {
-        message.success('Education Field Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         onClose();
       })
       .catch((error) => {

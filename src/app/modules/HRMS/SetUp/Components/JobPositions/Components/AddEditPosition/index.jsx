@@ -66,11 +66,19 @@ export default (props) => {
     };
     jobPosition.name.length == 0
       ? addjobPosition(payload).then((response) => {
-          message.success('Crated New Job');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         })
       : updatejobPosition(jobPosition.name, payload).then((response) => {
-          message.success('Updated Job Successfully');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         });
   };
@@ -78,8 +86,12 @@ export default (props) => {
   const onDeleteJobPosition = () => {
     deletejobPosition(jobPosition.name)
       .then((response) => {
-        message.success('Job Deleted Successfully');
-        onClose(false);
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
+        onClose();
       })
       .catch((error) => message.error('Cant delete a Job'));
   };

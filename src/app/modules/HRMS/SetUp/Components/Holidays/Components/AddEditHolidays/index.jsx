@@ -23,7 +23,11 @@ export default (props) => {
     holidayFields.holiday.length == 0
       ? addSingleHoliday(payload)
           .then((response) => {
-            message.success('Holiday Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Holiday exists'))
@@ -32,7 +36,11 @@ export default (props) => {
           holiday_date: moment(values.holiday_date).format('YYYY-MM-DD'),
         })
           .then((response) => {
-            message.success('Holiday Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Update Failed'));
@@ -41,7 +49,11 @@ export default (props) => {
   const onDeleteHoliday = () => {
     deleteSingleHoliday(holidayFields.name)
       .then((response) => {
-        message.success('Holiday Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         onClose();
       })
       .catch((error) => {

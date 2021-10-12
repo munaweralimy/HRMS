@@ -37,13 +37,21 @@ export default (props) => {
     letterData.name.length == 0
       ? addSingleWarningLetter(payload)
           .then((response) => {
-            message.success('Race Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             closeForn();
           })
           .catch((error) => message.error('Race exists'))
       : updateWarningLetter(letterData.name, payload)
           .then((response) => {
-            message.success('Race Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             closeForn();
           })
           .catch((error) => message.error('Update Failed'));
@@ -52,7 +60,11 @@ export default (props) => {
   const onDeleteNationality = () => {
     deleteWarningLetter(letterData.name)
       .then((response) => {
-        message.success('Race Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         closeForn();
       })
       .catch((error) => {

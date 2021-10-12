@@ -50,13 +50,21 @@ export default (props) => {
     asset.assets_name.length == 0
       ? addSingleAsset(payload)
           .then((response) => {
-            message.success('Asset Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Country exists'))
       : updateSingleAsset(asset.assets_id, { assets_id: values.assets_id, custodian: values.custodian.value })
           .then((response) => {
-            message.success('Asset Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Update Failed'));
@@ -65,7 +73,11 @@ export default (props) => {
   const onDeleteNationality = () => {
     deleteSingleAsset(asset.assets_id)
       .then((response) => {
-        message.success('Asset Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         onClose();
       })
       .catch((error) => {

@@ -46,22 +46,34 @@ export default (props) => {
     };
     projectData.name.length == 0
       ? addProject(payload).then((response) => {
-          message.success('New Project added successfully');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         })
       : updateProjecat(projectData.name, {
           project: values.project,
           user_staff: userData.map((value) => ({ employee: value.id })),
         }).then((response) => {
-          message.success(' Project update successfully');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         });
   };
   const onDeleteTeam = () => {
     deleteProject(projectData.name)
       .then((response) => {
-        message.success('Project Deleted Successfully');
-        onClose(false);
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
+        onClose();
       })
       .catch((error) => message.error('Cant delte a project'));
   };

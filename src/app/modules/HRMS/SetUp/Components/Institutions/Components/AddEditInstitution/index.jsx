@@ -18,12 +18,20 @@ export default (props) => {
     };
     institutionName.Institution.length == 0
       ? addInstitution(payload).then((response) => {
-          message.success('Institution Added Successfully');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         })
       : updateSingleInstitution(institutionName.name, { name1: values.institution, doctype: 'Institutions' }).then(
           (response) => {
-            message.success('Institution Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           },
         );

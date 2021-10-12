@@ -16,13 +16,21 @@ export default (props) => {
     race.race.length == 0
       ? addSingleRace(payload)
           .then((response) => {
-            message.success('Race Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Race exists'))
       : updateSingleRace(race.name, payload)
           .then((response) => {
-            message.success('Race Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Update Failed'));
@@ -31,7 +39,11 @@ export default (props) => {
   const onDeleteNationality = () => {
     deleteSingleRace(race.name)
       .then((response) => {
-        message.success('Race Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         onClose();
       })
       .catch((error) => {

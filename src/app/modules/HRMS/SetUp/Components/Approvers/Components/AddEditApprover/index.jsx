@@ -31,11 +31,19 @@ export default (props) => {
     };
     approver.name.length == 0
       ? addSingleApprover(payload).then((response) => {
-          message.success('success');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         })
       : updateApprover(approver.name, payload).then((response) => {
-          message.success('updated');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         });
   };

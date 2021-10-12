@@ -17,13 +17,21 @@ export default (props) => {
     religion.religion.length == 0
       ? addSingleReligion(payload)
           .then((response) => {
-            message.success('Religion Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Country exists'))
       : updateSingleReligion(religion.name, payload)
           .then((response) => {
-            message.success('Country Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Update Failed'));
@@ -31,7 +39,11 @@ export default (props) => {
   const onDeleteNationality = () => {
     deleteSingleReligion(religion.name)
       .then((response) => {
-        message.success('Country Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         onClose();
       })
       .catch((error) => {

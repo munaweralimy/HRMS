@@ -62,11 +62,19 @@ export default (props) => {
     };
     roleData.name.length === 0
       ? addUserRoles(payload).then((response) => {
-          message.success('New User Role Added');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         })
       : updateUserRoles(roleData.name, payload).then((response) => {
-          message.success('User Role Updated ');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           onClose();
         });
   };
@@ -74,8 +82,12 @@ export default (props) => {
   const onDeleteTeam = () => {
     deleteUserRoles(roleData.name)
       .then((response) => {
-        message.success('User Role Deleted Successfully');
-        onClose(false);
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
+        onClose();
       })
       .catch((error) => message.error('Cant delte a user role'));
   };

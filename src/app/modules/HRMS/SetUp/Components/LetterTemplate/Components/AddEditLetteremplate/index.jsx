@@ -98,9 +98,23 @@ export default (props) => {
       company: 'Limkokwing University Creative Technology',
     };
     templateData?.name.length == 0
-      ? addSingleLetterTemp(payload).then((response) => onClose())
+      ? addSingleLetterTemp(payload).then((response) => {
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
+          onClose();
+        })
       : updateletterTemp(templateData.name, { ...payload, template_name: templateData.template_name }).then(
-          (response) => onClose(),
+          (response) => {
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
+            onClose();
+          },
         );
   };
 

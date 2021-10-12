@@ -18,13 +18,21 @@ export default (props) => {
     countryName.name.length == 0
       ? addCountry(payload)
           .then((response) => {
-            message.success('Country Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Country exists'))
       : updateSingleCountry(countryName.code, { name: values.country_name })
           .then((response) => {
-            message.success('Country Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Update Failed'));
@@ -32,7 +40,11 @@ export default (props) => {
   const onDeleteNationality = () => {
     deleteSingleCountry(countryName.code)
       .then((response) => {
-        message.success('Country Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         onClose();
       })
       .catch((error) => {

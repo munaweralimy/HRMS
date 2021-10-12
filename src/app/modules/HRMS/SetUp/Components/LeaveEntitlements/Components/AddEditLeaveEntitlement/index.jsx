@@ -153,13 +153,21 @@ export default (props) => {
     leaveEtitlement.leave_entitlement_name.length == 0
       ? addSingleLeaveEntitlement(payload)
           .then((response) => {
-            message.success('Leave Entitlement Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Leave Entitlemen exists'))
       : updateSingleLeaveEntitlement(leaveEtitlement.name, payload)
           .then((response) => {
-            message.success('Leave Etitlement Updated Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             onClose();
           })
           .catch((error) => message.error('Update Failed'));
@@ -168,7 +176,11 @@ export default (props) => {
   const onDeleteHoliday = () => {
     deleteSingleLeaveEntitlement(leaveEtitlement.name)
       .then((response) => {
-        message.success('Leave Etitlement Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         onClose();
       })
       .catch((error) => {
