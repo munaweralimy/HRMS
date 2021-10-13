@@ -1,15 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { leaveTypeSelect } from '../../../../ducks/actions';
+import { ctypeListLeave } from '../../../../../../../../configs/constantData';
 const leaveFields = () => {
   const dispatch = useDispatch();
   const disabled = useSelector((state) => state.setup.selectedLeave);
   const leaveList = useSelector((state) => state.setup.leaveList);
-  const onSelectChange = (e) => {
-    console.log({ e });
-    if (e.value === 'Individual') {
-      dispatch(leaveTypeSelect(true));
-    }
-  };
+  //   const onSelectChange = (e) => {
+  // a    if (e.value === 'Individual') {
+  //       dispatch(leaveTypeSelect(true));
+  //     }
+  //   };
 
   return [
     {
@@ -31,7 +31,7 @@ const leaveFields = () => {
       type: 'select',
       twocol: false,
       reqmessage: 'Please select type',
-      options: [{ value: 'All', label: 'All' }],
+      options: ctypeListLeave,
     },
     {
       name: 'gender',
@@ -58,8 +58,9 @@ const leaveFields = () => {
       twocol: false,
       reqmessage: 'Marital Status required',
       options: [
+        { label: 'Divorced', value: 'Divorced' },
         { label: 'Married', value: 'Married' },
-        { label: 'Unmarried', value: 'Unmarried' },
+        { label: 'Single', value: 'Single' },
         { label: 'All', value: 'All' },
       ],
     },
@@ -76,9 +77,8 @@ const leaveFields = () => {
           req: false,
           placeholder: 'Please Select',
           twocol: false,
-          onChange: onSelectChange,
           options: [
-            { label: 'Individual', value: 'Individual', isDisabled: disabled },
+            { label: 'Individual', value: 'Individual' },
             { label: 'Manager', value: 'Manager' },
             { label: 'Team Lead', value: 'Team Lead' },
             { label: 'Supervisor', value: 'Supervisor' },

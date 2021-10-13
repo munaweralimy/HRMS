@@ -1,73 +1,71 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Image, Menu, Typography, Card, Badge } from 'antd';
-import loginLogo from "../../../assets/img/limkokwing-logo.svg";
+import loginLogo from '../../../assets/img/limkokwing-logo.svg';
 import {
-    DashboardIcon2,
-    ApplicationsIcon,
-    FacultyIcon,
-    RequestIcon,
-    CalendarIcon,
-    ReportsIcon,
-    TaskIcon,
-    PolicyIcon,
-    SetupIcon,
-    AdvancementIcon,
-    StaffIcon,
-    ClockIcon,
+  DashboardIcon2,
+  ApplicationsIcon,
+  FacultyIcon,
+  RequestIcon,
+  CalendarIcon,
+  ReportsIcon,
+  TaskIcon,
+  PolicyIcon,
+  SetupIcon,
+  AdvancementIcon,
+  StaffIcon,
+  ClockIcon,
 } from '../../atoms/CustomIcons';
-import {Link, useLocation} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import RoutingList from '../../../routing/config/RoutingList';
 import { allowedRoutes } from '../../../routing/config/utils';
 
 const { SubMenu } = Menu;
 const IconList = {
-    DashboardIcon2,
-    ApplicationsIcon,
-    TaskIcon,
-    AdvancementIcon,
-    StaffIcon,
-    ClockIcon,
-    FacultyIcon,
-    RequestIcon,
-    CalendarIcon,
-    ReportsIcon,
-    PolicyIcon,
-    SetupIcon,
-}
+  DashboardIcon2,
+  ApplicationsIcon,
+  TaskIcon,
+  AdvancementIcon,
+  StaffIcon,
+  ClockIcon,
+  FacultyIcon,
+  RequestIcon,
+  CalendarIcon,
+  ReportsIcon,
+  PolicyIcon,
+  SetupIcon,
+};
 
 export default (props) => {
-
-    const [menuList, setMenuList] = useState([]);
-    const location = useLocation().pathname;
-    const subkey = location.split('/')[1];
-    const selected = location.split('/').length > 1 ? `/${location.split('/')[1]}` : location;
+  const [menuList, setMenuList] = useState([]);
+  const location = useLocation().pathname;
+  const subkey = location.split('/')[1];
+  const selected = location.split('/').length > 1 ? `/${location.split('/')[1]}` : location;
 
     useEffect(() => {
         ModifyJson(allowedRoutes(RoutingList));
     }, []);
 
 
-    const ModifyJson = (data) => {
-        var result = data.reduce(function (r, a) {
-            if (a.parent) {
-                r[a["menu"]] = r[a["menu"]] || [];
-                if (a.submenu) {
-                    r[a["menu"]].push(a);
-                } else {
-                    r[a["menu"]] = a;
-                }
-            }
-            return r;
-        }, Object.create(null));
+  const ModifyJson = (data) => {
+    var result = data.reduce(function (r, a) {
+      if (a.parent) {
+        r[a['menu']] = r[a['menu']] || [];
+        if (a.submenu) {
+          r[a['menu']].push(a);
+        } else {
+          r[a['menu']] = a;
+        }
+      }
+      return r;
+    }, Object.create(null));
 
-        setMenuList(result);
+    setMenuList(result);
+  };
 
-      };
-
-      const mainIcon = (icon) => {
-        const IconComp = IconList[icon];
-        return <IconComp />
-      } 
+  const mainIcon = (icon) => {
+    const IconComp = IconList[icon];
+    return <IconComp />;
+  };
 
     return (
         <Card bordered={false} className='navBar'>

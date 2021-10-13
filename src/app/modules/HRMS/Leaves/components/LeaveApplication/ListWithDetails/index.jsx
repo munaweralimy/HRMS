@@ -11,17 +11,21 @@ export default ({details, updateApi, progressData}) => {
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  
+  const [approverID, setApproverID] = useState('');
 
-  progressData?.find(element => {
-    const elem = element?.leave_type == 'Annual Leave';
-    console.log('elem', elem)
-  })
+  const annualLeaves = progressData?.find(element => element?.leave_type === 'Annual Leave')
+  const replacementLeaves = progressData?.find(element => element?.leave_type === 'Replacement Leave')
 
-  const pending = 5;
-  const approved = 15;
-  const total = pending + approved;
-  const percentage = approved/total *100;
+  const pendingAnnual = annualLeaves?.available_leaves;
+  const approvedAnnual = annualLeaves?.taken_leaves;
+  const totalAnnual = pendingAnnual + approvedAnnual;
+  const percentageAnnual = pendingAnnual/totalAnnual *100;
+
+
+  const pendingReplacement = replacementLeaves?.available_leaves;
+  const approvedReplacement = replacementLeaves?.taken_leaves;
+  const totalReplacement = pendingReplacement + approvedReplacement;
+  const percentageReplacement = pendingReplacement/totalReplacement *100;
 
   const btnList = [
     {
@@ -35,6 +39,7 @@ export default ({details, updateApi, progressData}) => {
     return {
       onClick: () => {
         setRowDetail(true)
+        setApproverID(record?.approver_id)
         let temp = [
           {
             label: 'Date Applied',
@@ -86,6 +91,10 @@ export default ({details, updateApi, progressData}) => {
     }
   }
 
+  const onEdit = () => {
+    setAddVisible(true); setMode('edit')
+  }
+
     return (
         <>
         {!rowDetails ?
@@ -98,8 +107,8 @@ export default ({details, updateApi, progressData}) => {
                         type="circle" 
                         className='c-progress' 
                         width={200}
-                        percent={percentage} 
-                        format={() => <><div className="percent-text">{approved}</div> <div className="percent-numb">Annual Leaves</div></>}
+                        percent={percentageAnnual} 
+                        format={() => <><div className="percent-text">{pendingAnnual}</div> <div className="percent-numb">Annual Leaves</div></>}
                         />
                     </Card>  
                   </Col>
@@ -109,8 +118,8 @@ export default ({details, updateApi, progressData}) => {
                         type="circle" 
                         className='c-progress' 
                         width={200}
-                        percent={percentage} 
-                        format={() => <><div className="percent-text">{approved}</div> <div className="percent-numb">Annual Leaves</div></>}
+                        percent={percentageReplacement} 
+                        format={() => <><div className="percent-text">{approvedReplacement}</div> <div className="percent-numb">Replacement Leaves</div></>}
                         />
                     </Card>  
                   </Col>
@@ -135,16 +144,13 @@ export default ({details, updateApi, progressData}) => {
             </>
             :
             <DetailsComponent 
-            setRowDetail={setRowDetail} 
-            mainTitle={detailTitle}
-            backbtnTitle={heading}
-            data={rowData}
-            btn1title={'Approve'}
-            btn2title={'Reject'}
-            onAction1={onAction1}
-            onAction2={onAction2}
-            btnClass1='green-btn'
-            btnClass2='red-btn'
+              setRowDetail={setRowDetail} 
+              mainTitle={detailTitle}
+              backbtnTitle={heading}
+              data={rowData}
+              onAction3={onEdit}
+              btn3title={'Cancel Application'}
+              btnClass3='black-btn'
             />
             }
         </>

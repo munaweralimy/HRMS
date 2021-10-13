@@ -32,26 +32,26 @@ export default (props) => {
       title: 'Name',
       dataIndex: 'leave_entitlement_name',
       key: 'leave_entitlement_name',
-      sorted: (a, b) => a.leave_entitlement_name - b.leave_entitlement_name,
+      sorter: true,
     },
     {
       title: 'Entitlement',
       dataIndex: 'entitlement',
       key: 'entitlement',
-      sorted: (a, b) => a.entitlement - b.entitlement,
+      sorter: true,
     },
     {
       title: 'Min Years',
       dataIndex: 'min_years',
       key: 'min_years',
       align: 'center',
-      sorted: (a, b) => a.min_years - b.min_years,
+      sorter: true,
     },
     {
       title: 'Limited',
       dataIndex: 'is_limit',
       key: 'is_limit',
-      sorted: (a, b) => a.is_limit - b.is_limit,
+      sorter: true,
       align: 'center',
       // render: (text) => {
       //   if (text == 0) {
@@ -65,7 +65,7 @@ export default (props) => {
       title: 'Apply Before',
       dataIndex: 'apply_before_current_date',
       key: 'apply_before_current_date',
-      sorted: (a, b) => a.apply_before_current_date - b.apply_before_current_date,
+      sorter: true,
       align: 'center',
       // render: (text) => {
       //   if (text == 0) {
@@ -79,7 +79,7 @@ export default (props) => {
       title: 'Prorated',
       dataIndex: 'is_prorate',
       key: 'is_prorate',
-      sorted: (a, b) => a.is_prorate - b.is_prorate,
+      sorter: true,
       align: 'center',
       // render: (text) => {
       //   if (text == 0) {
@@ -93,7 +93,7 @@ export default (props) => {
       title: 'Overdraft',
       dataIndex: 'overdraft',
       key: 'overdraft',
-      sorted: (a, b) => a.overdraft - b.overdraft,
+      sorter: true,
       align: 'center',
       // render: (text) => {
       //   if (text == 0) {
@@ -107,7 +107,7 @@ export default (props) => {
       title: 'CF',
       dataIndex: 'carries_forward',
       key: 'carries_forward',
-      sorted: (a, b) => a.carries_forward - b.carries_forward,
+      sorter: true,
       align: 'center',
       // render: (text) => {
       //   if (text == 0) {
@@ -148,7 +148,7 @@ export default (props) => {
     content: (
       <AddEditEntitlmentLeave
         leaveEtitlement={entitlementLeave}
-        title={`${entitlementLeave.name ? 'Edit' : 'Add'} Leave Entitlement`}
+        title={`${entitlementLeave.name ? 'Edit' : 'Add New'} Leave Entitlement`}
         onClose={() => setVisible(false)}
       />
     ),

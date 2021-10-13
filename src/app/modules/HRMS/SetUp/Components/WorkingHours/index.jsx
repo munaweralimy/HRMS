@@ -30,25 +30,24 @@ export default (props) => {
       title: 'Template Name',
       dataIndex: 'template_name',
       key: 'template_name',
-      sorted: (a, b) => a.template_name - b.template_name,
+      sorter: true,
     },
     {
       title: 'Company',
       dataIndex: 'company',
       key: 'company',
-      sorted: (a, b) => a.company - b.company,
+      sorter: true,
     },
     {
       title: 'Users',
       dataIndex: 'users',
       key: 'users',
-      sorted: (a, b) => a.users - b.users,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>

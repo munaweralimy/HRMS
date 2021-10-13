@@ -28,14 +28,13 @@ export default (props) => {
       title: 'Religion',
       dataIndex: 'religion',
       key: 'religion',
-      sorted: (a, b) => a.religion - b.religion,
+      sorter: true,
     },
 
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       width: '100px',
       render: (text, record) => (
@@ -61,7 +60,13 @@ export default (props) => {
     closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddEditReligion religion={religionFiled} title="Add New Religion" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditReligion
+        religion={religionFiled}
+        title={`${religionFiled.name ? 'Edit' : 'Add New'} Religion`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -84,7 +89,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getReligionsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getReligionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getReligionsList(pagination.current, pagination.pageSize, '', ''));
     }

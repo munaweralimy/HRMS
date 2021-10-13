@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, Card } from 'antd';
 import HeadingChip from '../../../molecules/HeadingChip';
-import { useDispatch } from 'react-redux';
-import { getEmployeeList } from './ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getEmployeeList, showWarningLetter } from './ducks/actions';
 import {
   Teams,
   LeaveTypes,
@@ -24,11 +24,13 @@ import {
   RequestForms,
   Departments,
 } from './Components';
-
+import AddEditWarningLetter from './Components/WarningLetter/Components/AddEditWarningLetter';
 export default (props) => {
   const [activeID, setActiveID] = useState(null);
   const [tabComp, setTabComp] = useState(null);
   const dispatch = useDispatch();
+  const warningLetterData = useSelector((state) => state.setup.viewWarninLette);
+  console.log({ warningLetterData });
   dispatch(getEmployeeList('Limkokwing University Creative Technology'));
   const data = [
     {
@@ -129,6 +131,7 @@ export default (props) => {
   ];
 
   const loadComp = (data, id) => {
+    dispatch(showWarningLetter({ name: '', warning_letter_template: '', visible: false }));
     setTabComp(data?.comp);
     setActiveID(id);
   };
@@ -136,31 +139,39 @@ export default (props) => {
   return (
     <>
       <Row gutter={[20, 50]}>
-        <Col span={24}>
-          <Row gutter={[20, 30]}>
+        {!warningLetterData?.visible ? (
+          <>
             <Col span={24}>
-              <HeadingChip title="Setup" />
+              <Row gutter={[20, 30]}>
+                <Col span={24}>
+                  <HeadingChip title="Setup" />
+                </Col>
+                {data && (
+                  <>
+                    {data?.map((resp, i) => (
+                      <Fragment key={i}>
+                        <Col span={6}>
+                          <Card
+                            className={activeID === i ? 'uni-card-small-active' : 'uni-card-small'}
+                            bordered={false}
+                            onClick={() => loadComp(resp, i)}
+                          >
+                            {resp?.tabTitle}
+                          </Card>
+                        </Col>
+                      </Fragment>
+                    ))}
+                  </>
+                )}
+              </Row>
             </Col>
-            {data && (
-              <>
-                {data?.map((resp, i) => (
-                  <Fragment key={i}>
-                    <Col span={6}>
-                      <Card
-                        className={activeID === i ? 'uni-card-small-active' : 'uni-card-small'}
-                        bordered={false}
-                        onClick={() => loadComp(resp, i)}
-                      >
-                        {resp?.tabTitle}
-                      </Card>
-                    </Col>
-                  </Fragment>
-                ))}
-              </>
-            )}
-          </Row>
-        </Col>
-        <Col span={24}>{tabComp}</Col>
+            <Col span={24}>{tabComp}</Col>
+          </>
+        ) : (
+          <Col span={24}>
+            <AddEditWarningLetter letterData={warningLetterData} />
+          </Col>
+        )}
       </Row>
     </>
   );
