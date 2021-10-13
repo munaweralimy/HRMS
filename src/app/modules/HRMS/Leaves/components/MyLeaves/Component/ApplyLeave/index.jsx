@@ -4,7 +4,7 @@ import {TextAreaField, SelectField, DateField, InputField } from '../../../../..
 import { useForm } from 'react-hook-form';
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { apiresource } from '../../../../../../../../configs/constants';
+import { apiMethod } from '../../../../../../../../configs/constants';
 import axios from '../../../../../../../../services/axiosInterceptor';
 import { getLeaveType, getLeaveData, getLeaveApprovers } from '../../../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +32,7 @@ export default (props) => {
     dispatch(getLeaveData(e.label, company, id));
     dispatch(getLeaveApprovers(e.label, company, id));
   }
-
+  console.log('leaveApproversData', leaveApproversData)
   const onFinish = async (val) => {
     setLoad(true);    
     const startDate = moment(val?.leaveStart);
@@ -40,7 +40,7 @@ export default (props) => {
     const daysDiff = endDate.diff(startDate, 'days');
 
     let approvers = [];
-    leaveApproversData.map(resp => {
+    leaveApproversData?.map(resp => {
       approvers.push({
         approver: resp?.approver,
         status: "Pending",
@@ -55,13 +55,14 @@ export default (props) => {
 
     let temp = {
       employee_id: id,
-      employee_name: fullName,
-      company: company,
-      date_of_joining: "2020-03-01",
-      leave_type_name: val?.leaveType.value,
+      leave_type: val?.leaveType.label,
       total_leaves: leaveInfoData[0]?.total_leaves,
       available_leaves: leaveInfoData[0]?.available_leaves,
       leaves_taken: leaveInfoData[0]?.taken_leaves,
+      role: '',
+      job_title:'',
+      leave_type_name: val?.leaveType.value,
+      company: company,
       leave_period: val?.leavePeriod.value,
       start_date: val?.leaveStart ? moment(val?.leaveStart).format('YYYY-MM-DD'): '',
       end_date: val?.leaveEnd ? moment(val?.leaveEnd).format('YYYY-MM-DD'): '',
@@ -70,17 +71,17 @@ export default (props) => {
       reason: val?.reason,
       attachment: "/private/files/CMS2_03_AQA_Flowchart.pdf",
       doctype: "HRMS Leave Application",
+      employee_name: fullName,
+      //date_of_joining: "2020-03-01",
       leave_approvers: approvers,
-      role: '',
-      leave_type: val?.leaveType.label
     }
 
     console.log('val', temp)
 
-    let url = `${apiresource}/HRMS Leave Application`;
+    let url = `${apiMethod}/hrms.leaves_api.leave_create_with_validation`;
     try {
         await axios.post(url, temp);
-        message.success('Leave Added Successfully');
+        message.success('Leave Applied Successfully');
         setLoad(false);
         
         setTimeout(() => {setAddVisible(false); updateApi()}, 1000)
