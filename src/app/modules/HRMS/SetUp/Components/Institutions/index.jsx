@@ -28,13 +28,13 @@ export default (props) => {
       title: 'Institution',
       dataIndex: 'Institution',
       key: 'Institution',
-      sorted: (a, b) => a.Institution - b.Institution,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
+
       align: 'center',
       width: '100px',
       render: (text, record) => (
@@ -63,7 +63,7 @@ export default (props) => {
     content: (
       <AddEditInstitution
         institutionName={institutionFiled}
-        title="Add New Institution"
+        title={`${institutionFiled.name ? 'Edit' : 'Add New'} Institutions`}
         onClose={() => setVisible(false)}
       />
     ),
@@ -89,7 +89,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getInstitutionsList(pagination.current, pagination.pageSize, '', ''));
     }
@@ -98,7 +98,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Institutions" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

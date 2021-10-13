@@ -29,13 +29,12 @@ export default (props) => {
       title: 'Education Field',
       dataIndex: 'education_field',
       key: 'education_field',
-      sorted: (a, b) => a.education_field - b.education_field,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       width: '100px',
       render: (text, record) => (
@@ -71,7 +70,11 @@ export default (props) => {
     visibility: visible,
     class: 'black-modal',
     content: (
-      <AddEditEducation educationField={field} title="Add New Education Field" onClose={() => setVisible(false)} />
+      <AddEditEducation
+        educationField={field}
+        title={`${field.name ? 'Edit' : 'Add New'} Education Fields`}
+        onClose={() => setVisible(false)}
+      />
     ),
     width: 536,
     onCancel: () => setVisible(false),
@@ -86,7 +89,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, '', ''));
     }
@@ -105,7 +108,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Education Fields" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

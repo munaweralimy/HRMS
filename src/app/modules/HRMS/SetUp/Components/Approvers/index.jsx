@@ -26,13 +26,12 @@ export default (props) => {
       title: 'Approver Name',
       dataIndex: 'name',
       key: 'name',
-      sorted: (a, b) => a.name - b.name,
+      sorter: true,
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => {}}>
@@ -43,7 +42,7 @@ export default (props) => {
   ];
   const btnList = [
     {
-      text: '+ New Team',
+      text: '+ New Approver',
       classes: 'green-btn',
       action: () => {
         setApproverFields({ name: '', approver_name: '' });
@@ -55,11 +54,14 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    class: 'black-modal',
     content: (
-      <AddEditApprover approver={apparoaverFileds} title="Add New Approvals" onClose={() => setVisible(false)} />
+      <AddEditApprover
+        approver={apparoaverFileds}
+        title={`${apparoaverFileds.name ? 'Edit' : 'Add New'} Approver`}
+        onClose={() => setVisible(false)}
+      />
     ),
-    width: 536,
+    width: 654,
     onCancel: () => setVisible(false),
   };
 
@@ -80,7 +82,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getApproversList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getApproversList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getApproversList(pagination.current, pagination.pageSize, '', ''));
     }
@@ -89,7 +91,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Approvers" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

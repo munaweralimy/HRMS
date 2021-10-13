@@ -32,48 +32,48 @@ export default (props) => {
       title: 'Job Title',
       dataIndex: 'job_title',
       key: 'job_title',
-      sorted: (a, b) => a.job_title - b.job_title,
+      sorter: true,
     },
     {
       title: 'Work Quality',
       dataIndex: 'work_quality',
       key: 'work_quality',
-      sorted: (a, b) => a.work_quality - b.work_quality,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Work Speed',
       dataIndex: 'work_speed',
       key: 'work_speed',
-      sorted: (a, b) => a.work_speed - b.work_speed,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Leadership',
       dataIndex: 'leadership',
       key: 'leadership',
-      sorted: (a, b) => a.leadership - b.leadership,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Critical Thinking',
       dataIndex: 'critical_thinking',
       key: 'critical_thinking',
-      sorted: (a, b) => a.critical_thinking - b.critical_thinking,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Team Work',
       dataIndex: 'team_work',
       key: 'team_work',
-      sorted: (a, b) => a.team_work - b.team_work,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
+      sorter: true,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
@@ -100,7 +100,7 @@ export default (props) => {
     content: (
       <AddEditPosition
         jobPosition={positionFields}
-        title="Add New Position"
+        title={`${positionFields.name ? 'Edit' : 'Add New'} Job Position`}
         onClose={() => {
           setVisible(false);
         }}
@@ -127,7 +127,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getJobPositionsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getJobPositionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getJobPositionsList(pagination.current, pagination.pageSize, '', ''));
     }
@@ -136,7 +136,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Job Positions" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

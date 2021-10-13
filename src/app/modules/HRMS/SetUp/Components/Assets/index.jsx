@@ -28,18 +28,19 @@ export default (props) => {
       title: 'Asset No.',
       dataIndex: 'assets_id',
       key: 'assets_id',
-      sorted: (a, b) => a.assets_id - b.assets_id,
+      sorter: true,
     },
     {
       title: 'Asset Name',
       dataIndex: 'assets_name',
       key: 'assets_name',
-      sorted: (a, b) => a.assets_name - b.assets_name,
+      sorter: true,
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      sorter: true,
       render: (text) => {
         let clname = '';
         if (text == 'In Staff Possession') {
@@ -66,7 +67,7 @@ export default (props) => {
 
   const btnList = [
     {
-      text: '+ New Team',
+      text: '+ New Asset',
       classes: 'green-btn',
       action: () => {
         setAssetField({ name: '', status: '', assets_id: '', assets_name: '' });
@@ -79,7 +80,13 @@ export default (props) => {
     closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <AddEditAsset asset={assetField} title="Add New Asset" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditAsset
+        asset={assetField}
+        title={`${assetField.name ? 'Edit' : 'Add New'} Asset`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -113,11 +120,10 @@ export default (props) => {
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getAssetsList(pagination.current, pagination.pageSize, '', ''));
     }
@@ -132,7 +138,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Assets" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

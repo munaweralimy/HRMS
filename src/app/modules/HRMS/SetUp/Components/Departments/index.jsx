@@ -6,16 +6,17 @@ import ListCard from '../../../../../molecules/ListCard';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getDepartments } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddEditDepartment } from './Component/AddEditDepartment';
+import AddEditDepartment from './Component/AddEditDepartment';
+import Search from './Component/Search';
 
-const Departments = () => {
+export default (props) => {
   const [visible, setVisible] = useState(false);
-  const [positionFields, setPositionFields] = useState('');
+  const [departmentFields, setDepartmentFields] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const departmentList = useSelector((state) => state.setup.departmentList);
-
+  console.log({ departmentList });
   useEffect(() => {
     if (!visible) {
       dispatch(getDepartments(page, limit, '', ''));
@@ -25,36 +26,35 @@ const Departments = () => {
   const ListCol = [
     {
       title: 'Department',
-      dataIndex: 'Department',
-      key: 'Department',
-      sorted: (a, b) => a.Department - b.Department,
+      dataIndex: 'department_name',
+      key: 'department_name',
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Company',
       dataIndex: 'company',
       key: 'company',
-      sorted: (a, b) => a.company - b.company,
+      sorter: true,
     },
     {
       title: 'Employee Name',
       dataIndex: 'employee_name',
       key: 'employee_name',
-      sorted: (a, b) => a.employee_name - b.employee_name,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      sorted: (a, b) => a.status - b.status,
+      sorter: true,
       align: 'center',
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => {}}>
@@ -69,7 +69,7 @@ const Departments = () => {
       text: '+ New Job Position',
       classes: 'green-btn',
       action: () => {
-        // setPositionFields({ name: '', job_title: '' });
+        setDepartmentFields({ name: '', company: '' });
         setVisible(true);
       },
     },
@@ -80,21 +80,19 @@ const Departments = () => {
     visibility: visible,
     content: (
       <AddEditDepartment
-        jobPosition={positionFields}
-        title="Add New Position"
-        onClose={() => {
-          setVisible(false);
-        }}
+        departmentField={departmentFields}
+        title={`${departmentFields.name ? 'Edit' : 'Add New'} Department`}
+        onClose={() => setVisible(false)}
       />
     ),
-    width: 1199,
+    width: 550,
     onCancel: () => setVisible(false),
   };
 
   const onClickRow = (record) => {
     return {
       onClick: () => {
-        setPositionFields(record);
+        setDepartmentFields(record);
         setVisible(true);
       },
     };
@@ -108,7 +106,7 @@ const Departments = () => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getDepartments(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getDepartments(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getDepartments(pagination.current, pagination.pageSize, '', ''));
     }
@@ -118,7 +116,7 @@ const Departments = () => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Departments" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard
@@ -140,5 +138,3 @@ const Departments = () => {
     </>
   );
 };
-
-export default Departments;

@@ -28,26 +28,25 @@ export default (props) => {
       title: 'Holiday Name',
       dataIndex: 'holiday',
       key: 'holiday',
-      sorted: (a, b) => a.holiday - b.holiday,
+      sorter: true,
     },
     {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
-      sorted: (a, b) => a.date - b.date,
+      sorter: true,
     },
     {
       title: 'Note',
       dataIndex: 'note',
       key: 'note',
-      sorted: (a, b) => a.note - b.note,
+      sorter: true,
       render: (text) => (text ? text : '-'),
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links">
@@ -73,7 +72,11 @@ export default (props) => {
     visibility: visible,
     class: 'black-modal',
     content: (
-      <AddEditHolidays holidayFields={holidayFields} title="Add New Holiday" onClose={() => setVisible(false)} />
+      <AddEditHolidays
+        holidayFields={holidayFields}
+        title={`${holidayFields.name ? 'Edit' : 'Add New'} Holidays`}
+        onClose={() => setVisible(false)}
+      />
     ),
     width: 536,
     onCancel: () => setVisible(false),
@@ -92,7 +95,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getHolidaysList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getHolidaysList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getHolidaysList(pagination.current, pagination.pageSize, '', ''));
     }
@@ -103,7 +106,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Holidays" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

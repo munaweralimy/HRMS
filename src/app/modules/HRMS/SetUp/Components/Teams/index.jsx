@@ -6,13 +6,15 @@ import ListCard from '../../../../../molecules/ListCard';
 import AddEditTeam from './Components/AddEditTeam';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getTeamList } from '../../ducks/actions';
+import { getTeamList, getAllDepartmentList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
-  const [teamFiled, setTeamField] = useState('');
+  const [teamFiled, setTeamField] = useState({ company: '', name: '' });
   const [page, setPage] = useState(1);
+  const [sorting, setSorting] = useState('');
+
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const teamListData = useSelector((state) => state.setup.teamsListData);
@@ -22,31 +24,34 @@ export default (props) => {
       dispatch(getTeamList(page, limit, '', ''));
     }
   }, [visible]);
+  useEffect(() => {
+    dispatch(getAllDepartmentList());
+  }, []);
 
   const ListCol = [
     {
       title: 'Team Name',
       dataIndex: 'team_name',
       key: 'team_name',
-      sorted: (a, b) => a.team_name - b.team_name,
+      sorter: true,
     },
     {
       title: 'Company',
       dataIndex: 'company',
       key: 'company',
-      sorted: (a, b) => a.company - b.company,
+      sorter: true,
     },
     {
       title: 'Team Leader',
       dataIndex: 'team_leader',
       key: 'team_leader',
-      sorted: (a, b) => a.team_leader_name - b.team_leader_name,
+      sorter: true,
     },
     {
       title: 'Team Member',
       dataIndex: 'team_member',
       key: 'team_member',
-      sorted: (a, b) => a.total_staff_count - b.total_staff_count,
+      sorter: true,
       align: 'center',
     },
     {
@@ -77,7 +82,13 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditTeam team={teamFiled} title="Add New Team" onClose={() => setVisible(false)} />,
+    content: (
+      <AddEditTeam
+        team={teamFiled}
+        title={`${teamFiled?.name.length ? 'Edit' : 'Add New'} Team`}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 900,
     onCancel: () => setVisible(false),
   };
@@ -96,11 +107,11 @@ export default (props) => {
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
+    console.log('heloo', pagination, sorter);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getTeamList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getTeamList(pagination.current, pagination.pageSize, '', ''));
     }
