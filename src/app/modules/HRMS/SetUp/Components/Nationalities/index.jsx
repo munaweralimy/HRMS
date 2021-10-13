@@ -28,7 +28,7 @@ export default (props) => {
       title: 'Nationality',
       dataIndex: 'name',
       key: 'name',
-      sorted: (a, b) => a.name - b.name,
+      sorter: true,
     },
     {
       title: 'Action',
@@ -63,7 +63,7 @@ export default (props) => {
     content: (
       <AddEditNationality
         countryName={nationalityField}
-        title="Add New Nationality"
+        title={`${nationalityField.name ? 'Edit' : 'Add New'} Nationality`}
         onClose={() => setVisible(false)}
       />
     ),
@@ -84,11 +84,10 @@ export default (props) => {
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getNationalitiesList(pagination.current, pagination.pageSize, '', ''));
     }
@@ -98,7 +97,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Nationality" btnList={btnList} />
         </Col>
         <Col span={24}>
           <ListCard

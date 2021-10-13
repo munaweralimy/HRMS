@@ -11,18 +11,35 @@ const { Title } = Typography;
 const { Option } = Select;
 
 export default (props) => {
-  const { control } = useForm()
+  const { control } = useForm();
   const { iProps } = props;
   const history = useHistory();
-  const { link, listCol, listdata, updateApi, filters, Search, listcount, carddata, cardcount, searchDropdowns, addon, statusKey, addonkey, listLink, topbtn, teamDrop } = iProps;
+  const {
+    link,
+    listCol,
+    listdata,
+    updateApi,
+    filters,
+    Search,
+    listcount,
+    carddata,
+    cardcount,
+    searchDropdowns,
+    addon,
+    statusKey,
+    addonkey,
+    listLink,
+    topbtn,
+    teamDrop,
+  } = iProps;
   const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
   const [page, setPage] = useState(1);
-  const [limit,setLimit] = useState(6);
+  const [limit, setLimit] = useState(6);
   const [view, setView] = useState('card');
   const [sorting, setSorting] = useState('');
   const [searchVal, setSearchVal] = useState(null);
   const [teamSelected, setTeamSelected] = useState('');
-  
+
   useEffect(() => {
     updateApi(filterVal, page, limit, '', '', view, null, teamSelected);
   }, []);
@@ -90,10 +107,11 @@ export default (props) => {
             </Radio.Button>
           </Radio.Group>
         </Space>
-        {topbtn && 
-        <Button type="primary" size='large' className="green-btn" onClick={topbtn.topAction}>
+        {topbtn && (
+          <Button type="primary" size="large" className="green-btn" onClick={topbtn.topAction}>
             {topbtn.title}
-        </Button>}
+          </Button>
+        )}
       </Space>
     );
   };
@@ -123,7 +141,16 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      updateApi(filterVal, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, view, searchVal, teamSelected);
+      updateApi(
+        filterVal,
+        pagination.current,
+        pagination.pageSize,
+        sorter.order,
+        sorter.columnKey,
+        view,
+        searchVal,
+        teamSelected,
+      );
     } else {
       updateApi(filterVal, pagination.current, pagination.pageSize, '', '', view, searchVal, teamSelected);
     }
@@ -133,29 +160,30 @@ export default (props) => {
     setTeamSelected(e);
     setPage(1);
     updateApi(filterVal, 1, limit, '', '', view, null, e);
-  }
+  };
 
   return (
     <>
       <SwitchView />
-      {teamDrop && 
-      <Select 
-        className="customSelect"
-        value={teamSelected}
-        onChange={onTeamChange}
-        className='mb-1'
-        size='large'
-        style={{width: 200}}
+      {teamDrop && (
+        <Select
+          className="customSelect"
+          value={teamSelected}
+          onChange={onTeamChange}
+          className="mb-1"
+          size="large"
+          style={{ width: 200 }}
         >
-        {teamDrop?.map((item,ind) => (
-          <Fragment key={ind}>
-            <Option value={item?.team_name}>{item?.team_name}</Option>
-          </Fragment>
-        ))}
-      </Select>}
+          {teamDrop?.map((item, ind) => (
+            <Fragment key={ind}>
+              <Option value={item?.team_name}>{item?.team_name}</Option>
+            </Fragment>
+          ))}
+        </Select>
+      )}
       {view == 'list' ? (
         <ListCard
-          classes='clickRow'
+          classes="clickRow"
           onRow={onClickRow}
           filters={filters && filters}
           Search={Search && Search}
@@ -176,15 +204,22 @@ export default (props) => {
         <>
           <div className="flexibleRow">
             {carddata.map((item, index) => (
-                <Fragment key={index}>
-                <div className='requestPanel'>
-                    <MainStatusCard data={item} link={link} addon={addon || item[addonkey]} statusKey={statusKey} />
+              <Fragment key={index}>
+                <div className="requestPanel">
+                  <MainStatusCard data={item} link={link} addon={addon || item[addonkey]} statusKey={statusKey} />
                 </div>
               </Fragment>
             ))}
           </div>
           <div className="w-100 text-right mt-2">
-            <Pagination pageSize={6} current={page} hideOnSinglePage={true} showSizeChanger={false} onChange={onPageChange} total={cardcount} />
+            <Pagination
+              pageSize={6}
+              current={page}
+              hideOnSinglePage={true}
+              showSizeChanger={false}
+              onChange={onPageChange}
+              total={cardcount}
+            />
           </div>
         </>
       )}

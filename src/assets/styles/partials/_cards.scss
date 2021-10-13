@@ -307,7 +307,6 @@
   }
 }
 
-
 .uni-card-small-active {
   height: 100%;
   border-radius: 8px;
@@ -320,7 +319,6 @@
     font-size: 20px;
   }
 }
-
 
 .figures-card {
   transition: 0.2s;
@@ -342,7 +340,7 @@
 }
 
 .category-card {
-  height:100%;
+  height: 100%;
   background-color: $element-color;
   cursor: pointer;
   &:hover {

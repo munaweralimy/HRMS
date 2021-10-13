@@ -1,16 +1,19 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Button, Row, Col, Typography, Form, InputNumber, message } from 'antd';
+import { Button, Row, Col, Typography, Form, InputNumber, message, Spin } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { jobFields } from './FormFields';
 import { useForm, useFieldArray } from 'react-hook-form';
 import AddUser from '../../../Teams/Components/AddUser';
 import { SliderFiled } from '../../../../../../../atoms/FormElement';
 import { getSingleJob, addjobPosition, updatejobPosition, deletejobPosition } from '../../../../ducks/services';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
   const { title, onClose, jobPosition } = props;
   const [teamData, setTeamData] = useState('');
   const [userData, setUserData] = useState([]);
+  const [load, setLoad] = useState(false);
   const { control, errors, setValue, watch, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
 
@@ -53,6 +56,7 @@ export default (props) => {
   }, [teamData]);
 
   const onFinish = async (val) => {
+    setLoad(true);
     const payload = {
       company: 'Limkokwing University Creative Technology',
       job_position_name: val.job_position_name,
@@ -66,117 +70,135 @@ export default (props) => {
     };
     jobPosition.name.length == 0
       ? addjobPosition(payload).then((response) => {
-          message.success('Crated New Job');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
+          setLoad(false);
           onClose();
         })
       : updatejobPosition(jobPosition.name, payload).then((response) => {
-          message.success('Updated Job Successfully');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
+          setLoad(false);
           onClose();
         });
   };
 
   const onDeleteJobPosition = () => {
+    setLoad(true);
     deletejobPosition(jobPosition.name)
       .then((response) => {
-        message.success('Job Deleted Successfully');
-        onClose(false);
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
+        setLoad(false);
+        onClose();
       })
       .catch((error) => message.error('Cant delete a Job'));
   };
 
   return (
-    <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
-      <Row gutter={[24, 30]}>
-        <Col span={24}>
-          <Row gutter={24} justify="center">
-            <Col>
-              <Title level={3} className="mb-0">
-                {title}
-              </Title>
-            </Col>
-          </Row>
-        </Col>
+    <Spin indicator={antIcon} size="large" spinning={load}>
+      <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
+        <Row gutter={[24, 30]}>
+          <Col span={24}>
+            <Row gutter={24} justify="center">
+              <Col>
+                <Title level={3} className="mb-0">
+                  {title}
+                </Title>
+              </Col>
+            </Row>
+          </Col>
 
-        <Col span={8}>
-          <Row gutter={[24, 30]}>
-            {jobFields().map((item, idx) => (
-              <Fragment key={idx}>
-                <FormGroup item={item} control={control} errors={errors} />
-              </Fragment>
-            ))}
-          </Row>
-        </Col>
-        <Col span={8}>
-          <Row gutter={[24, 20]} align="middle">
-            {skillSet.map((value, index) => (
-              <Fragment key={index}>
-                <Col span={20}>
-                  <SliderFiled
-                    fieldname={value.fieldname}
-                    label={value.label}
-                    control={control}
-                    errors={errors}
-                    iProps={{ min: 1, max: 5, marks: { 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' } }}
-                  />
-                </Col>
-                <Col span={4}>
-                  <InputNumber value={value.updateVal} disabled={true} className="w-100" />
-                </Col>
-              </Fragment>
-            ))}
-          </Row>
-        </Col>
-        <Col span={8}>
-          <Row gutter={[24, 30]}>
-            <Col span={24}>
-              <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
-            </Col>
-            <Col span={24}>
-              <Row gutter={24}>
-                {jobPosition.name ? (
-                  <>
-                    <Col span={12}>
-                      <Button
-                        size="large"
-                        type="primary"
-                        htmlType="button"
-                        className="red-btn w-100"
-                        onClick={onDeleteJobPosition}
-                      >
-                        Delete
-                      </Button>
-                    </Col>
-                    <Col span={12}>
-                      <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                        Save
-                      </Button>
-                    </Col>
-                  </>
-                ) : (
-                  <>
-                    <Col span={12}>
-                      <Button
-                        size="large"
-                        type="primary"
-                        htmlType="button"
-                        className="black-btn w-100"
-                        onClick={onClose}
-                      >
-                        Close
-                      </Button>
-                    </Col>
-                    <Col span={12}>
-                      <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
-                        Add
-                      </Button>
-                    </Col>
-                  </>
-                )}
-              </Row>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Form>
+          <Col span={8}>
+            <Row gutter={[24, 30]}>
+              {jobFields().map((item, idx) => (
+                <Fragment key={idx}>
+                  <FormGroup item={item} control={control} errors={errors} />
+                </Fragment>
+              ))}
+            </Row>
+          </Col>
+          <Col span={8}>
+            <Row gutter={[24, 20]} align="middle">
+              {skillSet.map((value, index) => (
+                <Fragment key={index}>
+                  <Col span={20}>
+                    <SliderFiled
+                      fieldname={value.fieldname}
+                      label={value.label}
+                      control={control}
+                      errors={errors}
+                      iProps={{ min: 1, max: 5, marks: { 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' } }}
+                    />
+                  </Col>
+                  <Col span={4}>
+                    <InputNumber value={value.updateVal} disabled={true} className="w-100" />
+                  </Col>
+                </Fragment>
+              ))}
+            </Row>
+          </Col>
+          <Col span={8}>
+            <Row gutter={[24, 30]}>
+              <Col span={24}>
+                <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
+              </Col>
+              <Col span={24}>
+                <Row gutter={24}>
+                  {jobPosition.name ? (
+                    <>
+                      <Col span={12}>
+                        <Button
+                          size="large"
+                          type="primary"
+                          htmlType="button"
+                          className="red-btn w-100"
+                          onClick={onDeleteJobPosition}
+                        >
+                          Delete
+                        </Button>
+                      </Col>
+                      <Col span={12}>
+                        <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                          Save
+                        </Button>
+                      </Col>
+                    </>
+                  ) : (
+                    <>
+                      <Col span={12}>
+                        <Button
+                          size="large"
+                          type="primary"
+                          htmlType="button"
+                          className="black-btn w-100"
+                          onClick={onClose}
+                        >
+                          Close
+                        </Button>
+                      </Col>
+                      <Col span={12}>
+                        <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
+                          Add
+                        </Button>
+                      </Col>
+                    </>
+                  )}
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+    </Spin>
   );
 };

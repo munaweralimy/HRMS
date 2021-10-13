@@ -8,14 +8,4 @@ export const approverFields = [
     twocol: false,
     reqmessage: 'Approaver required',
   },
-
-  {
-    name: 'approver_signature',
-    label: 'Signature',
-    req: true,
-    placeholder: '',
-    type: 'input',
-    twocol: false,
-    reqmessage: 'Upload Image',
-  },
 ];
