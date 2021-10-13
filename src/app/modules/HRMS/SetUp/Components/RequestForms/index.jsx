@@ -28,20 +28,20 @@ export default (props) => {
       title: 'Form Name',
       dataIndex: 'form_name',
       key: 'form_name',
-      sorted: (a, b) => a.form_name - b.form_name,
+      sorter: true,
     },
-    {
-      title: 'Fields',
-      dataIndex: 'fields',
-      key: 'fields',
-      sorted: (a, b) => a.fields - b.fields,
-    },
+    // {
+    //   title: 'Fields',
+    //   dataIndex: 'fields',
+    //   key: 'fields',
+    //   sorter: true,
+    // },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      sorted: (a, b) => a.status - b.status,
       align: 'center',
+      sorter: true,
       render: (text, record) => <Switch checked={text == 1 ? true : false} disabled />,
     },
     {
@@ -107,7 +107,7 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, sorter.order, sorted.columnKey));
+      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
       dispatch(getRequestFormsList(pagination.current, pagination.pageSize, '', ''));
     }
