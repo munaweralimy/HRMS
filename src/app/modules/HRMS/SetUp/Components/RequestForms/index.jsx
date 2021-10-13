@@ -30,12 +30,12 @@ export default (props) => {
       key: 'form_name',
       sorter: true,
     },
-    // {
-    //   title: 'Fields',
-    //   dataIndex: 'fields',
-    //   key: 'fields',
-    //   sorter: true,
-    // },
+    {
+      title: 'Fields',
+      dataIndex: 'fields',
+      key: 'fields',
+      sorter: true,
+    },
     {
       title: 'Status',
       dataIndex: 'status',
