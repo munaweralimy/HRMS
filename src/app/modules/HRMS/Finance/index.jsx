@@ -6,6 +6,9 @@ import Search from './components/Search';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import { getOverallFinance, getOverallFinanceList } from './ducks/action';
+import {allowed} from '../../../../routing/config/utils';
+import Roles from '../../../../routing/config/Roles';
+
 const colName = [
   {
     title: 'ID',
@@ -74,6 +77,7 @@ const Finance = () => {
 
   const tabs = [
     {
+      visible: allowed([Roles.FINANCE]),
       title: 'Overall Finance',
       key: 'overall',
       count: overallFinance?.count,

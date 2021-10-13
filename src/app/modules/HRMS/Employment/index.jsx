@@ -9,7 +9,8 @@ import Search from './components/Search';
 import TeamList from './TeamList';
 import { getOverallCard, getOverallList } from './ducks/action';
 import { useHistory } from 'react-router';
-
+import {allowed} from '../../../../routing/config/utils';
+import Roles from '../../../../routing/config/Roles';
 
 const colName = [
   {
@@ -91,6 +92,7 @@ export default (props) => {
 
   const tabs = [
     {
+      visible: allowed([Roles.EMPLOYMENT]),
       title: 'Overall Employment',
       key: 'overall',
       count: data?.count,

@@ -1,6 +1,6 @@
 export default {
     ADVANCEMENT: 'advacement',
-    ADVANCEMENT_TEAMS: 'advacement_teams',
+    ADVANCEMENT_TEAMS: 'advancement_teams',
     EMPLOYMENT: "employement",
     FINANCE: "finance",
     REPORTS: "reports",

@@ -14,8 +14,13 @@ import SearchTeam from './components/SearchTeam';
 import MyLeaves from './components/MyLeaves';
 import ListCard from '../../../molecules/ListCard';
 import moment from 'moment';
+import Roles from '../../../../routing/config/Roles';
+import {allowed} from '../../../../routing/config/utils';
+import { getTeamsDetail } from '../../Application/ducks/actions';
+
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
+
 const filtersOverall = [
   {
     label: 'Pending',
@@ -196,9 +201,13 @@ export default (props) => {
 
   const leaveStatAnnualList = useSelector(state => state.leaves.leaveStatAnnualList);
   const leaveStatisticsBar = useSelector(state => state.leaves.leaveStatisticsBar);
+  const teamsDetailData = useSelector(state => state.global.teamsDetailData);
+  
+  const employeeId = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
 
   useEffect(() => {
     dispatch(getLeaveStatisticBar());
+    dispatch(getTeamsDetail(employeeId));
   }, [])
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
@@ -209,11 +218,11 @@ export default (props) => {
     }
   }
 
-  const onTeamAction = (filter, page, limit, sort, sortby, type, searching) => {
+  const onTeamAction = (filter, page, limit, sort, sortby, type, searching, team) => {
     if (type == 'list') {
-      dispatch(getTeamTasksWithStatus('Development', filter, page, limit, sort, sortby))
+      dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby))
     } else {
-      dispatch(getTeamTasks('Development', page, limit, sort, sortby));
+      dispatch(getTeamTasks(team, page, limit, sort, sortby));
     }
   }
 
@@ -258,6 +267,7 @@ export default (props) => {
 
   const tabs = [
     {
+      visible: allowed([Roles.LEAVES]),
       title: 'Overall Leaves',
       key: 'overall',
       count: overallData?.count || overallDataList?.count || 0,
@@ -282,6 +292,7 @@ export default (props) => {
       },
     },
     {
+      visible: allowed([Roles.LEAVES_TEAMS]),
       title: 'Team Leaves',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
@@ -302,8 +313,10 @@ export default (props) => {
         statusKey: 'application_status'
       },
       Comp: MultiView,
+      teamDrop: teamsDetailData
     },
     {
+      visible: allowed([Roles.LEAVES_INDIVIDUAL]),
       title: 'My Leaves',
       key: 'myleaves',
       Comp: MyLeaves,

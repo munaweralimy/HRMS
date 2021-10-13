@@ -5,6 +5,7 @@ import { useHistory } from 'react-router';
 import { AppstoreFilled, DatabaseFilled } from '@ant-design/icons';
 import MainStatusCard from '../../../atoms/HRMS/MainStatusCard';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 const _ = require('lodash');
 const { Title } = Typography;
@@ -138,7 +139,7 @@ export default (props) => {
   return (
     <>
       <SwitchView />
-      {teamDrop && 
+      {teamDrop && teamDrop.length > 0 &&
       <Select 
         className="customSelect"
         value={teamSelected}

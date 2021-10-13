@@ -8,6 +8,8 @@ import CategoryCard from '../../../../atoms/CategoryCard';
 import Request from '../components/Request'
 import { TaskIcon, AdvancementIcon, CalendarIcon, FacultyIcon, ClockIcon, StaffIcon } from '../../../../atoms/CustomIcons';
 import { getRequestDetails } from '../ducks/actions';
+import Roles from '../../../../../routing/config/Roles';
+import {allowed} from '../../../../../routing/config/utils';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -103,22 +105,31 @@ return (
             </Row>
           </Card>
         </Col>
+        {allowed([Roles.REQUESTS]) ?
         <Col span={24}>
           <Card bordered={false} className="uni-card h-auto w-100">
             <Row gutter={[20, 30]}>
               <Col span={24}><Title level={4} className='mb-0'>Select Category</Title></Col>
               <Col span={24}>
                 <Row gutter={[20,20]}>
-                  {cardData.map((x, i) => (
-                    <Col flex='1 0 250px' key={i}>
-                      <CategoryCard data={x} />
-                    </Col>
-                  ))}
+                  {cardData.map((x, i) => {
+                    if (x.title != 'Finance' && x.title != 'Employment') {
+                      return <Col flex='1 0 250px' key={i}>
+                        <CategoryCard data={x} />
+                      </Col>
+                    } else {
+                      if (allowed([Roles.EMPLOYMENT])) {
+                        return <Col flex='1 0 250px' key={i}>
+                          <CategoryCard data={x} />
+                        </Col>
+                      }
+                    }
+                  })}
                 </Row>
               </Col>
             </Row>
           </Card>
-        </Col>
+        </Col> : null}
       </Row>
     </StaffDetails>
   );

@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import CardListSwitchLayout from '../../../../molecules/HRMS/CardListSwitchLayout';
 import RequestSection from '../../../../molecules/RequestSection';
 import { useHistory } from 'react-router-dom';
+import Roles from '../../../../../routing/config/Roles';
+import {allowed} from '../../../../../routing/config/utils';
 
 export default (props) => {
 
@@ -41,6 +43,7 @@ export default (props) => {
 
   const tabs = [
     {
+      visible: allowed([Roles.REQUESTS]),
       title: 'Staff Requests',
       key: 'pending',
       count: dataPending?.count,
@@ -57,6 +60,7 @@ export default (props) => {
       },
     },
     {
+      visible: allowed([Roles.REQUESTS_INDIVIDUAL]),
       title: 'Myr Requests',
       key: 'yourrequests',
       count: dataYour?.count,
@@ -76,6 +80,7 @@ export default (props) => {
       },
     },
     {
+      visible: allowed([Roles.REQUESTS_INDIVIDUAL]),
       title: 'Archive',
       key: 'archive',
       Comp: RequestSection,
