@@ -11,7 +11,7 @@ export default ({details, updateApi}) => {
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-
+  console.log('data', data)
   const pending = 5;
   const approved = 15;
   const total = pending + approved;
@@ -36,25 +36,29 @@ export default ({details, updateApi}) => {
             value: record?.name
           },
           {
-            label: 'Timesheet Date',
-            value: record?.date ? moment(record.date).format('Do MMMM YYYY') : ''
+            label: 'Date Applied',
+            value: record?.creation ? moment(record.creation).format('Do MMMM YYYY') : ''
           },
           {
-            label: 'Project Name',
-            value: record?.project
+            label: 'Start',
+            value: record?.start_date ? moment(record.start_date).format('Do MMMM YYYY') : ''
           },
           {
-            label: 'Total Hours',
-            value: record?.hours
+            label: 'End',
+            value: record?.end_date ? moment(record.end_date).format('Do MMMM YYYY') : ''
           },
           {
-            label: 'Task',
-            value: record?.tasks
+            label: 'Period',
+            value: record?.leave_period
+          },
+          {
+            label: 'Type',
+            value: record?.leave_type
           },
           {
             label: 'Status',
             value: record?.status,
-            classi: record?.status =='Pending' ? 'c-pending' : record?.status == 'Approved' ? 'c-success' : 'c-error' 
+            classi: record?.application_status =='Pending' ? 'c-pending' : record?.status == 'Approved' ? 'c-success' : 'c-error' 
           },
         ];
         setRowData(temp)
