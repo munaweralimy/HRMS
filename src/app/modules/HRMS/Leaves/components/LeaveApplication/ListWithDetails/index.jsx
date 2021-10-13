@@ -6,7 +6,7 @@ import moment from 'moment';
 
 export default ({details, updateApi, progressData}) => {
 
-  const { title, key, heading, data, column, nodetail, detailTitle, onAction1, onAction2 } = details;
+  const { title, key, heading, data, column, nodetail, detailTitle, onAction2 } = details;
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
@@ -27,20 +27,16 @@ export default ({details, updateApi, progressData}) => {
   const totalReplacement = pendingReplacement + approvedReplacement;
   const percentageReplacement = pendingReplacement/totalReplacement *100;
 
-  const btnList = [
-    {
-      text: '+ Add New Timesheet',
-      classes: 'green-btn',
-      action: () => { setAddVisible(true); setActiveKey('1')},
-    },
-  ];
-
   const onClickRow = (record) => {
     return {
       onClick: () => {
         setRowDetail(true)
         setApproverID(record?.approver_id)
         let temp = [
+          {
+            label: 'Name',
+            value: record?.name
+          },
           {
             label: 'Date Applied',
             value: record?.creation ? moment(record.creation).format('Do MMMM YYYY') : ''
@@ -89,10 +85,6 @@ export default ({details, updateApi, progressData}) => {
     } else {
       updateApi(key, pagination.current, pagination.pageSize, '', '');
     }
-  }
-
-  const onEdit = () => {
-    setAddVisible(true); setMode('edit')
   }
 
     return (
@@ -148,9 +140,9 @@ export default ({details, updateApi, progressData}) => {
               mainTitle={detailTitle}
               backbtnTitle={heading}
               data={rowData}
-              onAction3={onEdit}
-              btn3title={'Cancel Application'}
-              btnClass3='black-btn'
+              onAction2={onAction2}
+              btn2title={'Cancel Application'}
+              btnClass2='red-btn'
             />
             }
         </>
