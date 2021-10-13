@@ -101,11 +101,6 @@ export default (props) => {
     setRecord(null);
     dispatch(getMyLeaves(id,'Pending', 1, limit, '', ''));
   }
-
-  const onEdit = () => {
-    setAddVisible(true); setMode('edit')
-  }
-
   return (
     <>
       {!addVisible && <HeadingChip btnList={btnList} classes={`${isHDScreen ? 'optionsTabs' : 'mb-1-5'}`} />}
@@ -116,7 +111,7 @@ export default (props) => {
               <LeaveApplication id={id} updateApi={updateTimesheet} ListData={myAvailableLeaves?.availibility} data={myTaskData} />
             }
             {addVisible && <ApplyLeave id={id} fullName={fullName} company={company} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
-            {rowDetails && (
+            {/* {rowDetails && (
               <DetailsComponent
                 setRecord={setRecord}
                 setRowDetail={setRowDetail}
@@ -126,7 +121,7 @@ export default (props) => {
                 onAction3={onEdit}
                 btn3title={'Edit Timesheet'}
               />
-            )}
+            )} */}
           </TabPane>
 
           <TabPane key={'2'} tab='Availability'>

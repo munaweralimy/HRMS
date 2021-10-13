@@ -108,7 +108,7 @@ export const getLeaveStatisticBar = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_bar`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_bar?leave_type=Annual Leave&company=Limkokwing University Creative Technology`);
     dispatch({
       type: action_types.STATISTIC_BAR,
       data: message,
@@ -139,10 +139,6 @@ export const getLeaveApplicationDetail = (id,status) => {
     });
   };
 };
-
-
-
-
 
 export const getLeaveType = () => {
   return async (dispatch) => {
@@ -179,11 +175,6 @@ export const getLeaveApprovers = (type,company,employeeID) => {
     });
   };
 };
-
-
-
-
-
 
 export const getAddProjectName = () => {
   return async (dispatch) => {

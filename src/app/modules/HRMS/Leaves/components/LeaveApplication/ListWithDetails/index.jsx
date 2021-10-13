@@ -91,6 +91,10 @@ export default ({details, updateApi, progressData}) => {
     }
   }
 
+  const onEdit = () => {
+    setAddVisible(true); setMode('edit')
+  }
+
     return (
         <>
         {!rowDetails ?
@@ -140,17 +144,13 @@ export default ({details, updateApi, progressData}) => {
             </>
             :
             <DetailsComponent 
-            setRowDetail={setRowDetail} 
-            mainTitle={detailTitle}
-            backbtnTitle={heading}
-            data={rowData}
-            btn1title={'Approve'}
-            btn2title={'Reject'}
-            ApproverID={approverID}
-            onAction1={onAction1}
-            onAction2={onAction2}
-            btnClass1='green-btn'
-            btnClass2='red-btn'
+              setRowDetail={setRowDetail} 
+              mainTitle={detailTitle}
+              backbtnTitle={heading}
+              data={rowData}
+              onAction3={onEdit}
+              btn3title={'Cancel Application'}
+              btnClass3='black-btn'
             />
             }
         </>
