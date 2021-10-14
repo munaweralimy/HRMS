@@ -67,6 +67,7 @@ export default (props) => {
       placeholder: 'Min number of years',
       req: true,
       reqmessage: 'Years required',
+      number: true,
     },
     {
       label: 'Max Years of Service',
