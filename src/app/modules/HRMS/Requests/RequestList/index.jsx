@@ -16,7 +16,7 @@ export default (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const [activeKey, setActiveKey] = useState('pending');
+  const [activeKey, setActiveKey] = useState();
   const dataPending = useSelector((state) => state.hrmsrequests.requestListPending);
   const dataYour = useSelector((state) => state.hrmsrequests.requestListYourRequest);
   const dataArchive = useSelector((state) => state.hrmsrequests.requestListArchive);
@@ -61,7 +61,7 @@ export default (props) => {
     },
     {
       visible: allowed([Roles.REQUESTS_INDIVIDUAL]),
-      title: 'Myr Requests',
+      title: 'My Requests',
       key: 'yourrequests',
       count: dataYour?.count,
       Comp: RequestSection,
@@ -96,7 +96,15 @@ export default (props) => {
       },
     },
   ]
- 
+
+  useEffect(() => {
+    if (allowed(Roles.REQUESTS)) {
+      setActiveKey('pending')
+    } else {
+      setActiveKey('yourrequests')
+    }
+  }, []);
+  
   return (
       <Row gutter={[24, 30]}>
         <Col span={24}>

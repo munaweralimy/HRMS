@@ -225,10 +225,9 @@ export default [
     component: 'Profile',
     path: '/myprofile',
     title: titles.HRMS,
-    // permission: user,
     key: 'myprofile',
     menu: 'My Profile',
     icon: 'SetupIcon',
-    parent: true,
+    parent: false,
   },
 ];
