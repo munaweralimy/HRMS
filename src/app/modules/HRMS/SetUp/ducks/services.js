@@ -133,7 +133,7 @@ export const updateUserRoles = (id, payload) => {
   return axios.put(`${apiMethod}/hrms.setup.create_hrms_roles/${id}`, payload);
 };
 export const deleteUserRoles = (id) => {
-  return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=User Roles&name=${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=User Roles&name=${id}`);
 };
 
 export const getSingleProject = (id) => {
