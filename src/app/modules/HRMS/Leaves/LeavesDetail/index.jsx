@@ -11,6 +11,7 @@ import { apiMethod } from '../../../../../configs/constants';
 import { useForm } from 'react-hook-form';
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { getAdvancementdetails, emptyStaffDetails } from '../../Advancement/dcuks/action';
+import ListCard from '../../../../molecules/ListCard';
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -22,12 +23,13 @@ export default (props) => {
   const history = useHistory();
   const location = useLocation();
   const [deleted, setDeleted] = useState([]);
+  const [leaveAvailability, setLeaveAvailability] = useState(false);
   const [load, setLoad] = useState(false);
   const singleLeaveDetail = useSelector((state) => state.leaves.singleLeaveData);
   const applicationLeaveData = useSelector((state) => state.leaves.applicationLeaveData);
   const { control, errors, handleSubmit, reset } = useForm();
 
-  console.log('singleLeaveDetail?.summary', singleLeaveDetail?.summary)
+  console.log('singleLeaveDetail?.summary', singleLeaveDetail)
 
   useEffect(() => {
     dispatch(getSingleLeaveDetail(id));
@@ -88,6 +90,59 @@ export default (props) => {
     }
   };
 
+  const ListCol = [
+    {
+      title: 'Leave Type',
+      dataIndex: 'leave_type',
+      key: 'leave_type',
+      sorter: true, 
+    },
+    {
+      title: 'Carried Forward',
+      dataIndex: 'carry_forwarded_leaves',
+      key: 'carry_forwarded_leaves',
+      align: 'center',
+      sorter: true,
+      render: (text) => {
+        return <>{text} Days</>
+      }
+    },
+    {
+      title: 'Entitlement',
+      dataIndex: 'till_date',
+      key: 'till_date',
+      sorter: true,
+      align: 'center',
+      render: (text) => {
+        return <>{text} Days</>
+      }
+    },
+    {
+      title: 'Taken',
+      dataIndex: 'taken_leaves',
+      key: 'taken_leaves',
+      sorter: true,
+      align: 'center',
+      render: (text) => {
+        return <>{text} Days</>
+      }
+    },
+    {
+      title: 'Available',
+      dataIndex: 'available_leaves',
+      key: 'available_leaves',
+      align: 'center',
+      sorter: true,
+      render: (text) => {
+        return <span className="c-success">{text} Days</span>;
+      },
+    },
+  ]
+
+  const editLeave = () => {
+    setLeaveAvailability(true)
+  }
+
   return (
     <StaffDetails id={id} section='Tasks' data={singleLeaveDetail} title={'Tasks'}>
       <Card bordered={false} className="uni-card h-auto w-100">
@@ -105,11 +160,26 @@ export default (props) => {
                 <LeaveSummary title="Leave Statistics" id={id} data={singleLeaveDetail?.summary} />
             </TabPane>
             <TabPane tab="Availability" key="3">
+              {!leaveAvailability && (
+                <ListCard 
+                  title='Leave Availability' 
+                  ListCol={ListCol} 
+                  ListData={singleLeaveDetail?.availibility} 
+                  pagination={false}
+                  extraBtn={'Edit'}
+                  extraAction={editLeave}
+                  btnClass='blue-btn'
+                  scrolling={500}
+                />
+              )}
+              {leaveAvailability && (
                 <Form onFinish={handleSubmit(onFinish)} layout="vertical" scrollToFirstError={true}>
                   <Spin indicator={antIcon} size="large" spinning={load}>
-                    
+                    <Button onClick={() => setLeaveAvailability(false)}>Leave Availabilty</Button>
+
                   </Spin>
                 </Form>
+              )}
             </TabPane>
         </Tabs>
         </Col>

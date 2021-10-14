@@ -77,30 +77,13 @@ export default (props) => {
       },
     ]
 
-    const onApprove = async (name) => {
+    const onCancel = async (name) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.leaves_api.cancel_reject_application?name=${name}&status=Approved`
+        let url = `${apiMethod}/hrms.leaves_api.cancel_reject_application?name=${name}&status=Cancelled`
         try {
             await axios.get(url);
             setLoad(false)
-            message.success('Leaves Successfully Approved');
-            setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
-            
-        } catch(e) {
-            const { response } = e;
-            message.error('Something went wrong');
-            setLoad(false)
-        }
-        
-    }
-
-    const onReject = async (name) => {
-        setLoad(true)
-        let url = `${apiMethod}/hrms.leaves_api.cancel_reject_application?name=${name}&status=Rejected`
-        try {
-            await axios.get(url);
-            setLoad(false)
-            message.success('Leaves Successfully Rejected');
+            message.success('Leaves Successfully Cancelled');
             setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
             
         } catch(e) {
@@ -119,8 +102,7 @@ export default (props) => {
             column: ListCol,
             nodetail: false,
             detailTitle: 'Pending Leaves Details',
-            onAction1: onApprove,
-            onAction2: onReject,
+            onAction2: onCancel,
         },
         {
             title: 'History',
