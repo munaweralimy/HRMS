@@ -387,7 +387,7 @@ export const getRequestFormsList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.get_request_listing?status=My Request&page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.request_form_listing?orderby=creation&order=DESC&page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );

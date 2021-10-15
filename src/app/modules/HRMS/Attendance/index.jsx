@@ -165,6 +165,16 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(6);
 
+  let activeTab = ''
+
+  if (allowed([Roles.ATTENDANCE])) {
+    activeTab = 'overall';
+  } else if(allowed([Roles.ATTENDANCE_TEAMS])) {
+    activeTab = 'team';
+  } else {
+    activeTab = 'mytask';
+  }
+
   const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
   const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
@@ -187,16 +197,6 @@ export default (props) => {
       dispatch(getTeamAttendance(team, page, limit, sort, (sortby = 'creation')));
     }
   };
-
-  let activeTab = ''
-
-  if (allowed([Roles.TASK])) {
-    activeTab = 'overall';
-  } else if(allowed([Roles.TASK_TEAMS])) {
-    activeTab = 'team';
-  } else {
-    activeTab = 'mytask';
-  }
 
   useEffect(() => {
     dispatch(getMyAttendance(id, 1, 10, '', ''));
@@ -268,7 +268,7 @@ export default (props) => {
   ];
 
   return (
-    <Row gutter={[24, 30]}>
+    <Row gutter={[20, 30]}>
       <Col span={24}>
         <CardListSwitchLayout tabs={tabs} active={activeTab} />
       </Col>
