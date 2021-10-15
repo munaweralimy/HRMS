@@ -287,6 +287,7 @@ export default (props) => {
                   fieldname="add_leave_statistics"
                   control={control}
                   errors={errors}
+                  initValue={'No'}
                   options={
                     <Row gutter={24}>
                       <Col span={24}>
