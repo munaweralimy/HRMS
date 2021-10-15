@@ -111,14 +111,14 @@ export const getSingleTeam = (id) => {
   return axios.get(`${apiresource}/HRMS Teams/${id}`);
 };
 export const addSingleTeam = (payload) => {
-  return axios.post(`${apiresource}/HRMS Teams`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_team`, payload);
 };
 
 export const updateSingleTeam = (id, payload) => {
-  return axios.put(`${apiresource}/HRMS Teams/${id}`, payload);
+  return axios.put(`${apiresource}/hrms.setup.create_hrms_team/${id}`, payload);
 };
 export const deleteSingleTeam = (id) => {
-  return axios.delete(`${apiresource}/HRMS Teams/${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Teams&name=${id}`);
 };
 
 export const getSingleRole = (id) => {
@@ -126,14 +126,14 @@ export const getSingleRole = (id) => {
 };
 
 export const addUserRoles = (payload) => {
-  return axios.post(`${apiresource}/User Roles`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_roles`, payload);
 };
 
 export const updateUserRoles = (id, payload) => {
-  return axios.put(`${apiresource}/User Roles/${id}`, payload);
+  return axios.put(`${apiMethod}/hrms.setup.create_hrms_roles/${id}`, payload);
 };
 export const deleteUserRoles = (id) => {
-  return axios.delete(`${apiresource}/User Roles/${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=User Roles&name=${id}`);
 };
 
 export const getSingleProject = (id) => {
