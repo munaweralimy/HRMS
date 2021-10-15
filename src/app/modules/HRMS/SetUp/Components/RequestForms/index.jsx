@@ -39,8 +39,8 @@ export default (props) => {
     },
     {
       title: 'Fields',
-      dataIndex: 'fields',
-      key: 'fields',
+      dataIndex: 'field_count',
+      key: 'field_count',
       sorter: true,
     },
     {
@@ -55,7 +55,6 @@ export default (props) => {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      sorted: (a, b) => a.Action - b.Action,
       align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => deleteRequest(record.form_name)}>

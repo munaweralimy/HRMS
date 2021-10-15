@@ -58,6 +58,8 @@ export default (props) => {
       placeholder: 'Input numaber of days',
       req: true,
       reqmessage: 'Entitlment required',
+      number: true,
+      arrow: false,
     },
     {
       label: 'Min Years of Service',
@@ -67,6 +69,8 @@ export default (props) => {
       placeholder: 'Min number of years',
       req: true,
       reqmessage: 'Years required',
+      number: true,
+      arrow: false,
     },
     {
       label: 'Max Years of Service',
@@ -76,6 +80,8 @@ export default (props) => {
       placeholder: 'Max number of years',
       req: true,
       reqmessage: 'Years required',
+      number: true,
+      arrow: false,
     },
     {
       subheading: 'Options',
@@ -131,11 +137,13 @@ export default (props) => {
       options: [{ label: 'Is prorate', value: 1 }],
     },
     {
-      label: 'Carry Forward Cut Off Date',
+      label: 'Carry Forward Days',
       name: 'carry_forward_days',
       type: 'input',
       twocol: false,
       hidden: !leave,
+      number: true,
+      arrow: false,
     },
   ];
 

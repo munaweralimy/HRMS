@@ -57,17 +57,25 @@ export default (props) => {
     team.name.length == 0
       ? addSingleTeam(payload)
           .then((response) => {
-            message.success('Team Added Successfully');
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             setLoad(false);
-            onClose(false);
+            onClose();
           })
           .catch((error) => {
             setLoad(false);
           })
       : updateSingleTeam(team.name, payload).then((response) => {
-          message.success('Team Updated Successfully');
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           setLoad(false);
-          onClose(false);
+          onClose();
         });
   };
 
@@ -75,9 +83,13 @@ export default (props) => {
     setLoad(true);
     deleteSingleTeam(team.name)
       .then((response) => {
-        message.success('Team Deleted Successfully');
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+        } else {
+          message.error(response.data.message.message);
+        }
         setLoad(false);
-        onClose(false);
+        onClose();
       })
       .catch((error) => message.error('Cant delte a team'));
   };

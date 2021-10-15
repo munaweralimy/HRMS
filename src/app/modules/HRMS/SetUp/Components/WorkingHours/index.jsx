@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, message, Pagination, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
@@ -8,8 +8,6 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getWorkingHoursList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -44,6 +42,7 @@ export default (props) => {
       key: 'users',
       sorter: true,
     },
+
     {
       title: 'Action',
       dataIndex: 'Action',
@@ -69,7 +68,7 @@ export default (props) => {
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     content: (
       <AddEditWorkingHour
