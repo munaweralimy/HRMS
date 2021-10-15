@@ -33,6 +33,7 @@ export default (props) => {
 
         if (res) {
           localStorage.setItem('userdetails', JSON.stringify(response.data.user_detail_role[0]));
+          localStorage.setItem('access', JSON.stringify(response.data.user_screen_acces_role_list));
           localStorage.setItem('user', values.username);
           localStorage.setItem('token', JSON.stringify(res));
           dispatch(

@@ -7,6 +7,8 @@ import { InputField, RateField } from '../../../../../atoms/FormElement';
 // import querystring from 'querystring';
 import axios from '../../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../../configs/constants';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 const querystring = require('querystring');
 const { Option } = Select;
@@ -135,7 +137,7 @@ export default (props) => {
                 label="Staff Self Assessment"
                 control={control}
                 initValue={item.self_staff_assessment ? item.self_staff_assessment : 0}
-                iProps={{ character: ({ index }) => RatingStars[index + 1] }}
+                iProps={{ disabled: !allowed([Roles.ADVANCEMENT]),character: ({ index }) => RatingStars[index + 1] }}
               />
             </Col>
           </Row>

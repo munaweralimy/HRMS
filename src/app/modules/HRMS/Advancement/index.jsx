@@ -7,6 +7,8 @@ import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import Search from './components/Search';
 import { getOverallFit, getOverallFitCard } from './dcuks/action';
+import {allowed} from '../../../../routing/config/utils';
+import Roles from '../../../../routing/config/Roles';
 
 const colName = [
   {
@@ -85,6 +87,7 @@ export default (props) => {
 
   const tabs = [
     {
+      visible: allowed([Roles.ADVANCEMENT_TEAMS]),
       title: 'Overall Fit Index',
       key: 'overall',
       count: data?.count,
@@ -114,9 +117,10 @@ export default (props) => {
       <Col span={24}>
         <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
       </Col>
+      {allowed([Roles.ADVANCEMENT]) && 
       <Col span={24}>
         <Acquisitions />
-      </Col>
+      </Col>}
     </Row>
   );
 };

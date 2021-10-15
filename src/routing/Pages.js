@@ -3,9 +3,6 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import RoutingList from './config/RoutingList';
 import { checkPermission, isLoggedIn } from './config/utils';
 import Dashboard from '../app/pages/Dashboard';
-import QualityAssurance from '../app/pages/QualityAssurance';
-import Marketing from '../app/pages/Marketing';
-import Registry from '../app/pages/Registry';
 import HumanResource from '../app/pages/HumanResource';
 import NoPage from '../app/modules/Login/NoPage';
 
@@ -14,9 +11,6 @@ import Login from '../app/pages/Login';
 
 const compList = {
   Dashboard,
-  QualityAssurance,
-  Marketing,
-  Registry,
   HumanResource
 }
 

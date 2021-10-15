@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import ListCard from '../../ListCard';
-import { Radio, Space, Typography, Select, Pagination, Button } from 'antd';
+import { Row, Col, Radio, Space, Typography, Select, Pagination, Button } from 'antd';
 import { useHistory } from 'react-router';
 import { AppstoreFilled, DatabaseFilled } from '@ant-design/icons';
 import MainStatusCard from '../../../atoms/HRMS/MainStatusCard';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 const _ = require('lodash');
 const { Title } = Typography;
@@ -31,6 +32,8 @@ export default (props) => {
     listLink,
     topbtn,
     teamDrop,
+    extraComp1,
+    extraComp2
   } = iProps;
   const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
   const [page, setPage] = useState(1);
@@ -164,15 +167,17 @@ export default (props) => {
 
   return (
     <>
-      <SwitchView />
-      {teamDrop && (
-        <Select
-          className="customSelect"
-          value={teamSelected}
-          onChange={onTeamChange}
-          className="mb-1"
-          size="large"
-          style={{ width: 200 }}
+    <SwitchView />
+    <Row gutter={[20,30]}>
+      <Col span={24}>
+      {teamDrop && teamDrop.length > 0 &&
+      (<Select 
+        className="customSelect"
+        value={teamSelected}
+        onChange={onTeamChange}
+        className='mb-1'
+        size='large'
+        style={{width: 200}}
         >
           {teamDrop?.map((item, ind) => (
             <Fragment key={ind}>
@@ -223,6 +228,10 @@ export default (props) => {
           </div>
         </>
       )}
+    </Col>
+    {extraComp1 && <Col span={24}>{extraComp1}</Col>}
+    {extraComp2 && <Col span={24}>{extraComp2}</Col>}
+    </Row>
     </>
   );
 };

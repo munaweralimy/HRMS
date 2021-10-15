@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import axios from '../../../../services/axiosInterceptor';
 import { apiresource } from '../../../../configs/constants';
+import Roles from '../../../../routing/config/Roles';
+import { allowed } from '../../../../routing/config/utils';
 
 export default (props) => {
 
@@ -87,7 +89,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Policy" btnList={btnList} />
+          <HeadingChip title="Policy" btnList={allowed([Roles.POLICY]) ? btnList : null} />
         </Col>
         {policyListData && policyListData?.rows?.length > 0 && policyListData?.rows[0]?.map((resp, i) => (
           <Fragment key={i}>

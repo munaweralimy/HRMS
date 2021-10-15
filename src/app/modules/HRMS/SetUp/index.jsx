@@ -120,7 +120,7 @@ export default (props) => {
     },
     {
       tabTitle: 'Request Forms',
-      comp: <RequestForms />,
+      comp: <RequestForms setLoading={props.setLoading} />,
       permission: true,
     },
     {

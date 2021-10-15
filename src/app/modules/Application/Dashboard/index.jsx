@@ -4,6 +4,7 @@ import DashboardClock from '../component/DashboardClock';
 import PolicyRequestCard from '../../../molecules/PolicyRequestCard';
 import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 import ProgressCard from '../../../molecules/HRMS/ProgressCard';
+import { allowedRoutes } from '../../../../routing/config/utils';
 
 export default (props) => {
     const {policyData, timesheetData} = props;

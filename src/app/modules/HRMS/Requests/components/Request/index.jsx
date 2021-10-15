@@ -60,7 +60,7 @@ const ApproveRejectButton = ({data, currentD, onAction}) => {
 
 export default (props) => {
   
-  const { data, selectedTab, selectedPanel, currentDept,updateReqApi } = props;
+  const { data, selectedTab, selectedPanel, updateReqApi } = props;
   const [ activeTab, setActiveTab ] = useState(selectedTab);
 
   const panelHeader = (name, title, status) => {
@@ -94,100 +94,101 @@ export default (props) => {
     </div>
   }
 
-  const onRevert = (departments, name) => {
-    let dep =[];
-    departments.map(z => {
-      if (z.department == currentDept.department) {
-        dep.push({
-          department: z.department,
-          status: 'Pending',
-        })
-      } else {
-        dep.push({
-          department: z.department,
-          status: z.department_status
-        })
-      }
-    })
+  console.log('data', data)
+  // const onRevert = (departments, name) => {
+  //   let dep =[];
+  //   departments.map(z => {
+  //     if (z.department == currentDept.department) {
+  //       dep.push({
+  //         department: z.department,
+  //         status: 'Pending',
+  //       })
+  //     } else {
+  //       dep.push({
+  //         department: z.department,
+  //         status: z.department_status
+  //       })
+  //     }
+  //   })
 
-    const payload = {
-      status: 'Pending',
-      departments: dep,
-    };
+  //   const payload = {
+  //     status: 'Pending',
+  //     departments: dep,
+  //   };
 
-    updateRequest(payload, name)
-      .then((response) => {
-          message.success('Request Successfully Revert');
-          updateReqApi();
-      })
-      .catch((error) => message.error(error));
-  }
+  //   updateRequest(payload, name)
+  //     .then((response) => {
+  //         message.success('Request Successfully Revert');
+  //         updateReqApi();
+  //     })
+  //     .catch((error) => message.error(error));
+  // }
 
-  const onCancel = async (item) => {
-    cancelRequest(item)
-    .then((response) => {
-        message.success('Request Approve Successfully')
-        updateReqApi();
-    })
-    .catch((error) => message.error(error));
-  }
+  // const onCancel = async (item) => {
+  //   cancelRequest(item)
+  //   .then((response) => {
+  //       message.success('Request Approve Successfully')
+  //       updateReqApi();
+  //   })
+  //   .catch((error) => message.error(error));
+  // }
 
-  const onApproveReject = (status, item, remarks) => {
+  // const onApproveReject = (status, item, remarks) => {
 
-    const { name, departments } = item;
-    let dep =[];
-    departments.map(z => {
-      if (z.department == currentDept.department) {
-        dep.push({
-          department: z.department,
-          status: status,
-          remarks: remarks
-        })
-      } else {
-        dep.push({
-          department: z.department,
-          status: z.department_status
-        })
-      }
-    })
+  //   const { name, departments } = item;
+  //   let dep =[];
+  //   departments.map(z => {
+  //     if (z.department == currentDept.department) {
+  //       dep.push({
+  //         department: z.department,
+  //         status: status,
+  //         remarks: remarks
+  //       })
+  //     } else {
+  //       dep.push({
+  //         department: z.department,
+  //         status: z.department_status
+  //       })
+  //     }
+  //   })
 
-    const payload = {
-      departments: dep,
-    };
+  //   const payload = {
+  //     departments: dep,
+  //   };
 
 
-    updateRequest(payload, name)
-      .then((response) => {
-        status === 'Approve'
-          ? message.success('Request Approve Successfully')
-          : message.success('Request Reject Successfully');
-          updateReqApi();
-      })
-      .catch((error) => message.error(error));
-  };
+  //   updateRequest(payload, name)
+  //     .then((response) => {
+  //       status === 'Approve'
+  //         ? message.success('Request Approve Successfully')
+  //         : message.success('Request Reject Successfully');
+  //         updateReqApi();
+  //     })
+  //     .catch((error) => message.error(error));
+  // };
 
-  const cancelBtn = (fileds, name) => {
-    let x = fileds.find(y => y.field_label == "Department" && y.field_value == currentDept.department)
-    if (x) {
-      return (
-        <Col flex='0 1 200px'>
-          <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onCancel(name)}>Cancel Requests</Button>
-        </Col>
-      )
-    }
-  }
+  // const cancelBtn = (fileds, name) => {
+  //   let x = fileds.find(y => y.field_label == "Department" && y.field_value == currentDept.department)
+  //   if (x) {
+  //     return (
+  //       <Col flex='0 1 200px'>
+  //         <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onCancel(name)}>Cancel Requests</Button>
+  //       </Col>
+  //     )
+  //   }
+  // }
 
-  const revertBtn = (depart, name) => {
-    let x = depart.find(y => y.department_status == "Pending")
-    console.log('-------', x, depart);
-    if (!x) {
-      return (
-        <Col flex='0 1 200px'>
-          <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onRevert(depart, name)}>Revert</Button>
-        </Col>
-      )
-    }
-  }
+  // const revertBtn = (depart, name) => {
+  //   let x = depart.find(y => y?.department_status == "Pending")
+  //   console.log('-------', x, depart);
+  //   if (!x) {
+  //     return (
+  //       <Col flex='0 1 200px'>
+  //         <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onRevert(depart, name)}>Revert</Button>
+  //       </Col>
+  //     )
+  //   }
+  // }
   
   return (
       <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={(e) => setActiveTab(e)}>
@@ -197,25 +198,25 @@ export default (props) => {
             expandIcon={({isActive}) => panelRight(isActive)}
             expandIconPosition='right'>
               {value && value.map(item => (
-                <Panel className='ch-black' header={panelHeader(item.department, item.form_name, item.status)} key={item.name}>
+                <Panel className='ch-black' header={panelHeader(item?.department, item?.form_name, item?.status)} key={item?.name}>
                   <Row gutter={[20,20]}>
                     <Col span={24}>
                       <Descriptions className='reqData' bordered colon={false} column={1}>
-                        {item.form_fields.map((fd) => (
-                          <Descriptions.Item key={fd.field_label} label={fd.field_label}>{fd.field_value}</Descriptions.Item>
+                        {item?.form_fields.map((fd) => (
+                          <Descriptions.Item key={fd?.field_label} label={fd?.field_label}>{fd?.field_value}</Descriptions.Item>
                         ))}
-                        {item.departments.map((fx) => {
-                          return <Descriptions.Item className={`icon-size20 ${fx.department_status == 'Approve' ? 'icon-green' : 'icon-red'}`} key={fx.department} label={fx.department}>{fx.department_status} {fx.department_status == 'Approve' ? <CheckCircleFilled /> : <CloseCircleFilled />}</Descriptions.Item>
+                        {item?.approvers.map((fx) => {
+                          return <Descriptions.Item className={`icon-size20 ${fx?.status == 'Approve' ? 'icon-green' : 'icon-red'}`} key={fx?.approver_id} label={fx?.approvers}>{fx?.status} {fx?.status == 'Approve' ? <CheckCircleFilled /> : <CloseCircleFilled />}</Descriptions.Item>
                         })}
                       </Descriptions>
                     </Col>
-                    <Col span={24}>
+                    {/* <Col span={24}>
                       <Row gutter={[20,20]} className='justify-right'>
-                        {activeTab == 'pending' && <ApproveRejectButton data={item} currentD={currentDept.department} onAction={onApproveReject} />}
-                        {activeTab!='archive' && revertBtn(item.departments, item.name)}
-                        {activeTab == 'yourrequests' && cancelBtn(item.form_fields, item.name)}
+                        {activeTab == 'pending' && <ApproveRejectButton data={item} currentD={currentDept?.department} onAction={onApproveReject} />}
+                        {activeTab!='archive' && revertBtn(item?.departments, item?.name)}
+                        {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)}
                       </Row>
-                    </Col>
+                    </Col> */}
                   </Row>
                 </Panel>
                 ))}

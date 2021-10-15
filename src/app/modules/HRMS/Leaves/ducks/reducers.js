@@ -28,11 +28,11 @@ export default (state = initialState, action) => {
             return {...state, overallTaskData: data };
         case action_types.OVERALL_TASKS_WITH_STATUS:
             return {...state, overallTaskDataWithStatus: data };
-        case action_types.TEAM_TASKS:
+        case action_types.TEAM_LEAVES:
             return {...state, teamTaskData: data };
-        case action_types.TEAM_TASKS_WITH_STATUS:   
+        case action_types.TEAM_LEAVES_WITH_STATUS:   
             return {...state, teamTaskDataWithStatus: data };
-        case action_types.MY_TASKS:
+        case action_types.MY_LEAVES:
             return {...state, myTaskData: data };
         case action_types.MY_AVAILABLE_LEAVES:
             return {...state, myAvailableLeaves: data };

@@ -2,6 +2,8 @@ import React, {Fragment} from 'react';
 import { Row, Col, Card, Typography, Space, Tag, Button } from 'antd';
 import {CloseCircleFilled} from '@ant-design/icons';
 import moment from 'moment';
+import Roles from '../../../../routing/config/Roles';
+import { allowed } from '../../../../routing/config/utils';
 
 const { Title } = Typography
 
@@ -26,7 +28,7 @@ export default (props) => {
                 </Fragment>
               ))}
               <Button type='primary' htmlType='button' className={data?.policy_status == 'View' ? 'green-btn' : 'gray-btn'} onClick={() => onView(data)}>{data?.policy_status}</Button>
-              <Button type='link' size="large" className='cross-iconbtn graycross-icon' htmlType='button' icon={<CloseCircleFilled />} onClick={() => onDelete(data?.name)} />
+              {allowed([Roles.POLICY]) ? <Button type='link' size="large" className='cross-iconbtn graycross-icon' htmlType='button' icon={<CloseCircleFilled />} onClick={() => onDelete(data?.name)} />: null}
             </Space>
           </Col>
         </Row>
