@@ -9,6 +9,7 @@ const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
   const { title, onClose, countryName } = props;
+  console.log({ countryName });
   const { Title, Text } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
@@ -17,7 +18,7 @@ export default (props) => {
     setLoad(true);
     const payload = {
       country_name: values.country_name,
-      code: values.country_name.substring(0, 3),
+      // code: values.country_name.substring(0, 3),
     };
     countryName.name.length == 0
       ? addCountry(payload)
@@ -31,7 +32,7 @@ export default (props) => {
             onClose();
           })
           .catch((error) => message.error('Country exists'))
-      : updateSingleCountry(countryName.code, { name: values.country_name })
+      : updateSingleCountry(countryName.name, payload)
           .then((response) => {
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
@@ -45,7 +46,7 @@ export default (props) => {
   };
   const onDeleteNationality = () => {
     setLoad(true);
-    deleteSingleCountry(countryName.code)
+    deleteSingleCountry(countryName.name)
       .then((response) => {
         if (response.data.message.success == true) {
           message.success(response.data.message.message);
@@ -62,7 +63,8 @@ export default (props) => {
   };
   useEffect(() => {
     if (countryName.name.length > 0) {
-      setValue('country_name', countryName.name);
+      console.log({ countryName }, 'asdfasd');
+      setValue('country_name', countryName.country_name);
     } else {
       reset();
     }

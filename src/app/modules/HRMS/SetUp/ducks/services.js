@@ -9,10 +9,10 @@ export const getSingleLeave = (id) => {
   return axios.get(`${apiresource}/HRMS Leave Type/${id}`);
 };
 export const updateSingleLeave = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_leave_type/${id}`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_leave_type`, { ...payload, name: id });
 };
 export const deleteSingleLeave = (id) => {
-  return axios.post(`${apiMethod}hrms.setup.delete_records?doctype=HRMS Leave Type&name=${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Leave Type&name=${id}`);
 };
 
 export const addEducationField = (payload) => {
@@ -24,10 +24,10 @@ export const getSingleEducation = (id) => {
 };
 
 export const updateSingleEducation = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_hrms_education_field/${id}`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_education_field`, { ...payload, name: id });
 };
 export const deleteSingleEducation = (id) => {
-  return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Education Field&name=${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Education Field&name=${id}`);
 };
 
 export const addInstitution = (payload) => {
@@ -39,7 +39,7 @@ export const getSingleInstitution = (id) => {
 };
 
 export const updateSingleInstitution = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_hrms_institutions/${id}`, payload);
+  return axios.put(`${apiMethod}/hrms.setup.create_hrms_institutions`, { ...payload, name: id });
 };
 export const deleteSingleInstitution = (id) => {
   return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=Institutions&name=${id}`);
@@ -50,10 +50,10 @@ export const addCountry = (payload) => {
 };
 
 export const updateSingleCountry = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_hrms_nationality/${id}`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_nationality`, { ...payload, name: id });
 };
 export const deleteSingleCountry = (id) => {
-  return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=Country&name=${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=Country&name=${id}`);
 };
 
 export const addSingleHoliday = (payload) => {
@@ -72,20 +72,20 @@ export const addSingleReligion = (payload) => {
 };
 
 export const updateSingleReligion = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_hrms_religion/${id}`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_religion`, { ...payload, name: id });
 };
 export const deleteSingleReligion = (id) => {
-  return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=Religion&name=${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=Religion&name=${id}`);
 };
 export const addSingleRace = (payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_hrms_race`, payload);
 };
 
 export const updateSingleRace = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_hrms_race/${id}`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_race`, { ...payload, name: id });
 };
 export const deleteSingleRace = (id) => {
-  return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=Race&name=s${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=Race&name=${id}`);
 };
 export const addSingleAsset = (payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_hrms_assets`, payload);
@@ -102,7 +102,7 @@ export const addSingleLeaveEntitlement = (payload) => {
 };
 
 export const updateSingleLeaveEntitlement = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_leave_entitlement/${id}`, payload);
+  return axios.put(`${apiMethod}/hrms.setup.create_leave_entitlement`, { ...payload, name: id });
 };
 export const deleteSingleLeaveEntitlement = (id) => {
   return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Leave Entitlement&name=${id}`);
@@ -115,7 +115,7 @@ export const addSingleTeam = (payload) => {
 };
 
 export const updateSingleTeam = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_hrms_team/`, { ...payload, name: id });
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_team`, { ...payload, name: id });
 };
 export const deleteSingleTeam = (id) => {
   return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Teams&name=${id}`);
@@ -130,7 +130,7 @@ export const addUserRoles = (payload) => {
 };
 
 export const updateUserRoles = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_hrms_roles/${id}`, payload);
+  return axios.put(`${apiMethod}/hrms.setup.create_hrms_roles`, { ...payload, name: id });
 };
 export const deleteUserRoles = (id) => {
   return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=User Roles&name=${id}`);
@@ -152,14 +152,14 @@ export const deleteProject = (id) => {
 };
 
 export const addjobPosition = (payload) => {
-  return axios.post(`${apiresource}/hrms.setup.create_job_position`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_job_position`, payload);
 };
 
 export const updatejobPosition = (id, payload) => {
-  return axios.put(`${apiresource}/hrms.setup.create_job_position/${id}`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_job_position`, { ...payload, name: id });
 };
 export const deletejobPosition = (id) => {
-  return axios.delete(`${apiresource}/hrms.setup.delete_records?doctype=Job Position&name=${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=Job Position&name=${id}`);
 };
 export const getSingleJob = (id) => {
   return axios.get(`${apiresource}/Job Position/${id}`);

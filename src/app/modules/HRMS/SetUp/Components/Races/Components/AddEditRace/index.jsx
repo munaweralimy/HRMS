@@ -6,7 +6,6 @@ import { raceFields } from './FormFields';
 import { addSingleRace, updateSingleRace, deleteSingleRace } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined spin />;
-
 export default (props) => {
   const { title, onClose, race } = props;
   const { Title, Text } = Typography;
