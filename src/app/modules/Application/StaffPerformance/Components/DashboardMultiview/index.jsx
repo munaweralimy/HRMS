@@ -3,7 +3,7 @@ import ListCard from '../../../../../molecules/ListCard';
 import { Radio, Space, Typography, Select, Pagination, Button } from 'antd';
 import { useHistory } from 'react-router';
 import { AppstoreFilled, DatabaseFilled } from '@ant-design/icons';
-import MainStatusCard from '../../../../../atoms/HRMS/MainStatusCard';
+import MainStatusCardDashboard from '../../../../../atoms/HRMS/MainStatusCardDashboard';
 import { useForm } from 'react-hook-form';
 
 import { Column } from '@ant-design/charts';
@@ -236,7 +236,7 @@ export default (props) => {
             {carddata.map((item, index) => (
                 <Fragment key={index}>
                 <div className='requestPanel'>
-                    <MainStatusCard data={item} link={link} statusKey={statusKey} />
+                    <MainStatusCardDashboard data={item} link={link} statusKey={statusKey} />
                 </div>
               </Fragment>
             ))}
