@@ -61,10 +61,10 @@ export const addSingleHoliday = (payload) => {
 };
 
 export const updateSingleHoliday = (id, payload) => {
-  return axios.put(`${apiMethod}/hrms.setup.create_holidays/${id}`, payload);
+  return axios.post(`${apiMethod}/hrms.setup.create_holidays`, { ...payload, name: id });
 };
 export const deleteSingleHoliday = (id) => {
-  return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Holidays&name=${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Holidays&name=${id}`);
 };
 
 export const addSingleReligion = (payload) => {
@@ -169,8 +169,7 @@ export const addSingleDepartment = (payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_hrms_department`, payload);
 };
 export const updateDepartment = (id, payload) => {
-  let { department_name, ...updatePayload } = payload;
-  return axios.post(`${apiMethod}/hrms.setup.create_hrms_department`, { ...updatePayload, name: id });
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_department`, { ...payload, name: id });
 };
 export const deleteDepartment = (id) => {
   return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Department&name=${id}`);
@@ -183,7 +182,7 @@ export const updateWarningLetter = (id, payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_warning_letter`, { ...updatePayload, name: id });
 };
 export const deleteWarningLetter = (id) => {
-  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Teams&name${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=Warning Letter&name=${id}`);
 };
 export const getWarningLetterDetail = (id) => {
   return axios.get(`${apiresource}/Warning Letter/${id}`);
@@ -193,8 +192,7 @@ export const addSingleApprover = (payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_hrms_approver`, payload);
 };
 export const updateApprover = (id, payload) => {
-  let { department_name, ...updatePayload } = payload;
-  return axios.post(`${apiMethod}/hrms.setup.create_hrms_approver`, { ...updatePayload, name: id });
+  return axios.post(`${apiMethod}/hrms.setup.create_hrms_approver`, { ...payload, name: id });
 };
 export const deleteApprover = (id) => {
   return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Approver&name=${id}`);

@@ -25,7 +25,7 @@ const warningLetterFilds = () => {
     },
     {
       label: '',
-      name: 'signature',
+      name: 'signiture',
       type: 'checkbox',
       placeholder: '',
       twocol: false,

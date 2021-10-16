@@ -21,8 +21,8 @@ export default (props) => {
       company: values.company?.value,
       employee_name: values?.employee_name.value,
       employee_id: values?.employee_name.id,
-      doctype: 'HRMS Department',
       status: 'Active',
+      team: [],
     };
     departmentField.name.length == 0
       ? addSingleDepartment(payload)

@@ -43,8 +43,8 @@ export default (props) => {
     setLoad(true);
     const payload = {
       writing_letter_name: values?.writing_letter_name,
-      letter_template: 'CCC Letter Template A',
-      signature: values?.signature[0],
+      letter_template: values?.letter_template.value,
+      signiture: values?.signiture[0],
       signee: values?.signee.value,
       detail: values.detail,
     };
@@ -102,7 +102,7 @@ export default (props) => {
         let data = response?.data?.data;
         setValue('writing_letter_name', data.writing_letter_name);
         setValue('letter_template', { label: data.letter_template, value: data.letter_template });
-        setValue('signature', data.signature == '1' ? [1] : [0]);
+        setValue('signiture', data.signiture === 1 ? [1] : [0]);
         setValue('signee', { label: data.signee, value: data.signee });
         setValue('detail', data.detail);
         setLoad(false);
