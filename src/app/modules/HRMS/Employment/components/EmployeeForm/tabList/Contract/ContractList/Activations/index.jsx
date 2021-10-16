@@ -4,6 +4,8 @@ import { PopupSuccess } from '../../../../../../../../../atoms/Popup';
 import { getRequest, getApproverLead } from '../../../../../../../Requests/ducks/services';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
+import { createRequest } from '../../../../../../../Requests/ducks/services';
+import { contractApi } from '../../../../../../ducks/services';
 
 const { Title, Text } = Typography;
 
@@ -49,19 +51,17 @@ export default (props) => {
           aid = appr.supervisor_id;
         } else if(x.approvers == 'Supervisor') {
           aid = appr.supervisor_id;
-        } else if(x.approvers == 'Individual') {
-          aid = x.approvers_detail
-        } else if(x.approvers == 'Job Position') {
-
         }
+
         approvetemp.push({
             approvers: x.approvers,
-            approvers_detail: x.approvers_detail || '',
+            approver_detail: x.approver_detail || '',
             approver_id: aid,
             Status:"Pending",
             remarks:""
         })
       })
+
       const body1 = {
           form_name: req.data.data.form_name,
           sender: req.data.data.sender,
@@ -108,7 +108,11 @@ export default (props) => {
             field_type: "Text",
             field_value:staffData?.team_name[0] || ''
           },
-          
+          {
+            field_label: "Contract ID",
+            field_type: "Text",
+            field_value:data[0]?.value
+          },
         ]
       }
       if (type == 'Email Activation') {
@@ -126,18 +130,19 @@ export default (props) => {
         )
       }
       console.log('checking body',body1,appr.data.message)
-        //   createRequest(body1).then(resi => {
-        //       PopupSuccess(popup1);
-        //   }).catch(e => {
-        //     console.log('e',e)
-        //   })
-        // })
-      // })
+          createRequest(body1).then(resi => {
+            if (type == 'Email Activation') {
+              contractApi({card_activation_status: 'Pending'}, data[0]?.value)
+            } else {
+              contractApi({email_activation_status: 'Pending'}, data[0]?.value)
+            }
+              PopupSuccess(popup1);
+          }).catch(e => {
+            console.log('e',e)
+          })
     }
 
-    const sendCardRequest = () => {
-        PopupSuccess(popup1);
-    }
+    const cancelRequest = () => {}
 
     return (
         <Row gutter={[20,30]}>
@@ -153,7 +158,15 @@ export default (props) => {
                                         <Text className='c-gray smallFont12'>Please ensure all of the fields are filled before sending request</Text>
                                     </Space>
                                 </Col>
-                                <Col><Button htmlType='button' type='primary' size='large' className='' onClick={() => sendRequest('Email Activation')}>Send Request</Button></Col>
+                                <Col>
+                                {email_activation_status == 'Pending' ?
+                                  <Button htmlType='button' type='primary' size='large' className='' onClick={() => cancelRequest('Email Activation')}>Cancel Request</Button>
+                                  : email_activation_status != 'Active' ?
+                                    <Button htmlType='button' type='primary' size='large' className='' onClick={() => sendRequest('Email Activation')}>Send Request</Button>
+                                    :
+                                    <Text>Email Activated</Text>
+                                }
+                                </Col>
                             </Row>
                         </Card>
                     </Col>
@@ -170,7 +183,16 @@ export default (props) => {
                                         <Text className='c-gray smallFont12'>Please ensure all of the fields are filled before sending request</Text>
                                     </Space>
                                 </Col>
-                                <Col><Button htmlType='button' type='primary' size='large' className='' onClick={() => sendRequest('Card Activation')}>Send Request</Button></Col>
+                                <Col>
+                                {card_activation_status == 'Pending' ?
+                                  <Button htmlType='button' type='primary' size='large' className='black-btn' onClick={() => cancelRequest('Card Activation')}>Cancel Request</Button>
+                                  :
+                                  card_activation_status != 'Active' ?
+                                  <Button htmlType='button' type='primary' size='large' className='' onClick={() => sendRequest('Card Activation')}>Send Request</Button>
+                                  :
+                                  <Text>Card Activated</Text>
+                                }
+                                </Col>
                             </Row>
                         </Card>
                     </Col>

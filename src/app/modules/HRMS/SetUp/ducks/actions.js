@@ -412,7 +412,7 @@ export const getEmployeeList = (companyName) => async (dispatch) => {
   const {
     data: { data },
   } = await axios.get(
-    `${apiresource}/Employee?filters=[["company","=","${companyName}"]]&fields=["name","employee_name"]`,
+    `${apiresource}/Employee?limit_page_length=0&filters=[["company","=","${companyName}"]]&fields=["name","employee_name"]`,
   );
   dispatch({
     type: action_types.EMPLOYEE_LIST,

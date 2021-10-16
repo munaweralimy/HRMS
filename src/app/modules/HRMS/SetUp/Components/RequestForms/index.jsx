@@ -101,6 +101,7 @@ export default (props) => {
   };
 
   const onClickRow = (record) => {
+      console.log('hce', record)
       setFormFields(record);
       setVisible(true);
   };
