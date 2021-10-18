@@ -96,7 +96,7 @@ return (
               <Col span={24}>
                 <Tabs activeKey={activeTab} type="card" className="custom-tabs" onChange={(e) => setActiveTab(e)}>
                   <TabPane tab="Requests" key="Requests">
-                    <Request updateReqApi={updateReqApi} data={requests} selectedTab={location?.state?.rstatus || 'Pending'} selectedPanel={location?.state?.rid || ''} />
+                    <Request id={id} updateReqApi={updateReqApi} data={requests} selectedTab={location?.state?.rstatus || 'Pending'} selectedPanel={location?.state?.rid || ''} />
                   </TabPane>
                   <TabPane tab="Complaints" key="Complaints">
                   </TabPane>

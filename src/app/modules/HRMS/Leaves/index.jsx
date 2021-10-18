@@ -206,6 +206,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getTeamsDetail(employeeId));
+    return () => dispatch(emptyAllLeaves())
   }, [])
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
@@ -274,9 +275,9 @@ export default (props) => {
         addon: 'Leave Application',
         statusKey: 'application_status',
         extraComp1: <LeaveCalendar />,
+        teamDrop: teamsDetailData
       },
       Comp: MultiView,
-      teamDrop: teamsDetailData
     },
     {
       visible: allowed([Roles.LEAVES_INDIVIDUAL]),

@@ -221,7 +221,7 @@ const rolesFields = () => {
       reqmessage: '',
       options: [{ label: 'Policy Individual', value: 1 }],
     },
-    
+
     {
       name: 'setup',
       label: '',

@@ -26,8 +26,8 @@ export default (props) => {
   const ListCol = [
     {
       title: 'Race',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'race',
+      key: 'race',
       sorter: true,
     },
     {

@@ -7,6 +7,7 @@ import { getWorkingHourTempDetail } from '../../../../ducks/services';
 import ArrayForm from '../../../../../Employment/components/EmployeeForm/tabList/Personal/ArrayForm';
 import { workType, timelap } from '../../../../../../../../configs/constantData';
 import { LoadingOutlined } from '@ant-design/icons';
+import { addWorkingHourTemp, updateWorkingHourTemp, deleteWorkingHourTemp } from '../../../../ducks/services';
 const antIcon = <LoadingOutlined spin />;
 const init = {
   day: '',
@@ -19,42 +20,42 @@ const init = {
 const custom = [
   {
     day: 'Monday',
-    work_hour_type: '',
+    work_hour_type: 'Full Day',
     time_hour: 0,
     time_min: 0,
-    time_type: 'Am',
+    time_type: 'am',
     work_hours: 0,
   },
   {
     day: 'Tuesday',
-    work_hour_type: '',
+    work_hour_type: 'Full Day',
     time_hour: 0,
     time_min: 0,
-    time_type: 'Am',
+    time_type: 'am',
     work_hours: 0,
   },
   {
     day: 'Wednesday',
-    work_hour_type: '',
+    work_hour_type: 'Full Day',
     time_hour: 0,
     time_min: 0,
-    time_type: 'Am',
+    time_type: 'am',
     work_hours: 0,
   },
   {
     day: 'Thursday',
-    work_hour_type: '',
+    work_hour_type: 'Full Day',
     time_hour: 0,
     time_min: 0,
-    time_type: 'Am',
+    time_type: 'am',
     work_hours: 0,
   },
   {
     day: 'Friday',
-    work_hour_type: '',
+    work_hour_type: 'Full Day',
     time_hour: 0,
     time_min: 0,
-    time_type: 'Am',
+    time_type: 'am',
     work_hours: 0,
   },
   {
@@ -62,7 +63,7 @@ const custom = [
     work_hour_type: 'Half Day',
     time_hour: 0,
     time_min: 0,
-    time_type: 'Am',
+    time_type: 'am',
     work_hours: 0,
   },
   {
@@ -70,7 +71,7 @@ const custom = [
     work_hour_type: 'Rest Day',
     time_hour: 0,
     time_min: 0,
-    time_type: 'Am',
+    time_type: 'am',
     work_hours: 0,
   },
 ];
@@ -116,7 +117,7 @@ export default (props) => {
       type: 'array',
       name: 'work_hours',
       twocol: false,
-      colWidth: '1 0 100%',
+      colWidth: '0 1 100%',
       field: fields,
       single: false,
       noCard: true,
@@ -182,7 +183,7 @@ export default (props) => {
           number: true,
           arrow: false,
           // min: 0,
-          // max: 24,
+          // max: 12,
           placeholder: 'Please state',
           twocol: false,
           colWidth: '1 0 70px',
@@ -195,32 +196,88 @@ export default (props) => {
     if (workingHourTemp.name.length > 0) {
       setLoad(true);
       getWorkingHourTempDetail(workingHourTemp.name).then((response) => {
-        console.log({ response });
         let data = response?.data?.data;
-        // setWorkingHours(response?.data?.data);
+        let working_hours = data?.work_hours.map((value) => ({
+          day: value?.day,
+          work_hour_type: value?.work_hour_type,
+          time_type: value?.time_type,
+          work_hours: value?.work_hours,
+          time_hour: value?.start_time.split(':')[0],
+          time_min: value?.start_time.split(':')[1],
+        }));
         setValue('template_name', data.template_name);
-        setValue('company', data?.company);
-
+        setValue('company', { label: data?.company, value: data?.company });
+        setValue('work_hours', working_hours);
         setUserData(
-          response?.data?.data?.user_staff.map((value) => ({
+          data?.user_staff.map((value) => ({
             full_name: value.employee_full_name,
             id: value.employee,
           })),
         );
+        setLoad(false);
       });
-      setLoad(false);
     } else {
+      reset();
       setValue('work_hours', custom);
+      setUserData([]);
     }
   }, [workingHourTemp]);
 
-  // useEffect(() => {
-  //   if (Object.entries(workingHours.length > 0)) {
-  //   }
-  // }, [workingHours]);
-
   const onFinish = async (val) => {
-    console.log('values', val);
+    setLoad(true);
+    const createWorkingHourTemp = {
+      company: val?.company.value,
+      template_name: val?.template_name,
+      user_staff: userData.map((value) => ({ employee: value.id })),
+      work_hours: val?.work_hours.map((value) => ({
+        day: value.day,
+        time_type: value.time_type.value,
+        work_hour_type: value.work_hour_type.value,
+        work_hours: parseInt(value?.work_hours),
+        start_time: value?.time_hour.toString().concat(':', value?.time_min.toString(), ':00'),
+      })),
+    };
+    workingHourTemp.name.length == 0
+      ? addWorkingHourTemp(createWorkingHourTemp)
+          .then((response) => {
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
+            setLoad(false);
+            onClose();
+          })
+          .catch((error) => {
+            setLoad(false);
+            onClose();
+          })
+      : updateWorkingHourTemp(workingHourTemp.name, createWorkingHourTemp)
+          .then((response) => {
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
+            setLoad(false);
+            onClose();
+          })
+          .catch((error) => {
+            setLoad(false);
+            onClose();
+          });
+  };
+  const onDeleteWorkingHourTemp = () => {
+    setLoad(true);
+    deleteWorkingHourTemp(workingHourTemp.name).then((response) => {
+      if (response.data.message.success == true) {
+        message.success(response.data.message.message);
+      } else {
+        message.error(response.data.message.message);
+      }
+      setLoad(false);
+      onClose();
+    });
   };
 
   return (
@@ -238,7 +295,7 @@ export default (props) => {
           </Col>
 
           <Col span={16}>
-            <Row gutter={[24, 18]}>
+            <Row gutter={[20, 20]}>
               {workingHorFields.map((item, idx) => (
                 <Fragment key={idx}>
                   {item?.subheader && (
@@ -252,22 +309,8 @@ export default (props) => {
                     <Col span={item.twocol ? 12 : 24}>
                       <Row gutter={[20, 30]}>
                         <Col span={24}>
-                          <ArrayForm
-                            gap={item.gap}
-                            fields={item.field}
-                            // remove={item.remov}
-                            item={item}
-                            control={control}
-                            errors={errors}
-                          />
+                          <ArrayForm gap={item.gap} fields={item.field} item={item} control={control} errors={errors} />
                         </Col>
-                        {/* {item.adding && (
-                        <Col span={24}>
-                          <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={item.adding}>
-                            {item.appendText}
-                          </Button>
-                        </Col>
-                      )} */}
                       </Row>
                     </Col>
                   ) : (
@@ -292,7 +335,7 @@ export default (props) => {
                           type="primary"
                           htmlType="button"
                           className="red-btn w-100"
-                          // onClick={onDeleteTeam}
+                          onClick={onDeleteWorkingHourTemp}
                         >
                           Delete
                         </Button>

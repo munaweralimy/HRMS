@@ -62,7 +62,7 @@ export default (props) => {
         })
       })
 
-      const body1 = {
+      let body1 = {
           form_name: req.data.data.form_name,
           sender: req.data.data.sender,
           approvers: approvetemp,
@@ -116,14 +116,14 @@ export default (props) => {
         ]
       }
       if (type == 'Email Activation') {
-        body1.push(
+        body1.form_fields.push(
           {
-            field_name: "New Work Email",
+            field_label: "New Work Email",
             field_type: "Text",
             field_value:""
           },
           {
-            field_name: "Work Email Password",
+            field_label: "Work Email Password",
             field_type: "Text",
             field_value:""
           }
@@ -159,9 +159,10 @@ export default (props) => {
                                     </Space>
                                 </Col>
                                 <Col>
-                                {email_activation_status == 'Pending' ?
-                                  <Button htmlType='button' type='primary' size='large' className='' onClick={() => cancelRequest('Email Activation')}>Cancel Request</Button>
-                                  : email_activation_status != 'Active' ?
+                                
+                                {data.find(x => x.field == 'email_activation_status').value == 'Pending' ?
+                                  <Button htmlType='button' type='primary' size='large' className='black-btn'>Pending Request</Button>
+                                  : data.find(x => x.field == 'email_activation_status').value != 'Active' ?
                                     <Button htmlType='button' type='primary' size='large' className='' onClick={() => sendRequest('Email Activation')}>Send Request</Button>
                                     :
                                     <Text>Email Activated</Text>
@@ -184,10 +185,10 @@ export default (props) => {
                                     </Space>
                                 </Col>
                                 <Col>
-                                {card_activation_status == 'Pending' ?
-                                  <Button htmlType='button' type='primary' size='large' className='black-btn' onClick={() => cancelRequest('Card Activation')}>Cancel Request</Button>
+                                {data.find(x => x.field == 'card_activation_status').value == 'Pending' ?
+                                  <Button htmlType='button' type='primary' size='large' className='black-btn'>Pending Request</Button>
                                   :
-                                  card_activation_status != 'Active' ?
+                                  data.find(x => x.field == 'card_activation_status').value != 'Active' ?
                                   <Button htmlType='button' type='primary' size='large' className='' onClick={() => sendRequest('Card Activation')}>Send Request</Button>
                                   :
                                   <Text>Card Activated</Text>

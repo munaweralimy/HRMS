@@ -50,6 +50,8 @@ export default (props) => {
       assets_name: values.assets_name,
       assets_id: values.assets_id,
       custodian: values.custodian.value,
+      status: 'With Company',
+      company: 'Limkokwing University Creative Technology',
     };
 
     asset.assets_name.length == 0
@@ -64,7 +66,7 @@ export default (props) => {
             onClose();
           })
           .catch((error) => message.error('Country exists'))
-      : updateSingleAsset(asset.assets_id, { assets_id: values.assets_id, custodian: values.custodian.value })
+      : updateSingleAsset(asset.assets_id, { ...payload, status: asset.status })
           .then((response) => {
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
@@ -79,7 +81,7 @@ export default (props) => {
 
   const onDeleteNationality = () => {
     setLoad(true);
-    deleteSingleAsset(asset.assets_id)
+    deleteSingleAsset(asset.name)
       .then((response) => {
         if (response.data.message.success == true) {
           message.success(response.data.message.message);

@@ -29,6 +29,7 @@ const initialState = {
   departmentList: [],
   tempList: [],
   getAllDepartments: [],
+  getSpecificEmployeeList: [],
   letterTempList: [],
   selectedLeave: false,
   viewWarninLette: { name: '', warning_letter_template: '', visible: false },
@@ -99,6 +100,8 @@ export default (state = initialState, action) => {
       return { ...state, getAllDepartments: data };
     case action_types.LETTER_TEMP:
       return { ...state, letterTempList: data };
+    case action_types.GET_USER_SPCIFIC:
+      return { ...state, getSpecificEmployeeList: data };
     default:
       return state;
   }
