@@ -73,7 +73,7 @@ export default (props) => {
     content: (
       <AddEditWorkingHour
         workingHourTemp={workingHourFields}
-        title="Add New Working Hours"
+        title={`${workingHourFields.name ? 'Edit' : 'Add New'} Working Hours`}
         onClose={() => setVisible(false)}
       />
     ),

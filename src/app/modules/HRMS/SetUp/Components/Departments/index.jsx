@@ -66,7 +66,7 @@ export default (props) => {
 
   const btnList = [
     {
-      text: '+ New Job Position',
+      text: '+ New Department',
       classes: 'green-btn',
       action: () => {
         setDepartmentFields({ name: '', company: '' });
@@ -85,7 +85,7 @@ export default (props) => {
         onClose={() => setVisible(false)}
       />
     ),
-    width: 550,
+    width: 900,
     onCancel: () => setVisible(false),
   };
 

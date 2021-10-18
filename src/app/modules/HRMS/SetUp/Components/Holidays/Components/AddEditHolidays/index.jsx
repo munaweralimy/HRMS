@@ -38,6 +38,7 @@ export default (props) => {
       : updateSingleHoliday(holidayFields.name, {
           holiday_name: values.holiday_name,
           holiday_date: moment(values.holiday_date).format('YYYY-MM-DD'),
+          note: values.note,
         })
           .then((response) => {
             if (response.data.message.success == true) {

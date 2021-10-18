@@ -6,7 +6,7 @@ import ListCard from '../../../../../molecules/ListCard';
 import AddEditRoles from './Components/AddEditRoles';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getUserList } from '../../ducks/actions';
+import { getUserList, getSpecificEmployee } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {

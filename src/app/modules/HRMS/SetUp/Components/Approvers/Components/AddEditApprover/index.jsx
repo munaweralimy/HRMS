@@ -146,7 +146,7 @@ export default (props) => {
   useEffect(() => {
     if (approver.approver_name.length > 0) {
       setLoad(true);
-      getApproverDetail(approver.approver_name).then((response) => {
+      getApproverDetail(approver.name).then((response) => {
         let data = response?.data?.data;
         setValue1(data.approver_name);
         setImage({ loading: false, imageUrl: data?.signature ? data?.signature : '' });

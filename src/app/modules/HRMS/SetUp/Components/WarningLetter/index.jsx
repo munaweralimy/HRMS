@@ -23,8 +23,8 @@ export default (props) => {
   const ListCol = [
     {
       title: 'Warning Letter Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'writing_letter_name',
+      key: 'writing_letter_name',
       sorter: true,
     },
     {

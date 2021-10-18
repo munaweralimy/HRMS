@@ -17,6 +17,8 @@ const jobFields = () => {
       label: 'Skills',
       placeholder: 'Please Select',
       multiple: true,
+      req: true,
+      reqMessage: 'skills required',
       twocol: false,
       options: skills.map((value) => ({ label: value.name, value: value.name })),
     },
