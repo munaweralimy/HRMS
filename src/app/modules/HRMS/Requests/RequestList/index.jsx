@@ -43,7 +43,7 @@ export default (props) => {
 
   const tabs = [
     {
-      visible: allowed([Roles.REQUESTS]),
+      visible: allowed([Roles.REQUESTS_MANAGER]),
       title: 'Staff Requests',
       key: 'pending',
       count: dataPending?.count,

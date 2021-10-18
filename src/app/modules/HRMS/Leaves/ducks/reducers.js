@@ -64,7 +64,8 @@ export default (state = initialState, action) => {
             return initialState;
         case action_types.MY_TIMESHEETS:
             return {...state, timesheetData: data };
-            
+        case action_types.EMPTY_ALL_LEAVES:
+            return initialState;
             
         default:
             return state;

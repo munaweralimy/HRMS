@@ -3,6 +3,15 @@ const rolesFields = () => {
   const leaveList = useSelector((state) => state.setup.leaveList);
   return [
     {
+      label: '',
+      name: 'name',
+      type: 'input',
+      twocol: false,
+      req: false,
+      reqmessage: '',
+      hidden: true
+    },
+    {
       label: 'User Role Name',
       name: 'role_name',
       type: 'input',
@@ -23,14 +32,24 @@ const rolesFields = () => {
       options: [{ label: 'All', value: 1 }],
     },
     {
-      name: 'Advancement',
+      name: 'advacement',
+      label: '',
+      req: false,
+      placeholder: '',
+      type: 'checkbox',
+      twocol:true,
+      reqmessage: '',
+      options: [{ label: 'Advancement-Company', value: 1 }],
+    },
+    {
+      name: 'advancement_teams',
       label: '',
       req: false,
       placeholder: '',
       type: 'checkbox',
       twocol: true,
       reqmessage: '',
-      options: [{ label: 'Advacement', value: 1 }],
+      options: [{ label: 'Advancement Teams', value: 1 }],
     },
     {
       name: 'reports',
@@ -131,6 +150,16 @@ const rolesFields = () => {
       twocol: true,
       reqmessage: '',
       options: [{ label: 'Requests', value: 1 }],
+    },
+    {
+      name: 'request_team',
+      label: '',
+      req: false,
+      placeholder: '',
+      type: 'checkbox',
+      twocol: true,
+      reqmessage: '',
+      options: [{ label: 'Requests Team', value: 1 }],
     },
     {
       name: 'requests_individual',

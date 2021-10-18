@@ -12,8 +12,10 @@ const { TabPane } = Tabs;
 const ApproveRejectButton = ({data, currentD, onAction}) => {
     
   const [rejectEnable, setRejectEnable] = useState(false);
-  let x = data.form_fields.find(y => y.field_label == "Department" && y.field_value == currentD)
-
+  let appr = data.approvers.find(y => y.approvers == 'Job Position');
+  console.log('kkk', appr);
+  // let x = data.form_fields.find(y => y.field_label == "Request For" && y.field_value == currentD)
+  let x= 'dd';
   const onFinish = (val) => {
     onAction('Reject', data, val.remarks);
   }
@@ -45,12 +47,12 @@ const ApproveRejectButton = ({data, currentD, onAction}) => {
         </>
         :
         <>
-          <Col span={12}>
+          {/* <Col span={12}>
             <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null)}>Approve</Button>
           </Col>
           <Col span={12}>
             <Button type='primary' htmlType='button' className='w-100 red-btn' size='large' onClick={() => setRejectEnable(true)}>Reject</Button>
-          </Col>
+          </Col> */}
         </>}
       </>
     }
@@ -60,7 +62,7 @@ const ApproveRejectButton = ({data, currentD, onAction}) => {
 
 export default (props) => {
   
-  const { data, selectedTab, selectedPanel, updateReqApi } = props;
+  const { data, selectedTab, selectedPanel, updateReqApi, id } = props;
   const [ activeTab, setActiveTab ] = useState(selectedTab);
 
   const panelHeader = (name, title, status) => {
@@ -133,39 +135,39 @@ export default (props) => {
   //   .catch((error) => message.error(error));
   // }
 
-  // const onApproveReject = (status, item, remarks) => {
+  const onApproveReject = (status, item, remarks) => {
 
-  //   const { name, departments } = item;
-  //   let dep =[];
-  //   departments.map(z => {
-  //     if (z.department == currentDept.department) {
-  //       dep.push({
-  //         department: z.department,
-  //         status: status,
-  //         remarks: remarks
-  //       })
-  //     } else {
-  //       dep.push({
-  //         department: z.department,
-  //         status: z.department_status
-  //       })
-  //     }
-  //   })
+    // const { name, departments } = item;
+    // let dep =[];
+    // departments.map(z => {
+    //   if (z.department == currentDept.department) {
+    //     dep.push({
+    //       department: z.department,
+    //       status: status,
+    //       remarks: remarks
+    //     })
+    //   } else {
+    //     dep.push({
+    //       department: z.department,
+    //       status: z.department_status
+    //     })
+    //   }
+    // })
 
-  //   const payload = {
-  //     departments: dep,
-  //   };
+    // const payload = {
+    //   departments: dep,
+    // };
 
 
-  //   updateRequest(payload, name)
-  //     .then((response) => {
-  //       status === 'Approve'
-  //         ? message.success('Request Approve Successfully')
-  //         : message.success('Request Reject Successfully');
-  //         updateReqApi();
-  //     })
-  //     .catch((error) => message.error(error));
-  // };
+    // updateRequest(payload, name)
+    //   .then((response) => {
+    //     status === 'Approve'
+    //       ? message.success('Request Approve Successfully')
+    //       : message.success('Request Reject Successfully');
+    //       updateReqApi();
+    //   })
+    //   .catch((error) => message.error(error));
+  };
 
   // const cancelBtn = (fileds, name) => {
   //   let x = fileds.find(y => y.field_label == "Department" && y.field_value == currentDept.department)
@@ -178,17 +180,17 @@ export default (props) => {
   //   }
   // }
 
-  // const revertBtn = (depart, name) => {
-  //   let x = depart.find(y => y?.department_status == "Pending")
-  //   console.log('-------', x, depart);
-  //   if (!x) {
-  //     return (
-  //       <Col flex='0 1 200px'>
-  //         <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onRevert(depart, name)}>Revert</Button>
-  //       </Col>
-  //     )
-  //   }
-  // }
+  const revertBtn = (appr, name) => {
+    let x = appr.find(y => y?.status == "Pending")
+    console.log('-------', x, appr);
+    if (!x) {
+      return (
+        <Col flex='0 1 200px'>
+          <Button type='primary' htmlType='button' size='large' className='w-100'>Revert</Button>
+        </Col>
+      )
+    }
+  }
   
   return (
       <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={(e) => setActiveTab(e)}>
@@ -210,13 +212,13 @@ export default (props) => {
                         })}
                       </Descriptions>
                     </Col>
-                    {/* <Col span={24}>
+                    <Col span={24}>
                       <Row gutter={[20,20]} className='justify-right'>
-                        {activeTab == 'pending' && <ApproveRejectButton data={item} currentD={currentDept?.department} onAction={onApproveReject} />}
-                        {activeTab!='archive' && revertBtn(item?.departments, item?.name)}
-                        {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)}
+                        {activeTab == 'pending' && <ApproveRejectButton data={item} currentD={id} onAction={onApproveReject} />}
+                        {activeTab!='archive' && revertBtn(item.approvers, item?.name)}
+                        {/* {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)} */}
                       </Row>
-                    </Col> */}
+                    </Col>
                   </Row>
                 </Panel>
                 ))}

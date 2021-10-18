@@ -154,8 +154,12 @@ export default (props) => {
               value: record.end_date ? moment(record.end_date, 'YYYY-MM-DD') : '' 
             },
             {
-              field: 'custom_work_hour_template',
-              value: record.custom_work_hour_template 
+              field: 'email_activation_status',
+              value: record.email_activation_status 
+            },
+            {
+              field: 'card_activation_status',
+              value: record.card_activation_status 
             },
 
           ];

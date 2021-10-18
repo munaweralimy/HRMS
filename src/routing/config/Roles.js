@@ -17,6 +17,7 @@ export default {
     POLICY: 'policy_company',
     POLICY_INDIVIDUAL: 'policy_individual',
     REQUESTS: 'requests',
+    REQUESTS_MANAGER: 'request_team',
     REQUESTS_INDIVIDUAL: 'requests_individual',
     DASHBOARD: 'dashboard_company',
     DASHBOARD_USER: 'dashboard_individual',

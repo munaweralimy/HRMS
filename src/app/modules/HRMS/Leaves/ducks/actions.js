@@ -44,6 +44,15 @@ export const getTeamTasks = (task, page, limit, order, orderby) => {
     };
 };
 
+const emptyAllLeaves = () => {
+  return (dispatch) => {
+    dispatch({
+      type: action_types.EMPTY_ALL_LEAVES,
+      data: [],
+    });
+  }
+}
+
 export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby) => {
   let ordering = '';
     if(order == "ascend") {
