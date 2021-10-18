@@ -224,7 +224,7 @@ export const updateWorkingHourTemp = (id, payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_working_hour`, { ...payload, name: id });
 };
 export const deleteWorkingHourTemp = (id) => {
-  return axios.delete(`${apiMethod}/hrms.setup.delete_records?doctype=Work Hour Template&name=${id}`);
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=Work Hour Template&name=${id}`);
 };
 
 export const getWorkingHourTempDetail = (id) => {

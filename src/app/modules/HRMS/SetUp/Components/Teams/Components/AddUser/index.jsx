@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Typography, Descriptions, Button } from 'antd';
+import { Card, Row, Col, Typography, Descriptions, Button, message } from 'antd';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { Popup } from '../../../../../../../atoms/Popup';
 import { InputField } from '../../../../../../../atoms/FormElement';
@@ -19,10 +19,16 @@ const AddUser = (props) => {
 
   useEffect(() => {
     if (addUser?.employee) {
-      console.log({ addUser });
+      console.log(addUser.employee);
       let newEmpoyees = userData;
-      newEmpoyees.push({ full_name: addUser.employee.label, id: addUser.employee.value });
-      setUserData(newEmpoyees);
+      console.log({ newEmpoyees });
+      if (newEmpoyees.filter((value) => value.id === addUser.employee.value).length > 0) {
+        message.error(`${addUser.employee.label} already added`);
+        setVisible(true);
+      } else {
+        newEmpoyees.push({ full_name: addUser.employee.label, id: addUser.employee.value });
+        setUserData(newEmpoyees);
+      }
     }
   }, [addUser]);
 

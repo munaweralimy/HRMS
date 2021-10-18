@@ -3,6 +3,7 @@ import { Button, Row, Col, Typography, Form, InputNumber, message, Spin } from '
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { jobFields } from './FormFields';
 import { useForm, useFieldArray } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import AddUser from '../../../Teams/Components/AddUser';
 import { SliderFiled } from '../../../../../../../atoms/FormElement';
 import { getSingleJob, addjobPosition, updatejobPosition, deletejobPosition } from '../../../../ducks/services';
@@ -24,7 +25,6 @@ export default (props) => {
     { label: 'Critical Thinking', fieldname: 'critical_thinking', updateVal: watch('critical_thinking') },
     { label: 'Team Work', fieldname: 'team_work', updateVal: watch('team_work') },
   ];
-
   useEffect(() => {
     if (jobPosition.name.length > 0) {
       getSingleJob(jobPosition.name).then((response) => {
@@ -43,7 +43,6 @@ export default (props) => {
   }, [jobPosition]);
 
   useEffect(() => {
-    console.log({ teamData });
     if (Object.entries(teamData).length > 0) {
       setValue('job_position_name', teamData.job_position_name);
       setValue(

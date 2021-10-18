@@ -537,3 +537,13 @@ export const getALlLetterTemp = () => async (dispatch) => {
     data: data,
   });
 };
+
+export const getSpecificEmployee = (url, id) => async (dispatch) => {
+  const {
+    data: { message },
+  } = await axios.get(`${apiMethod}/${url}?name_id=${id}&company=Limkokwing University Creative Technology`);
+  dispatch({
+    type: action_types.GET_USER_SPCIFIC,
+    data: message,
+  });
+};
