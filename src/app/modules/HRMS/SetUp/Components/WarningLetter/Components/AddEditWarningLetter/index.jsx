@@ -115,13 +115,15 @@ export default (props) => {
       <Spin indicator={antIcon} size="large" spinning={load}>
         <Breadcrumb separator=">" className="mb-1">
           <Breadcrumb.Item onClick={closeForn}>Setup</Breadcrumb.Item>
-          <Breadcrumb.Item>Add New Warning Letter</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            {letterData.name.length == 0 ? 'Add New Warning Letter' : 'Warning Letter Detail'}
+          </Breadcrumb.Item>
         </Breadcrumb>
 
         <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
           <Row gutter={[24, 30]}>
             <Col span={24}>
-              <HeadingChip title="Add New Warning Letter" />
+              <HeadingChip title={letterData.name.length == 0 ? 'Add New Warning Letter' : 'Warning Letter Detail'} />
             </Col>
             <Col span={24}>
               <Card bordered={false} className="uni-card">
