@@ -7,6 +7,7 @@ import { sendWarning, delWarning } from '../../../../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
 import { getWarnLetter } from '../../../../../ducks/action';
 import moment from 'moment';
+import { createRequest, getRequest, getApproverLead } from '../../../../../../Requests/ducks/services';
 
 const colName = [
   {
@@ -30,7 +31,9 @@ export default (props) => {
     const [recordData, setRecord] = useState(null);
     const dispatch = useDispatch();
     const letters = useSelector(state => state.employment.warnLetter);
+    const staffData = useSelector(state => state.advancement.advData)
     const [letterList, setLetterList] = useState([]);
+    const user = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
     
     useEffect(() => {
       dispatch(getWarnLetter());
@@ -122,25 +125,101 @@ export default (props) => {
         warning_letter: val.warning_letter.label,
         status:"Active"
       }
+      getRequest('Warning Letter Approval').then(req => {
+        getApproverLead(id).then(appr => {
+          console.log('check approver', req.data)
 
-      sendWarning(body).then(res => {
-        message.success('Warning letter send');
-        reset();
-        
-        setFormVisible(false);
-        setVisible({
-            set1: true,
-            set2: true,
-            set3: true,
-            set4: true,
-        });
-        setLoad(false);
-        updateApi();
-      }).catch(e => {
-        console.log(e);
-        setLoad(false);
-        const {response} = e;
-        message.error(response);
+          let approvetemp = [];
+          req.data.data.approvers.map(x => {
+            approvetemp.push({
+                approvers: x.approvers,
+                approvers_detail: x.approvers_detail || '',
+                approver_id: appr.data.message[0].manager_id,
+                Status:"Pending",
+                remarks:""
+            })
+          })
+          const body1 = {
+              form_name: req.data.data.form_name,
+              sender: req.data.data.sender,
+              approvers: approvetemp,
+
+              form_fields: [
+              { 
+                field_label: "Requester",
+                field_type: "Text",
+                field_value:user.full_name
+              },
+              {
+                field_label: "Requester ID",
+                field_type: "Text",
+                field_value:user.name
+              },    
+              {
+                field_label: "Requester Team",
+                field_type: "Text",
+                field_value:user.team_name
+              },
+              {
+                field_label: "Date",
+                field_type: "Date",
+                field_value: moment().format('YYYY-MM-DD')
+              },
+              {
+                field_label: "Request For",
+                field_type: "Text",
+                field_value: staffData?.employee_name
+              },
+              {
+                field_label: "Staff ID",
+                field_type: "Text",
+                field_value: id
+              },
+              {
+                field_label: "Company",
+                field_type: "Text",
+                field_value:staffData?.company || ''
+              },
+              {
+                field_label: "Request For Team",
+                field_type: "Text",
+                field_value:staffData?.team_name[0] || ''
+              },
+              {
+                field_label: "Warning Letter",
+                field_type: "Text",
+                field_value:val.warning_letter.label
+              },
+            ]
+          }
+          console.log('----',body1,appr.data.message)
+          createRequest(body1).then(resi => {
+            console.log('--', resi.data)
+          }).catch(e => {
+            console.log('e',e)
+          })
+
+          sendWarning(body).then(res => {
+            message.success('Warning letter send');
+            reset();
+            
+            setFormVisible(false);
+            setVisible({
+                set1: true,
+                set2: true,
+                set3: true,
+                set4: true,
+            });
+            setLoad(false);
+            updateApi();
+            
+          }).catch(e => {
+            console.log(e);
+            setLoad(false);
+            const {response} = e;
+            message.error(response);
+          })
+        })
       })
     }
 

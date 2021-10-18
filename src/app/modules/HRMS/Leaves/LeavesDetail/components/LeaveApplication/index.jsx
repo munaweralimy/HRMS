@@ -22,7 +22,7 @@ export default (props) => {
         key: 'creation',
         sorter: true,
         render: (text) => {
-          return moment(text).format('Do MMMM YYYY')
+          return moment(text).format('DD/MM/YYYY')
         }
       },
       {
@@ -31,7 +31,7 @@ export default (props) => {
         key: 'start_date',
         sorter: true,
         render: (text) => {
-          return moment(text).format('Do MMMM YYYY')
+          return moment(text).format('DD/MM/YYYY')
         }
       },
       {
@@ -40,15 +40,56 @@ export default (props) => {
         key: 'end_date',
         sorter: true,
         render: (text) => {
-          return moment(text).format('Do MMMM YYYY')
+          return moment(text).format('DD/MM/YYYY')
         }
       },
       {
-        title: 'Period',
-        dataIndex: 'leave_period',
-        key: 'leave_period',
-        elipsis: true,
+        title: 'Type',
+        dataIndex: 'leave_type',
+        key: 'leave_type',
         sorter: true,
+      },
+      {
+        title: 'Action',
+        align: 'center',
+        render: (text) => {
+          return (
+            <div className="">
+              <Button type="primary" htmlType='button' danger>Reject</Button> 
+              <Button type="primary" htmlType='button' className="green-btn ml-1">Approve</Button>
+            </div>
+          );
+        },
+      },
+    ]
+
+    const ListCol2 = [
+      {
+        title: 'Date Applied',
+        dataIndex: 'creation',
+        key: 'creation',
+        sorter: true,
+        render: (text) => {
+          return moment(text).format('DD/MM/YYYY')
+        }
+      },
+      {
+        title: 'Start',
+        dataIndex: 'start_date',
+        key: 'start_date',
+        sorter: true,
+        render: (text) => {
+          return moment(text).format('DD/MM/YYYY')
+        }
+      },
+      {
+        title: 'End',
+        dataIndex: 'end_date',
+        key: 'end_date',
+        sorter: true,
+        render: (text) => {
+          return moment(text).format('DD/MM/YYYY')
+        }
       },
       {
         title: 'Type',
@@ -76,48 +117,13 @@ export default (props) => {
       },
     ]
 
-      const ListCol2 = [
-        {
-          title: 'Date',
-          dataIndex: 'date',
-          key: 'date',
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            width: 250,
-            render: (text) => {
-              let clname = '';
-              if (text == 'Approved') {
-                clname = 'c-success';
-              } else if (text == 'Rejected') {
-                clname = 'c-error';
-              } else if (~text.indexOf('Pending')) {
-                clname = 'c-pending';
-              }
-              return <span className={`SentanceCase ${clname}`}>{text}</span>;
-            },
-        },
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
-            align: 'center',
-            width: 120,
-            render: (text) => (
-                <Button type="primary" htmlType='button' danger>Notify</Button>
-            ),
-        },
-      ]
-
     const onApprove = async (name) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved`
+        let url = `${apiMethod}/hrms.leaves_api.approve_leave_application_request?name=${name}&status=Approved&role=Admin`
         try {
             await axios.get(url);
             setLoad(false)
-            message.success('Timesheet Successfully Approved');
+            message.success('Leaves Successfully Approved');
             setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
             
         } catch(e) {
@@ -130,11 +136,11 @@ export default (props) => {
 
     const onReject = async (name) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected`
+        let url = `${apiMethod}/hrms.leaves_api.cancel_reject_application?name=${name}&status=Rejected&role=Admin`
         try {
             await axios.get(url);
             setLoad(false)
-            message.success('Timesheet Successfully Rejected');
+            message.success('Leaves Successfully Rejected');
             setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
             
         } catch(e) {
@@ -161,7 +167,7 @@ export default (props) => {
             key: 'History',
             data: data,
             heading: 'Leave History',
-            column: ListCol,
+            column: ListCol2,
             nodetail: false,
             detailTitle: 'Leave Details',
         },

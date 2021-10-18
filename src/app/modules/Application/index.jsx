@@ -7,9 +7,12 @@ import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../configs/constantData';
 import Dashboard from './Dashboard';
 import PendingRequests from './PendingRequests';
+import StaffPerformance from './StaffPerformance';
 import RequestList from '../HRMS/Requests/RequestList';
 import moment from 'moment';
-import { getPendingIssues, getPolicyList, getTimesheetData } from './ducks/actions';
+import { getPendingIssues, getPolicyList, getTimesheetData, getCalenderData } from './ducks/actions';
+import Roles from '../../../routing/config/Roles';
+import { allowed } from '../../../routing/config/utils';
 
 const { Title } = Typography;
 
@@ -24,12 +27,13 @@ export default (props) => {
     const pendingData = useSelector(state => state.global.pendingData);
     const policyData = useSelector(state => state.global.policyData);
     const timesheetData = useSelector(state => state.global.timesheetData);
-    
+    //const calenderData = useSelector(state => state.global.calenderData);
     
     useEffect(() => {
         dispatch(getPendingIssues());
         dispatch(getPolicyList());
         dispatch(getTimesheetData());
+        //dispatch(getCalenderData());
     }, [])
 
     return (
@@ -37,12 +41,15 @@ export default (props) => {
            <Col span={24}>
                <Dashboard policyData={policyData} timesheetData={timesheetData} />
            </Col>
-           <Col span={24}>
-               <RequestList />
-           </Col>
-           <Col span={24}>
+           {allowed([Roles.REQUESTS]) ? <Col span={24}>
+               <RequestList dashboard={true} />
+           </Col> : null}
+           {allowed([Roles.ADVANCEMENT]) ? <Col span={24}>
+               <StaffPerformance />
+           </Col> : null}
+           {allowed([Roles.SETUP]) ? <Col span={24}>
                 <PendingRequests pendingData={pendingData} />
-            </Col>
+            </Col> : null}
        </Row>
     )
 }

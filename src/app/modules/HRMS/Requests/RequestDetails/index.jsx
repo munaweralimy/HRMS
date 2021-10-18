@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Typography } from 'antd';
+import { Row, Col, Card, Typography, Tabs } from 'antd';
 import StaffDetails from '../../StaffDetails';
 import { getAdvancementdetails, emptyStaffDetails }  from '../../Advancement/dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,28 +7,27 @@ import { useParams, useLocation } from 'react-router-dom';
 import CategoryCard from '../../../../atoms/CategoryCard';
 import Request from '../components/Request'
 import { TaskIcon, AdvancementIcon, CalendarIcon, FacultyIcon, ClockIcon, StaffIcon } from '../../../../atoms/CustomIcons';
+import { getRequestDetails } from '../ducks/actions';
+import Roles from '../../../../../routing/config/Roles';
+import {allowed} from '../../../../../routing/config/utils';
 
 const { Title } = Typography;
+const { TabPane } = Tabs;
 
 export default (props) => {
 
   const {id} = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
-  const department = location.pathname.split('/')[1];
-  const [ load, setLoad] = useState(false);
   const data = useSelector(state => state.advancement.advData);
-  const [requests, setRequests] = useState({
-    pending: [],
-    yourrequests: [],
-    archive: []
-  });
+  const dataRequest = useSelector(state => state.hrmsrequests.requestData);
+  const [activeTab, setActiveTab] = useState('Requests');
+  const [requests, setRequests] = useState({});
 
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
-    return () => {
-      dispatch(emptyStaffDetails())
-    }
+    dispatch(getRequestDetails(id));
+    return () => dispatch(emptyStaffDetails());
   }, []);
 
   const cardData = [
@@ -72,54 +71,66 @@ export default (props) => {
     },
   ]
 
-  const caseDepart = (dept) => {
-    switch(dept) {
-      case 'aqa' :
-        return { department: 'AQA', link:'/aqa' };
-
-      case 'registry' :
-        return { department: 'Registry', link:'/registry' };
-
-      case 'faculty' :
-        return { department: 'Faculty', link:'/faculty' };
-      case 'hrms' :
-          return { department: 'HRMS', link:'/hrms' };
-      default:
-        break;
+  useEffect(() => {
+    if (dataRequest.length > 0) {
+      console.log('data', dataRequest)
+      setRequests({
+        pending: dataRequest.filter((value) => value.status == 'Pending'),
+        yourrequests: dataRequest.filter((value) => value.status == 'Pending' && value.requestor == 'HR-EMP-00063'),
+        archive: dataRequest.filter((value) => value.status != 'Pending')
+      })
     }
-  }
+  }, [dataRequest]);
 
   const updateReqApi = () => {
     console.log('i am here');
   }
 
 return (
-  <>
-      <StaffDetails id={id} section='Requests' data={data}>
-        <Row gutter={[20,20]}>
-          <Col span={24}>
-            <Card bordered={false} className="uni-card h-auto w-100">
-              <Request updateReqApi={updateReqApi} currentDept={caseDepart('hrms')} data={requests} selectedTab={location?.state?.rstatus || 'Pending'} selectedPanel={location?.state?.rid || ''} />
-            </Card>
-          </Col>
-          <Col span={24}>
-        <Card bordered={false} className="uni-card h-auto w-100">
-          <Row gutter={[20, 30]}>
-            <Col span={24}><Title level={4} className='mb-0'>Select Category</Title></Col>
-            <Col span={24}>
-              <Row gutter={[20,20]}>
-                {cardData.map((x, i) => (
-                  <Col flex='1 0 250px' key={i}>
-                    <CategoryCard data={x} />
-                  </Col>
-                ))}
-              </Row>
-            </Col>
-          </Row>
-        </Card>
+    <StaffDetails id={id} section='Requests' data={data}>
+      <Row gutter={[20,20]}>
+        <Col span={24}>
+          <Card bordered={false} className="uni-card">
+            <Row gutter={[20, 20]}>
+              <Col span={24}><Title level={4} className='mb-0 c-default'>Requests & Complaints</Title></Col>
+              <Col span={24}>
+                <Tabs activeKey={activeTab} type="card" className="custom-tabs" onChange={(e) => setActiveTab(e)}>
+                  <TabPane tab="Requests" key="Requests">
+                    <Request updateReqApi={updateReqApi} data={requests} selectedTab={location?.state?.rstatus || 'Pending'} selectedPanel={location?.state?.rid || ''} />
+                  </TabPane>
+                  <TabPane tab="Complaints" key="Complaints">
+                  </TabPane>
+                </Tabs>
+              </Col>
+            </Row>
+          </Card>
         </Col>
-        </Row>
-      </StaffDetails>
-    </>
+        {allowed([Roles.REQUESTS]) ?
+        <Col span={24}>
+          <Card bordered={false} className="uni-card h-auto w-100">
+            <Row gutter={[20, 30]}>
+              <Col span={24}><Title level={4} className='mb-0'>Select Category</Title></Col>
+              <Col span={24}>
+                <Row gutter={[20,20]}>
+                  {cardData.map((x, i) => {
+                    if (x.title != 'Finance' && x.title != 'Employment') {
+                      return <Col flex='1 0 250px' key={i}>
+                        <CategoryCard data={x} />
+                      </Col>
+                    } else {
+                      if (allowed([Roles.EMPLOYMENT])) {
+                        return <Col flex='1 0 250px' key={i}>
+                          <CategoryCard data={x} />
+                        </Col>
+                      }
+                    }
+                  })}
+                </Row>
+              </Col>
+            </Row>
+          </Card>
+        </Col> : null}
+      </Row>
+    </StaffDetails>
   );
 };

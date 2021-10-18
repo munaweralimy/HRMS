@@ -1,21 +1,19 @@
 import React, {useEffect} from 'react';
-import { Row, Col, ConfigProvider, Calendar, Card, Button, Typography, Space, Badge, Collapse, Avatar } from 'antd';
-import en_GB from 'antd/lib/locale-provider/en_GB';
-import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
-import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, 
-        getLeaveStatisticList, getLeaveStatisticBar
-} from './ducks/actions';
+import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks } from './ducks/actions';
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
 import MyLeaves from './components/MyLeaves';
-import ListCard from '../../../molecules/ListCard';
 import moment from 'moment';
-const { Title, Text } = Typography;
-const { Panel } = Collapse;
+import Roles from '../../../../routing/config/Roles';
+import {allowed} from '../../../../routing/config/utils';
+import { getTeamsDetail } from '../../Application/ducks/actions';
+import TeamStatistics from './components/TeamStatistics';
+import LeaveCalendar from './components/LeaveCalendar';
+
 const filtersOverall = [
   {
     label: 'Pending',
@@ -184,7 +182,6 @@ const ListColTeams = [
 ];
 
 
-
 export default (props) => {
   const dispatch = useDispatch();
   const il8n = useTranslate();
@@ -193,12 +190,22 @@ export default (props) => {
   const overallDataList = useSelector(state => state.leaves.overallTaskDataWithStatus);
   const teamTaskData = useSelector(state => state.leaves.teamTaskData);
   const teamTaskDataList = useSelector(state => state.leaves.teamTaskDataWithStatus);
+  
+  const teamsDetailData = useSelector(state => state.global.teamsDetailData);
+  const employeeId = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
 
-  const leaveStatAnnualList = useSelector(state => state.leaves.leaveStatAnnualList);
-  const leaveStatisticsBar = useSelector(state => state.leaves.leaveStatisticsBar);
+  let activeTab = ''
+
+  if (allowed([Roles.LEAVES])) {
+    activeTab = 'overall';
+  } else if(allowed([Roles.LEAVES_TEAMS])) {
+    activeTab = 'team';
+  } else {
+    activeTab = 'myleaves';
+  }
 
   useEffect(() => {
-    dispatch(getLeaveStatisticBar());
+    dispatch(getTeamsDetail(employeeId));
   }, [])
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
@@ -209,61 +216,18 @@ export default (props) => {
     }
   }
 
-  const onTeamAction = (filter, page, limit, sort, sortby, type, searching) => {
+  const onTeamAction = (filter, page, limit, sort, sortby, type, searching, team) => {
     if (type == 'list') {
-      dispatch(getTeamTasksWithStatus('Development', filter, page, limit, sort, sortby))
+      dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby))
     } else {
-      dispatch(getTeamTasks('Development', page, limit, sort, sortby));
+      dispatch(getTeamTasks(team, page, limit, sort, sortby));
     }
   }
 
-  const leavesPanelHeader = (item,index) => (
-    <>
-      <Row justify="space-between">
-        <Col>
-          <Title level={4} className="m-0">{item?.leave_type}</Title>
-          <Title level={5} className="m-0">Company Average</Title>
-          <Title level={3} className="m-0">80%</Title>
-        </Col>
-        <Col>
-          <Space className='w-100' size={30} align="start">
-            <Avatar.Group
-              maxCount={5}  
-              size={70}
-            >
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>95%</Text>
-              </Space>
   
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>93%</Text>
-              </Space>
-  
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>82%</Text>
-              </Space>
-  
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>81%</Text>
-              </Space>
-  
-              <Space direction="vertical" align="center" style={{margin:'0 10px'}}>
-                <Avatar size={70} />
-                <Text className='c-error'>81%</Text>
-              </Space>
-            </Avatar.Group>
-          </Space>
-        </Col>
-      </Row>
-    </>
-  );
-
   const tabs = [
     {
+      visible: allowed([Roles.LEAVES]),
       title: 'Overall Leaves',
       key: 'overall',
       count: overallData?.count || overallDataList?.count || 0,
@@ -284,10 +248,13 @@ export default (props) => {
           field3: [{ label: 'All', value: 'All' }],
         },
         addon: 'Timesheet',
-        statusKey: 'application_status'
+        statusKey: 'application_status',
+        extraComp1: <TeamStatistics />,
+        extraComp2: <LeaveCalendar />,
       },
     },
     {
+      visible: allowed([Roles.LEAVES_TEAMS]),
       title: 'Team Leaves',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
@@ -305,199 +272,21 @@ export default (props) => {
           field1: [{ label: 'All', value: 'All' }],
         },
         addon: 'Leave Application',
-        statusKey: 'application_status'
+        statusKey: 'application_status',
+        extraComp1: <LeaveCalendar />,
       },
       Comp: MultiView,
+      teamDrop: teamsDetailData
     },
     {
+      visible: allowed([Roles.LEAVES_INDIVIDUAL]),
       title: 'My Leaves',
       key: 'myleaves',
       Comp: MyLeaves,
     },
   ]
 
-  function getListData(value) {
-    let listData;
-    switch (value.date()) {
-      case 8:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-        ];
-        break;
-      case 10:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-          { type: 'error', content: 'This is error event.' },
-        ];
-        break;
-      case 23:
-        listData = [
-          { type: 'warning', content: 'This is warning event' },
-          { type: 'success', content: 'This is very long usual event。。....' },
-          { type: 'error', content: 'This is error event 1.' },
-          { type: 'error', content: 'This is error event 2.' },
-          { type: 'purple', content: 'This is error event 3.' },
-          { type: 'error', content: 'This is error event 4.' },
-        ];
-        break;
-      default:
-    }
-    return listData || [];
-  }
-
-  function dateCellRender(value) {
-    const listData = getListData(value);
-    const unique = [...new Map(listData.map(item => [item.type, item])).values()];
-    return (
-      <Space size={3} className='justify-cetner' wrap>
-        {unique.map(item => (
-          <Badge status={item.type} />
-        ))}
-      </Space>
-    );
-  }
-
-  const customHeader = ({ value, type, onChange, onTypeChange }) => {
-
-    const nextMonth = () => {
-      let newValue = value.clone();
-      let currentmonth = value.month();
-      let currentyear = value.year();
-      if (currentmonth > 11) {
-        currentmonth = 0;
-        currentyear + 1;
-      } else {
-        currentmonth = currentmonth + 1
-      }
-      newValue.month(parseInt(currentmonth, 10));
-      onChange(newValue);
-    }
-
-    const prevMonth = () => {
-      let newValue = value.clone();
-      let currentmonth = value.month();
-      let currentyear = value.year();
-      if (currentmonth < 0) {
-        currentmonth = 11;
-        currentyear - 1;
-      } else {
-        currentmonth = currentmonth - 1
-      }
-      newValue.month(parseInt(currentmonth, 10));
-      onChange(newValue);
-    }
-
-    const updateValue = (value) => {
-      return moment(value).format('MMMM YYYY')
-    }
-
-    return (
-      <Card bordered={false} className='mini-card mini-card10 b-dark-gray'>
-        <Row gutter={20} justify='space-between'>
-          <Col><Button onClick={prevMonth} type='link' className='c-gray-linkbtn p-0' htmlType='button' icon={<LeftOutlined />} /></Col>
-          <Col><Title level={5} className='c-default mb-0'>{updateValue(value)}</Title></Col>
-          <Col><Button onClick={nextMonth} type='link' className='c-gray-linkbtn p-0' htmlType='button' icon={<RightOutlined />} /></Col>
-        </Row>
-      </Card>
-    );
-  }
-
-  const onClickRow = (record) => {
-    return {
-      onClick: () => { },
-    };
-  }
-
-  function callback(key) {
-    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type));
-  }
-
-  const ListCol = [
-    {
-      title: 'Name',
-      dataIndex: 'employee_name',
-      key: 'employee_name',
-      sorted: (a, b) => a.employee_name - b.employee_name,
-    },
-    {
-      title: 'Job Title',
-      dataIndex: 'job_title',
-      key: 'job_title',
-      sorted: (a, b) => a.job_title - b.job_title,
-    },
-    {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      sorted: (a, b) => a.company - b.company,
-    },
-    {
-      title: 'Team',
-      dataIndex: 'team',
-      key: 'team',
-      sorted: (a, b) => a.team - b.team,
-    },
-    {
-      title: 'Contract',
-      dataIndex: 'contract',
-      key: 'contract',
-      sorted: (a, b) => a.contract - b.contract,
-    },
-    {
-      title: 'Leaves Taken',
-      dataIndex: 'taken_employee_leaves',
-      key: 'taken_employee_leaves',
-      sorted: (a, b) => a.taken_employee_leaves - b.taken_employee_leaves,
-      align: 'center',
-      width: '100px',
-      render: (text) => {
-        return <span className="c-error">{text}</span>;
-      },
-    },
-  ];
-
   return (
-    <Row gutter={[24, 30]}>
-      <Col span={24}>
-        <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
-      </Col>
-      <Col span={24}>
-        {leaveStatisticsBar && (
-          <>
-            <Collapse accordion onChange={callback}>
-                {leaveStatisticsBar.map((item, index) => (
-                    <Panel header={leavesPanelHeader(item,index)} key={index} showArrow={false}>
-                      <ListCard
-                        onRow={onClickRow}
-                        ListCol={ListCol}
-                        ListData={leaveStatAnnualList?.rows}
-                        pagination={true}
-                      />
-                    </Panel>
-                ))}
-            </Collapse>
-          </>
-        )}
-        
-      </Col>
-      <Col span={24}>
-        <Card bordered={false} className='uni-card dashboard-card'>
-          <ConfigProvider locale={en_GB}>
-            <Calendar
-              className='custom-calendar'
-              dateCellRender={dateCellRender}
-              disabledDate={
-                current => {
-                  return moment(current).day() === 0 || moment(current).day() === 6
-                }
-              }
-              headerRender={customHeader}
-            />
-          </ConfigProvider>
-        </Card>
-      </Col>
-    </Row>
+      <CardListSwitchLayout tabs={tabs} active={activeTab} />
   )
 }

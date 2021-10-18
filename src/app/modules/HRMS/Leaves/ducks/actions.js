@@ -6,7 +6,7 @@ export const getOverallTasks = (page, limit, order, approverID, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_overall_leaves?page_number=${page}&limit=${limit}&approver_id=${approverID}${order ? `&order=${order}` : ''}&orderby=employee_id`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_overall_leaves?page_number=${page}&limit=${limit}&approver_id=${approverID}${order ? `&order=${order}` : ''}&orderby=employee_id`);
     dispatch({
       type: action_types.OVERALL_TASKS,
       data: message,
@@ -24,7 +24,7 @@ export const getOverallTasksWithStatus = (status, page, limit, order, approverID
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_overall_leaves_with_status?status=${status}&approver_id=${approverID}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_overall_leaves_with_status?status=${status}&approver_id=${approverID}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
     dispatch({
       type: action_types.OVERALL_TASKS_WITH_STATUS,
       data: message,
@@ -36,9 +36,9 @@ export const getTeamTasks = (task, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.getting_team_leaves_list?team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list?team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
       dispatch({
-        type: action_types.TEAM_TASKS,
+        type: action_types.TEAM_LEAVES,
         data: message,
       });
     };
@@ -54,9 +54,9 @@ export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby)
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_team_leaves_list_with_status?team_name=${task}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list_with_status?team_name=${task}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
     dispatch({
-      type: action_types.TEAM_TASKS_WITH_STATUS,
+      type: action_types.TEAM_LEAVES_WITH_STATUS,
       data: message,
     });
   };
@@ -72,9 +72,9 @@ export const getMyLeaves = (id,status, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.getting_my_leaves_list_with_status?employee_id=${id}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves_list_with_status?employee_id=${id}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
       dispatch({
-        type: action_types.MY_TASKS,
+        type: action_types.MY_LEAVES,
         data: message,
       });
     };
@@ -84,7 +84,7 @@ export const getMyAvailableLeaves = (id) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.getting_my_leaves?employee_id=${id}`);
+      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves?employee_id=${id}`);
       dispatch({
         type: action_types.MY_AVAILABLE_LEAVES,
         data: message,
@@ -96,7 +96,7 @@ export const getLeaveStatisticList = (status) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_statistics_list?orderby=employee_id&order=ASC&leave_type=${status}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_list?orderby=taken_employee_leaves&order=ASC&leave_type=${status}`);
     dispatch({
       type: action_types.STATISTIC_LIST,
       data: message,
@@ -108,7 +108,7 @@ export const getLeaveStatisticBar = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_statistics_bar`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_bar?leave_type=Annual Leave&company=Limkokwing University Creative Technology`);
     dispatch({
       type: action_types.STATISTIC_BAR,
       data: message,
@@ -120,7 +120,7 @@ export const getSingleLeaveDetail = (id) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_my_leaves?employee_id=${id}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves?employee_id=${id}`);
     dispatch({
       type: action_types.SINGLE_LEAVE_DETAIL,
       data: message,
@@ -132,17 +132,13 @@ export const getLeaveApplicationDetail = (id,status) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_my_leaves_list_with_status?employee_id=${id}&status=${status}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves_list_with_status?employee_id=${id}&status=${status}`);
     dispatch({
       type: action_types.APPLICATION_LEAVE_DETAIL,
       data: message,
     });
   };
 };
-
-
-
-
 
 export const getLeaveType = () => {
   return async (dispatch) => {
@@ -160,7 +156,7 @@ export const getLeaveData = (type,company,employeeID) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.getting_leaves_data?employee_id=${employeeID}&leave_type=${type}&company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_data?employee_id=${employeeID}&leave_type=${type}&company=${company}`);
     dispatch({
       type: action_types.LEAVE_DATA,
       data: message,
@@ -172,7 +168,7 @@ export const getLeaveApprovers = (type,company,employeeID) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_leave_type_approvers?leave_type=${type}&company=${company}&employee_id=${employeeID}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_leave_type_approvers?leave_type=${type}&company=${company}&employee_id=${employeeID}`);
     dispatch({
       type: action_types.LEAVE_APPROVERS,
       data: message,
@@ -180,16 +176,11 @@ export const getLeaveApprovers = (type,company,employeeID) => {
   };
 };
 
-
-
-
-
-
 export const getAddProjectName = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_project_names`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_project_names`);
     dispatch({
       type: action_types.ADD_PROJECT_NAME,
       data: message,
@@ -207,33 +198,4 @@ export const getProjectName = () => {
       data: data,
     });
   };
-};
-
-
-
-export const emptyOverall = () => {
-  return (dispatch) => {
-    dispatch({
-      type: action_types.EMPTY_TASKS,
-      data: null,
-    });
-  };
-};
-
-export const getTimesheet = (id, status, page, limit, order, orderby) => {
-  let ordering = '';
-    if(order == "ascend") {
-        ordering = 'ASC'
-    } else if(order == "descend") {
-        ordering = 'DESC'
-    }
-    return async (dispatch) => {
-      const {
-        data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.get_employee_task_list?employee_id=${id}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
-      dispatch({
-        type: action_types.MY_TIMESHEETS,
-        data: message,
-      });
-    };
 };

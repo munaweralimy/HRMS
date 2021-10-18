@@ -33,6 +33,39 @@ const rolesFields = () => {
       options: [{ label: 'Advacement', value: 1 }],
     },
     {
+<<<<<<< HEAD
+=======
+      name: 'dashboard_individual',
+      label: '',
+      req: false,
+      placeholder: '',
+      type: 'checkbox',
+      twocol: true,
+      reqmessage: '',
+      options: [{ label: 'Dashboard Individual', value: 1 }],
+    },
+    {
+      name: 'advacement',
+      label: '',
+      req: false,
+      placeholder: '',
+      type: 'checkbox',
+      twocol:true,
+      reqmessage: '',
+      options: [{ label: 'Advancement-Company', value: 1 }],
+    },
+    {
+      name: 'advancement_teams',
+      label: '',
+      req: false,
+      placeholder: '',
+      type: 'checkbox',
+      twocol: true,
+      reqmessage: '',
+      options: [{ label: 'Advancement Teams', value: 1 }],
+    },
+    {
+>>>>>>> 0d3207d5f0f41770e768eef166d3a6c460b3a805
       name: 'reports',
       label: '',
       req: false,
@@ -133,6 +166,16 @@ const rolesFields = () => {
       options: [{ label: 'Requests', value: 1 }],
     },
     {
+      name: 'requests_individual',
+      label: '',
+      req: false,
+      placeholder: '',
+      type: 'checkbox',
+      twocol: true,
+      reqmessage: '',
+      options: [{ label: 'Requests Individual', value: 1 }],
+    },
+    {
       name: 'leaves_company',
       label: '',
       req: false,
@@ -173,15 +216,16 @@ const rolesFields = () => {
       options: [{ label: 'Policy', value: 1 }],
     },
     {
-      name: 'forms',
+      name: 'policy_individual',
       label: '',
       req: false,
       placeholder: '',
       type: 'checkbox',
       twocol: true,
       reqmessage: '',
-      options: [{ label: 'Forms', value: 1 }],
+      options: [{ label: 'Policy Individual', value: 1 }],
     },
+    
     {
       name: 'setup',
       label: '',
@@ -192,16 +236,6 @@ const rolesFields = () => {
       reqmessage: '',
       options: [{ label: 'Setup', value: 1 }],
     },
-    //   {
-    //     name: 'is_prorate',
-    //     label: '',
-    //     req: false,
-    //     placeholder: '',
-    //     type: 'checkbox',
-    //     twocol: true,
-    //     reqmessage: '',
-    //     options: [{ label: 'Is prorate', value: 1 }],
-    //   },
   ];
 };
 export { rolesFields };

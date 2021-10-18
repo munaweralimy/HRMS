@@ -61,7 +61,7 @@ export default (props) => {
     const json = {
       timesheet: temp
     }
-    let url = `${apiMethod}/hrms.api.add_single_timesheet`;
+    let url = `${apiMethod}/hrms.tasks_api.add_single_timesheet`;
     try {
         const res = await axios.post(url, json);
         setLoad(false);

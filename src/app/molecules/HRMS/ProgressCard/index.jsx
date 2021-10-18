@@ -7,7 +7,6 @@ const { Title } = Typography;
 export default (props) => {
     const {timesheetData} = props;
 
-    console.log('timesheetData', timesheetData)
     const pending = timesheetData?.length > 0 && timesheetData[0]?.pending;
     const approved = timesheetData?.length > 0 && timesheetData[0]?.approved;
     const total = pending + approved;

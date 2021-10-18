@@ -6,6 +6,7 @@ const initialState = {
     timesheetData: [],
     checkInData: [],
     teamsDetailData: [],
+    calenderData: [],
 
     checkInData: [],
     countryData: [],
@@ -41,6 +42,9 @@ export default (state = initialState, action) => {
 
         case action_types.EMPLOYEE_ID:
             return {...state, teamsDetailData: data };
+
+        case action_types.CALENDER_DATA:
+            return {...state, calenderData: data };
 
         case action_types.COUNTRY:
             return {...state, countryData: data };

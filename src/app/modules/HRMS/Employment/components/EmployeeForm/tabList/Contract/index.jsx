@@ -22,12 +22,12 @@ export default (props) => {
       {visisble.set2 && <Col span={24}>
         <ResignTeminate {...props} setVisible={setVisible} />
       </Col>}
-      {/* {visisble.set3 && <Col span={24}>
+      {visisble.set3 && <Col span={24}>
         <ShowCauseLetter {...props} />
       </Col>}
       {visisble.set4 && <Col span={24}>
         <WarningLetter {...props} setVisible={setVisible} />
-      </Col>} */}
+      </Col>}
     </Row>
   );
 };

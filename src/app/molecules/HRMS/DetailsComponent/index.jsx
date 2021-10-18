@@ -7,14 +7,16 @@ const {Title} = Typography;
 
 export default (props) => {
   
-  const { setRowDetail, backbtnTitle, btn1title, btn2title, btn3title, onAction1, onAction2, onAction3, data, mainTitle, btnClass1, btnClass2, btnClass3 } = props;
-
-
+  const { setRowDetail, backbtnTitle, btn1title, btn2title, btn3title, onAction1, onAction2, onAction3, data, ApproverID, mainTitle, btnClass1, btnClass2, btnClass3 } = props;
+  // const userID = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  // console.log('ApproverID', ApproverID)
   return (
       <Row gutter={[20, 30]}>
         <Col span={24}>
           <Space direction='vertical' size={20}>
-            <Button type="link" className='c-gray-linkbtn p-0 mt-1' onClick={() => {setRowDetail(false); props?.setRecord(null)}} htmlType="button"><LeftOutlined />{backbtnTitle}</Button>
+            {backbtnTitle && (
+              <Button type="link" className='c-gray-linkbtn p-0 mt-1' onClick={() => {setRowDetail(false); props?.setRecord(null)}} htmlType="button"><LeftOutlined />{backbtnTitle}</Button>
+            )}
             <Title level={4} className='c-default mb-0'>{mainTitle}</Title>
           </Space>
         </Col>

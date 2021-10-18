@@ -10,6 +10,7 @@ export default ({details, updateApi}) => {
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [approverID, setApproverID] = useState('');
 
   const btnList = [
     {
@@ -20,9 +21,9 @@ export default ({details, updateApi}) => {
   ];
 
   const onClickRow = (record) => {
-
     return {
       onClick: () => {
+        setApproverID(record?.approver_id)
         setRowDetail(true)
         let temp = [
           {
@@ -67,39 +68,40 @@ export default ({details, updateApi}) => {
     }
   }
 
-    return (
-        <>
-        {!rowDetails ?
-            <ListCard 
-            title={heading}
-            onRow={!nodetail ? onClickRow : null}
-            ListCol={column} 
-            ListData={data?.rows} 
-            pagination={{
-              total: data?.count,
-              current: page,
-              pageSize: limit
-            }}
-            onChange={onTableChange}
-            classes={`${!nodetail ? 'clickRow' : ''}`}
-            scrolling={500}
-            listClass="nospace-card"
-            headclass='mt-1'
-            />
-            :
-            <DetailsComponent 
-            setRowDetail={setRowDetail} 
-            mainTitle={detailTitle}
-            backbtnTitle={heading}
-            data={rowData}
-            btn1title={'Approve'}
-            btn2title={'Reject'}
-            onAction1={onAction1}
-            onAction2={onAction2}
-            btnClass1='green-btn'
-            btnClass2='red-btn'
-            />
-            }
-        </>
-    )
+return (
+    <>
+    {!rowDetails ?
+      <ListCard 
+        title={heading}
+        onRow={!nodetail ? onClickRow : null}
+        ListCol={column} 
+        ListData={data?.rows} 
+        pagination={{
+          total: data?.count,
+          current: page,
+          pageSize: limit
+        }}
+        onChange={onTableChange}
+        classes={`${!nodetail ? 'clickRow' : ''}`}
+        scrolling={500}
+        listClass="nospace-card"
+        headclass='mt-1'
+      />
+      :
+      <DetailsComponent 
+        setRowDetail={setRowDetail} 
+        mainTitle={detailTitle}
+        backbtnTitle={heading}
+        data={rowData}
+        btn1title={'Approve'}
+        btn2title={'Reject'}
+        ApproverID={approverID}
+        onAction1={onAction1}
+        onAction2={onAction2}
+        btnClass1='green-btn'
+        btnClass2='red-btn'
+      />
+      }
+    </>
+  )
 }

@@ -4,32 +4,39 @@ import DetailsComponent from '../../../../../../molecules/HRMS/DetailsComponent'
 import { Row, Col, Card, Progress } from 'antd';
 import moment from 'moment';
 
-export default ({details, updateApi}) => {
+export default ({details, updateApi, progressData}) => {
 
-  const { title, key, heading, data, column, nodetail, detailTitle, onAction1,onAction2 } = details;
+  const { title, key, heading, data, column, nodetail, detailTitle, onAction2 } = details;
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [approverID, setApproverID] = useState('');
 
-  const pending = 5;
-  const approved = 15;
-  const total = pending + approved;
-  const percentage = approved/total *100;
+  const annualLeaves = progressData?.find(element => element?.leave_type === 'Annual Leave')
+  const replacementLeaves = progressData?.find(element => element?.leave_type === 'Replacement Leave')
 
-  const btnList = [
-    {
-      text: '+ Add New Timesheet',
-      classes: 'green-btn',
-      action: () => { setAddVisible(true); setActiveKey('1')},
-    },
-  ];
+  const pendingAnnual = annualLeaves?.available_leaves;
+  const approvedAnnual = annualLeaves?.taken_leaves;
+  const totalAnnual = pendingAnnual + approvedAnnual;
+  const percentageAnnual = pendingAnnual/totalAnnual *100;
+
+
+  const pendingReplacement = replacementLeaves?.available_leaves;
+  const approvedReplacement = replacementLeaves?.taken_leaves;
+  const totalReplacement = pendingReplacement + approvedReplacement;
+  const percentageReplacement = pendingReplacement/totalReplacement *100;
 
   const onClickRow = (record) => {
     return {
       onClick: () => {
         setRowDetail(true)
+        setApproverID(record?.approver_id)
         let temp = [
+          {
+            label: 'Name',
+            value: record?.name
+          },
           {
             label: 'Date Applied',
             value: record?.creation ? moment(record.creation).format('Do MMMM YYYY') : ''
@@ -92,8 +99,8 @@ export default ({details, updateApi}) => {
                         type="circle" 
                         className='c-progress' 
                         width={200}
-                        percent={percentage} 
-                        format={() => <><div className="percent-text">{approved}</div> <div className="percent-numb">Annual Leaves</div></>}
+                        percent={percentageAnnual} 
+                        format={() => <><div className="percent-text">{pendingAnnual}</div> <div className="percent-numb">Annual Leaves</div></>}
                         />
                     </Card>  
                   </Col>
@@ -103,8 +110,8 @@ export default ({details, updateApi}) => {
                         type="circle" 
                         className='c-progress' 
                         width={200}
-                        percent={percentage} 
-                        format={() => <><div className="percent-text">{approved}</div> <div className="percent-numb">Annual Leaves</div></>}
+                        percent={percentageReplacement} 
+                        format={() => <><div className="percent-text">{approvedReplacement}</div> <div className="percent-numb">Replacement Leaves</div></>}
                         />
                     </Card>  
                   </Col>
@@ -129,16 +136,13 @@ export default ({details, updateApi}) => {
             </>
             :
             <DetailsComponent 
-            setRowDetail={setRowDetail} 
-            mainTitle={detailTitle}
-            backbtnTitle={heading}
-            data={rowData}
-            btn1title={'Approve'}
-            btn2title={'Reject'}
-            onAction1={onAction1}
-            onAction2={onAction2}
-            btnClass1='green-btn'
-            btnClass2='red-btn'
+              setRowDetail={setRowDetail} 
+              mainTitle={detailTitle}
+              backbtnTitle={heading}
+              data={rowData}
+              onAction2={onAction2}
+              btn2title={'Cancel Application'}
+              btnClass2='red-btn'
             />
             }
         </>

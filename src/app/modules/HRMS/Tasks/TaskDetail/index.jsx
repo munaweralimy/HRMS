@@ -81,7 +81,7 @@ export default (props) => {
   const onFinish = async (val) => {
     setLoad(true);
     if (deleted.length > 0) {
-      let url = `${apiMethod}/hrms.api.delete_projects`;
+      let url = `${apiMethod}/hrms.tasks_api.delete_projects`;
       try {
         await axios.post(url, { projects: deleted });
         if (val.form_projects.length == 0) {
@@ -108,7 +108,7 @@ export default (props) => {
       const json = {
           projects: proj
       };
-      let url = `${apiMethod}/hrms.api.add_projects`;
+      let url = `${apiMethod}/hrms.tasks_api.add_projects`;
       try {
         const res = await axios.post(url, json);
         if (res.data.message.success ==  false) {

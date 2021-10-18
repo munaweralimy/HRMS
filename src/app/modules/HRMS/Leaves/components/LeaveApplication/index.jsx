@@ -11,7 +11,7 @@ const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
 
-    const { id, data, tabSelected, updateApi } = props;
+    const { id, data, tabSelected, updateApi, ListData } = props;
     const [load, setLoad] = useState(false);
     const [update, setUpdate] = useState(false);
     const [activeTab, setActiveTab] = useState(tabSelected ? tabSelected : 'Pending');
@@ -77,30 +77,13 @@ export default (props) => {
       },
     ]
 
-    const onApprove = async (name) => {
+    const onCancel = async (name) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved`
+        let url = `${apiMethod}/hrms.leaves_api.cancel_reject_application?name=${name}&status=Cancelled`
         try {
             await axios.get(url);
             setLoad(false)
-            message.success('Timesheet Successfully Approved');
-            setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
-            
-        } catch(e) {
-            const { response } = e;
-            message.error('Something went wrong');
-            setLoad(false)
-        }
-        
-    }
-
-    const onReject = async (name) => {
-        setLoad(true)
-        let url = `${apiMethod}/hrms.api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected`
-        try {
-            await axios.get(url);
-            setLoad(false)
-            message.success('Timesheet Successfully Rejected');
+            message.success('Leaves Successfully Cancelled');
             setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
             
         } catch(e) {
@@ -119,8 +102,7 @@ export default (props) => {
             column: ListCol,
             nodetail: false,
             detailTitle: 'Pending Leaves Details',
-            onAction1: onApprove,
-            onAction2: onReject,
+            onAction2: onCancel,
         },
         {
             title: 'History',
@@ -144,7 +126,7 @@ export default (props) => {
             <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={changeTab}>
                 {tabs.map((item) => (
                     <TabPane tab={item.title} key={item.key}>
-                        <ListWithDetails details={item} updateApi={updateApi} update={update} />
+                        <ListWithDetails details={item} progressData={ListData} updateApi={updateApi} update={update} />
                     </TabPane>
                 ))}
             </Tabs>
