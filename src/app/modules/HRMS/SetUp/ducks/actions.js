@@ -13,7 +13,7 @@ export const getTeamList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_team_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_team_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -35,7 +35,7 @@ export const getLeaveTypesList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.leave_type_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.leave_type_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -57,7 +57,7 @@ export const getLeaveEntitlementsList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_leave_entitlement_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_leave_entitlement_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -79,7 +79,7 @@ export const getUserRolesList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_team_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_team_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -101,7 +101,7 @@ export const getWorkingHoursList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.work_hour_template_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.work_hour_template_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -123,7 +123,7 @@ export const getJobPositionsList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.job_position_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.job_position_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -145,7 +145,7 @@ export const getEducationalFieldsList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_education_field_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_education_field_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -167,7 +167,7 @@ export const getInstitutionsList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.institution_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.institution_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -189,7 +189,7 @@ export const getNationalitiesList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_nationality_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_nationality_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -211,7 +211,7 @@ export const getHolidaysList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_holidays_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_holidays_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -233,7 +233,7 @@ export const getReligionsList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.religion_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.religion_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -255,7 +255,7 @@ export const getRacesList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.race_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.race_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -277,7 +277,7 @@ export const getProjectsList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_projects_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_projects_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -299,7 +299,7 @@ export const getWarningLetterList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.warning_letter_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.warning_letter_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -321,7 +321,7 @@ export const getLetterTemplateList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.letter_template_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.letter_template_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -343,7 +343,7 @@ export const getApproversList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_approver_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_approver_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -365,7 +365,7 @@ export const getAssetsList = (page, limit, order, orderby) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_assets_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_assets_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }`,
     );
@@ -412,7 +412,7 @@ export const getEmployeeList = (companyName) => async (dispatch) => {
   const {
     data: { data },
   } = await axios.get(
-    `${apiresource}/Employee?filters=[["company","=","${companyName}"]]&fields=["name","employee_name"]`,
+    `${apiresource}/Employee?limit_page_length=0&filters=[["company","=","${companyName}"]]&fields=["name","employee_name"]`,
   );
   dispatch({
     type: action_types.EMPLOYEE_LIST,
@@ -442,7 +442,7 @@ export const getUserList = (page, limit, order, orderby) => async (dispatch) => 
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.api.hrms_user_role_pagination?page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.setup.hrms_user_role_pagination?page_number=${page}&limit=${limit}${
       order ? `&order=${ordering}&orderby=${orderby}` : ''
     }`,
   );
@@ -535,5 +535,15 @@ export const getALlLetterTemp = () => async (dispatch) => {
   dispatch({
     type: action_types.LETTER_TEMP,
     data: data,
+  });
+};
+
+export const getSpecificEmployee = (url, id) => async (dispatch) => {
+  const {
+    data: { message },
+  } = await axios.get(`${apiMethod}/${url}?name_id=${id}&company=Limkokwing University Creative Technology`);
+  dispatch({
+    type: action_types.GET_USER_SPCIFIC,
+    data: message,
   });
 };

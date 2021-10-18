@@ -62,7 +62,7 @@ export default (props) => {
 
   useEffect(() => {
     if (religion.name.length > 0) {
-      setValue('religion_name', religion.name);
+      setValue('religion_name', religion.religion);
     } else {
       reset();
     }

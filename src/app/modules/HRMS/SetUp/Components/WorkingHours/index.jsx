@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, message, Pagination, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Button } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
 import ListCard from '../../../../../molecules/ListCard';
@@ -8,67 +8,6 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getWorkingHoursList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../../configs/constants';
-import axios from '../../../../../../services/axiosInterceptor';
-import ListformComp from '../';
-const custom = [
-  {
-    day: 'Monday',
-    work_hour_type: 'Full Day',
-    time_hour: 1,
-    time_min: 0,
-    time_type: '',
-    work_hours: 8,
-  },
-  {
-    day: 'Tuesday',
-    work_hour_type: 'Full Day',
-    time_hour: 1,
-    time_min: 0,
-    time_type: '',
-    work_hours: 8,
-  },
-  {
-    day: 'Wednesday',
-    work_hour_type: 'Full Day',
-    time_hour: 1,
-    time_min: 0,
-    time_type: '',
-    work_hours: 8,
-  },
-  {
-    day: 'Thursday',
-    work_hour_type: 'Full Day',
-    time_hour: 1,
-    time_min: 0,
-    time_type: '',
-    work_hours: 8,
-  },
-  {
-    day: 'Friday',
-    work_hour_type: 'Full Day',
-    time_hour: 1,
-    time_min: 0,
-    time_type: '',
-    work_hours: 8,
-  },
-  {
-    day: 'Saturday',
-    work_hour_type: 'Half Day',
-    time_hour: 1,
-    time_min: 0,
-    time_type: '',
-    work_hours: 4,
-  },
-  {
-    day: 'Sunday',
-    work_hour_type: 'Rest Day',
-    time_hour: 1,
-    time_min: 0,
-    time_type: '',
-    work_hours: 0,
-  },
-];
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -117,99 +56,6 @@ export default (props) => {
     },
   ];
 
-  const workig_fields = [
-    {
-      subheader: 'Work Hours',
-      type: 'select',
-      name: 'work_hour_template',
-      label: 'Template',
-      placeholder: 'Please Select',
-      twocol: false,
-      colWidth: '1 0 100%',
-      options: templateList,
-      req: true,
-      reqmessage: 'Please select',
-      onChange: onWHChnage,
-    },
-    {
-      type: 'array',
-      name: 'work_hour_template_detail',
-      twocol: false,
-      colWidth: '1 0 100%',
-      field: fields,
-      gap: [10, 10],
-      single: false,
-      noCard: true,
-      child: [
-        {
-          type: 'input',
-          name: 'day',
-          label: '',
-          static: true,
-          req: false,
-          twocol: false,
-          colWidth: '1 0 100px',
-        },
-        {
-          type: 'select',
-          name: 'work_hour_type',
-          label: '',
-          placeholder: 'Please Select',
-          options: workType,
-          req: true,
-          twocol: false,
-          colWidth: '1 0 100px',
-        },
-        {
-          type: 'input',
-          name: 'time_hour',
-          label: '',
-          req: true,
-          number: true,
-          min: 1,
-          max: 12,
-          arrow: false,
-          twocol: false,
-          colWidth: '0 1 70px',
-        },
-        {
-          type: 'input',
-          name: 'time_min',
-          label: '',
-          number: true,
-          arrow: false,
-          req: true,
-          min: 0,
-          max: 59,
-          twocol: false,
-          colWidth: '0 1 70px',
-        },
-        {
-          type: 'select',
-          name: 'time_type',
-          label: '',
-          placeholder: 'Select',
-          options: timelap,
-          req: true,
-          twocol: false,
-          colWidth: '0 1 100px',
-        },
-        {
-          type: 'input',
-          name: 'work_hours',
-          label: '',
-          req: true,
-          number: true,
-          arrow: false,
-          min: 0,
-          max: 24,
-          placeholder: 'Please state',
-          twocol: false,
-          colWidth: '1 0 70px',
-        },
-      ],
-    },
-  ];
   const btnList = [
     {
       text: '+ New Working Hours',
@@ -222,12 +68,12 @@ export default (props) => {
   ];
 
   const popup = {
-    closable: false,
+    closable: true,
     visibility: visible,
     content: (
       <AddEditWorkingHour
         workingHourTemp={workingHourFields}
-        title="Add New Working Hours"
+        title={`${workingHourFields.name ? 'Edit' : 'Add New'} Working Hours`}
         onClose={() => setVisible(false)}
       />
     ),

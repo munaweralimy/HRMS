@@ -20,8 +20,8 @@ export default (props) => {
           <Space size={17}>
             <Avatar size="large" src="" />
             <Space direction="vertical" size={0}>
-              <Text className="c-gray lineHeight20">{data?.name}</Text>
-              <Text className="lineHeight20">{data?.student}</Text>
+              <Text className="c-gray lineHeight20">{data?.employee_name}</Text>
+              <Text className="lineHeight20">{data?.name}</Text>
             </Space>
           </Space>
         </Col>

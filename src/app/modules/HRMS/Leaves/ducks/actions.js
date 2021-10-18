@@ -38,11 +38,20 @@ export const getTeamTasks = (task, page, limit, order, orderby) => {
         data: { message },
       } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list?team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
       dispatch({
-        type: action_types.TEAM_TASKS,
+        type: action_types.TEAM_LEAVES,
         data: message,
       });
     };
 };
+
+const emptyAllLeaves = () => {
+  return (dispatch) => {
+    dispatch({
+      type: action_types.EMPTY_ALL_LEAVES,
+      data: [],
+    });
+  }
+}
 
 export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby) => {
   let ordering = '';
@@ -56,7 +65,7 @@ export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby)
       data: { message },
     } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list_with_status?team_name=${task}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
     dispatch({
-      type: action_types.TEAM_TASKS_WITH_STATUS,
+      type: action_types.TEAM_LEAVES_WITH_STATUS,
       data: message,
     });
   };
@@ -74,7 +83,7 @@ export const getMyLeaves = (id,status, page, limit, order, orderby) => {
         data: { message },
       } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves_list_with_status?employee_id=${id}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
       dispatch({
-        type: action_types.MY_TASKS,
+        type: action_types.MY_LEAVES,
         data: message,
       });
     };

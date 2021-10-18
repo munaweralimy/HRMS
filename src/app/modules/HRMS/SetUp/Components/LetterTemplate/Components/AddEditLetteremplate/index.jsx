@@ -93,15 +93,17 @@ export default (props) => {
       });
   };
   const onFinish = async (val) => {
+    console.log({ val });
     setLoad(true);
     let letter_head = '';
     let letter_footer = '';
     if (val.header.file) {
       letter_head = await uploadImage(val.header);
-    } else if (val.footer.file) {
+    }
+    if (val.footer.file) {
       letter_footer = await uploadImage(val.footer);
     }
-
+    console.log({ val, letter_footer, letter_head });
     const payload = {
       template_name: val?.template_name,
       letter_head: letter_head?.file_url ? letter_head?.file_url : val.header,

@@ -9,6 +9,9 @@ import Search from './components/Search/OverallSearch';
 import TeamSearch from './components/Search/TeamSearch';
 import MyAttendance from './components/MyAttendance';
 import moment from 'moment';
+import Roles from '../../../../routing/config/Roles';
+import {allowed} from '../../../../routing/config/utils';
+import { getTeamsDetail } from '../../Application/ducks/actions';
 
 const ListColOverall = [
   {
@@ -161,11 +164,22 @@ export default (props) => {
   const { t } = il8n;
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(6);
-  let empID = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].name;
+
+  let activeTab = ''
+
+  if (allowed([Roles.ATTENDANCE])) {
+    activeTab = 'overall';
+  } else if(allowed([Roles.ATTENDANCE_TEAMS])) {
+    activeTab = 'team';
+  } else {
+    activeTab = 'mytask';
+  }
 
   const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
   const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
+  const teamsDetailData = useSelector(state => state.global.teamsDetailData);
+  const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     console.log({ page, limit, sort, sortby });
@@ -176,30 +190,32 @@ export default (props) => {
     }
   };
 
-  const onTeamAction = (filter, page, limit, sort, sortby, type, searching) => {
+  const onTeamAction = (filter, page, limit, sort, sortby, type, searching, team) => {
     if (type == 'list') {
-      dispatch(getTeamAttendance('TM000367', page, limit, sort, (sortby = 'creation')));
+      dispatch(getTeamAttendance(team, page, limit, sort, (sortby = 'creation')));
     } else {
-      dispatch(getTeamAttendance('TM000367', page, limit, sort, (sortby = 'creation')));
+      dispatch(getTeamAttendance(team, page, limit, sort, (sortby = 'creation')));
     }
   };
 
   useEffect(() => {
-    dispatch(getMyAttendance(empID, page, limit, '', ''));
-  }, [empID]);
+    dispatch(getMyAttendance(id, 1, 10, '', ''));
+    dispatch(getTeamsDetail(id));
+  }, []);
 
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getMyAttendance(empID, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
-      dispatch(getMyAttendance(empID, pagination.current, pagination.pageSize, '', ''));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', ''));
     }
   };
 
   const tabs = [
     {
+      visible: allowed([Roles.ATTENDANCE]),
       title: 'Overall Attendance',
       key: 'overall',
       count: overallAttendanceData?.count,
@@ -217,6 +233,7 @@ export default (props) => {
       },
     },
     {
+      visible: allowed([Roles.ATTENDANCE_TEAMS]),
       title: 'Team Attendance',
       key: 'team',
       count: teamAttendance?.count,
@@ -230,10 +247,12 @@ export default (props) => {
         Search: TeamSearch,
         statusKey: 'status',
         updateApi: onTeamAction,
+        teamDrop: teamsDetailData
       },
       Comp: MultiView,
     },
     {
+      visible: allowed([Roles.ATTENDANCE_INDIVIDUAL]),
       title: 'My Attendance',
       key: 'mytask',
       iProps: {
@@ -249,9 +268,9 @@ export default (props) => {
   ];
 
   return (
-    <Row gutter={[24, 30]}>
+    <Row gutter={[20, 30]}>
       <Col span={24}>
-        <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
+        <CardListSwitchLayout tabs={tabs} active={activeTab} />
       </Col>
     </Row>
   );

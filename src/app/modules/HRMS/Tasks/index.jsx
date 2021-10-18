@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
@@ -10,6 +10,8 @@ import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
 import MyTasks from './components/MyTasks';
 import { useLocation } from 'react-router-dom';
+import Roles from '../../../../routing/config/Roles';
+import {allowed} from '../../../../routing/config/utils';
 
 const filtersOverall = [
   {
@@ -155,7 +157,21 @@ export default (props) => {
   const teamTaskData = useSelector(state => state.tasks.teamTaskData);
   const teamTaskDataList = useSelector(state => state.tasks.teamTaskDataWithStatus);
   const teamsDetailData = useSelector(state => state.global.teamsDetailData);
+  
   const employeeId = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  let activeTab = ''
+
+  if(location?.state?.addTimeSheet) {
+    activeTab = 'mytask';
+  } else {
+    if (allowed([Roles.TASK])) {
+      activeTab = 'overall';
+    } else if(allowed([Roles.TASK_TEAMS])) {
+      activeTab = 'team';
+    } else {
+      activeTab = 'mytask';
+    }
+  }
   
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
@@ -175,36 +191,36 @@ export default (props) => {
     }    
   }
 
-  useEffect(() => {
-    dispatch(getTeamsDetail(employeeId));
-  }, [])
+  
 
   const tabs = [
-    {
-      title: 'Overall Tasks',
-      key: 'overall',
-      count: overallData?.count || overallDataList?.count || 0,
-      Comp: MultiView,
-      iProps : {
-        carddata: overallData?.rows || [],
-        cardcount: overallData?.count || 0,
-        listdata: overallDataList?.rows || [],
-        listcount: overallDataList?.count || 0,
-        listCol: ListColOverall,
-        link: '/tasks/',
-        filters: filtersOverall,
-        updateApi: onOverallAction,
-        Search: Search,
-        searchDropdowns: {
-          field1: [{label: 'All', value: 'All'}],
-          field2: [{label: 'All', value: 'All'}],
-          field3: [{label: 'All', value: 'All'}],
-        },
-        addon: 'Timesheet',
-        statusKey:'status'
+  {
+    visible: allowed([Roles.TASK]),
+    title: 'Overall Tasks',
+    key: 'overall',
+    count: overallData?.count || overallDataList?.count || 0,
+    Comp: MultiView,
+    iProps : {
+      carddata: overallData?.rows || [],
+      cardcount: overallData?.count || 0,
+      listdata: overallDataList?.rows || [],
+      listcount: overallDataList?.count || 0,
+      listCol: ListColOverall,
+      link: '/tasks/',
+      filters: filtersOverall,
+      updateApi: onOverallAction,
+      Search: Search,
+      searchDropdowns: {
+        field1: [{label: 'All', value: 'All'}],
+        field2: [{label: 'All', value: 'All'}],
+        field3: [{label: 'All', value: 'All'}],
+      },
+      addon: 'Timesheet',
+      statusKey:'status'
       },
     },
     {
+      visible: allowed([Roles.TASK_TEAMS]),
       title: 'Team Tasks',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
@@ -227,25 +243,26 @@ export default (props) => {
       Comp: MultiView,
     },
     {
+      visible: allowed([Roles.TASK_INDIVIDUAL]),
       title: 'My Tasks',
       key: 'mytask',
       Comp: MyTasks,
       iProps : {
         activeAddTimeSheet: location?.state?.addTimeSheet ? location?.state?.addTimeSheet : false
       }
-    },
+    }
   ]
 
-  let activeTabs = tabs[0].key;
+  useEffect(() => {
+    dispatch(getTeamsDetail(employeeId));
+    
+  }, []);
 
-  if(location?.state?.addTimeSheet) {
-    activeTabs = tabs[2].key;
-  }
 
   return (
     <Row gutter={[24, 30]}>
       <Col span={24}>
-        <CardListSwitchLayout tabs={tabs} active={activeTabs} />
+          <CardListSwitchLayout tabs={tabs} active={activeTab} />
       </Col>
     </Row>
     )

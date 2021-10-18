@@ -154,8 +154,12 @@ export default (props) => {
               value: record.end_date ? moment(record.end_date, 'YYYY-MM-DD') : '' 
             },
             {
-              field: 'custom_work_hour_template',
-              value: record.custom_work_hour_template 
+              field: 'email_activation_status',
+              value: record.email_activation_status 
+            },
+            {
+              field: 'card_activation_status',
+              value: record.card_activation_status 
             },
 
           ];
@@ -309,10 +313,10 @@ export default (props) => {
             <Col span={24}>
               {mode == 'edit' ?
               <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-                <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />
+                <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} />
               </Form>
               :
-              <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} />}
+              <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />}
             </Col>}
         </Row>
 

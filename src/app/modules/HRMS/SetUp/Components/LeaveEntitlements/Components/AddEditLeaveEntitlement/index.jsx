@@ -47,7 +47,7 @@ export default (props) => {
       placeholder: 'Select leave type',
       req: true,
       reqmessage: 'Leave Type required',
-      options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
+      options: leaveList.map((value) => ({ label: value.leave_type, value: value.name })),
       onChange: onChnageLeaveType,
     },
     {
@@ -58,6 +58,8 @@ export default (props) => {
       placeholder: 'Input numaber of days',
       req: true,
       reqmessage: 'Entitlment required',
+      number: true,
+      arrow: false,
     },
     {
       label: 'Min Years of Service',
@@ -68,6 +70,7 @@ export default (props) => {
       req: true,
       reqmessage: 'Years required',
       number: true,
+      arrow: false,
     },
     {
       label: 'Max Years of Service',
@@ -77,6 +80,8 @@ export default (props) => {
       placeholder: 'Max number of years',
       req: true,
       reqmessage: 'Years required',
+      number: true,
+      arrow: false,
     },
     {
       subheading: 'Options',
@@ -132,27 +137,30 @@ export default (props) => {
       options: [{ label: 'Is prorate', value: 1 }],
     },
     {
-      label: 'Carry Forward Cut Off Date',
+      label: 'Carry Forward Days',
       name: 'carry_forward_days',
       type: 'input',
       twocol: false,
       hidden: !leave,
+      number: true,
+      arrow: false,
     },
   ];
 
   const onFinish = (values) => {
+    console.log({ values });
     setLoad(true);
     const payload = {
-      leave_entitlement_name: values.leave_entitlement_name.value,
-      leave_type: values.leave_type.value,
+      leave_entitlement_name: values.leave_entitlement_name,
+      leave_type_name: values.leave_type.value,
       entitlement: values.entitlement,
       max_years: values.max_years,
       min_years: values.min_years,
-      is_limit: values.is_limit[0],
-      overdraft: values.overdraft[0],
-      apply_before_current_date: values.apply_before_current_date[0],
-      carries_forward: values.carries_forward[0],
-      is_prorate: values.is_prorate[0],
+      is_limit: values?.is_limit.length ? 1 : 0,
+      overdraft: values?.overdraft.length ? 1 : 0,
+      apply_before_current_date: values?.apply_before_current_date.length ? 1 : 0,
+      carries_forward: values?.carries_forward.length ? 1 : 0,
+      is_prorate: values?.is_prorate.length ? 1 : 0,
       carry_forward_days: values.carry_forward_days,
     };
     leaveEtitlement.leave_entitlement_name.length == 0
@@ -207,15 +215,15 @@ export default (props) => {
         leaveType(false);
       }
       setValue('leave_entitlement_name', leaveEtitlement.leave_entitlement_name);
-      setValue('leave_type', { label: leaveEtitlement.leave_type, value: leaveEtitlement.leave_type });
+      setValue('leave_type', { label: leaveEtitlement.leave_type, value: leaveEtitlement.leave_type_name });
       setValue('entitlement', leaveEtitlement.entitlement);
       setValue('min_years', leaveEtitlement.min_years);
       setValue('max_years', leaveEtitlement.max_years);
-      setValue('is_limit', leaveEtitlement.is_limit == 'Yes' ? [1] : [0]);
-      setValue('overdraft', leaveEtitlement.overdraft == 'Yes' ? [1] : [0]);
-      setValue('apply_before_current_date', leaveEtitlement.apply_before_current_date == 'Yes' ? [1] : [0]);
-      setValue('carries_forward', leaveEtitlement.carries_forward == 'Yes' ? [1] : [0]);
-      setValue('is_prorate', leaveEtitlement.is_prorate == 'Yes' ? [1] : [0]);
+      setValue('is_limit', leaveEtitlement.is_limit == 'Yes' ? [1] : []);
+      setValue('overdraft', leaveEtitlement.overdraft == 'Yes' ? [1] : []);
+      setValue('apply_before_current_date', leaveEtitlement.apply_before_current_date == 'Yes' ? [1] : []);
+      setValue('carries_forward', leaveEtitlement.carries_forward == 'Yes' ? [1] : []);
+      setValue('is_prorate', leaveEtitlement.is_prorate == 'Yes' ? [1] : []);
       setValue('carry_forward_days', leaveEtitlement.carry_forward_days);
     } else {
       reset();

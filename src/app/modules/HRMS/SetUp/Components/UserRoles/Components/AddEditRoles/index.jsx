@@ -63,7 +63,8 @@ export default (props) => {
       ...newObj,
       user_staff: userData.map((value) => ({ employee: value.id })),
     };
-    roleData.name.length === 0
+    console.log('roleData', roleData, payload)
+    !roleData.name
       ? addUserRoles(payload).then((response) => {
           if (response.data.message.success == true) {
             message.success(response.data.message.message);
