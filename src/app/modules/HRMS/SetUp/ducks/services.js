@@ -174,6 +174,10 @@ export const updateDepartment = (id, payload) => {
 export const deleteDepartment = (id) => {
   return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Department&name=${id}`);
 };
+
+export const getSingleDepartment = (id) => {
+  return axios.get(`${apiresource}/HRMS Department/${id}`);
+};
 export const addSingleWarningLetter = (payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_warning_letter`, payload);
 };

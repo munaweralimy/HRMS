@@ -85,7 +85,7 @@ export default (props) => {
         onClose={() => setVisible(false)}
       />
     ),
-    width: 550,
+    width: 900,
     onCancel: () => setVisible(false),
   };
 
