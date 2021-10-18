@@ -19,14 +19,15 @@ export default (props) => {
   const { Title, Text } = Typography;
 
   const skillSet = [
-    { label: 'Work Quality', fieldname: 'work_quality', updateVal: watch('work_quality') },
-    { label: 'Work Speed', fieldname: 'work_speed', updateVal: watch('work_speed') },
-    { label: 'Leadership', fieldname: 'leadership', updateVal: watch('leadership') },
-    { label: 'Critical Thinking', fieldname: 'critical_thinking', updateVal: watch('critical_thinking') },
-    { label: 'Team Work', fieldname: 'team_work', updateVal: watch('team_work') },
+    { label: 'Work Quality', fieldname: 'work_quality', updateVal: watch('work_quality', 1) },
+    { label: 'Work Speed', fieldname: 'work_speed', updateVal: watch('work_speed', 1) },
+    { label: 'Leadership', fieldname: 'leadership', updateVal: watch('leadership', 1) },
+    { label: 'Critical Thinking', fieldname: 'critical_thinking', updateVal: watch('critical_thinking', 1) },
+    { label: 'Team Work', fieldname: 'team_work', updateVal: watch('team_work', 1) },
   ];
   useEffect(() => {
     if (jobPosition.name.length > 0) {
+      setLoad(true);
       getSingleJob(jobPosition.name).then((response) => {
         setTeamData(response?.data?.data);
         setUserData(
@@ -35,6 +36,8 @@ export default (props) => {
             id: value.employee,
           })),
         );
+        setLoad(false);
+
       });
     } else {
       reset();

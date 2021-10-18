@@ -6,7 +6,7 @@ import { InputField } from '../../../../../../../atoms/FormElement';
 import { SearchOutlined, PlusCircleFilled } from '@ant-design/icons';
 import Users from '../Users';
 const AddUser = (props) => {
-  const { userData, setUserData, title, control } = props;
+  const { userData, setUserData, title, control, department } = props;
   const { Title, Text } = Typography;
   const [removeUser, setRemoveUser] = useState({});
   const [addUser, setAddUser] = useState('');
@@ -19,9 +19,8 @@ const AddUser = (props) => {
 
   useEffect(() => {
     if (addUser?.employee) {
-      console.log(addUser.employee);
+      console.log({ addUser });
       let newEmpoyees = userData;
-      console.log({ newEmpoyees });
       if (newEmpoyees.filter((value) => value.id === addUser.employee.value).length > 0) {
         message.error(`${addUser.employee.label} already added`);
         setVisible(true);
@@ -36,7 +35,14 @@ const AddUser = (props) => {
     closable: true,
     visibility: visible,
     class: 'black-modal',
-    content: <Users title="Add New User" addNewUser={setAddUser} onClose={() => setVisible(false)} />,
+    content: (
+      <Users
+        title={department?.bool ? 'Add New Team' : 'Add New User'}
+        addNewUser={setAddUser}
+        department={department}
+        onClose={() => setVisible(false)}
+      />
+    ),
     width: 400,
     onCancel: () => setVisible(false),
   };

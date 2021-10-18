@@ -117,7 +117,7 @@ export default (props) => {
       type: 'array',
       name: 'work_hours',
       twocol: false,
-      colWidth: '1 0 100%',
+      colWidth: '0 1 100%',
       field: fields,
       single: false,
       noCard: true,
@@ -295,7 +295,7 @@ export default (props) => {
           </Col>
 
           <Col span={16}>
-            <Row gutter={[24, 18]}>
+            <Row gutter={[20, 20]}>
               {workingHorFields.map((item, idx) => (
                 <Fragment key={idx}>
                   {item?.subheader && (

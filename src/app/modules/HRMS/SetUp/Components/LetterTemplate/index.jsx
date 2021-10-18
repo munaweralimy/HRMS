@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Card, Image } from 'antd';
+import { Row, Col, Card, Image, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
@@ -16,7 +16,6 @@ export default (props) => {
 
   const dispatch = useDispatch();
   const tempData = useSelector((state) => state.setup.letterTemplateListData);
-  console.log({ tempData });
   const ListCol = [
     {
       title: 'Template Name',
@@ -55,15 +54,6 @@ export default (props) => {
   const onCardHandler = (e) => {
     setTemplateData(e);
     setVisible(true);
-  };
-
-  const onClickRow = (record) => {
-    return {
-      onClick: () => {
-        setTemplateData(record);
-        setVisible(true);
-      },
-    };
   };
 
   const onSearch = (value) => {

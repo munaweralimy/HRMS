@@ -66,7 +66,7 @@ export default (props) => {
 
   const btnList = [
     {
-      text: '+ New Job Position',
+      text: '+ New Department',
       classes: 'green-btn',
       action: () => {
         setDepartmentFields({ name: '', company: '' });

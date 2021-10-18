@@ -29,7 +29,7 @@ export default (props) => {
       employee_name: values?.employee_name.value,
       employee_id: values?.employee_name.id,
       status: 'Active',
-      team: userData.map((value) => ({ employee: value.id })),
+      team: userData.map((value) => ({ team: value.id })),
     };
     departmentField.name.length == 0
       ? addSingleDepartment(payload)
@@ -79,8 +79,8 @@ export default (props) => {
       getSingleDepartment(departmentField.name).then((response) => {
         setUserData(
           response?.data?.data?.team.map((value) => ({
-            full_name: value.employee_full_name,
-            id: value.employee,
+            full_name: value.team_name,
+            id: value.team,
           })),
         );
       });
@@ -122,7 +122,13 @@ export default (props) => {
           <Col span={12}>
             <Row gutter={[24, 30]}>
               <Col span={24}>
-                <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
+                <AddUser
+                  userData={userData}
+                  setUserData={setUserData}
+                  title="Team Member"
+                  department={{ bool: true, deptName: departmentField.name ? departmentField.name : '' }}
+                  control={control}
+                />
               </Col>
               <Col span={24}>
                 <Row gutter={24}>
