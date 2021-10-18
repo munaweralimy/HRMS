@@ -125,3 +125,7 @@ export { default as TaskIcon} from './TaskIcon';
 export { default as AdvancementIcon} from './AdvancementIcon';
 export { default as PolicyIcon} from './PolicyIcon';
 export { default as SetupIcon} from './SetupIcon';
+
+export { default as ChangePasswordIcon} from './ChangePassword';
+export { default as UserIcon} from './UserIcon';
+export { default as LogOutIcon} from './LogOut';
