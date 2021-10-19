@@ -6,7 +6,7 @@ export const getOverallAttendance = (page, limit, order, orderby) => async (disp
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.api.get_overall_attendance_pagination?page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.attendance_api.get_overall_attendance_pagination?page_number=${page}&limit=${limit}${
       order ? `&order=${order}&orderby=creation` : ''
     }`,
   );
@@ -17,11 +17,17 @@ export const getOverallAttendance = (page, limit, order, orderby) => async (disp
 };
 
 export const getOverallAttendanceList = (page, limit, order, orderby) => async (dispatch) => {
+  let ordering = '';
+  if (order == 'ascend') {
+    ordering = 'ASC';
+  } else if (order == 'descend') {
+    ordering = 'DESC';
+  }
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.api.get_all_attendance_pagination?page_number=${page}&limit=${limit}${
-      order ? `&order=${order}&orderby=${orderby}` : ''
+    `${apiMethod}/hrms.attendance_api.get_overall_attendance_pagination_list?page_number=${page}&limit=${limit}${
+      order ? `&order=${ordering}&orderby=${orderby}` : ''
     }`,
   );
   dispatch({
@@ -34,7 +40,7 @@ export const getTeamAttendance = (team, page, limit, order, orderby) => async (d
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.api.get_my_team_attendance_pagination?team=${team}&page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.attendance_api.get_my_team_attendance_pagination?company=Limkokwing University Creative Technology&team=${team}&page_number=${page}&limit=${limit}${
       orderby ? `&order=${order}&orderby=${orderby}` : ''
     }`,
   );
@@ -43,13 +49,37 @@ export const getTeamAttendance = (team, page, limit, order, orderby) => async (d
     data: message,
   });
 };
-
-export const getMyAttendance = (employeeID, page, limit, order, orderby) => async (dispatch) => {
+export const getTeamAttendanceList = (team, page, limit, order, orderby) => async (dispatch) => {
+  let ordering = '';
+  if (order == 'ascend') {
+    ordering = 'ASC';
+  } else if (order == 'descend') {
+    ordering = 'DESC';
+  }
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.api.get_single_employee_attendance_pagination?employee=${employeeID}&page_number=${page}&limit=${limit}${
-      orderby ? `&order=${order}&orderby=${orderby}` : ''
+    `${apiMethod}/hrms.attendance_api.get_my_team_attendance_pagination_list?company=Limkokwing University Creative Technology&team=${team}&page_number=${page}&limit=${limit}${
+      orderby ? `&order=${ordering}&orderby=${orderby}` : ''
+    }`,
+  );
+  dispatch({
+    type: action_types.TEAM_ATTENDANCE_LIST,
+    data: message,
+  });
+};
+export const getMyAttendance = (employeeID, page, limit, order, orderby) => async (dispatch) => {
+  let ordering = '';
+  if (order == 'ascend') {
+    ordering = 'ASC';
+  } else if (order == 'descend') {
+    ordering = 'DESC';
+  }
+  const {
+    data: { message },
+  } = await axios.get(
+    `${apiMethod}/hrms.attendance_api.get_single_employee_attendance_pagination?employee=${employeeID}&page_number=${page}&limit=${limit}${
+      orderby ? `&order=${ordering}&orderby=${orderby}` : ''
     }`,
   );
   dispatch({
