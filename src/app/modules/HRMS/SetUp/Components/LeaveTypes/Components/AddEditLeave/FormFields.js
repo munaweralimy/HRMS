@@ -5,11 +5,20 @@ const leaveFields = () => {
   const dispatch = useDispatch();
   const disabled = useSelector((state) => state.setup.selectedLeave);
   const leaveList = useSelector((state) => state.setup.leaveList);
-  //   const onSelectChange = (e) => {
-  // a    if (e.value === 'Individual') {
-  //       dispatch(leaveTypeSelect(true));
-  //     }
-  //   };
+  console.log({ disabled });
+  const onSelectChange = (e) => {
+    console.log({ e });
+    if (e.value === 'Manager') {
+      let disableManager = { ...disabled, manager: true };
+      dispatch(leaveTypeSelect(disableManager));
+    } else if (e.value === 'Supervisor') {
+      let disableManager = { ...disabled, supervisor: true };
+      dispatch(leaveTypeSelect(disableManager));
+    } else if (e.value === 'Team Lead') {
+      let disableManager = { ...disabled, teamLead: true };
+      dispatch(leaveTypeSelect(disableManager));
+    }
+  };
 
   return [
     {
@@ -72,6 +81,7 @@ const leaveFields = () => {
       child: [
         {
           type: 'select',
+          onChange: onSelectChange,
           subheader: 'Approver',
           name: 'approver_level',
           req: false,
@@ -79,9 +89,9 @@ const leaveFields = () => {
           twocol: false,
           options: [
             { label: 'Individual', value: 'Individual' },
-            { label: 'Manager', value: 'Manager' },
-            { label: 'Team Lead', value: 'Team Lead' },
-            { label: 'Supervisor', value: 'Supervisor' },
+            { label: 'Manager', value: 'Manager', isDisabled: disabled.manager },
+            { label: 'Team Lead', value: 'Team Lead', isDisabled: disabled.teamLead },
+            { label: 'Supervisor', value: 'Supervisor', isDisabled: disabled.supervisor },
           ],
         },
       ],
