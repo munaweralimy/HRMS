@@ -5,9 +5,7 @@ const leaveFields = () => {
   const dispatch = useDispatch();
   const disabled = useSelector((state) => state.setup.selectedLeave);
   const leaveList = useSelector((state) => state.setup.leaveList);
-  console.log({ disabled });
   const onSelectChange = (e) => {
-    console.log({ e });
     if (e.value === 'Manager') {
       let disableManager = { ...disabled, manager: true };
       dispatch(leaveTypeSelect(disableManager));

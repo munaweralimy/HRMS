@@ -14,14 +14,12 @@ const antIcon = <LoadingOutlined spin />;
 
 const ConditionalInput = (props) => {
   const { control, index, field } = props;
-  console.log({ field });
   const approverList = useSelector((state) => state.setup.allApprovers);
 
   const fieldVales = useWatch({
     name: 'approvers',
     control,
   });
-  console.log({ fieldVales });
   return (
     <Col span={24}>
       <Controller
@@ -113,7 +111,6 @@ export default (props) => {
 
   useEffect(() => {
     if (Object.entries(singleLeaveValues).length > 0) {
-      console.log({ singleLeaveValues });
       setLoad(true);
       setValue('leave_type', { label: singleLeaveValues?.leave_type, value: singleLeaveValues?.leave_type });
       setValue('contract_type', { label: singleLeaveValues?.contract_type, value: singleLeaveValues?.contract_type });
@@ -134,7 +131,6 @@ export default (props) => {
       );
       setValue('approvers', approvers);
       let diableApprover = { manager: false, supervisor: false, teamLead: false };
-      console.log({ approvers });
       approvers.map((value) => {
         if (value.approver_level === 'Manager') {
           diableApprover.manager = true;
@@ -144,7 +140,6 @@ export default (props) => {
           diableApprover.teamLead = true;
         }
       });
-      console.log({ diableApprover });
       dispatch(leaveTypeSelect(diableApprover));
       setLoad(false);
     } else {
@@ -207,8 +202,6 @@ export default (props) => {
   };
 
   const onRemoveSelect = (index) => {
-    console.log({ index });
-    console.log({ value });
     if (value[index].approver_level.value == 'Manager') {
       let ableManager = { ...disabled, manager: false };
       dispatch(leaveTypeSelect(ableManager));
@@ -246,7 +239,6 @@ export default (props) => {
                 <Col span={24}>
                   <Space size={15} direction="vertical" className="w-100">
                     {fields.map((elem, index) => {
-                      console.log({ elem });
                       return (
                         <Row gutter={[24, 8]}>
                           {item.child.map((x, i) => (
