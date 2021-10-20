@@ -6,6 +6,7 @@ const initialState = {
     requestListYourRequest: {},
     formList: [],
     requestData: [],
+    fieldData: []
 };
 
 export default (state = initialState, action) => {
@@ -21,6 +22,8 @@ export default (state = initialState, action) => {
             return {...state, formList: data };
         case action_types.REQUEST_DATA:
             return {...state, requestData: data };
+        case action_types.FIELDS_LIST:
+            return {...state, fieldData: data };
             
         default:
             return state;

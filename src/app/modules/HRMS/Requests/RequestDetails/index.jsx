@@ -7,7 +7,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import CategoryCard from '../../../../atoms/CategoryCard';
 import Request from '../components/Request'
 import { TaskIcon, AdvancementIcon, CalendarIcon, FacultyIcon, ClockIcon, StaffIcon } from '../../../../atoms/CustomIcons';
-import { getRequestDetails } from '../ducks/actions';
+import { getFieldsList, getRequestDetails } from '../ducks/actions';
 import Roles from '../../../../../routing/config/Roles';
 import {allowed} from '../../../../../routing/config/utils';
 
@@ -23,10 +23,12 @@ export default (props) => {
   const dataRequest = useSelector(state => state.hrmsrequests.requestData);
   const [activeTab, setActiveTab] = useState('Requests');
   const [requests, setRequests] = useState({});
+  const uid = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
 
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
     dispatch(getRequestDetails(id));
+    
     return () => dispatch(emptyStaffDetails());
   }, []);
 
@@ -75,15 +77,15 @@ export default (props) => {
     if (dataRequest.length > 0) {
       console.log('data', dataRequest)
       setRequests({
-        pending: dataRequest.filter((value) => value.status == 'Pending'),
-        yourrequests: dataRequest.filter((value) => value.status == 'Pending' && value.requestor == 'HR-EMP-00063'),
+        pending: dataRequest.filter((value) => value.status == 'Pending' && value.requester_id != uid),
+        yourrequests: dataRequest.filter((value) => value.status == 'Pending' && value.requester_id == uid),
         archive: dataRequest.filter((value) => value.status != 'Pending')
       })
     }
   }, [dataRequest]);
 
   const updateReqApi = () => {
-    console.log('i am here');
+    dispatch(getRequestDetails(id));
   }
 
 return (
@@ -96,7 +98,7 @@ return (
               <Col span={24}>
                 <Tabs activeKey={activeTab} type="card" className="custom-tabs" onChange={(e) => setActiveTab(e)}>
                   <TabPane tab="Requests" key="Requests">
-                    <Request id={id} updateReqApi={updateReqApi} data={requests} selectedTab={location?.state?.rstatus || 'Pending'} selectedPanel={location?.state?.rid || ''} />
+                    <Request id={uid} updateReqApi={updateReqApi} data={requests} selectedTab={location?.state?.rstatus || 'Pending'} selectedPanel={location?.state?.rid || ''} />
                   </TabPane>
                   <TabPane tab="Complaints" key="Complaints">
                   </TabPane>
