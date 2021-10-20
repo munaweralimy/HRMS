@@ -10,6 +10,7 @@ import { getRequestFormsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { delRequest } from '../../ducks/services';
 import { getRoles } from '../../../../Application/ducks/actions';
+import { getFieldsList } from '../../../Requests/ducks/actions';
 
 export default (props) => {
   const [formFields, setFormFields] = useState();
@@ -22,6 +23,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getRoles());
+    dispatch(getFieldsList());
     if (!visible) {
       dispatch(getRequestFormsList(page, limit, '', ''));
     }
@@ -49,7 +51,7 @@ export default (props) => {
       key: 'status',
       align: 'center',
       sorter: true,
-      render: (text, record) => <Switch checked={text == 1 ? true : false} disabled />,
+      render: (text, record) => <Switch checked={text == 'Active' ? true : false} disabled />,
     },
     {
       title: 'Action',
@@ -76,13 +78,14 @@ export default (props) => {
 
   const onUpdate = () => {
     setVisible(false);
+    setFormFields(null)
     dispatch(getRequestFormsList(page, limit, '', ''));
   }
 
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditReqForm title="Add New Form" data={formFields} onClose={() => setVisible(false)} onUpdate={onUpdate} />,
+    content: <AddEditReqForm title="Add New Form" data={formFields} onClose={() => {setVisible(false); setFormFields(null)}} onUpdate={onUpdate} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -101,7 +104,6 @@ export default (props) => {
   };
 
   const onClickRow = (record) => {
-      console.log('hce', record)
       setFormFields(record);
       setVisible(true);
   };

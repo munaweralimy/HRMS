@@ -3,7 +3,7 @@ import { Input, Form, Descriptions, Space, Typography, Collapse, Row, Col, Butto
 import { UpOutlined } from '@ant-design/icons';
 import SmallStatusCard from '../../../../../atoms/SmallStatusCard';
 import { CheckCircleFilled, CloseCircleFilled, ClockCircleFilled } from '@ant-design/icons';
-// import { cancelRequest, updateRequest } from '../../ducks/services';
+import { cancelRequest, updateRequest } from '../../ducks/services';
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -96,44 +96,43 @@ export default (props) => {
     </div>
   }
 
-  console.log('data', data)
-  // const onRevert = (departments, name) => {
-  //   let dep =[];
-  //   departments.map(z => {
-  //     if (z.department == currentDept.department) {
-  //       dep.push({
-  //         department: z.department,
-  //         status: 'Pending',
-  //       })
-  //     } else {
-  //       dep.push({
-  //         department: z.department,
-  //         status: z.department_status
-  //       })
-  //     }
-  //   })
+  const onRevert = (requestor, name) => {
+    let req =[];
+    requestor.map(z => {
+      if (z.approver_id == id) {
+        req.push({
+          approver_id: z.approver_id,
+          status: 'Pending',
+        })
+      } else {
+        req.push({
+          approver_id: z.approver_id,
+          status: z.status
+        })
+      }
+    })
 
-  //   const payload = {
-  //     status: 'Pending',
-  //     departments: dep,
-  //   };
+    const payload = {
+      status: 'Pending',
+      approvers: req,
+    };
 
-  //   updateRequest(payload, name)
-  //     .then((response) => {
-  //         message.success('Request Successfully Revert');
-  //         updateReqApi();
-  //     })
-  //     .catch((error) => message.error(error));
-  // }
+    updateRequest(payload, name)
+      .then((response) => {
+          message.success('Request Successfully Revert');
+          updateReqApi();
+      })
+      .catch((error) => message.error(error));
+  }
 
-  // const onCancel = async (item) => {
-  //   cancelRequest(item)
-  //   .then((response) => {
-  //       message.success('Request Approve Successfully')
-  //       updateReqApi();
-  //   })
-  //   .catch((error) => message.error(error));
-  // }
+  const onCancel = async (item) => {
+    cancelRequest(item)
+    .then((response) => {
+        message.success('Request Canceled')
+        updateReqApi();
+    })
+    .catch((error) => message.error(error));
+  }
 
   const onApproveReject = (status, item, remarks) => {
 
@@ -169,24 +168,24 @@ export default (props) => {
     //   .catch((error) => message.error(error));
   };
 
-  // const cancelBtn = (fileds, name) => {
-  //   let x = fileds.find(y => y.field_label == "Department" && y.field_value == currentDept.department)
-  //   if (x) {
-  //     return (
-  //       <Col flex='0 1 200px'>
-  //         <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onCancel(name)}>Cancel Requests</Button>
-  //       </Col>
-  //     )
-  //   }
-  // }
+  const cancelBtn = (fileds, name) => {
+    console.log('xfields',x ,fileds, name)
+    let x = fileds.find(y => y.field_label == "Requester ID" && y.field_value == id)
+    if (x) {
+      return (
+        <Col flex='0 1 200px'>
+          <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onCancel(name)}>Cancel Requests</Button>
+        </Col>
+      )
+    }
+  }
 
   const revertBtn = (appr, name) => {
     let x = appr.find(y => y?.status == "Pending")
-    console.log('-------', x, appr);
     if (!x) {
       return (
         <Col flex='0 1 200px'>
-          <Button type='primary' htmlType='button' size='large' className='w-100'>Revert</Button>
+          <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onRevert(appr, name)}>Revert</Button>
         </Col>
       )
     }
@@ -216,7 +215,7 @@ export default (props) => {
                       <Row gutter={[20,20]} className='justify-right'>
                         {activeTab == 'pending' && <ApproveRejectButton data={item} currentD={id} onAction={onApproveReject} />}
                         {activeTab!='archive' && revertBtn(item.approvers, item?.name)}
-                        {/* {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)} */}
+                        {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)}
                       </Row>
                     </Col>
                   </Row>

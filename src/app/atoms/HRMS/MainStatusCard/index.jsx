@@ -40,8 +40,8 @@ export default (props) => {
         return 'b-success';
       case 'Rest Day':
         return 'b-success';
-      case 'HolidayMalaysia Day':
-        console.log(status);
+      case 'Early Clock Out':
+        return 'b-pending';
     }
   };
 
@@ -49,7 +49,7 @@ export default (props) => {
     <Link
       to={{
         pathname: link ? `${link}${data.employee_id}` : '',
-        state: { tab: link == '/employment/' ? "1" : data?.status },
+        state: { tab: link == '/employment/' ? '1' : data?.status },
       }}
     >
       <Card bordered={false} className="uni-card">

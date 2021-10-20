@@ -5,6 +5,15 @@ export const createRequest = (body) => {
     return axios.post(`${apiresource}/HRMS Form Request`, body);
 };
 
+export const cancelRequest = (id) => {
+    return axios.put(`${apiresource}/HRMS Form Request/${id}`, {status:"Inactive"});
+};
+
+export const updateRequest = (id, body) => {
+    return axios.put(`${apiresource}/HRMS Form Request/${id}`, body);
+};
+
+
 export const getRequest = (name) => {
     return axios.get(`${apiresource}/HRMS Form Listing/${name}`);
 };

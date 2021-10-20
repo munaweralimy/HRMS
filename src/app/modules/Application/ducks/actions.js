@@ -2,8 +2,6 @@ import axios from '../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../configs/constants';
 
-
-
 export const getPendingIssues = () => {
   return async (dispatch) => {
     const {
@@ -15,9 +13,6 @@ export const getPendingIssues = () => {
     });
   };
 };
-
-
-
 
 export const getPolicyList = () => {
   return async (dispatch) => {
@@ -59,7 +54,9 @@ export const getCalenderData = (sDate, eDate, company) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}&company=${company}`);
+    } = await axios.get(
+      `${apiMethod}/hrms.api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}&company=${company}`,
+    );
     dispatch({
       type: action_types.CALENDER_DATA,
       data: message,
@@ -84,7 +81,7 @@ export const getTeamsDetail = (employeeid) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.teams_dropdown?employee_id=${employeeid}`);
+    } = await axios.get(`${apiMethod}/hrms.attendance_api.get_employee_team_list?employee_id=${employeeid}`);
     dispatch({
       type: action_types.EMPLOYEE_ID,
       data: message,
@@ -189,50 +186,50 @@ export const getProgName = () => {
 };
 
 export const getInstitution = () => {
-  return async(dispatch) => {
-      const {
-          data: { data },
-      } = await axios.get(`${apiresource}/Institutions`);
-      dispatch({
-          type: action_types.INTITUTION_LIST,
-          data: data,
-      });
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/Institutions`);
+    dispatch({
+      type: action_types.INTITUTION_LIST,
+      data: data,
+    });
   };
 };
 
 export const getTeams = () => {
-  return async(dispatch) => {
-      const {
-          data: { data },
-      } = await axios.get(`${apiresource}/HRMS Teams?fields=["name","team_name"]`);
-      dispatch({
-          type: action_types.TEAM_LISTING,
-          data: data,
-      });
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/HRMS Teams?fields=["name","team_name"]`);
+    dispatch({
+      type: action_types.TEAM_LISTING,
+      data: data,
+    });
   };
 };
 
 export const getRoles = () => {
-  return async(dispatch) => {
-      const {
-          data: { data },
-      } = await axios.get(`${apiresource}/User Roles`);
-      dispatch({
-          type: action_types.ROLE_LIST,
-          data: data,
-      });
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/User Roles`);
+    dispatch({
+      type: action_types.ROLE_LIST,
+      data: data,
+    });
   };
 };
 
 export const getEducationType = () => {
-  return async(dispatch) => {
-      const {
-          data: { data },
-      } = await axios.get(`${apiresource}/HRMS Education Field?fields=["name","education_field"]`);
-      dispatch({
-          type: action_types.EDUCATION_TYPE,
-          data: data,
-      });
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/HRMS Education Field?fields=["name","education_field"]`);
+    dispatch({
+      type: action_types.EDUCATION_TYPE,
+      data: data,
+    });
   };
 };
 
@@ -261,28 +258,27 @@ export const getStaffs = () => {
 };
 
 export const getJobs = () => {
-return async (dispatch) => {
-  const {
-    data: { data },
-  } = await axios.get(`${apiresource}/Job Position`);
-  dispatch({
-    type: action_types.JOBS_LIST,
-    data: data,
-  });
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/Job Position`);
+    dispatch({
+      type: action_types.JOBS_LIST,
+      data: data,
+    });
+  };
 };
-};
-
 
 export const getComments = (doctype, id) => {
-    return async(dispatch) => {
-        const {
-            data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_message?doctype=${doctype}&doc_name=${id}`);
-        dispatch({
-            type: action_types.ALL_COMMENTS,
-            data: message,
-        });
-    };
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.api.get_message?doctype=${doctype}&doc_name=${id}`);
+    dispatch({
+      type: action_types.ALL_COMMENTS,
+      data: message,
+    });
+  };
 };
 
 export const emptyComments = () => {

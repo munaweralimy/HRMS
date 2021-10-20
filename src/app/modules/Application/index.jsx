@@ -43,9 +43,9 @@ export default (props) => {
            {allowed([Roles.REQUESTS]) ? <Col span={24}>
                <RequestList dashboard={true} />
            </Col> : null}
-           {allowed([Roles.ADVANCEMENT]) ? <Col span={24}>
+           {/* {allowed([Roles.ADVANCEMENT]) ? <Col span={24}>
                <StaffPerformance />
-           </Col> : null}
+           </Col> : null} */}
            {allowed([Roles.SETUP]) ? <Col span={24}>
                 <PendingRequests />
             </Col> : null}

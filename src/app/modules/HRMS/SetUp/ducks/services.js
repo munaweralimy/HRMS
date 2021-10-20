@@ -167,7 +167,11 @@ export const getSingleJob = (id) => {
 
 // Request
 export const addRequest = (body, id) => {
-  return axios.post(`${apiresource}/HRMS Form Listing`, body);
+  if (id) {
+    return axios.put(`${apiresource}/HRMS Form Listing/${id}`, body);
+  } else {
+    return axios.post(`${apiresource}/HRMS Form Listing`, body);
+  }
 };
 export const delRequest = (id) => {
   return axios.delete(`${apiresource}/HRMS Form Listing/${id}`);
