@@ -5,8 +5,7 @@ import { useDispatch } from "react-redux";
 import userImage from "../../../assets/img/dummy-profile.png";
 import { logout } from "../../../features/userSlice";
 import { useHistory } from 'react-router-dom';
-import { LogoutOutlined } from '@ant-design/icons';
-import { SearchIcon } from '../../atoms/CustomIcons';
+import { SearchIcon, ChangePasswordIcon, UserIcon, LogOutIcon } from '../../atoms/CustomIcons';
 import LanguageSwitcher from '../../molecules/LanguageSwitcher';
 
 const { Text } = Typography;
@@ -34,12 +33,12 @@ export default (props) => {
     
       const menu = (
         <Menu>
-          {/* <Menu.Item>
+          <Menu.Item>
             <Button
-              onClick={history.push("/myprofile")}
+              onClick={() => history.push("/myprofile")}
               type="link"
               className="btn-link"
-              icon={<LogoutOutlined />}
+              icon={<UserIcon />}
             >
               My Profile
             </Button>
@@ -49,18 +48,18 @@ export default (props) => {
             <Button
               type="link"
               className="btn-link"
-              icon={<LogoutOutlined />}
+              icon={<ChangePasswordIcon />}
             >
               Change Password
             </Button>
-          </Menu.Item> */}
+          </Menu.Item>
 
           <Menu.Item>
             <Button
               onClick={logoutHandler}
               type="link"
               className="btn-link"
-              icon={<LogoutOutlined />}
+              icon={<LogOutIcon />}
             >
               Logout
             </Button>

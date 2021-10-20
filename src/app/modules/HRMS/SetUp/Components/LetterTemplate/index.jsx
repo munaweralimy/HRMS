@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Card, Image, Spin } from 'antd';
+import { Row, Col, Card, Image, Spin, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { Popup } from '../../../../../atoms/Popup';
@@ -11,7 +11,7 @@ import Search from './Components/Search';
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(6);
   const [teamplateData, setTemplateData] = useState('');
 
   const dispatch = useDispatch();
@@ -71,6 +71,11 @@ export default (props) => {
     }
   };
 
+  const onPageChange = (pg) => {
+    setPage(pg);
+    getLetterTemplateList(pg, limit, '', '');
+  };
+
   useEffect(() => {
     if (!visible) {
       dispatch(getLetterTemplateList(page, limit, '', ''));
@@ -125,6 +130,17 @@ export default (props) => {
             }}
             onChange={onTableChange}
           /> */}
+        </Col>
+        <Col span={24}>
+          <div className="w-100 text-right mt-2">
+            <Pagination
+              pageSize={limit}
+              current={page}
+              hideOnSinglePage={false}
+              onChange={onPageChange}
+              total={tempData?.count}
+            />
+          </div>
         </Col>
       </Row>
       <Popup {...popup} />

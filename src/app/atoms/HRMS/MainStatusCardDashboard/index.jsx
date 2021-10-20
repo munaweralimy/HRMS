@@ -1,46 +1,21 @@
 import React from 'react';
-import { Row, Col, Typography, Avatar, Card, Space } from 'antd';
+import { Row, Col, Typography, Avatar, Card, Space, Descriptions } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
 
 const { Title, Text } = Typography;
 
 export default (props) => {
-  const { data, link, addon, statusKey } = props;
+  const { data, link, statusKey } = props;
+  //console.log('data', data)
   const history = useHistory();
   const statuses = (status) => {
     switch (status) {
-      case 'Missed':
-        return 'b-error';
-      case 'Pending':
-        return 'b-pending';
-      case 'Fit Index':
+      case 'Excellent':
         return 'b-success';
-      case 'Low Index':
+      case 'Poor':
         return 'b-error';
-      case 'Medium Fit Index':
-        return 'b-pending';
-      case 'Late Clock In':
-        return 'b-pending';
-      case 'Absent':
-        return 'b-error';
-      case 'On Duty':
-        return 'b-success';
-      case 'Outstanding Loan':
-        return 'b-error';
-      case 'Expiring Asset Possession':
-        return 'b-pending';
-      case 'Expired Asset Possession':
-        return 'b-error';
-      case 'Expiring':
-        return 'b-pending';
-      case 'Expired':
-        return 'b-error';
-      case 'On Leave':
-        return 'b-success';
-      case 'Rest Day':
-        return 'b-success';
-      case 'Early Clock Out':
+      case 'Average':
         return 'b-pending';
     }
   };
@@ -49,7 +24,7 @@ export default (props) => {
     <Link
       to={{
         pathname: link ? `${link}${data.employee_id}` : '',
-        state: { tab: link == '/employment/' ? '1' : data?.status },
+        state: { tab: link == '/employment/' ? "1" : data?.status },
       }}
     >
       <Card bordered={false} className="uni-card">
@@ -72,21 +47,18 @@ export default (props) => {
                 <Col span={24}>
                   <Space direction="vertical" size={2}>
                     <Title level={5} className="mb-0">
-                      {data[statusKey]} {addon}
+                      {data[statusKey]}
                     </Title>
-                    {data?.date && (
-                      <Title level={5} className="mb-0 op-6">
-                        {data?.date && moment(data?.date).format('Do MMMM YYYY')}
-                      </Title>
-                    )}
-                    {data?.creation && (
-                      <Title level={5} className="mb-0 op-6">
-                        {data?.creation && moment(data?.creation).format('Do MMMM YYYY')}
-                      </Title>
-                    )}
                   </Space>
                 </Col>
               </Row>
+            </Card>
+            <Card bordered={false} className="mini-card b-black dashboard-FitCard">
+              <Descriptions>
+                  <Descriptions.Item span={24} label="Fit Index Score"><span className={`${Number(data?.fit_index) > 80 ? 'c-success' : Number(data?.fit_index) > 50 ? 'c-pending' : 'c-error'}`}>{data?.fit_index}%</span></Descriptions.Item>
+                  <Descriptions.Item span={24} label="Attendance"><span className={`${Number(data?.attendance) > 90 ? 'c-success' : Number(data?.attendance) > 70 ? 'c-pending' : 'c-error'}`}>{data?.attendance}%</span></Descriptions.Item>
+                  <Descriptions.Item span={24} label="Leaves"><span>{data?.leaves}</span></Descriptions.Item>
+              </Descriptions>
             </Card>
           </Col>
         </Row>

@@ -4,12 +4,14 @@ import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleTaskDetail, getAddProjectName, getTimesheet } from '../Tasks/ducks/actions';
 import StaffDetails from '../StaffDetails';
-import Timesheet from './components/Timesheet';
+import Employment from './components/Employment';
 import Management from './components/Managment';
 import DetailsComponent from '../../../molecules/HRMS/DetailsComponent';
 import { useForm } from 'react-hook-form';
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { emptyStaffDetails, getAdvancementdetails } from '../Advancement/dcuks/action';
+import { getEmployeeProfile } from './ducks/actions';
+import Personal from './components/Personal' 
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -28,9 +30,11 @@ export default (props) => {
   const singleTaskDetail = useSelector((state) => state.tasks.singleTaskData);
   const projectName = useSelector((state) => state.tasks.myAddProjectData);
   const timesheetData = useSelector((state) => state.tasks.timesheetData);
+  const employeeProfileData = useSelector((state) => state.employeeProfile.employeeProfileData);
   const { control, errors, handleSubmit, reset } = useForm();
 
   useEffect(() => {
+    dispatch(getEmployeeProfile(id))
     dispatch(getSingleTaskDetail(id));
     dispatch(getAdvancementdetails(id));
     if (location?.state?.tab) {
@@ -47,6 +51,8 @@ export default (props) => {
       dispatch(emptyStaffDetails())
     }
   }, []);
+
+  //console.log('employeeProfileData', employeeProfileData?.contracts)
 
   const updateApi = () => {
     dispatch(getSingleTaskDetail(id));
@@ -167,20 +173,10 @@ export default (props) => {
           <Col span={24}>
             <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
               <TabPane tab="Employment" key="1">
-                <Timesheet id={id} updateApi={updateTimesheet} data={timesheetData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
+                <Employment id={id} data={employeeProfileData?.contracts} />
               </TabPane>
               <TabPane tab="Personal" key="2">
-                <DetailsComponent 
-                  setRowDetail={setRowDetail} 
-                  mainTitle={personalData.heading}
-                  data={temp}
-                  // btn1title={'Approve'}
-                  // btn2title={'Reject'}
-                  // onAction1={onAction1}
-                  // onAction2={onAction2}
-                  btnClass1='green-btn'
-                  btnClass2='red-btn'
-                />
+                <Personal data={employeeProfileData} />
               </TabPane>
               <TabPane tab="Fit Index" key="3">
                 <Management id={id} />

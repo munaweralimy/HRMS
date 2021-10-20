@@ -9,7 +9,7 @@ const rolesFields = () => {
       twocol: false,
       req: false,
       reqmessage: '',
-      hidden: true
+      hidden: true,
     },
     {
       label: 'User Role Name',
@@ -37,7 +37,7 @@ const rolesFields = () => {
       req: false,
       placeholder: '',
       type: 'checkbox',
-      twocol:true,
+      twocol: true,
       reqmessage: '',
       options: [{ label: 'Advancement-Company', value: 1 }],
     },
@@ -228,7 +228,7 @@ const rolesFields = () => {
       req: false,
       placeholder: '',
       type: 'checkbox',
-      twocol: true,
+      colWidth: '0 1 375px',
       reqmessage: '',
       options: [{ label: 'Setup', value: 1 }],
     },
