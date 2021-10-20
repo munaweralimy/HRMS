@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, Select } from 'antd';
+import { Row, Col, Form, Select, Button } from 'antd';
 import { SelectField } from '../../../../../../../../atoms/FormElement';
 import { useSelector } from 'react-redux';
 import { Controller } from 'react-hook-form';
@@ -20,7 +20,7 @@ export default (props) => {
 
     const [visible, setVisible] = useState(false);
     const [visible2, setVisible2] = useState(false);
-    const { control, errors, item, index, watch } = props;
+    const { control, errors, item, index, watch, remove } = props;
     const position = useSelector(state =>  state.global.roles);
     const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
@@ -83,19 +83,6 @@ export default (props) => {
       }
     }, [watch1]);
 
-    // const onChange = (e) => {
-    //     if (e.label == 'Job Position') {
-    //       setVisible2(false);
-    //         setVisible(true);
-    //     } else if(e.label == 'Individual') {
-    //         setVisible(false);
-    //         setVisible2(true);
-    //     } else {
-    //       setVisible(false);
-    //       setVisible2(false);
-    //     }
-    // }
-
     return (
         <Row gutter={[10,10]}>
             <Col span={24}>
@@ -108,6 +95,14 @@ export default (props) => {
                   initValue={item?.approvers ? {label: item?.approvers, value: item?.approvers} : ''}
                   selectOption={approveList}
                   />
+                  <Button
+                    type="link"
+                    htmlType="button"
+                    className="p-0 h-auto c-gray-linkbtn right-fixed smallFont12"
+                    onClick={() => remove(index)}
+                  >
+                    Remove
+                  </Button>
             </Col>
             {visible &&
             <Col span={24}>

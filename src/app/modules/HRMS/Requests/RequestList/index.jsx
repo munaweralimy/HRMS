@@ -20,17 +20,32 @@ export default (props) => {
   const dataPending = useSelector((state) => state.hrmsrequests.requestListPending);
   const dataYour = useSelector((state) => state.hrmsrequests.requestListYourRequest);
   const dataArchive = useSelector((state) => state.hrmsrequests.requestListArchive);
+  const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   
   const onAction1 = (status, page, sort, limit) => {
-      dispatch(getRequestPending(page, sort,limit));
+    if(allowed([Roles.REQUESTS])) {
+      dispatch(getRequestPending(page, sort,limit, ''));
+    } else {
+      dispatch(getRequestPending(page, sort,limit, id));
+    }
   }
 
   const onAction2 = (status, page, sort, limit) => {
-    dispatch(getYourRequest(page, sort,limit));
+    if(allowed([Roles.REQUESTS])) {
+      dispatch(getYourRequest(page, sort,limit,''));
+    } else {
+      dispatch(getYourRequest(page, sort,limit,id));
+    }
+    
   }
 
   const onAction3 = (status, page, sort, limit) => {
-      dispatch(getRequestArchive(page, sort,limit));
+    if(allowed([Roles.REQUESTS])) {
+      dispatch(getRequestArchive(page, sort,limit, ''));
+    } else {
+      dispatch(getRequestArchive(page, sort,limit, id));
+    }
+      
   }
 
   useEffect(() => {

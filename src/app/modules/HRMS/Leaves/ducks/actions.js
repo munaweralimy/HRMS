@@ -32,6 +32,18 @@ export const getOverallTasksWithStatus = (status, page, limit, order, approverID
   };
 };
 
+export const getCarryForwardStatus = (id) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_carry_forward_expiry_status?employee_id=${id}`);
+    dispatch({
+      type: action_types.CARRY_FORWARD_STATUS,
+      data: message,
+    });
+  };
+};
+
 export const getTeamTasks = (task, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {

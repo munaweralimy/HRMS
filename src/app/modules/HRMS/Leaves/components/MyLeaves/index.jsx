@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Tabs, Spin, message } from 'antd';
 import HeadingChip from '../../../../../molecules/HeadingChip';
-import { getMyLeaves, getMyAvailableLeaves  } from '../../ducks/actions';
+import { getMyLeaves, getMyAvailableLeaves, getCarryForwardStatus  } from '../../ducks/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import ListCard from '../../../../../molecules/ListCard';
 import ApplyLeave from './Component/ApplyLeave';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../../../../configs/constantData';
-import { apiMethod } from '../../../../../../configs/constants';
 import LeaveApplication from '../LeaveApplication';
 import { LoadingOutlined } from '@ant-design/icons';
-import axios from '../../../../../../services/axiosInterceptor';
+import { updateCarryForward } from '../../ducks/services';
 
 const { TabPane } = Tabs;
 const antIcon = <LoadingOutlined spin />;
@@ -69,6 +68,7 @@ export default (props) => {
   const [addVisible, setAddVisible] = useState(false)
   const myTaskData = useSelector(state => state.leaves.myTaskData);
   const myAvailableLeaves = useSelector(state => state.leaves.myAvailableLeaves);
+  const cfStatus = useSelector(state => state.leaves.cforwardstatus);
   const [rowDetails, setRowDetail] = useState(false);
   const [mode, setMode] = useState('');
   const [selectedRecord, setRecord] = useState([]);
@@ -82,6 +82,7 @@ export default (props) => {
   useEffect(() => {
     dispatch(getMyLeaves(userdetail?.name,'Pending', 1, 10, '', ''));
     dispatch(getMyAvailableLeaves(userdetail?.name));
+    dispatch(getCarryForwardStatus(userdetail?.name))
   }, []);
 
 
@@ -104,25 +105,114 @@ export default (props) => {
 
   const carryForward = async () => {
     setLoad(true)
-    let url = `${apiMethod}/hrms.leaves_api.change_carry_forwarded_leaves?employee_id=${userdetail.name}`
-    try {
-        const res = await axios.get(url);
-        if (res.data.message.success ==  false) {
-          message.error(res.data.message.message);
-        } else {
-          message.success('Leaves Successfully Carry Forwarded');
-          setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
+    const req = await getRequest(type);
+      if (req) {
+        console.log('Data', req)
+      } else {
+        return false;
+      }
+      
+      let approvetemp = [];
+      let appr = await getApproverLead(id);
+      req?.data?.data?.approvers.map(x => {
+        let aid = '';
+        if (x.approvers == 'Manager') {
+          aid = appr.manager_id;
+        } else if (x.approvers == 'Supervisor') {
+          aid = appr.supervisor_id;
+        } else if(x.approvers == 'Supervisor') {
+          aid = appr.supervisor_id;
         }
 
-        setLoad(false)
-        
-        
-    } catch(e) {
-        const { response } = e;
-        message.error('Something went wrong');
-        setLoad(false)
-    }
+        approvetemp.push({
+            approvers: x.approvers,
+            approver_detail: x.approver_detail || '',
+            approver_id: aid,
+            Status:"Pending",
+            remarks:""
+        })
+      })
+
+      let body1 = {
+          form_name: req.data.data.form_name,
+          sender: req.data.data.sender,
+          approvers: approvetemp,
+
+          form_fields: [
+          { 
+            field_label: "Requester",
+            field_type: "Text",
+            field_value:user.full_name
+          },
+          {
+            field_label: "Requester ID",
+            field_type: "Text",
+            field_value:user.name
+          },    
+          {
+            field_label: "Requester Team",
+            field_type: "Text",
+            field_value:user.team_name
+          },
+          {
+            field_label: "Date",
+            field_type: "Date",
+            field_value: moment().format('YYYY-MM-DD')
+          },
+          {
+            field_label: "Request For",
+            field_type: "Text",
+            field_value: staffData?.employee_name
+          },
+          {
+            field_label: "Staff ID",
+            field_type: "Text",
+            field_value: id
+          },
+          {
+            field_label: "Company",
+            field_type: "Text",
+            field_value:staffData?.company || ''
+          },
+          {
+            field_label: "Request For Team",
+            field_type: "Text",
+            field_value:staffData?.team_name[0] || ''
+          },
+          {
+            field_label: "Contract ID",
+            field_type: "Text",
+            field_value:data[0]?.value
+          },
+        ]
+      }
+      if (type == 'Email Activation') {
+        body1.form_fields.push(
+          {
+            field_label: "New Work Email",
+            field_type: "Text",
+            field_value:""
+          },
+          {
+            field_label: "Work Email Password",
+            field_type: "Text",
+            field_value:""
+          }
+        )
+      }
+      console.log('checking body',body1,appr.data.message)
+          createRequest(body1).then(resi => {
+            if (type == 'Email Activation') {
+              contractApi({card_activation_status: 'Pending'}, data[0]?.value)
+            } else {
+              contractApi({email_activation_status: 'Pending'}, data[0]?.value)
+            }
+              PopupSuccess(popup1);
+          }).catch(e => {
+            console.log('e',e)
+          })
   }
+
   return (
     <>
       {!addVisible && <HeadingChip btnList={btnList} classes={`${isHDScreen ? 'optionsTabs' : 'mb-1-5'}`} />}
@@ -142,9 +232,9 @@ export default (props) => {
                   ListCol={ListCol} 
                   ListData={myAvailableLeaves?.availibility} 
                   pagination={false}
-                  extraBtn={'Carry Forward Extension (60 Days)'}
-                  extraAction={carryForward}
-                  btnClass='green-btn'
+                  extraBtn={cfStatus[0]?.carry_forward_expiry_status == 'No' ? 'Carry Forward Extension (60 Days)' : cfStatus[0]?.carry_forward_expiry_status == 'Pending' ? 'Carry Forward Request Pending' : 'Carry Forwarded'}
+                  extraAction={cfStatus[0]?.carry_forward_expiry_status == 'No' ? carryForward : null}
+                  btnClass={cfStatus[0]?.carry_forward_expiry_status == 'No' ? 'green-btn' : 'black-btn'}
                 />
               </Spin>
           </TabPane>

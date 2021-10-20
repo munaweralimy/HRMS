@@ -24,6 +24,12 @@ const categoryList = [
   { label: 'Show Cause Letter', value: 'Show Cause Letter' },
 ]
 
+const init = {
+  form_name: '',
+  sender: '',
+  category: '',
+}
+
 
 const { Title, Text } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -31,9 +37,10 @@ const antIcon = <LoadingOutlined spin />;
 export default (props) => {
 
   const { title, onClose, onUpdate, data } = props;
-  const { control, errors, reset, setValue, handleSubmit, watch } = useForm();
+  const { control, errors, reset, setValue, handleSubmit, watch } = useForm({defaultValues: init});
   const [ load, setLoad ] = useState(false);
   const position = useSelector(state =>  state.global.roles);
+  const fieldList = useSelector(state =>  state.hrmsrequests.fieldData);
 
   const { fields: fields1, append: append1, remove: remove1 } = useFieldArray({
     control,
@@ -55,28 +62,29 @@ export default (props) => {
     } else {
       append1(initQ);
     }
-  }, []);
+  }, [data]);
   
   const onFinish = (val) => {
-    console.log('----', val)
+    console.log('----', val);
+    setLoad(true);
     let approver = [];
-    val.approvers_fields.map(x => {
+    val?.approvers_fields?.map(x => {
       approver.push({
-        approvers: x.approvers.label,
-        approver_detail: x.approver_detail?.label ? x.approver_detail.label : x.approver_detail ? x.approver_detail : '' 
+        approvers: x?.approvers?.label,
+        approver_detail: x?.approver_detail?.label ? x.approver_detail.label : x.approver_detail ? x.approver_detail : '' 
       })
     })
 
     const body = {
-      form_name: val.form_name,
-      sender:val.sender.label,
+      form_name: val?.form_name,
+      sender:val?.sender?.label,
       status: "Active",
       category: val?.category?.label ? val?.category?.label : '',
       approvers: approver,
       form_fields: []
     }
-    console.log('body', body)
-    addRequest(body).then(res => {
+
+    addRequest(body, data?.name).then(res => {
       message.success('Request Successfully Added');
       setLoad(false);
       reset();
@@ -89,7 +97,7 @@ export default (props) => {
 
   const onCategoryChange = (e) => {
     if (e.label == 'Carry Forward Leave Extension')  {
-      setValue('sender', {label: 'All',value: 'All'})
+      setValue('sender', {label: 'Staff',value: 'Staff'})
     } else if (e.label == 'Card Activation')  {
       setValue('sender', {label: 'HR Admin',value: 'HR Admin'})
     } else if (e.label == 'Email Activation')  {
@@ -101,7 +109,7 @@ export default (props) => {
     }
   }
 
-  const fieldList = []
+  
 
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
@@ -151,10 +159,13 @@ export default (props) => {
             selectOption={categoryList}
             />
         </Col>
+        <Col span={24}>
+          <Title level={5} className='mb-0'>Approvers</Title>
+        </Col>
         {fields1.map((item, index) => (
           <Fragment key={item.id}>
             <Col span={24}>
-                <ApprovalFields watch={watch} item={item} index={index} control={control} errors={errors} />
+                <ApprovalFields remove={remove1} watch={watch} item={item} index={index} control={control} errors={errors} />
             </Col>
           </Fragment>
         ))}
@@ -163,18 +174,30 @@ export default (props) => {
               + Add Approver
           </Button>
         </Col>
+        <Col span={24}>
+          <Title level={5} className='mb-0'>Form Fields</Title>
+          {/* <Text>Form Fields</Text> */}
+        </Col>
         {fields2.map((item, index) => (
           <Fragment key={item.id}>
           <Col span={24}>
               <SelectField
                 fieldname={`form_fields[${index}].field_name`}
-                label={''}
+                label={``}
                 control={control}
                 class={`mb-0`}
                 iProps={{ placeholder: 'Please select' }}
                 initValue={item?.field_name ? { label: item?.field_name, value: item?.field_name } : ''}
-                selectOption={fieldList}
+                selectOption={fieldList.map(x => ({label: x.field_label, value: x.name, type: x.type}))}
               />
+              {/* <Button
+                type="link"
+                htmlType="button"
+                className="p-0 h-auto c-gray-linkbtn right-fixed smallFont12"
+                onClick={() => remove2(index)}
+              >
+                Remove
+              </Button> */}
           </Col>
           </Fragment>
         ))}
@@ -183,7 +206,7 @@ export default (props) => {
               + Add Field
           </Button>
         </Col>
-        <Col span={12}><Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>Close</Button></Col>
+        <Col span={12}><Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={() => {reset();onClose()}}>Close</Button></Col>
         <Col span={12}><Button size="large" type="primary" htmlType="submit" className="green-btn w-100">Save</Button></Col>
       </Row>
 

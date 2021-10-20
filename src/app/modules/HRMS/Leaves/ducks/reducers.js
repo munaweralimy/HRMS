@@ -18,7 +18,8 @@ const initialState = {
 
     myProjectData: [],
     myAddProjectData: [],
-    timesheetData: {}
+    timesheetData: {},
+    cforwardstatus: []
 };
 
 export default (state = initialState, action) => {
@@ -66,6 +67,8 @@ export default (state = initialState, action) => {
             return {...state, timesheetData: data };
         case action_types.EMPTY_ALL_LEAVES:
             return initialState;
+        case action_types.CARRY_FORWARD_STATUS:
+            return {...state, cforwardstatus: data };
             
         default:
             return state;
