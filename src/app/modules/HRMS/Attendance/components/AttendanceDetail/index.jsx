@@ -19,7 +19,7 @@ const AttendanceDetails = (props) => {
     if (attendanceData) {
       setValue('attendance_date', attendanceData?.date ? moment(attendanceData?.date, 'YYYY-MM-DD') : '');
       setValue(
-        'Attendance_date_out',
+        'attendance_date_out',
         attendanceData?.Attendance_date_out ? moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD') : '',
       );
       setValue('total_job_hour', attendanceData?.total_work_hour);
@@ -32,14 +32,14 @@ const AttendanceDetails = (props) => {
 
   const onSubmitHandler = (values) => {
     const payload = {
-      name: attendanceData.name,
+      employee: attendanceData.employee_id,
       attendance_date: moment(values.attendance_date).format('YYYY-MM-DD'),
-      Attendance_date_out: moment(values.Attendance_date_out).format('YYYY-MM-DD'),
+      attendance_date_out: moment(values.Attendance_date_out).format('YYYY-MM-DD'),
       // total_job_hour: values.total_job_hour,
       time_in: moment(values.time_in).format('HH:mm:ss'),
       time_out: moment(values.time_out).format('HH:mm:ss'),
       remarks: values.remarks,
-      // status: values.status.value,
+      status: values.status.value,
     };
     setLoad(true);
     updateAttendance(attendanceData.name, payload).then((response) => {
@@ -66,7 +66,7 @@ const AttendanceDetails = (props) => {
               label="Date In"
               control={control}
               class="mb-0"
-              iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
+              iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY', disabled: true }}
               initValue=""
               validate={errors.attendance_date && 'error'}
               validMessage={errors.attendance_date && errors.attendance_date.message}
@@ -74,7 +74,7 @@ const AttendanceDetails = (props) => {
           </Col>
           <Col span={12}>
             <DateField
-              fieldname="Attendance_date_out"
+              fieldname="attendance_date_out"
               label="Date Out"
               control={control}
               class="mb-0"
@@ -126,13 +126,12 @@ const AttendanceDetails = (props) => {
               label="Status"
               control={control}
               class="mb-0"
-              iProps={{ placeholder: 'Please Select status', size: 'large', isDisabled: true }}
+              iProps={{ placeholder: 'Please Select status', size: 'large' }}
               initValue=""
               selectOption={[
                 { value: 'On Duty', label: 'On Duty' },
                 { value: 'Absent', label: 'Absent' },
-                { value: 'Late Clock Out', label: 'Late Clock Out' },
-                { value: 'Late Clock In', label: 'Late Clock In' },
+                { value: 'Present', label: 'Present' },
               ]}
               validate={errors.date_out && 'error'}
               validMessage={errors.date_out && errors.date_out.message}
