@@ -10,7 +10,7 @@ import PendingRequests from './PendingRequests';
 import StaffPerformance from './StaffPerformance';
 import RequestList from '../HRMS/Requests/RequestList';
 import moment from 'moment';
-import { getPendingIssues, getPolicyList, getTimesheetData, getCalenderData } from './ducks/actions';
+import { getPolicyList, getTimesheetData } from './ducks/actions';
 import Roles from '../../../routing/config/Roles';
 import { allowed } from '../../../routing/config/utils';
 
@@ -21,16 +21,15 @@ export default (props) => {
     const dispatch = useDispatch();
     const i18n = useTranslate();
     const { t } = i18n;
-    const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+    
     //const id = 'HR-EMP-00006'
     const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
-    const pendingData = useSelector(state => state.global.pendingData);
+    
     const policyData = useSelector(state => state.global.policyData);
     const timesheetData = useSelector(state => state.global.timesheetData);
-    //const calenderData = useSelector(state => state.global.calenderData);
+    
     
     useEffect(() => {
-        dispatch(getPendingIssues());
         dispatch(getPolicyList());
         dispatch(getTimesheetData());
         //dispatch(getCalenderData());
@@ -48,7 +47,7 @@ export default (props) => {
                <StaffPerformance />
            </Col> : null}
            {allowed([Roles.SETUP]) ? <Col span={24}>
-                <PendingRequests pendingData={pendingData} />
+                <PendingRequests />
             </Col> : null}
        </Row>
     )

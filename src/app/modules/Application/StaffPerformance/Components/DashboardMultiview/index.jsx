@@ -24,10 +24,6 @@ export default (props) => {
   const [searchVal, setSearchVal] = useState(null);
   const [teamSelected, setTeamSelected] = useState('');
 
-
-
-
-
   var data = [
     {
       type: '100%',

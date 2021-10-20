@@ -24,7 +24,6 @@ export default (props) => {
     let listData;
     array?.map(resp => {
       if(resp?.compareDate) {
-        console.log('array', resp?.compareDate, resp?.date)
         if(resp?.leave_type == 'Annual Leave'){
           listData = [
             { type: 'success', content: 'Annual Leave' },
