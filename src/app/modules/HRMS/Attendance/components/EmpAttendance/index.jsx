@@ -42,12 +42,15 @@ const ListCol = [
     dataIndex: 'total_work_hour',
     key: 'total_work_hour',
     align: 'center',
+    sorter: true,
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
     align: 'center',
+    sorter: true,
+
     render: (text) => {
       let clname = '';
       if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {

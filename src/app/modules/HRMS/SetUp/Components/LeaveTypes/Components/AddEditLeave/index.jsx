@@ -14,11 +14,13 @@ const antIcon = <LoadingOutlined spin />;
 
 const ConditionalInput = (props) => {
   const { control, index, field } = props;
+  console.log({ field });
   const approverList = useSelector((state) => state.setup.allApprovers);
   const fieldVales = useWatch({
     name: 'approvers',
     control,
   });
+  console.log({ fieldVales });
   return (
     <Col span={24}>
       <Controller
@@ -100,7 +102,6 @@ export default (props) => {
   };
 
   useEffect(() => {
-    console.log({ leaveType });
     if (leaveType.name.length > 0) {
       dispatch(getSingleLeave(leaveType.name));
     } else {
@@ -111,7 +112,6 @@ export default (props) => {
   useEffect(() => {
     if (Object.entries(singleLeaveValues).length > 0) {
       setLoad(true);
-      console.log({ singleLeaveValues });
       setValue('leave_type', { label: singleLeaveValues?.leave_type, value: singleLeaveValues?.leave_type });
       setValue('contract_type', { label: singleLeaveValues?.contract_type, value: singleLeaveValues?.contract_type });
       setValue('gender', { label: singleLeaveValues?.gender, value: singleLeaveValues?.gender });
@@ -191,9 +191,10 @@ export default (props) => {
   };
 
   const onRemoveSelect = (index) => {
-    if (value[index].approver_level.value == 'Individual') {
-      dispatch(leaveTypeSelect(false));
-    }
+    console.log({ index });
+    // if (value[index].approver_level.value == 'Individual') {
+    //   dispatch(leaveTypeSelect(false));
+    // }
     remove(index);
   };
 

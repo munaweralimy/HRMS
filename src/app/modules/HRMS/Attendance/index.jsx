@@ -4,13 +4,19 @@ import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
-import { getOverallAttendance, getTeamAttendance, getMyAttendance } from './ducks/actions';
+import {
+  getOverallAttendance,
+  getOverallAttendanceList,
+  getTeamAttendance,
+  getTeamAttendanceList,
+  getMyAttendance,
+} from './ducks/actions';
 import Search from './components/Search/OverallSearch';
 import TeamSearch from './components/Search/TeamSearch';
 import MyAttendance from './components/MyAttendance';
 import moment from 'moment';
 import Roles from '../../../../routing/config/Roles';
-import {allowed} from '../../../../routing/config/utils';
+import { allowed } from '../../../../routing/config/utils';
 import { getTeamsDetail } from '../../Application/ducks/actions';
 
 const ListColOverall = [
@@ -132,12 +138,13 @@ const ListColTeams = [
     dataIndex: 'time_out',
     key: 'time_out',
     sorter: true,
-    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
+    render: (text) => (text === '0:00:00' ? '-' : moment(text, 'h:mm:ss a').format('h:mm:ss a')),
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
+    sorter: true,
     align: 'center',
     render: (text) => {
       let clname = '';
@@ -165,36 +172,38 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(6);
 
-  let activeTab = ''
+  let activeTab = '';
 
   if (allowed([Roles.ATTENDANCE])) {
     activeTab = 'overall';
-  } else if(allowed([Roles.ATTENDANCE_TEAMS])) {
+  } else if (allowed([Roles.ATTENDANCE_TEAMS])) {
     activeTab = 'team';
   } else {
     activeTab = 'mytask';
   }
 
   const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
+  const overallAttendanceDataList = useSelector((state) => state.attendance.overallAttendanceList);
   const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
+  const teamAttendanceList = useSelector((state) => state.attendance.teamAttendanceList);
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
-  const teamsDetailData = useSelector(state => state.global.teamsDetailData);
+  const teamsDetailData = useSelector((state) => state.global.teamsDetailData);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
     console.log({ page, limit, sort, sortby });
     if (type == 'list') {
-      dispatch(getOverallAttendance(page, limit, sort, sortby));
+      dispatch(getOverallAttendanceList(page, limit, sort, sortby));
     } else {
-      dispatch(getOverallAttendance(page, limit, sort, sortby));
+      dispatch(getOverallAttendance(page, limit, '', ''));
     }
   };
 
   const onTeamAction = (filter, page, limit, sort, sortby, type, searching, team) => {
     if (type == 'list') {
-      dispatch(getTeamAttendance(team, page, limit, sort, (sortby = 'creation')));
+      dispatch(getTeamAttendanceList(team, page, limit, sort, sortby));
     } else {
-      dispatch(getTeamAttendance(team, page, limit, sort, (sortby = 'creation')));
+      dispatch(getTeamAttendance(team, page, limit, '', ''));
     }
   };
 
@@ -218,13 +227,13 @@ export default (props) => {
       visible: allowed([Roles.ATTENDANCE]),
       title: 'Overall Attendance',
       key: 'overall',
-      count: overallAttendanceData?.count,
+      count: overallAttendanceData?.count || overallAttendanceDataList?.count || 0,
       Comp: MultiView,
       iProps: {
         carddata: overallAttendanceData?.rows || [],
         cardcount: overallAttendanceData?.count || 0,
-        listdata: overallAttendanceData?.rows || [],
-        listcount: overallAttendanceData?.count || 0,
+        listdata: overallAttendanceDataList?.rows || [],
+        listcount: overallAttendanceDataList?.count || 0,
         listCol: ListColOverall,
         link: '/attendance/',
         Search: Search,
@@ -236,18 +245,18 @@ export default (props) => {
       visible: allowed([Roles.ATTENDANCE_TEAMS]),
       title: 'Team Attendance',
       key: 'team',
-      count: teamAttendance?.count,
+      count: teamAttendance?.count || teamAttendanceList?.count || 0,
       iProps: {
         carddata: teamAttendance?.rows || [],
         cardcount: teamAttendance?.count || 0,
-        listdata: teamAttendance?.rows || [],
-        listcount: teamAttendance?.count || 0,
+        listdata: teamAttendanceList?.rows || [],
+        listcount: teamAttendanceList?.count || 0,
         listCol: ListColTeams,
         link: '/attendance/',
         Search: TeamSearch,
         statusKey: 'status',
         updateApi: onTeamAction,
-        teamDrop: teamsDetailData
+        teamDrop: teamsDetailData,
       },
       Comp: MultiView,
     },
