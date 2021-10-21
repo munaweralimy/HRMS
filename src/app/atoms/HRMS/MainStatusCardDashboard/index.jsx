@@ -55,9 +55,9 @@ export default (props) => {
             </Card>
             <Card bordered={false} className="mini-card b-black dashboard-FitCard">
               <Descriptions>
-                  <Descriptions.Item span={24} label="Fit Index Score"><span className={`${Number(data?.fit_index) > 80 ? 'c-success' : Number(data?.fit_index) > 50 ? 'c-pending' : 'c-error'}`}>{data?.fit_index}%</span></Descriptions.Item>
-                  <Descriptions.Item span={24} label="Attendance"><span className={`${Number(data?.attendance) > 90 ? 'c-success' : Number(data?.attendance) > 70 ? 'c-pending' : 'c-error'}`}>{data?.attendance}%</span></Descriptions.Item>
-                  <Descriptions.Item span={24} label="Leaves"><span>{data?.leaves}</span></Descriptions.Item>
+                  <Descriptions.Item span={24} label="Fit Index Score"><span className={`${Number(data?.fit_index) > 80 ? 'c-success' : Number(data?.fit_index) > 50 ? 'c-pending' : 'c-error'}`}>{data?.fit_index}</span></Descriptions.Item>
+                  <Descriptions.Item span={24} label="Attendance"><span className={`${Number(data?.attendance) > 90 ? 'c-success' : Number(data?.attendance) > 70 ? 'c-pending' : 'c-error'}`}>{data?.attendance}</span></Descriptions.Item>
+                  <Descriptions.Item span={24} label="Leaves"><span>{data?.percentage_leaves}</span></Descriptions.Item>
               </Descriptions>
             </Card>
           </Col>

@@ -20,39 +20,72 @@ export default (props) => {
     dispatch(getCalenderData(startOfMonth,endOfMonth,companyName));
   }, [])
 
-  function getListData(value) {
+  function getListData(array) {
     let listData;
-    switch (value.date()) {
-      case 8:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-        ];
-        break;
-      case 10:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-          { type: 'error', content: 'This is error event.' },
-        ];
-        break;
-      case 23:
-        listData = [
-          { type: 'warning', content: 'This is warning event' },
-          { type: 'success', content: 'This is very long usual event。。....' },
-          { type: 'error', content: 'This is error event 1.' },
-          { type: 'error', content: 'This is error event 2.' },
-          { type: 'purple', content: 'This is error event 3.' },
-          { type: 'error', content: 'This is error event 4.' },
-        ];
-        break;
-      default:
-    }
+    array?.map(resp => {
+      if(resp?.compareDate) {
+        if(resp?.leave_type == 'Annual Leave'){
+          listData = [
+            { type: 'success', content: 'Annual Leave' },
+          ];
+        }
+        if(resp?.leave_type == 'Medical Leave'){
+          listData = [
+            { type: 'error', content: 'Medical Leave' },
+          ];
+        }
+      }
+    })
+    
+    // switch (value.date()) {
+    //   case 8:
+    //     listData = [
+    //       { type: 'warning', content: 'This is warning event.' },
+    //       { type: 'success', content: 'This is usual event.' },
+    //     ];
+    //     break;
+    //   case 10:
+    //     listData = [
+    //       { type: 'warning', content: 'This is warning event.' },
+    //       { type: 'success', content: 'This is usual event.' },
+    //       { type: 'error', content: 'This is error event.' },
+    //     ];
+    //     break;
+    //   case 23:
+    //     listData = [
+    //       { type: 'warning', content: 'This is warning event' },
+    //       { type: 'success', content: 'This is very long usual event。。....' },
+    //       { type: 'error', content: 'This is error event 1.' },
+    //       { type: 'error', content: 'This is error event 2.' },
+    //       { type: 'purple', content: 'This is error event 3.' },
+    //       { type: 'error', content: 'This is error event 4.' },
+    //     ];
+    //     break;
+    //   default:
+    // }
     return listData || [];
   }
 
   function dateCellRender(value) {
-    const listData = getListData(value);
+    let sDate = null;
+    let eDate = null;
+    let cDate = null;
+    let vDate = null
+    let array = []
+    calenderData?.map(resp => {
+      sDate = moment(resp?.start_date).format('YYYY-MM-DD');
+      eDate = moment(resp?.end_date).format('YYYY-MM-DD');
+      cDate = moment(value);
+      vDate = cDate?.isBetween(sDate,eDate)
+      array.push({
+        compareDate: vDate,
+        leave_type: resp?.leave_type,
+        date: value.date()
+      })
+    })
+    //console.log('value',array,vDate)
+    
+    const listData = getListData(array);
     const unique = [...new Map(listData.map(item => [item.type, item])).values()];
     return (
       <Space size={3} className='justify-cetner' wrap>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 import { getRequestPending } from '../../HRMS/Requests/ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,19 +6,26 @@ import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import DashboardMultiview from './Components/DashboardMultiview/';
 import Search from './Components/Search/';
 import { useHistory } from 'react-router-dom';
+import { allowed } from '../../../../routing/config/utils';
+import Roles from '../../../../routing/config/Roles';
+import { getStaffPerformance } from '../../Application/ducks/actions';
 
 export default (props) => {
-
+  const {performanceData} = props;
+  console.log('performanceData', performanceData)
   const dispatch = useDispatch();
   const history = useHistory();
   const [activeKey, setActiveKey] = useState('pending');
-  const dataPending = useSelector((state) => state.hrmsrequests.requestListPending);
-  const dataYour = useSelector((state) => state.hrmsrequests.requestListYourRequest);
-  const dataArchive = useSelector((state) => state.hrmsrequests.requestListArchive);
-
+  const staffData = useSelector(state => state.global.staffData);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   const onAction1 = (status, page, sort) => {
     dispatch(getRequestPending(page, sort));
   }
+
+  useEffect(() => {
+    dispatch(getStaffPerformance(company));
+    //dispatch(getCalenderData());
+}, [])
 
   const data = {
     count: 49,
@@ -172,17 +179,18 @@ export default (props) => {
 
   const tabs = [
     {
+      visible: allowed([Roles.ADVANCEMENT]),
       title: 'Staff Performance',
       key: 'pending',
-      count: data?.count,
+      count: staffData?.count,
       Comp: DashboardMultiview,
       iProps: {
         key: 'pending',
-        carddata: data?.rows || [],
-        cardcount: data?.count || 0,
+        carddata: staffData?.rows || [],
+        cardcount: staffData?.count || 0,
 
-        listdata: data?.rows || [],
-        listcount: data?.count || 0,
+        listdata: staffData?.rows || [],
+        listcount: staffData?.count || 0,
         listCol: ListColOverall,
 
         link: '/requests/',
