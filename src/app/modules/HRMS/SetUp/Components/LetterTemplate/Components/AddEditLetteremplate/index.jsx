@@ -13,12 +13,6 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { InputField } from '../../../../../../../atoms/FormElement';
 const antIcon = <LoadingOutlined spin />;
 
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
 export default (props) => {
   const { title, onClose, templateData } = props;
   const { Title, Text } = Typography;
@@ -32,33 +26,29 @@ export default (props) => {
   });
   const { control, errors, setValue, handleSubmit, reset } = useForm();
 
-  const handleChange = (info, fileVal) => {
-    console.log({ info, fileVal });
-    if (fileVal === 'header') {
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        let tempsHeadandFoot = { ...header, headerloading: false, imageUrlHeader: imageUrl };
-        setHeader(tempsHeadandFoot);
+  const beforeUpload = (file, fileType) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.addEventListener('load', (event) => {
+      const _loadedImageUrl = event.target.result;
+      const image = document.createElement('img');
+      image.src = _loadedImageUrl;
+      image.addEventListener('load', () => {
+        const { width, height } = image;
+        console.log({ width, height });
+        if (width > 210 || height > 32) {
+          message.error('Image size must 210mm x 32mm');
+        } else {
+          if (fileType === 'header') {
+            let tempsHeadandFoot = { ...header, headerloading: false, imageUrlHeader: _loadedImageUrl };
+            setHeader(tempsHeadandFoot);
+          } else if (fileType === 'footer') {
+            let tempsHeadandFoot = { ...header, footerloading: false, imageUrlFooter: _loadedImageUrl };
+            setHeader(tempsHeadandFoot);
+          }
+        }
       });
-    } else if (fileVal === 'footer') {
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        let tempsHeadandFoot = { ...header, footerloading: false, imageUrlFooter: imageUrl };
-        setHeader(tempsHeadandFoot);
-      });
-    }
-  };
-
-  const beforeUpload = (file) => {
-    console.log({ file });
-
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 1.18;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
+    });
   };
 
   const uploadImage = async (file) => {
@@ -239,9 +229,8 @@ export default (props) => {
                   fileList={fileList}
                   onChange={(e) => {
                     onChange(e);
-                    handleChange(e, 'header');
                   }}
-                  beforeUpload={beforeUpload}
+                  beforeUpload={(e) => beforeUpload(e, 'header')}
                 >
                   {!header.headerloading ? (
                     <img
@@ -291,9 +280,8 @@ export default (props) => {
                   fileList={fileList}
                   onChange={(e) => {
                     onChange(e);
-                    handleChange(e, 'footer');
                   }}
-                  beforeUpload={beforeUpload}
+                  beforeUpload={(e) => beforeUpload(e, 'footer')}
                 >
                   {!header.footerloading ? (
                     <img

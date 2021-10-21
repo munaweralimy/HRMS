@@ -14,13 +14,12 @@ const antIcon = <LoadingOutlined spin />;
 
 const ConditionalInput = (props) => {
   const { control, index, field } = props;
-  console.log({ field });
   const approverList = useSelector((state) => state.setup.allApprovers);
+
   const fieldVales = useWatch({
     name: 'approvers',
     control,
   });
-  console.log({ fieldVales });
   return (
     <Col span={24}>
       <Controller
@@ -87,6 +86,7 @@ export default (props) => {
   const { control, errors, reset, setValue, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const singleLeaveValues = useSelector((state) => state.setup.singleLeave);
+  const disabled = useSelector((state) => state.setup.selectedLeave);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -130,6 +130,17 @@ export default (props) => {
           : { approver_level: value.approver_level },
       );
       setValue('approvers', approvers);
+      let diableApprover = { manager: false, supervisor: false, teamLead: false };
+      approvers.map((value) => {
+        if (value.approver_level === 'Manager') {
+          diableApprover.manager = true;
+        } else if (value.approver_level === 'Supervisor') {
+          diableApprover.supervisor = true;
+        } else if (value.approver_level === 'Team Lead') {
+          diableApprover.teamLead = true;
+        }
+      });
+      dispatch(leaveTypeSelect(diableApprover));
       setLoad(false);
     } else {
       reset();
@@ -191,10 +202,16 @@ export default (props) => {
   };
 
   const onRemoveSelect = (index) => {
-    console.log({ index });
-    // if (value[index].approver_level.value == 'Individual') {
-    //   dispatch(leaveTypeSelect(false));
-    // }
+    if (value[index].approver_level.value == 'Manager') {
+      let ableManager = { ...disabled, manager: false };
+      dispatch(leaveTypeSelect(ableManager));
+    } else if (value[index].approver_level.value == 'Team Lead') {
+      let ableManager = { ...disabled, teamLead: false };
+      dispatch(leaveTypeSelect(ableManager));
+    } else if (value[index].approver_level.value == 'Supervisor') {
+      let ableManager = { ...disabled, supervisor: false };
+      dispatch(leaveTypeSelect(ableManager));
+    }
     remove(index);
   };
 
@@ -222,7 +239,6 @@ export default (props) => {
                 <Col span={24}>
                   <Space size={15} direction="vertical" className="w-100">
                     {fields.map((elem, index) => {
-                      console.log({ elem });
                       return (
                         <Row gutter={[24, 8]}>
                           {item.child.map((x, i) => (

@@ -31,7 +31,7 @@ const initialState = {
   getAllDepartments: [],
   getSpecificEmployeeList: [],
   letterTempList: [],
-  selectedLeave: false,
+  selectedLeave: { manager: false, supervisor: false, teamLead: false },
   viewWarninLette: { name: '', warning_letter_template: '', visible: false },
 };
 

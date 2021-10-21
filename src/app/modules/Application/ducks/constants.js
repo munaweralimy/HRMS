@@ -4,6 +4,7 @@ export const TIMESHEET_DATA = "TIMESHEET_DATA";
 export const CHECK_IN_DATA = "CHECK_IN_DATA";
 export const EMPLOYEE_ID = "EMPLOYEE_ID";
 export const CALENDER_DATA = "CALENDER_DATA";
+export const STAFF_DATA = "STAFF_DATA";
 
 export const COUNTRY = "COUNTRY";
 export const RACE = "RACE";

@@ -1,10 +1,17 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Row, Col } from "antd";
 import PendingRequestCard from '../../../molecules/PendingRequestCard';
 import HeadingChip from '../../../molecules/HeadingChip';
+import { getPendingIssues } from '../../Application/ducks/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default (props) => {
-    const {pendingData} = props;
+    const dispatch = useDispatch();
+    const pendingData = useSelector(state => state.global.pendingData);
+
+    useEffect(() => {
+        dispatch(getPendingIssues());
+    }, [])
 
     return (
         <Row gutter={[20, 30]}>

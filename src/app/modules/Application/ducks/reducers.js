@@ -7,6 +7,8 @@ const initialState = {
     checkInData: [],
     teamsDetailData: [],
     calenderData: [],
+    staffData: [],
+
 
     checkInData: [],
     countryData: [],
@@ -42,6 +44,9 @@ export default (state = initialState, action) => {
 
         case action_types.EMPLOYEE_ID:
             return {...state, teamsDetailData: data };
+
+        case action_types.STAFF_DATA:
+            return {...state, staffData: data };
 
         case action_types.CALENDER_DATA:
             return {...state, calenderData: data };

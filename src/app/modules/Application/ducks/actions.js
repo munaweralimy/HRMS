@@ -64,6 +64,19 @@ export const getCalenderData = (sDate, eDate, company) => {
   };
 };
 
+export const getStaffPerformance = (company) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.dashboard_api.staff_performance?company=${company}&order=ASC&orderby=employee_id`);
+    dispatch({
+      type: action_types.STAFF_DATA,
+      data: message,
+    });
+  };
+};
+
+
 export const getTeamsDetail = (employeeid) => {
   return async (dispatch) => {
     const {

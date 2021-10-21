@@ -4,7 +4,7 @@ import ListWithDetails from './ListWithDetails';
 import { apiMethod } from '../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 import axios from '../../../../../../services/axiosInterceptor';
-
+import moment from 'moment';
 const { TabPane } = Tabs;
 const antIcon = <LoadingOutlined spin />;
 
@@ -13,13 +13,14 @@ export default (props) => {
   const { id, data, updateApi } = props;
   const [load, setLoad] = useState(false);
   const [update, setUpdate] = useState(false);
-  
+  console.log('data',data)
   const ListCol = [
     {
       title: 'Contract Type',
       dataIndex: 'contract_type',
       key: 'contract_type',
       sorter: true,
+      width: '130px'
     },
     {
       title: 'Job Title',
@@ -27,6 +28,7 @@ export default (props) => {
       key: 'job_title',
       elipsis: true,
       sorter: true,
+      width: '140px'
     },
     {
       title: 'Company',
@@ -40,11 +42,30 @@ export default (props) => {
       dataIndex: 'start_date',
       key: 'start_date',
       sorter: true,
+      width: '120px'
     },
     {
       title: 'End',
       dataIndex: 'end_date',
       key: 'end_date',
+      sorter: true,
+      width: '120px'
+    },
+  ]
+
+  const warnCol = [
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+      sorter: true,
+      width: '120px',
+      render: text => moment(text).format('DD-MM-YYYY'),
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
       sorter: true,
     },
   ]
@@ -83,8 +104,13 @@ export default (props) => {
   }
 
   const tabs = {
+    employmentHeading: 'Employment History',
+    terminationHeading: 'Termination & Resignation',
+    warningHeading: 'Warning Letter History',
     data: data,
     column: ListCol,
+    warningColumg: warnCol,
+
   }
 
   return (

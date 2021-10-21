@@ -33,7 +33,7 @@ const ListCol = [
     dataIndex: 'time_out',
     key: 'time_out',
     sorter: true,
-    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
+    render: (text) => (text === '0:00:00' ? '-' : moment(text, 'h:mm:ss a').format('h:mm:ss a')),
   },
   {
     title: 'Hours',
