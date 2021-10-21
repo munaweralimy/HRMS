@@ -43,11 +43,13 @@ const AttendanceDetails = (props) => {
     };
     setLoad(true);
     updateAttendance(attendanceData.name, payload).then((response) => {
-      if (response.status === 200) {
-        message.success(`${attendanceData.name} Attendance Update Successfully`);
-        setLoad(false);
-        onViewForm(false);
+      if (response.data.message.success == true) {
+        message.success(response.data.message.message);
+      } else {
+        message.error(response.data.message.message);
       }
+      setLoad(false);
+      onViewForm(false);
     });
   };
 
