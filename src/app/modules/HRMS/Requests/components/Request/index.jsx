@@ -214,7 +214,7 @@ export default (props) => {
                     <Col span={24}>
                       <Row gutter={[20,20]} className='justify-right'>
                         {activeTab == 'pending' && <ApproveRejectButton data={item} currentD={id} onAction={onApproveReject} />}
-                        {activeTab!='archive' && revertBtn(item.approvers, item?.name)}
+                        {activeTab =='archive' && revertBtn(item.approvers, item?.name)}
                         {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)}
                       </Row>
                     </Col>

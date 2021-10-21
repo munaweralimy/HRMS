@@ -132,9 +132,9 @@ export default (props) => {
       console.log('checking body',body1,appr.data.message)
           createRequest(body1).then(resi => {
             if (type == 'Email Activation') {
-              contractApi({card_activation_status: 'Pending'}, data[0]?.value)
-            } else {
               contractApi({email_activation_status: 'Pending'}, data[0]?.value)
+            } else {
+              contractApi({card_activation_status: 'Pending'}, data[0]?.value)
             }
               PopupSuccess(popup1);
           }).catch(e => {

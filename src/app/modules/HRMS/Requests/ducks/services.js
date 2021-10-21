@@ -6,7 +6,7 @@ export const createRequest = (body) => {
 };
 
 export const cancelRequest = (id) => {
-    return axios.put(`${apiresource}/HRMS Form Request/${id}`, {status:"Inactive"});
+    return axios.delete(`${apiresource}/HRMS Form Request/${id}`);
 };
 
 export const updateRequest = (id, body) => {
