@@ -472,10 +472,10 @@ export const getAllApprovers = () => async (dispatch) => {
     data: data,
   });
 };
-export const leaveTypeSelect = (boolean) => (dispach) => {
+export const leaveTypeSelect = (data) => (dispach) => {
   dispach({
     type: action_types.LEAVE_SELECT_TYPE,
-    data: boolean,
+    data: data,
   });
 };
 

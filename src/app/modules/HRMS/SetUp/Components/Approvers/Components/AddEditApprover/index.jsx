@@ -77,16 +77,16 @@ export default (props) => {
     reader.readAsDataURL(img);
   }
 
-  const handleChange = (info) => {
-    getBase64(info.file.originFileObj, (imageUrl) => {
-      console.log({ imageUrl });
-      setImage({
-        imageUrl: imageUrl,
-        fileObj: info.file.originFileObj,
-        loading: false,
-      });
-    });
-  };
+  // const handleChange = (info) => {
+  //   getBase64(info.file.originFileObj, (imageUrl) => {
+  //     console.log({ imageUrl });
+  //     setImage({
+  //       imageUrl: imageUrl,
+  //       fileObj: info.file.originFileObj,
+  //       loading: false,
+  //     });
+  //   });
+  // };
 
   let timeout;
   let currentValue;
@@ -122,17 +122,26 @@ export default (props) => {
   }
 
   const beforeUpload = (file) => {
-    console.log({ file });
-
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 1.18;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.addEventListener('load', (event) => {
+      const _loadedImageUrl = event.target.result;
+      const image = document.createElement('img');
+      image.src = _loadedImageUrl;
+      image.addEventListener('load', () => {
+        const { width, height } = image;
+        console.log({ width }, { height });
+        if (width > 50 || height > 25) {
+          message.error('Image size must 50mm x 25mm');
+        } else {
+          setImage({
+            imageUrl: _loadedImageUrl,
+            fileObj: file,
+            loading: false,
+          });
+        }
+      });
+    });
   };
 
   const handleSearch = (value) => {
@@ -241,7 +250,7 @@ export default (props) => {
                         accept="image"
                         maxCount={1}
                         fileList={fileList}
-                        onChange={handleChange}
+                        // onChange={handleChange}
                         beforeUpload={beforeUpload}
                       >
                         {!image.loading ? (
@@ -252,7 +261,7 @@ export default (props) => {
                                 : image.imageUrl
                             }
                             alt={<PlusCircleFilled />}
-                            style={{ width: '100%' }}
+                            style={{ width: '98%', height: '213px' }}
                           />
                         ) : (
                           <PlusCircleFilled style={{ fontSize: '30px' }} />

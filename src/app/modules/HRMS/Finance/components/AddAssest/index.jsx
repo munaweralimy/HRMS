@@ -17,7 +17,7 @@ const AddAsset = (props) => {
   const { Title } = Typography;
   useEffect(() => {
     if (data?.asset_no) {
-      setValue('asset_no', data?.asset_no);
+      setValue('asset_no', { label: data?.asset_no, value: data?.asset_no });
       setValue('description', data?.description);
       setValue('start_date', data.start_date ? moment(data.start_date, 'YYYY-MM-DD') : '');
       setValue('end_date', data.end_date ? moment(data.end_date, 'YYYY-MM-DD') : '');
@@ -26,7 +26,7 @@ const AddAsset = (props) => {
 
   const onSubmitHandler = (values) => {
     const payload = {
-      asset_no: values?.asset_no,
+      asset_no: values?.asset_no.value,
       start_date: moment(values?.start_date).format('YYYY-MM-DD'),
       end_date: moment(values?.end_date).format('YYYY-MM-DD'),
       description: values?.description,
@@ -67,7 +67,7 @@ const AddAsset = (props) => {
               Asset Details
             </Title>
           </Col>
-          {addAsset.map((value, key) => (
+          {addAsset().map((value, key) => (
             <FormGroup key={key} item={value} control={control} errors={errors} />
           ))}
           <Col span={24}>
