@@ -9,13 +9,13 @@ const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
-const ApproveRejectButton = ({data, currentD, onAction}) => {
+const ApproveRejectButton = ({data, currentID, onAction}) => {
     
   const [rejectEnable, setRejectEnable] = useState(false);
   let appr = data.approvers.find(y => y.approvers == 'Job Position');
   console.log('kkk', appr);
   // let x = data.form_fields.find(y => y.field_label == "Request For" && y.field_value == currentD)
-  let x= 'dd';
+  let x= undefined;
   const onFinish = (val) => {
     onAction('Reject', data, val.remarks);
   }
@@ -47,12 +47,12 @@ const ApproveRejectButton = ({data, currentD, onAction}) => {
         </>
         :
         <>
-          {/* <Col span={12}>
+          <Col span={12}>
             <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null)}>Approve</Button>
           </Col>
           <Col span={12}>
             <Button type='primary' htmlType='button' className='w-100 red-btn' size='large' onClick={() => setRejectEnable(true)}>Reject</Button>
-          </Col> */}
+          </Col>
         </>}
       </>
     }
@@ -136,40 +136,39 @@ export default (props) => {
 
   const onApproveReject = (status, item, remarks) => {
 
-    // const { name, departments } = item;
-    // let dep =[];
-    // departments.map(z => {
-    //   if (z.department == currentDept.department) {
-    //     dep.push({
-    //       department: z.department,
-    //       status: status,
-    //       remarks: remarks
-    //     })
-    //   } else {
-    //     dep.push({
-    //       department: z.department,
-    //       status: z.department_status
-    //     })
-    //   }
-    // })
+    const { name, approvers } = item;
+    let dep =[];
+    approvers.map(z => {
+      if (z.department == currentDept.department) {
+        dep.push({
+          department: z.department,
+          status: status,
+          remarks: remarks
+        })
+      } else {
+        dep.push({
+          department: z.department,
+          status: z.department_status
+        })
+      }
+    })
 
-    // const payload = {
-    //   departments: dep,
-    // };
+    const payload = {
+      approvers: dep,
+    };
 
 
-    // updateRequest(payload, name)
-    //   .then((response) => {
-    //     status === 'Approve'
-    //       ? message.success('Request Approve Successfully')
-    //       : message.success('Request Reject Successfully');
-    //       updateReqApi();
-    //   })
-    //   .catch((error) => message.error(error));
+    updateRequest(payload, name)
+      .then((response) => {
+        status === 'Approve'
+          ? message.success('Request Approve Successfully')
+          : message.success('Request Reject Successfully');
+          updateReqApi();
+      })
+      .catch((error) => message.error(error));
   };
 
   const cancelBtn = (fileds, name) => {
-    console.log('xfields',x ,fileds, name)
     let x = fileds.find(y => y.field_label == "Requester ID" && y.field_value == id)
     if (x) {
       return (
@@ -216,6 +215,7 @@ export default (props) => {
                         {activeTab == 'pending' && <ApproveRejectButton data={item} currentD={id} onAction={onApproveReject} />}
                         {activeTab =='archive' && revertBtn(item.approvers, item?.name)}
                         {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)}
+                        {cancelBtn(item?.form_fields, item?.name)}
                       </Row>
                     </Col>
                   </Row>

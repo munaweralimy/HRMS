@@ -130,20 +130,30 @@ export default (props) => {
           console.log('check approver', req.data)
 
           let approvetemp = [];
-          req.data.data.approvers.map(x => {
+          req?.data?.data?.approvers.map(x => {
+            let aid = '';
+            if (x.approvers == 'Manager') {
+              aid = appr.manager_id;
+            } else if (x.approvers == 'Supervisor') {
+              aid = appr.supervisor_id;
+            } else if(x.approvers == 'Supervisor') {
+              aid = appr.supervisor_id;
+            }
+    
             approvetemp.push({
                 approvers: x.approvers,
-                approvers_detail: x.approvers_detail || '',
-                approver_id: appr.data.message[0].manager_id,
+                approver_detail: x.approver_detail || '',
+                approver_id: aid,
                 Status:"Pending",
                 remarks:""
             })
           })
+          
           const body1 = {
               form_name: req.data.data.form_name,
               sender: req.data.data.sender,
               approvers: approvetemp,
-
+              status: 'Pending',
               form_fields: [
               { 
                 field_label: "Requester",

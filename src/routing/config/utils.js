@@ -37,7 +37,6 @@ export function allowedRoutes(routes) {
 }
 
 export function allowed(permission) {
-    console.log('checking', permission)
     let permit =  conversion();
     if(!isArrayWithLength(permission)) return true;
     else return intersection(permission, permit).length;

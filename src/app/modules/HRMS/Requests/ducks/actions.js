@@ -50,10 +50,10 @@ export const getFormFields = () => {
     };
 };
 
-export const getRequestDetails = (id) => async (dispatch) => {
+export const getRequestDetails = (id, approver) => async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_staff_requests?staff_id=${id}`);
+    } = await axios.get(`${apiMethod}/hrms.api.get_staff_requests?staff_id=${id}${approver ? `&approver_id=${approver}`: ''}`);
     dispatch({
       type: action_types.REQUEST_DATA,
       data: message,

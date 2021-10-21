@@ -313,7 +313,7 @@ export default (props) => {
             <Col span={24}>
               {mode == 'edit' ?
               <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-                <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} />
+                <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} setLoad={setLoad} updateApi={updateApi} />
               </Form>
               :
               <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />}
