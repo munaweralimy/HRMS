@@ -3,8 +3,7 @@ import { Row, Col, Typography, Space, Tag, Card, Form, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import StatsCard from './components/Stats';
-import Aptitudes from './components/Aptitudes';
-import JobRelatedAssessment from './components/JobRelatedAssessment';
+import JobRelatedSkills from './components/JobRelatedSkills';
 import OtherSkills from './components/OtherSkills'
 
 import { getFitFigure } from '../../../Advancement/dcuks/action';
@@ -55,13 +54,10 @@ export default ({id}) => {
         </Row>
       </Col>
       <Col span={24}>
-          <JobRelatedAssessment data={figures} updateApi={updateApi} id={id} />
+          <JobRelatedSkills data={figures} updateApi={updateApi} id={id} />
       </Col>
       <Col span={24}>
           <OtherSkills data={figures} updateApi={updateApi} id={id} />
-      </Col>
-      <Col span={24}>
-        <Aptitudes data={figures} updateApi={updateApi} id={id} />
       </Col>
     </Row>
   );
