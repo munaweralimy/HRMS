@@ -50,7 +50,10 @@ const AddAccount = (props) => {
   };
 
   const onDeleteHandler = () => {
+    setLoad(true);
+
     deleteAccount(selectedAccout.name, { status: 'Inactive' }).then((response) => {
+      setLoad(false);
       message.success(`Account ${selectedAccout.name} Deleted Seccussfully`);
       onCloseForm('', '');
     });

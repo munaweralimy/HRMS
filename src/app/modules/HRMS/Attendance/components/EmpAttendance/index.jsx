@@ -53,7 +53,7 @@ const ListCol = [
 
     render: (text) => {
       let clname = '';
-      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
+      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave' || text == 'Holiday') {
         clname = 'c-success';
       } else if (text == 'Absent') {
         clname = 'c-error';

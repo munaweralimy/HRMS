@@ -36,12 +36,20 @@ const AddSalaryAdvance = (props) => {
     setLoad(true);
     data?.name
       ? updateSalaryAdvance(data.name, payload).then((response) => {
-          message.success(`Advance Salary ${data.name} Updated Successfully`);
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           setLoad(false);
           onUpdateComplete();
         })
       : addNewSalaryAdvance({ employee_id: id, salary_advance: { ...payload } }).then((response) => {
-          message.success(`Advance Salary Added Successfully`);
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           setLoad(false);
           onUpdateComplete();
         });
