@@ -20,8 +20,9 @@ const ApproveRejectButton = ({data, currentID, onAction}) => {
   let ind = data.approvers.find(y => y.approver_detail == currentID);
   let other = data.approvers.find(y => y.approver_id == currentID);
 
+  console.log('kkk', currentID, other)
   const onFinish = (val) => {
-    onAction('Reject', data, val.remarks, currentID, pos, ind);
+    onAction('Reject', data, val.remarks, pos, ind);
   }
   
   return (
@@ -38,7 +39,7 @@ const ApproveRejectButton = ({data, currentID, onAction}) => {
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null)}>Approve</Button>
+                  <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null, pos, ind)}>Approve</Button>
                 </Col>
                 <Col span={12}>
                   <Button type='primary' htmlType='submit' className='w-100 red-btn' size='large'>Reject</Button>
@@ -51,7 +52,7 @@ const ApproveRejectButton = ({data, currentID, onAction}) => {
         <>
         {(pos && pos?.status == 'Pending' || ind && ind?.status == 'Pending' || other && other?.status == 'Pending') && <>
           <Col span={12}>
-            <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null, currentID, pos, ind)}>Approve</Button>
+            <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null, pos, ind)}>Approve</Button>
           </Col>
           <Col span={12}>
             <Button type='primary' htmlType='button' className='w-100 red-btn' size='large' onClick={() => setRejectEnable(true)}>Reject</Button>
@@ -138,9 +139,9 @@ export default (props) => {
     .catch((error) => message.error(error));
   }
 
-  const onApproveReject = (status, item, remarks, currentID, pos, ind) => {
+  const onApproveReject = (status, item, remarks, pos, ind) => {
 
-    console.log('chck', item, status, currentID, pos, ind)
+    console.log('chck', item, status, id, pos, ind)
     const { name, approvers, form_fields, category } = item;
     let contractid = null;
     let dep =[];
@@ -156,15 +157,15 @@ export default (props) => {
       } else if(z.approvers == 'Individual' && ind?.status == 'Pending') {
         dep.push({
           approvers: z.approvers,
-          approvers: z.approver_detail,
+          approver_detail: z.approver_detail,
           approvers_id: z.approver_id,
           status: status,
           remarks: remarks
         })
-      } else if(z.approver_id == currentID) {
+      } else if(z.approver_id == id) {
         dep.push({
           approvers: z.approvers,
-          approvers: z.approver_detail,
+          approver_detail: z.approver_detail,
           approvers_id: z.approver_id,
           status: status,
           remarks: remarks
@@ -172,7 +173,7 @@ export default (props) => {
       } else {
         dep.push({
           approvers: z.approvers,
-          approvers: z.approver_detail,
+          approver_detail: z.approver_detail,
           approvers_id: z.approver_id,
           status: z.status
         })
@@ -299,7 +300,7 @@ export default (props) => {
                     </Col>
                     <Col span={24}>
                       <Row gutter={[20,20]} className='justify-right'>
-                        {activeTab == 'pending' && <ApproveRejectButton data={item} currentD={id} onAction={onApproveReject} />}
+                        {activeTab == 'pending' && <ApproveRejectButton data={item} currentID={id} onAction={onApproveReject} />}
                         {activeTab =='archive' && revertBtn(item.approvers, item?.name)}
                         {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)}
                       </Row>
