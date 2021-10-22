@@ -37,13 +37,16 @@ const AddAsset = (props) => {
       ? updateAssets(data?.name, payload).then((response) => {
           if (response.status === 200) {
             message.success(`Asset ${data?.asset_no} update successfully`);
-            a;
             setLoad(false);
             onUpdateComplete();
           }
         })
       : addNewAsset({ employee_id: id, assets: { ...payload } }).then((response) => {
-          message.success(`New Asset added successfully`);
+          if (response.data.message.success == true) {
+            message.success(response.data.message.message);
+          } else {
+            message.error(response.data.message.message);
+          }
           setLoad(false);
           onUpdateComplete();
         });
