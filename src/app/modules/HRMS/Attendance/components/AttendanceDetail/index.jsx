@@ -10,6 +10,7 @@ const antIcon = <LoadingOutlined spin />;
 
 const AttendanceDetails = (props) => {
   const { attendanceData, onViewForm } = props;
+  console.log({ attendanceData });
   const { Title } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
@@ -22,7 +23,10 @@ const AttendanceDetails = (props) => {
         'attendance_date_out',
         attendanceData?.Attendance_date_out ? moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD') : '',
       );
-      setValue('total_job_hour', attendanceData?.total_work_hour);
+      setValue(
+        'total_job_hour',
+        attendanceData?.total_work_hour?.substring(0, attendanceData?.total_work_hour.indexOf(':')),
+      );
       setValue('status', { value: attendanceData?.status, label: attendanceData.status });
       setValue('time_in', attendanceData?.time_in ? moment(attendanceData?.time_in, 'h:mm:ss a') : '');
       setValue('time_out', attendanceData?.time_out ? moment(attendanceData?.time_out, 'h:mm:ss a') : '');
@@ -39,7 +43,7 @@ const AttendanceDetails = (props) => {
       time_in: moment(values.time_in).format('HH:mm:ss'),
       time_out: moment(values.time_out).format('HH:mm:ss'),
       remarks: values.remarks,
-      status: values.status.value,
+      // status: values.status.value,
     };
     setLoad(true);
     updateAttendance(attendanceData.name, payload).then((response) => {
@@ -128,7 +132,7 @@ const AttendanceDetails = (props) => {
               label="Status"
               control={control}
               class="mb-0"
-              iProps={{ placeholder: 'Please Select status', size: 'large' }}
+              iProps={{ placeholder: 'Please Select status', size: 'large', isDisabled: true }}
               initValue=""
               selectOption={[
                 { value: 'On Duty', label: 'On Duty' },

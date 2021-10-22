@@ -6,47 +6,55 @@ import Search from './components/Search';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import { getOverallFinance, getOverallFinanceList } from './ducks/action';
-import {allowed} from '../../../../routing/config/utils';
+import { allowed } from '../../../../routing/config/utils';
 import Roles from '../../../../routing/config/Roles';
 
 const colName = [
   {
     title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-    sorted: (a, b) => a.id - b.id,
+    dataIndex: 'employee_id',
+    key: 'employee_id',
+    sorter: true,
   },
   {
     title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    sorted: (a, b) => a.name - b.name,
+    dataIndex: 'employee_name',
+    key: 'employee_name',
+    sorter: true,
   },
   {
     title: 'Job Title',
-    dataIndex: 'jobtitle',
-    key: 'jobtitle',
-    sorted: (a, b) => a.jobtitle - b.jobtitle,
-    align: 'center',
+    dataIndex: 'job_title',
+    key: 'job_title',
+    sorter: true,
   },
   {
     title: 'Company',
     dataIndex: 'company',
     key: 'company',
-    sorted: (a, b) => a.company - b.company,
-    align: 'center',
+    sorter: true,
+    ellipsis: true,
   },
   {
     title: 'Team',
     dataIndex: 'team',
     key: 'team',
-    sorted: (a, b) => a.team - b.team,
+    sorter: true,
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    sorted: (a, b) => a.status - b.status,
+    sorter: true,
+    render: (text) => {
+      let clname = '';
+      if (Number.isInteger(text) || text == 'Expiring Asset Possession') {
+        clname = 'c-pending';
+      } else if (text == 'Outstanding Loan') {
+        clname = 'c-error';
+      }
+      return <span className={`SentanceCase ${clname}`}>{text}</span>;
+    },
   },
 ];
 
