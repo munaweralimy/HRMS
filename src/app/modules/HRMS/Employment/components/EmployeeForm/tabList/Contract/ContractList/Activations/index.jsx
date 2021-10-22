@@ -67,6 +67,7 @@ export default (props) => {
       let body1 = {
           form_name: req.data.data.form_name,
           sender: req.data.data.sender,
+          category: req.data.data.category,
           approvers: approvetemp,
           status: 'Pending',
           form_fields: [
@@ -131,7 +132,7 @@ export default (props) => {
           }
         )
       }
-      // console.log('checking body',body1,appr.data.message)
+      console.log('checking body',body1,appr.data.message)
           createRequest(body1).then(resi => {
             if (type == 'Email Activation') {
               contractApi({email_activation_status: 'Pending'}, data[0]?.value).then(xs => {

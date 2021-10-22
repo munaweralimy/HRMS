@@ -40,4 +40,5 @@ export function allowed(permission) {
     let permit =  conversion();
     if(!isArrayWithLength(permission)) return true;
     else return intersection(permission, permit).length;
+    
 }

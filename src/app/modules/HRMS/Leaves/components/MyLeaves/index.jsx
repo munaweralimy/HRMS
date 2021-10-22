@@ -10,6 +10,8 @@ import { BreakingPoint } from '../../../../../../configs/constantData';
 import LeaveApplication from '../LeaveApplication';
 import { LoadingOutlined } from '@ant-design/icons';
 import { updateCarryForward } from '../../ducks/services';
+import { createRequest, getApproverLead, getRequest } from '../../../Requests/ducks/services';
+import moment from 'moment';
 
 const { TabPane } = Tabs;
 const antIcon = <LoadingOutlined spin />;
@@ -75,6 +77,7 @@ export default (props) => {
   const [activeKey, setActiveKey] = useState('1');
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const [load, setLoad] = useState(false);
+ 
   
   const userdetail = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
   
@@ -105,7 +108,7 @@ export default (props) => {
 
   const carryForward = async () => {
     setLoad(true)
-    const req = await getRequest(type);
+    const req = await getRequest('Carry Froward Leave Extension');
       if (req) {
         console.log('Data', req)
       } else {
@@ -113,7 +116,7 @@ export default (props) => {
       }
       
       let approvetemp = [];
-      let appr = await getApproverLead(id);
+      let appr = await getApproverLead(userdetail.name);
       req?.data?.data?.approvers.map(x => {
         let aid = '';
         if (x.approvers == 'Manager') {
@@ -128,7 +131,7 @@ export default (props) => {
             approvers: x.approvers,
             approver_detail: x.approver_detail || '',
             approver_id: aid,
-            Status:"Pending",
+            status:"Pending",
             remarks:""
         })
       })
@@ -136,23 +139,24 @@ export default (props) => {
       let body1 = {
           form_name: req.data.data.form_name,
           sender: req.data.data.sender,
+          category: req.data.data.category,
           approvers: approvetemp,
-
+          status:"Pending",
           form_fields: [
           { 
             field_label: "Requester",
             field_type: "Text",
-            field_value:user.full_name
+            field_value:userdetail.full_name
           },
           {
             field_label: "Requester ID",
             field_type: "Text",
-            field_value:user.name
+            field_value:userdetail.name
           },    
           {
             field_label: "Requester Team",
             field_type: "Text",
-            field_value:user.team_name
+            field_value:userdetail.team_name || ''
           },
           {
             field_label: "Date",
@@ -162,53 +166,50 @@ export default (props) => {
           {
             field_label: "Request For",
             field_type: "Text",
-            field_value: staffData?.employee_name
+            field_value: userdetail?.full_name
           },
           {
             field_label: "Staff ID",
             field_type: "Text",
-            field_value: id
+            field_value: userdetail.name
           },
           {
             field_label: "Company",
             field_type: "Text",
-            field_value:staffData?.company || ''
+            field_value:userdetail?.company || ''
           },
           {
             field_label: "Request For Team",
             field_type: "Text",
-            field_value:staffData?.team_name[0] || ''
+            field_value:userdetail?.team_name || ''
           },
           {
-            field_label: "Contract ID",
+            field_label: "Carry Forward Leave",
             field_type: "Text",
-            field_value:data[0]?.value
+            field_value:"Annual Leave"
           },
+          {
+            field_label: "Cut Off Date Extension",
+            field_type: "Text",
+            field_value:"60 Days"
+          }
         ]
       }
-      if (type == 'Email Activation') {
-        body1.form_fields.push(
-          {
-            field_label: "New Work Email",
-            field_type: "Text",
-            field_value:""
-          },
-          {
-            field_label: "Work Email Password",
-            field_type: "Text",
-            field_value:""
-          }
-        )
-      }
+      
       console.log('checking body',body1,appr.data.message)
-          createRequest(body1).then(resi => {
-            if (type == 'Email Activation') {
-              contractApi({card_activation_status: 'Pending'}, data[0]?.value)
+          updateCarryForward(userdetail.name).then(ax => {
+            if(ax.data.message.success == true) {
+              createRequest(body1).then(resi => {
+                setLoad(false);
+                message.success('Carry Forward Request Generated')
+              })
             } else {
-              contractApi({email_activation_status: 'Pending'}, data[0]?.value)
+              setLoad(false);
+              message.error(ax.data.message.message)
             }
-              PopupSuccess(popup1);
+            
           }).catch(e => {
+            setLoad(false);
             console.log('e',e)
           })
   }
@@ -232,9 +233,9 @@ export default (props) => {
                   ListCol={ListCol} 
                   ListData={myAvailableLeaves?.availibility} 
                   pagination={false}
-                  extraBtn={cfStatus[0]?.carry_forward_expiry_status == 'No' ? 'Carry Forward Extension (60 Days)' : cfStatus[0]?.carry_forward_expiry_status == 'Pending' ? 'Carry Forward Request Pending' : 'Carry Forwarded'}
-                  extraAction={cfStatus[0]?.carry_forward_expiry_status == 'No' ? carryForward : null}
-                  btnClass={cfStatus[0]?.carry_forward_expiry_status == 'No' ? 'green-btn' : 'black-btn'}
+                  extraBtn={cfStatus[0]?.carry_forward_expiry_status == 'Yes' ? 'Carry Forward Extension (60 Days)' : cfStatus[0]?.carry_forward_expiry_status == 'Pending' ? 'Carry Forward Request Pending' : null}
+                  extraAction={cfStatus[0]?.carry_forward_expiry_status == 'Yes' ? carryForward : null}
+                  btnClass={cfStatus[0]?.carry_forward_expiry_status == 'Yes' ? 'green-btn' : 'black-btn'}
                 />
               </Spin>
           </TabPane>

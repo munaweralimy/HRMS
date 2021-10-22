@@ -26,7 +26,11 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
-    dispatch(getRequestDetails(id));
+    if (allowed([Roles.REQUESTS])) {
+      dispatch(getRequestDetails(id, null));
+    } else {
+      dispatch(getRequestDetails(id, uid));
+    }
     
     return () => dispatch(emptyStaffDetails());
   }, []);
@@ -40,11 +44,17 @@ export default (props) => {
         yourrequests: dataRequest.filter((value) => value.status == 'Pending' && value.requester_id == uid),
         archive: dataRequest.filter((value) => value.status != 'Pending')
       })
+    } else {
+      setRequests({})
     }
   }, [dataRequest]);
 
   const updateReqApi = () => {
-    dispatch(getRequestDetails(id));
+    if (allowed([Roles.REQUESTS])) {
+      dispatch(getRequestDetails(id));
+    } else {
+      dispatch(getRequestDetails(id, uid));
+    }
   }
 
 return (

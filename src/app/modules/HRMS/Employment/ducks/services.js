@@ -9,6 +9,10 @@ export const sendWarning = (payload) => {
   return axios.post(`${apiMethod}/hrms.api.add_employee_warning`, payload);
 };
 
+export const sendShowCause = (payload) => {
+  return axios.post(`${apiMethod}/hrms.api.add_employee_showcause`, payload);
+};
+
 export const delWarning = (id, json) => {
   return axios.put(`${apiresource}/EMP Warning Letter/${id}`, json);
 };
