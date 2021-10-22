@@ -20,7 +20,8 @@ export default (props) => {
   const leaveList = useSelector((state) => state.setup.leaveList);
 
   const onChnageLeaveType = (val) => {
-    if (val.value === 'Annual Leave') {
+    console.log({ val });
+    if (val.label === 'Annual Leave') {
       leaveType(true);
     } else {
       leaveType(false);
@@ -117,7 +118,7 @@ export default (props) => {
     },
     {
       name: 'carries_forward',
-      class: leave != true ? 'd-none' : '',
+      class: !leave ? 'd-none' : '',
       label: '',
       req: false,
       placeholder: '',

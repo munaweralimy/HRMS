@@ -52,7 +52,7 @@ const ListColOverall = [
     dataIndex: 'time_in',
     key: 'time_in',
     sorter: true,
-    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
+    render: (text) => (text === '0:00:00' ? '-' : moment(text, 'h:mm:ss a').format('h:mm:ss a')),
   },
   {
     title: 'Out',
@@ -132,7 +132,7 @@ const ListColTeams = [
     dataIndex: 'time_in',
     key: 'time_in',
     sorter: true,
-    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
+    render: (text) => (text === '0:00:00' ? '-' : moment(text, 'h:mm:ss a').format('h:mm:ss a')),
   },
   {
     title: 'Out',
@@ -196,7 +196,7 @@ export default (props) => {
     if (type == 'list') {
       dispatch(getOverallAttendanceList(page, limit, sort, sortby));
     } else {
-      dispatch(getOverallAttendance(page, limit, '', ''));
+      dispatch(getOverallAttendance(page, limit, sort, sortby));
     }
   };
 
@@ -204,7 +204,7 @@ export default (props) => {
     if (type == 'list') {
       dispatch(getTeamAttendanceList(team, page, limit, sort, sortby));
     } else {
-      dispatch(getTeamAttendance(team, page, limit, '', ''));
+      dispatch(getTeamAttendance(team, page, limit, sort, sortby));
     }
   };
 

@@ -26,7 +26,7 @@ const ListCol = [
     dataIndex: 'time_in',
     key: 'time_in',
     sorter: true,
-    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
+    render: (text) => (text === '0:00:00' ? '-' : moment(text, 'h:mm:ss a').format('h:mm:ss a')),
   },
   {
     title: 'Out',
@@ -40,12 +40,15 @@ const ListCol = [
     dataIndex: 'total_work_hour',
     key: 'total_work_hour',
     align: 'center',
+    sorter: true,
+    render: (text) => (text === '0:00:00' ? '-' : `${text.substring(0, text.indexOf(':'))} Hours`),
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
     align: 'center',
+    sorter: true,
     render: (text) => {
       let clname = '';
       if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
