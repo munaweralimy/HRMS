@@ -95,7 +95,11 @@ const AddUser = (props) => {
               </Col>
             ) : (
               <Col span={24}>
-                <PlusCircleFilled onClick={() => setVisible(true)} />
+                <Row gutter={24} align="middle" justify="center">
+                  <Col>
+                    <PlusCircleFilled onClick={() => setVisible(true)} />
+                  </Col>
+                </Row>
               </Col>
             )}
           </Row>

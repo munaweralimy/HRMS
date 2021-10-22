@@ -41,7 +41,7 @@ export const getTeamAttendance = (team, page, limit, order, orderby) => async (d
     data: { message },
   } = await axios.get(
     `${apiMethod}/hrms.attendance_api.get_my_team_attendance_pagination?company=Limkokwing University Creative Technology&team=${team}&page_number=${page}&limit=${limit}${
-      orderby ? `&order=${order}&orderby=${orderby}` : ''
+      order ? `&order=${order}` : ''
     }`,
   );
   dispatch({
@@ -101,6 +101,6 @@ export const getSingleAttendanceDetail = (id) => async (dispatch) => {
 export const getTotalAttendance = (id) => async (dispatch) => {
   const {
     data: { message },
-  } = await axios.get(`${apiMethod}/hrms.api.absent_count_single_employee?employee_id=${id}`);
+  } = await axios.get(`${apiMethod}/hrms.attendance_api.absent_count_single_employee?employee_id=${id}`);
   dispatch({ type: action_types.TOTAL_ABSENT, data: message });
 };
