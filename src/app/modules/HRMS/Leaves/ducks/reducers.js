@@ -14,7 +14,7 @@ const initialState = {
     leaveTypeData: [],
     leaveInfoData: [],
     leaveApproversData: [],
-    // leaveStatUnpaidBar: [],
+    entitlementData: [],
 
     myProjectData: [],
     myAddProjectData: [],
@@ -54,7 +54,9 @@ export default (state = initialState, action) => {
 
         case action_types.LEAVE_APPROVERS:
             return {...state, leaveApproversData: data };
-                
+        case action_types.ENTITLEMENT:
+            return {...state, entitlementData: data };
+
             
         case action_types.PROJECT_NAME:
             return {...state, myProjectData: data };

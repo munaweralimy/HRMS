@@ -28,20 +28,20 @@ const ListCol = [
     dataIndex: 'time_in',
     key: 'time_in',
     sorter: true,
-    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
+    render: (text) => (text === '0:00:00' ? '-' : moment(text, 'h:mm:ss a').format('h:mm:ss a')),
   },
   {
     title: 'Out',
     dataIndex: 'time_out',
     key: 'time_out',
     sorter: true,
-    render: (text) => moment(text, 'h:mm:ss a').format('h:mm:ss a'),
+    render: (text) => (text === '0:00:00' ? '-' : moment(text, 'h:mm:ss a').format('h:mm:ss a')),
   },
   {
     title: 'Hours',
     dataIndex: 'total_work_hour',
     key: 'total_work_hour',
-    align: 'center',
+    render: (text) => (text === '0:00:00' ? '-' : `${text.substring(0, text.indexOf(':'))} Hours`),
     sorter: true,
   },
   {
@@ -53,7 +53,7 @@ const ListCol = [
 
     render: (text) => {
       let clname = '';
-      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
+      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave' || text == 'Holiday') {
         clname = 'c-success';
       } else if (text == 'Absent') {
         clname = 'c-error';
@@ -100,8 +100,19 @@ export default (props) => {
   useEffect(() => {
     if (empID && viewForm === true) {
       dispatch(getSingleAttendanceDetail(empID));
+    } else if (!viewForm) {
+      setPage(1);
+      dispatch(getMyAttendance(id, 1, 6, '', ''));
+      dispatch(getTotalAttendance(id));
     }
   }, [empID, viewForm]);
+
+  // useEffect(() => {
+  //   if (!viewForm) {
+  //     dispatch(getMyAttendance(id, 1, 6, '', ''));
+  //     dispatch(getTotalAttendance(id));
+  //   }
+  // }, [viewForm]);
 
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);

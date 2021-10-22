@@ -32,6 +32,7 @@ const warningLetterFilds = () => {
       colWidth: '1 0 200px',
       req: false,
       reqMessage: '',
+      class: { width: '0px' },
       options: [{ label: 'Require Signature', value: 1 }],
     },
     {

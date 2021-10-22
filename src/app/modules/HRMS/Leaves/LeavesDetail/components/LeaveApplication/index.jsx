@@ -10,7 +10,7 @@ const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
 
-    const { id, data, tabSelected, updateApi } = props;
+    const { id, data, tabSelected, updateApi, progressData } = props;
     const [load, setLoad] = useState(false);
     const [update, setUpdate] = useState(false);
     const [activeTab, setActiveTab] = useState(tabSelected ? tabSelected : 'Pending');
@@ -184,7 +184,7 @@ export default (props) => {
             <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={changeTab}>
                 {tabs.map((item) => (
                     <TabPane tab={item.title} key={item.key}>
-                        <ListWithDetails details={item} updateApi={updateApi} update={update} />
+                        <ListWithDetails details={item} progressData={progressData} updateApi={updateApi} update={update} />
                     </TabPane>
                 ))}
             </Tabs>

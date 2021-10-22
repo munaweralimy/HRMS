@@ -35,7 +35,7 @@ const ConditionalInput = (props) => {
             : ''
         }
         render={({ onBlur, onChange, value }) => {
-          if (fieldVales?.[index]?.approver_level.value === 'Individual') {
+          if (fieldVales?.[index]?.approver_level?.value === 'Individual') {
             return (
               <Select
                 value={value}

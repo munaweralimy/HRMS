@@ -4,18 +4,27 @@ import DetailsComponent from '../../../../../../../molecules/HRMS/DetailsCompone
 import moment from 'moment';
 import { Row, Col, Card, Progress } from 'antd';
 
-export default ({details, updateApi}) => {
+export default ({details, updateApi, progressData}) => {
 
-  const { title, key, heading, data, column, nodetail, detailTitle, onAction1,onAction2 } = details;
+  const { title, key, heading, data, column, nodetail, detailTitle, onAction1, onAction2 } = details;
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  console.log('data', data)
-  const pending = 5;
-  const approved = 15;
-  const total = pending + approved;
-  const percentage = approved/total *100;
+  
+  const annualLeaves = progressData?.find(element => element?.leave_type === 'Annual Leave')
+  const replacementLeaves = progressData?.find(element => element?.leave_type === 'Replacement Leave')
+
+  const pendingAnnual = annualLeaves?.available_leaves;
+  const approvedAnnual = annualLeaves?.taken_leaves;
+  const totalAnnual = pendingAnnual + approvedAnnual;
+  const percentageAnnual = pendingAnnual/totalAnnual *100;
+
+
+  const pendingReplacement = replacementLeaves?.available_leaves;
+  const approvedReplacement = replacementLeaves?.taken_leaves;
+  const totalReplacement = pendingReplacement + approvedReplacement;
+  const percentageReplacement = pendingReplacement/totalReplacement *100;
 
   const btnList = [
     {
@@ -83,30 +92,30 @@ export default ({details, updateApi}) => {
           <>
             {key == 'Pending' && (
                 <Row gutter={[20,20]}>
-                  <Col span={12} className='text-center'>
-                    <Card bordered={false} className='uni-card'>
-                      <Progress 
-                        type="circle" 
-                        className='c-progress' 
-                        width={200}
-                        percent={percentage} 
-                        format={() => <><div className="percent-text">{approved}</div> <div className="percent-numb">Annual Leaves</div></>}
-                        />
-                    </Card>  
-                  </Col>
-                  <Col span={12} className='text-center'>
-                    <Card bordered={false} className='uni-card'>
-                      <Progress 
-                        type="circle" 
-                        className='c-progress' 
-                        width={200}
-                        percent={percentage} 
-                        format={() => <><div className="percent-text">{approved}</div> <div className="percent-numb">Annual Leaves</div></>}
-                        />
-                    </Card>  
-                  </Col>
-                </Row> 
-              )}
+                <Col span={12} className='text-center'>
+                  <Card bordered={false} className='uni-card'>
+                    <Progress 
+                      type="circle" 
+                      className='c-progress' 
+                      width={200}
+                      percent={percentageAnnual} 
+                      format={() => <><div className="percent-text">{pendingAnnual}</div> <div className="percent-numb">Annual Leaves</div></>}
+                      />
+                  </Card>  
+                </Col>
+                <Col span={12} className='text-center'>
+                  <Card bordered={false} className='uni-card'>
+                    <Progress 
+                      type="circle" 
+                      className='c-progress' 
+                      width={200}
+                      percent={percentageReplacement} 
+                      format={() => <><div className="percent-text">{approvedReplacement}</div> <div className="percent-numb">Replacement Leaves</div></>}
+                      />
+                  </Card>  
+                </Col>
+              </Row> 
+            )}
             <ListCard 
             title={heading}
             onRow={!nodetail ? onClickRow : null}

@@ -209,6 +209,18 @@ export const getAddProjectName = () => {
   };
 };
 
+export const getEntitlement = (employeID) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.availibilities_entitlements?employee_id=${employeID}`);
+    dispatch({
+      type: action_types.ENTITLEMENT,
+      data: message,
+    });
+  };
+};
+
 export const getProjectName = () => {
   return async (dispatch) => {
     const {

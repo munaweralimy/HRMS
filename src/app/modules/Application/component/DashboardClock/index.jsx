@@ -18,7 +18,7 @@ export default (props) => {
     const checkInData = useSelector(state => state.global.checkInData);
     const todayDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
     const todayDate = moment().format('YYYY-MM-DD');
-    const clockin = checkInData?.last_log_time ? moment(checkInData?.last_log_time).format("hh:mm") : '';
+    const clockin = checkInData?.last_log_time ? moment(checkInData?.last_log_time).format("hh:mm A") : '';
     const clockout = '18:20';
 
     function getTimeDiff(start, end) {
@@ -67,7 +67,7 @@ export default (props) => {
                                 <Col flex='0 1 150px'>
                                     <Space direction='vertical' size={4}>
                                         <Text className='c-gray smallFont12'>Clock {checkInData?.log_type_last == 'IN' ? 'In' : 'Out'} Time</Text>
-                                        <Title level={4} className='mb-0 c-default'>{moment(clockin, 'hh:mm').format('LT')}</Title>
+                                        <Title level={4} className='mb-0 c-default'>{moment(clockin, 'hh:mm A').format('LT')}</Title>
                                     </Space>
                                 </Col>
 
