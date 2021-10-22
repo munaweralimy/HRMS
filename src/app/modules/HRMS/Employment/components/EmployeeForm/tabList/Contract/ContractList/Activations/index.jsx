@@ -27,17 +27,19 @@ const popup1 = {
 
 export default (props) => {
 
-    const { id, data } = props;
+    const { id, data, setLoad, updateApi } = props;
     const staffData = useSelector(state => state.advancement.advData)
     const user = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
 
     console.log('checking data', data)
 
     const sendRequest = async (type) => {
+      setLoad(true);
       const req = await getRequest(type);
       if (req) {
         console.log('Data', req)
       } else {
+        setLoad(false);
         return false;
       }
       
@@ -65,8 +67,9 @@ export default (props) => {
       let body1 = {
           form_name: req.data.data.form_name,
           sender: req.data.data.sender,
+          category: req.data.data.category,
           approvers: approvetemp,
-
+          status: 'Pending',
           form_fields: [
           { 
             field_label: "Requester",
@@ -132,13 +135,19 @@ export default (props) => {
       console.log('checking body',body1,appr.data.message)
           createRequest(body1).then(resi => {
             if (type == 'Email Activation') {
-              contractApi({card_activation_status: 'Pending'}, data[0]?.value)
+              contractApi({email_activation_status: 'Pending'}, data[0]?.value).then(xs => {
+                updateApi();
+              })
             } else {
-              contractApi({email_activation_status: 'Pending'}, data[0]?.value)
+              contractApi({card_activation_status: 'Pending'}, data[0]?.value).then(xs => {
+                updateApi();
+              })
             }
+              setLoad(false);
               PopupSuccess(popup1);
           }).catch(e => {
             console.log('e',e)
+            setLoad(false);
           })
     }
 

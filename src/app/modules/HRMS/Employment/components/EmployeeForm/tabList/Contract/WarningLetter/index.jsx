@@ -120,30 +120,36 @@ export default (props) => {
 
     const onFinish = async (val) => {
       setLoad(true)
-      const body = {
-        employee_id: id,
-        warning_letter: val.warning_letter.label,
-        status:"Active"
-      }
       getRequest('Warning Letter Approval').then(req => {
         getApproverLead(id).then(appr => {
-          console.log('check approver', req.data)
+          console.log('check approver', appr, req.data)
 
           let approvetemp = [];
-          req.data.data.approvers.map(x => {
+          req?.data?.data?.approvers.map(x => {
+            let aid = '';
+            if (x.approvers == 'Manager') {
+              aid = appr?.data?.message[0]?.manager_id;
+            } else if (x.approvers == 'Supervisor') {
+              aid = appr?.data?.message[0]?.supervisor_id;
+            } else if(x.approvers == 'Team Leader') {
+              aid = appr?.data?.message[0]?.team_leader;
+            }
+            console.log('check', aid);
             approvetemp.push({
                 approvers: x.approvers,
-                approvers_detail: x.approvers_detail || '',
-                approver_id: appr.data.message[0].manager_id,
+                approver_detail: x.approver_detail || '',
+                approver_id: aid,
                 Status:"Pending",
                 remarks:""
             })
           })
+          
           const body1 = {
               form_name: req.data.data.form_name,
               sender: req.data.data.sender,
+              category: req.data.data.category,
               approvers: approvetemp,
-
+              status: 'Pending',
               form_fields: [
               { 
                 field_label: "Requester",
@@ -194,13 +200,7 @@ export default (props) => {
           }
           console.log('----',body1,appr.data.message)
           createRequest(body1).then(resi => {
-            console.log('--', resi.data)
-          }).catch(e => {
-            console.log('e',e)
-          })
-
-          sendWarning(body).then(res => {
-            message.success('Warning letter send');
+            message.success('Warning letter request created');
             reset();
             
             setFormVisible(false);
@@ -211,14 +211,10 @@ export default (props) => {
                 set4: true,
             });
             setLoad(false);
-            updateApi();
-            
           }).catch(e => {
-            console.log(e);
-            setLoad(false);
-            const {response} = e;
-            message.error(response);
+            console.log('e',e)
           })
+
         })
       })
     }
