@@ -5,7 +5,7 @@ import StaffDetails from '../StaffDetails';
 import Employment from './components/Employment';
 import Management from './components/Managment';
 import { LoadingOutlined } from '@ant-design/icons';
-import { emptyStaffDetails } from '../Advancement/dcuks/action';
+import { emptyStaffDetails, getAdvancementdetails } from '../Advancement/dcuks/action';
 import { getEmployeeProfile } from './ducks/actions';
 import Personal from './components/Personal' 
 
@@ -20,6 +20,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getEmployeeProfile(id))
+    dispatch(getAdvancementdetails(id))
     return () => {
       dispatch(emptyStaffDetails())
     }

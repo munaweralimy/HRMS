@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Typography, Card, Tabs, Form, Spin, message } from 'antd';
+import { Row, Col, Button, Typography, Card, Tabs, Form, Spin, message, Tag } from 'antd';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleLeaveDetail, getLeaveApplicationDetail, } from '../ducks/actions';
 import StaffDetails from '../../StaffDetails';
 import LeaveApplication from './components/LeaveApplication';
 import LeaveSummary from './components/LeaveSummary';
@@ -11,7 +10,9 @@ import { apiMethod } from '../../../../../configs/constants';
 import { useForm } from 'react-hook-form';
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { getAdvancementdetails, emptyStaffDetails } from '../../Advancement/dcuks/action';
+import { getSingleLeaveDetail, getLeaveApplicationDetail, getEntitlement } from '../ducks/actions';
 import ListCard from '../../../../molecules/ListCard';
+import { DateField, InputField } from '../../../../atoms/FormElement';
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -24,15 +25,17 @@ export default (props) => {
   const location = useLocation();
   const [deleted, setDeleted] = useState([]);
   const [leaveAvailability, setLeaveAvailability] = useState(false);
+  const [entitlement, setEntitlement] = useState([]);
   const [load, setLoad] = useState(false);
   const singleLeaveDetail = useSelector((state) => state.leaves.singleLeaveData);
   const applicationLeaveData = useSelector((state) => state.leaves.applicationLeaveData);
-  const { control, errors, handleSubmit, reset } = useForm();
-
-  console.log('singleLeaveDetail?.summary', singleLeaveDetail)
+  const entitlementData = useSelector((state) => state.leaves.entitlementData);
+  const { control, errors, setValue, handleSubmit } = useForm();
+  //console.log('entitlementData', entitlementData)
 
   useEffect(() => {
     dispatch(getSingleLeaveDetail(id));
+    dispatch(getEntitlement(id));
     dispatch(getLeaveApplicationDetail(id, 'Pending'));
 
     dispatch(getAdvancementdetails(id));
@@ -41,52 +44,74 @@ export default (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    if(entitlementData) {
+      let temp = {
+        annualLeave: entitlementData?.find(element => element?.leave_type == 'Annual Leave'),
+        medicalLeave: entitlementData?.find(element => element?.leave_type === 'Medical Leave'),
+        hospitalizationLeave: entitlementData?.find(element => element?.leave_type === 'Hospitalization Leave'),
+        paternityLeave: entitlementData?.find(element => element?.leave_type === 'Paternity Leave'),
+        bereavementLeave: entitlementData?.find(element => element?.leave_type === 'Bereavement Leave'),
+        marriageLeave: entitlementData?.find(element => element?.leave_type === 'Marriage Leave'),
+        unpaidLeave: entitlementData?.find(element => element?.leave_type === 'Unpaid Leave'),
+        replacementLeave: entitlementData?.find(element => element?.leave_type === 'Replacement Leave'),
+        maternityLeave: entitlementData?.find(element => element?.leave_type === 'Maternity Leave')
+      };
+      setEntitlement(temp)
+    }
+  }, [entitlementData]);
+
   const updateStatus = (status, page, limit, sort, sortby) => {
     dispatch(getLeaveApplicationDetail(id, status, page, limit, sort, sortby));
   }
 
   const onFinish = async (val) => {
     setLoad(true);
-    if (deleted.length > 0) {
-      let url = `${apiMethod}/hrms.api.delete_projects`;
-      try {
-        await axios.post(url, { projects: deleted });
-        if (val.form_projects.length == 0) {
-          message.success('Projects Successfully Updated');
-          setLoad(false);
-          reset();
-        }
-      } catch (e) {
-        setLoad(false);
-        const { response } = e;
-        message.error(e);
-      }
-
-    }
-    if (val.form_projects.length > 0) {
-      let proj = [];
-      val.form_projects.map((item) => {
-          proj.push({
-              employee_id: id,
-              project_name: item.project.label,
-          });
-      });
-      const json = {
-          projects: proj
-      };
-      let url = `${apiMethod}/hrms.api.add_projects`;
-      try {
-        await axios.post(url, json);
-        message.success('Projects Successfully Updated');
-        setLoad(false);
-        reset();
-      } catch (e) {
-        setLoad(false);
-        const { response } = e;
-        message.error(e);
-      }
-    } else {
+    const json = {
+      employee_id: id,
+      leaves_availibility: [
+          {
+            leave_type: "Annual Leave",
+            entitlement: val?.annualLeave,
+            carry_forward_cut_off_days: "70"
+          },
+          {
+            leave_type: "Replacement Leave",
+            entitlement: val?.replacementLeave,
+          },
+          {
+            leave_type: "Medical Leave",
+            entitlement: val?.medicalLeave,
+          },
+          {
+            leave_type: "Hospitalization Leave",
+            entitlement: val?.hospitalizationLeave,
+          },
+          {
+            leave_type: "Bereavement Leave",
+            entitlement: val?.bereavementLeave,
+          },
+          {
+            leave_type: "Marriage Leave",
+            entitlement: val?.marriageLeave,
+          },
+          {
+            leave_type: "Maternity Leave",
+            entitlement: val?.maternityLeave,
+          }
+      ]
+    };
+    let url = `${apiMethod}/hrms.api.edit_leaves_availibilites`;
+    try {
+      await axios.post(url, json);
+      message.success('Entitlement Successfully Updated');
+      getEntitlement(id)
       setLoad(false);
+      setLeaveAvailability(false);
+    } catch (e) {
+      setLoad(false);
+      const { response } = e;
+      message.error(e);
     }
   };
 
@@ -143,8 +168,22 @@ export default (props) => {
     setLeaveAvailability(true)
   }
 
+  useEffect(() => {
+    if(leaveAvailability) {
+      setValue('annualLeave', entitlement?.annualLeave?.entitlement);
+      setValue('medicalLeave', entitlement?.medicalLeave?.entitlement);
+      setValue('hospitalizationLeave', entitlement?.hospitalizationLeave?.entitlement);
+      setValue('paternityLeave', entitlement?.paternityLeave?.entitlement);
+      setValue('bereavementLeave', entitlement?.bereavementLeave?.entitlement);
+      setValue('marriageLeave', entitlement?.marriageLeave?.entitlement);
+      setValue('unpaidLeave', entitlement?.unpaidLeave?.entitlement);
+      setValue('replacementLeave', entitlement?.replacementLeave?.entitlement);
+      setValue('maternityLeave', entitlement?.maternityLeave?.entitlement);
+    }
+  }, [leaveAvailability]);
+
   return (
-    <StaffDetails id={id} section='Tasks' data={singleLeaveDetail} title={'Tasks'}>
+    <StaffDetails id={id} section='Tasks' title={'Tasks'}>
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>
           <Col flex='auto'><Title level={4} className='mb-0'>Leaves</Title></Col>
@@ -154,7 +193,7 @@ export default (props) => {
           <Col span={24}>
         <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
             <TabPane tab="Leave Application" key="1">
-                <LeaveApplication id={id} updateApi={updateStatus} data={applicationLeaveData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
+                <LeaveApplication id={id} updateApi={updateStatus} progressData={singleLeaveDetail?.availibility} data={applicationLeaveData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
             </TabPane>
             <TabPane tab="Summary" key="2">
                 <LeaveSummary title="Leave Statistics" id={id} data={singleLeaveDetail?.summary} />
@@ -175,8 +214,157 @@ export default (props) => {
               {leaveAvailability && (
                 <Form onFinish={handleSubmit(onFinish)} layout="vertical" scrollToFirstError={true}>
                   <Spin indicator={antIcon} size="large" spinning={load}>
-                    <Button onClick={() => setLeaveAvailability(false)}>Leave Availabilty</Button>
+                    <Button type="text" onClick={() => setLeaveAvailability(false)}>Leaves Availabilty</Button>
+                    <Col span={24}>
+                      <Title level={4} className="c-default mb-0 ">Edit Leave Availability</Title>
+                    </Col>
+                    <Row gutter={[20, 30]}>
+                      <Col span={24}>
+                        <Row gutter={[20, 30]}>
+                          <Col span={10}>
+                            <Tag className="program-list">
+                              <span className="p-name">Annual Leave</span>
+                            </Tag>
+                          </Col>
+                          <Col span={10}>
+                            <DateField 
+                                fieldname='leaveStart'
+                                control={control}
+                                class='mb-0'
+                                iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY"}}
+                                initValue=''
+                            />
+                          </Col>
+                          <Col span={4}>
+                            <InputField 
+                                fieldname='annualLeave'
+                                control={control}
+                                class='mb-0'
+                                iProps={{ placeholder: 'Please state', size: 'small'}}
+                                initValue=''
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
 
+                      <Col span={24}>
+                        <Row gutter={[20, 30]}>
+                          <Col span={20}>
+                            <Tag className="program-list">
+                              <span className="p-name">Replacement Leave</span>
+                            </Tag>
+                          </Col>
+                          <Col span={4}>
+                            <InputField 
+                                fieldname='replacementLeave'
+                                control={control}
+                                class='mb-0'
+                                iProps={{ placeholder: 'Please state', size: 'small'}}
+                                initValue=''
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col span={24}>
+                        <Row gutter={[20, 30]}>
+                          <Col span={20}>
+                            <Tag className="program-list">
+                              <span className="p-name">Medical Leave</span>
+                            </Tag>
+                          </Col>
+                          <Col span={4}>
+                            <InputField 
+                                fieldname='medicalLeave'
+                                control={control}
+                                class='mb-0'
+                                iProps={{ placeholder: 'Please state', size: 'small'}}
+                                initValue=''
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col span={24}>
+                        <Row gutter={[20, 30]}>
+                          <Col span={20}>
+                            <Tag className="program-list">
+                              <span className="p-name">Hospitalization Leave</span>
+                            </Tag>
+                          </Col>
+                          <Col span={4}>
+                            <InputField 
+                                fieldname='hospitalizationLeave'
+                                control={control}
+                                class='mb-0'
+                                iProps={{ placeholder: 'Please state', size: 'small'}}
+                                initValue=''
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col span={24}>
+                        <Row gutter={[20, 30]}>
+                          <Col span={20}>
+                            <Tag className="program-list">
+                              <span className="p-name">Bereavement Leave</span>
+                            </Tag>
+                          </Col>
+                          <Col span={4}>
+                            <InputField 
+                                fieldname='bereavementLeave'
+                                control={control}
+                                class='mb-0'
+                                iProps={{ placeholder: 'Please state', size: 'small'}}
+                                initValue=''
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col span={24}>
+                        <Row gutter={[20, 30]}>
+                          <Col span={20}>
+                            <Tag className="program-list">
+                              <span className="p-name">Marriage Leave</span>
+                            </Tag>
+                          </Col>
+                          <Col span={4}>
+                            <InputField 
+                                fieldname='marriageLeave'
+                                control={control}
+                                class='mb-0'
+                                iProps={{ placeholder: 'Please state', size: 'small'}}
+                                initValue=''
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col span={24}>
+                        <Row gutter={[20, 30]}>
+                          <Col span={20}>
+                            <Tag className="program-list">
+                              <span className="p-name">Maternity Leave</span>
+                            </Tag>
+                          </Col>
+                          <Col span={4}>
+                            <InputField 
+                                fieldname='maternityLeave'
+                                control={control}
+                                class='mb-0'
+                                iProps={{ placeholder: 'Please state', size: 'small'}}
+                                initValue=''
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col span={24} className='text-right'>
+                        <Button type='primary' size='large' htmlType='submit' className="green-btn">Save Changes</Button>
+                      </Col>
+                    </Row>
                   </Spin>
                 </Form>
               )}
