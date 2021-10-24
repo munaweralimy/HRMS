@@ -1,67 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Form, Descriptions, Space, Typography, Collapse, Row, Col, Button, Tabs, message } from 'antd';
+import { Input, Form, Space, Typography, Collapse, Row, Col, Button, Tabs, message } from 'antd';
 import { UpOutlined } from '@ant-design/icons';
 import SmallStatusCard from '../../../../../atoms/SmallStatusCard';
 import { CheckCircleFilled, CloseCircleFilled, ClockCircleFilled } from '@ant-design/icons';
 import { cancelRequest, updateRequest } from '../../ducks/services';
 import { contractApi, sendWarning } from '../../../Employment/ducks/services';
 import { updateCarryForward, updateCarryForwardApprove } from '../../../Leaves/ducks/services';
+import RequestPanel from './RequestPanel';
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
-const permit = JSON.parse(localStorage.getItem('access'));
-
-const ApproveRejectButton = ({data, currentID, onAction}) => {
-    
-  const [rejectEnable, setRejectEnable] = useState(false);
-
-  let pos = data.approvers.find(y => Object.keys(permit).find(z => z == y.approver_detail));
-  let ind = data.approvers.find(y => y.approver_detail == currentID);
-  let other = data.approvers.find(y => y.approver_id == currentID);
-
-  console.log('kkk', currentID, other)
-  const onFinish = (val) => {
-    onAction('Reject', data, val.remarks, pos, ind);
-  }
-  
-  return (
-      <>
-        {rejectEnable ?
-        <>
-          <Col span={24}>
-            <Form onFinish={onFinish} layout='vertical' className='w-100'>
-              <Row gutter={[20,20]}>
-                <Col span={24}>
-                  <Form.Item label='Remarks' name='remarks' className='mb-0 w-100'>
-                    <Input.TextArea 
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null, pos, ind)}>Approve</Button>
-                </Col>
-                <Col span={12}>
-                  <Button type='primary' htmlType='submit' className='w-100 red-btn' size='large'>Reject</Button>
-                </Col>
-              </Row>
-            </Form>
-          </Col>
-        </>
-        :
-        <>
-        {(pos && pos?.status == 'Pending' || ind && ind?.status == 'Pending' || other && other?.status == 'Pending') && <>
-          <Col span={12}>
-            <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null, pos, ind)}>Approve</Button>
-          </Col>
-          <Col span={12}>
-            <Button type='primary' htmlType='button' className='w-100 red-btn' size='large' onClick={() => setRejectEnable(true)}>Reject</Button>
-          </Col>
-          </>}
-        </>}
-      </>
-  )
-}
 
 export default (props) => {
   
@@ -73,16 +22,14 @@ export default (props) => {
     appr.map(y => x += y.approvers == 'Job Position' ? y.approver_detail : y.approvers)
       return <Space size={30}>
         <SmallStatusCard
-          status={status.includes('Pending') ? 'Pending' : status}
+          status={status == 'Archive' ? appr.find(x => x.status == 'Reject') ? 'Reject' : 'Approved' : 'Pending'}
           icon={
             (status == 'Pending' && <ClockCircleFilled />) ||
-            (status == 'Approval' && <CheckCircleFilled />) ||
-            (status == 'Rejected' && <CloseCircleFilled />)
+            (status == 'Archive' && appr.find(x => x.status == 'Reject') ? <CloseCircleFilled /> : <CheckCircleFilled />)
           }
           iColor={
             (status == 'Pending' && 'b-pending') ||
-            (status == 'Approval' && 'b-success') ||
-            (status == 'Rejected' && 'b-error')
+            (status == 'Archive' && appr.find(x => x.status == 'Reject') ? 'b-error' : 'b-success')
           }
         />
         <Space direction='vertical' size={5}>
@@ -256,27 +203,7 @@ export default (props) => {
       .catch((error) => message.error(error));
   };
 
-  const cancelBtn = (fileds, name) => {
-    let x = fileds.find(y => y.field_label == "Requester ID" && y.field_value == id)
-    if (x) {
-      return (
-        <Col flex='0 1 200px'>
-          <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onCancel(name)}>Cancel Requests</Button>
-        </Col>
-      )
-    }
-  }
-
-  const revertBtn = (appr, name) => {
-    let x = appr.find(y => y?.status == "Pending")
-    if (!x) {
-      return (
-        <Col flex='0 1 200px'>
-          <Button type='primary' htmlType='button' size='large' className='w-100' onClick={() => onRevert(appr, name)}>Revert</Button>
-        </Col>
-      )
-    }
-  }
+  
   
   return (
       <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={(e) => setActiveTab(e)}>
@@ -287,25 +214,7 @@ export default (props) => {
             expandIconPosition='right'>
               {value && value.map(item => (
                 <Panel className='ch-black' header={panelHeader(item?.approvers, item?.form_name, item?.status)} key={item?.name}>
-                  <Row gutter={[20,20]}>
-                    <Col span={24}>
-                      <Descriptions className='reqData' bordered colon={false} column={1}>
-                        {item?.form_fields.map((fd) => (
-                          <Descriptions.Item key={fd?.field_label} label={fd?.field_label}>{fd?.field_value}</Descriptions.Item>
-                        ))}
-                        {item?.approvers.map((fx) => {
-                          return <Descriptions.Item className={`icon-size20 ${fx?.status == 'Approve' ? 'icon-green' : 'icon-red'}`} key={fx?.approver_id} label={fx?.approvers == 'Job Position' ? fx?.approver_detail : fx?.approvers}>{fx?.status} {fx?.status == 'Approve' ? <CheckCircleFilled /> : <CloseCircleFilled />}</Descriptions.Item>
-                        })}
-                      </Descriptions>
-                    </Col>
-                    <Col span={24}>
-                      <Row gutter={[20,20]} className='justify-right'>
-                        {activeTab == 'pending' && <ApproveRejectButton data={item} currentID={id} onAction={onApproveReject} />}
-                        {activeTab =='archive' && revertBtn(item.approvers, item?.name)}
-                        {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)}
-                      </Row>
-                    </Col>
-                  </Row>
+                  <RequestPanel id={id} item={item} activeTab={activeTab} onApproveReject={onApproveReject} onRevert={onRevert} onCancel={onCancel} />
                 </Panel>
                 ))}
             </Collapse>

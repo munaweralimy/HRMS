@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Space, Card, Button, Typography } from 'antd';
+import { Row, Col, Space, Card, Button, Typography, message } from 'antd';
 import { PopupSuccess } from '../../../../../../../../../atoms/Popup';
 import { getRequest, getApproverLead } from '../../../../../../../Requests/ducks/services';
 import { useSelector } from 'react-redux';
@@ -27,11 +27,9 @@ const popup1 = {
 
 export default (props) => {
 
-    const { id, data, setLoad, updateApi } = props;
+    const { id, data, setLoad, updateApi, onBack } = props;
     const staffData = useSelector(state => state.advancement.advData)
     const user = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
-
-    console.log('checking data', data)
 
     const sendRequest = async (type) => {
       setLoad(true);
@@ -137,14 +135,25 @@ export default (props) => {
             if (type == 'Email Activation') {
               contractApi({email_activation_status: 'Pending'}, data[0]?.value).then(xs => {
                 updateApi();
+                setLoad(false);
+                PopupSuccess(popup1);
+                onBack();
+              }).catch(e => {
+                message.error('Something went wrong');
+                setLoad(false);
               })
             } else {
               contractApi({card_activation_status: 'Pending'}, data[0]?.value).then(xs => {
                 updateApi();
+                setLoad(false);
+                PopupSuccess(popup1);
+                onBack();
+              }).catch(e => {
+                message.error('Something went wrong');
+                setLoad(false);
               })
             }
-              setLoad(false);
-              PopupSuccess(popup1);
+              
           }).catch(e => {
             console.log('e',e)
             setLoad(false);

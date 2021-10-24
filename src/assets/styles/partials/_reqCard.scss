@@ -72,3 +72,27 @@
     border: 0;
   }
 }
+
+.icon-size20 {
+  span {
+    display: flex;
+    align-items: center;
+    > span {
+      margin-left: 10px;
+    }
+  }
+  .anticon {
+    font-size: 20px;
+  }
+}
+.icon-red {
+  .anticon {
+    color: $errors;
+  }
+}
+
+.icon-green {
+  .anticon {
+    color: $green-color;
+  }
+}
