@@ -58,15 +58,25 @@ export default (props) => {
       setValue('sender', {label: data.sender, value: data.sender});
       setValue('category', data?.category ? {label: data.category, value: data.category } : '');
       setValue('approvers_fields', data?.approvers);
-      setValue('form_fields', data?.form_fields);
+      setValue('form_fields', data?.form_fileds);
+      console.log('checking', data)
     } else {
       append1(initQ);
     }
   }, [data]);
   
   const onFinish = (val) => {
-    console.log('----', val);
+
     setLoad(true);
+    
+    let fields = [];
+    val?.form_fields?.map(x => {
+      fields.push({
+        field_name: x?.field_name?.label,
+        field_type: x?.field_name?.type
+      })
+    })
+
     let approver = [];
     val?.approvers_fields?.map(x => {
       approver.push({
@@ -81,17 +91,18 @@ export default (props) => {
       status: "Active",
       category: val?.category?.label ? val?.category?.label : '',
       approvers: approver,
-      form_fields: []
+      form_fields: fields
     }
-
+    
     addRequest(body, data?.name).then(res => {
       message.success('Request Successfully Added');
       setLoad(false);
       reset();
       onUpdate();
     }).catch(e => {
-      message.error('Request Successfully Added');
       console.log(e);
+      message.error('Something went wrong');
+      setLoad(false);
     })
   };
 
@@ -178,29 +189,33 @@ export default (props) => {
           <Title level={5} className='mb-0'>Form Fields</Title>
           {/* <Text>Form Fields</Text> */}
         </Col>
+        <Col span={24}>
+          <Row gutter={[20,10]}>
         {fields2.map((item, index) => (
           <Fragment key={item.id}>
-          <Col span={24}>
+            <Col span={24}>
               <SelectField
                 fieldname={`form_fields[${index}].field_name`}
                 label={``}
                 control={control}
                 class={`mb-0`}
                 iProps={{ placeholder: 'Please select' }}
-                initValue={item?.field_name ? { label: item?.field_name, value: item?.field_name } : ''}
+                initValue={item?.field_name ? { label: item?.field_name, value: item?.field_name, type: item?.field_type } : ''}
                 selectOption={fieldList.map(x => ({label: x.field_label, value: x.name, type: x.type}))}
               />
-              {/* <Button
+              <Button
                 type="link"
                 htmlType="button"
                 className="p-0 h-auto c-gray-linkbtn right-fixed smallFont12"
                 onClick={() => remove2(index)}
               >
                 Remove
-              </Button> */}
-          </Col>
+              </Button>
+              </Col>
           </Fragment>
         ))}
+        </Row>
+        </Col>
         <Col span={24}>
           <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={() => append2(initF)}>
               + Add Field

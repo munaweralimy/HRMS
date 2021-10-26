@@ -414,7 +414,7 @@ export default (props) => {
         title={'Employment Contract'}
         fieldsList={contractDetails}
         backbtnTitle='Employment History'
-        extraComp={<Activations id={id} data={recordData} setLoad={setLoad} updateApi={updateApi} />}
+        extraComp={<Activations id={id} data={recordData} setLoad={setLoad} onBack={onBack} updateApi={updateApi} />}
         />
     )
 }

@@ -8,6 +8,7 @@ const { Title, Text } = Typography;
 export default (props) => {
   const { data, link, stateKey } = props;
   const history = useHistory();
+
   return (
     <Card
       bordered={false}
@@ -73,7 +74,7 @@ export default (props) => {
             <Row gutter={24} wrap={false} align="middle">
               <Col flex='auto'>
                 <Space direction="vertical" size={0} className='w-100'>
-                  {data?.department && <Text className="d-block c-white op-6 smallFont12">{data?.department}</Text>}
+                  {data?.sender && <Text className="d-block c-white op-6 smallFont12">{data?.sender}</Text>}
                   <Title level={5} className="text-cutout d-block mb-0 lineHeight20">
                     {data?.form_name}
                   </Title>
@@ -81,17 +82,17 @@ export default (props) => {
               </Col>
               <Col flex='0 1 130px'>
                 <SmallStatusCard
-                  status={stateKey == 'yourrequests' ? 'Pending' : data?.status == 'Archive' ? data['department status'] : data?.status}
+                  status={stateKey == 'yourrequests' ? 'Pending' : data?.status == 'Archive' ? data.approvers.find(x => x.status == 'Reject') ? 'Reject' : 'Approved' : data?.status}
                   icon={
                     stateKey == 'yourrequests' ? <ClockCircleFilled /> : 
-                    (data?.status == 'Archive' ? data['department status'] == 'Approved' ? <CheckCircleFilled /> : data['department status'] == 'Reject' ? <CloseCircleFilled /> : '' : '') ||
+                    (data?.status == 'Archive' ? data.approvers.find(x => x.status == 'Reject') ? <CloseCircleFilled /> : <CheckCircleFilled /> : '') ||
                     (data?.status == 'Pending' && <ClockCircleFilled />) ||
                     (data?.status == 'Approved' && <CheckCircleFilled />) ||
                     (data?.status == 'Rejected' && <CloseCircleFilled />)
                   }
                   iColor={
                     stateKey == 'yourrequests' ? 'b-pending' : 
-                    (data?.status == 'Archive' ? data['department status'] == 'Reject' ? 'b-error' : 'b-success': '' ) ||
+                    (data?.status == 'Archive' ? data?.approvers.find(x => x.status == 'Reject') ? 'b-error' : 'b-success': '' ) ||
                     (data?.status == 'Pending' && 'b-pending') ||
                     (data?.status == 'Approved' && 'b-success') ||
                     (data?.status == 'Reject' && 'b-error')

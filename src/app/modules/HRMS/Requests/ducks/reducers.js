@@ -24,7 +24,8 @@ export default (state = initialState, action) => {
             return {...state, requestData: data };
         case action_types.FIELDS_LIST:
             return {...state, fieldData: data };
-            
+        case action_types.EMPTY_REQUEST_DATA:
+            return {...state, requestData: [] };
         default:
             return state;
     }

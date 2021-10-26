@@ -5,7 +5,7 @@ import { getAdvancementdetails, emptyStaffDetails }  from '../../Advancement/dcu
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
 import Request from '../components/Request'
-import { getRequestDetails } from '../ducks/actions';
+import { getRequestDetails, emptyRequestDetails } from '../ducks/actions';
 import Roles from '../../../../../routing/config/Roles';
 import {allowed} from '../../../../../routing/config/utils';
 import EmployeeServices from '../components/EmployeeServices';
@@ -32,7 +32,10 @@ export default (props) => {
       dispatch(getRequestDetails(id, uid));
     }
     
-    return () => dispatch(emptyStaffDetails());
+    return () => {
+      dispatch(emptyStaffDetails())
+      dispatch(emptyRequestDetails())
+    };
   }, []);
 
 

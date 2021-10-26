@@ -9,7 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../../../../configs/constantData';
 import LeaveApplication from '../LeaveApplication';
 import { LoadingOutlined } from '@ant-design/icons';
-import { updateCarryForward } from '../../ducks/services';
+import { updateCarryForward, updateCarryForwardReject } from '../../ducks/services';
 import { createRequest, getApproverLead, getRequest } from '../../../Requests/ducks/services';
 import moment from 'moment';
 
@@ -91,6 +91,7 @@ export default (props) => {
 
   const updateTimesheet = (status, page, limit, sort, sortby) => {
     dispatch(getMyLeaves(userdetail?.name, status, page, limit, sort, sortby));
+    dispatch(getCarryForwardStatus(userdetail?.name))
   }
 
   const btnList = [
@@ -188,19 +189,21 @@ export default (props) => {
             field_type: "Text",
             field_value:"Annual Leave"
           },
-          {
-            field_label: "Cut Off Date Extension",
-            field_type: "Text",
-            field_value:"60 Days"
-          }
+          
         ]
       }
       
-      console.log('checking body',body1,appr.data.message)
           updateCarryForward(userdetail.name).then(ax => {
-            if(ax.data.message.success == true) {
+            console.log('checking body')
+            if(ax?.data?.message?.success == "True") {
+              body1.form_fields.push({
+                field_label: "Cut Off Date Extension",
+                field_type: "Text",
+                field_value:`${ax?.data?.message?.cut_off_days} Days`
+              })
               createRequest(body1).then(resi => {
                 setLoad(false);
+                updateTimesheet();
                 message.success('Carry Forward Request Generated')
               })
             } else {
@@ -210,6 +213,7 @@ export default (props) => {
             
           }).catch(e => {
             setLoad(false);
+            message.error('Something went wrong')
             console.log('e',e)
           })
   }
@@ -236,6 +240,9 @@ export default (props) => {
                   extraBtn={cfStatus[0]?.carry_forward_expiry_status == 'Yes' ? 'Carry Forward Extension (60 Days)' : cfStatus[0]?.carry_forward_expiry_status == 'Pending' ? 'Carry Forward Request Pending' : null}
                   extraAction={cfStatus[0]?.carry_forward_expiry_status == 'Yes' ? carryForward : null}
                   btnClass={cfStatus[0]?.carry_forward_expiry_status == 'Yes' ? 'green-btn' : 'black-btn'}
+                  // extraBtn={'Carry Forward Extension (60 Days)'}
+                  // extraAction={carryForward}
+                  // btnClass={'green-btn'}
                 />
               </Spin>
           </TabPane>

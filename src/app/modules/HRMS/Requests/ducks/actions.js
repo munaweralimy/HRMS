@@ -59,6 +59,14 @@ export const getRequestDetails = (id, approver) => async (dispatch) => {
       data: message,
     });
 };
+export const emptyRequestDetails = () => {
+    return (dispatch) => {
+        dispatch({
+            type: action_types.EMPTY_REQUEST_DATA,
+            data: [],
+        });
+    };
+};
 
   export const getFieldsList = () => {
     return async (dispatch) => {
