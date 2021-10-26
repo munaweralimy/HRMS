@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Space, Button, Row, Col, Typography, Form, Card, Breadcrumb, message, Spin } from 'antd';
+import { Button, Row, Col, Typography, Form, Card, Breadcrumb, message, Spin } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -8,6 +8,7 @@ import HeadingChip from '../../../../../../../molecules/HeadingChip';
 import { QuestionCircleFilled } from '@ant-design/icons';
 import { TextAreaField } from '../../../../../../../atoms/FormElement';
 import { showWarningLetter } from '../../../../ducks/actions';
+import PreviewWarningLetter from '../PreviewWarningLetter';
 import {
   getWarningLetterDetail,
   addSingleWarningLetter,
@@ -23,6 +24,7 @@ export default (props) => {
   const { letterData } = props;
   const { Title, Text } = Typography;
   const [visible, setVisible] = useState(false);
+  const [perview, setPreview] = useState(false);
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
   const dispatch = useDispatch();
@@ -35,16 +37,25 @@ export default (props) => {
     onCancel: () => setVisible(false),
   };
 
+  const previewWarningLetter = {
+    visibility: perview,
+    content: <PreviewWarningLetter letterID={letterData.name} />,
+    width: 964,
+    class: 'white-modal',
+    onCancel: () => setPreview(false),
+  };
+
   const closeForn = () => {
     dispatch(showWarningLetter({ name: '', warning_letter_tempalte: '', visible: false }));
   };
 
   const onFinish = (values) => {
+    console.log({ values });
     setLoad(true);
     const payload = {
       writing_letter_name: values?.writing_letter_name,
       letter_template: values?.letter_template.value,
-      signiture: values?.signiture[0],
+      signiture: values?.signiture.length ? 1 : 0,
       signee: values?.signee.value,
       detail: values.detail,
     };
@@ -168,7 +179,7 @@ export default (props) => {
                     <Row gutter={24} justify="end">
                       {letterData.name.length == 0 ? (
                         <>
-                          <Col span={5}>
+                          <Col span={4}>
                             <Button
                               size="large"
                               type="primary"
@@ -179,7 +190,7 @@ export default (props) => {
                               Close
                             </Button>
                           </Col>
-                          <Col span={5}>
+                          <Col span={4}>
                             <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                               Save
                             </Button>
@@ -187,12 +198,22 @@ export default (props) => {
                         </>
                       ) : (
                         <>
-                          <Col span={5}>
+                          <Col span={4}>
+                            <Button
+                              size="large"
+                              type="primary"
+                              className="black-btn w-100"
+                              onClick={() => setPreview(true)}
+                            >
+                              Preview
+                            </Button>
+                          </Col>
+                          <Col span={4}>
                             <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteNationality}>
                               Delete
                             </Button>
                           </Col>
-                          <Col span={5}>
+                          <Col span={4}>
                             <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                               Save
                             </Button>
@@ -208,6 +229,7 @@ export default (props) => {
         </Form>
       </Spin>
       <Popup {...popup} />
+      <Popup {...previewWarningLetter} />
     </>
   );
 };

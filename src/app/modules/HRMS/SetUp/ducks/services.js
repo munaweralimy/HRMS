@@ -175,7 +175,7 @@ export const addRequest = (body, id) => {
 };
 export const delRequest = (id) => {
   return axios.delete(`${apiresource}/HRMS Form Listing/${id}`);
-}
+};
 export const addSingleDepartment = (payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_hrms_department`, payload);
 };
@@ -249,4 +249,8 @@ export const getDepartmentList = (id) => {
   return axios.get(
     `${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}&company=Limkokwing University Creative Technology`,
   );
+};
+
+export const getSingleWarningLetter = (id) => {
+  return axios.get(`${apiresource}/Warning Letter/${id}`);
 };
