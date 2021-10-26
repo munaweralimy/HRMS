@@ -209,6 +209,10 @@ export default (props) => {
                 updateReqApi();
               })
           }
+        } else {
+          message.success(`Request ${status} Successfully`)
+          setLoad(false);
+          updateReqApi();
         }
       })
       .catch((error) => {
