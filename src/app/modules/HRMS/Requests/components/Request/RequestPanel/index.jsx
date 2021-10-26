@@ -1,13 +1,15 @@
 import React, { Fragment } from 'react';
-import { Descriptions, Row, Col, Button } from 'antd';
+import { Descriptions, Row, Col, Button, Spin } from 'antd';
 import { InputField } from '../../../../../../atoms/FormElement';
 import { CheckCircleFilled, CloseCircleFilled, ClockCircleFilled } from '@ant-design/icons';
 import ApproveRejectButton from '../ApproveRejectButton';
+import { LoadingOutlined } from '@ant-design/icons';
 
-    
+const antIcon = <LoadingOutlined spin />;
+
 export default (props) => {
 
-    const { id, item, activeTab, onApproveReject, onRevert, onCancel } = props;
+    const { id, item, activeTab, onApproveReject, onRevert, onCancel, load } = props;
 
     const cancelBtn = (fileds, name) => {
         let x = fileds.find(y => y.field_label == "Requester ID" && y.field_value == id)
@@ -32,6 +34,7 @@ export default (props) => {
     }
 
     return (
+        <Spin indicator={antIcon} size="large" spinning={load}>
         <Row gutter={[20,20]}>
             <Col span={24}>
                 <Descriptions className='reqData' bordered colon={false} column={1}>
@@ -56,10 +59,11 @@ export default (props) => {
             <Col span={24}>
                 <Row gutter={[20,20]} className='justify-right'>
                 {activeTab == 'pending' && <ApproveRejectButton data={item} currentID={id} onAction={onApproveReject} />}
-                {activeTab =='archive' && revertBtn(item.approvers, item?.name)}
+                {/* {activeTab =='archive' && revertBtn(item.approvers, item?.name)} */}
                 {activeTab == 'yourrequests' && cancelBtn(item?.form_fields, item?.name)}
                 </Row>
             </Col>
         </Row>
+    </Spin>
     )
 }

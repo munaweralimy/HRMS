@@ -5,7 +5,7 @@ import SmallStatusCard from '../../../../../atoms/SmallStatusCard';
 import { CheckCircleFilled, CloseCircleFilled, ClockCircleFilled } from '@ant-design/icons';
 import { cancelRequest, updateRequest } from '../../ducks/services';
 import { contractApi, sendWarning } from '../../../Employment/ducks/services';
-import { updateCarryForward, updateCarryForwardApprove } from '../../../Leaves/ducks/services';
+import { updateCarryForwardApprove, updateCarryForwardReject } from '../../../Leaves/ducks/services';
 import RequestPanel from './RequestPanel';
 
 const { Title, Text } = Typography;
@@ -16,6 +16,7 @@ export default (props) => {
   
   const { data, selectedTab, selectedPanel, updateReqApi, id } = props;
   const [ activeTab, setActiveTab ] = useState(selectedTab);
+  const [ load, setLoad ] = useState(false);
 
   const panelHeader = (appr, title, status) => {
     let x = '';
@@ -87,7 +88,7 @@ export default (props) => {
   }
 
   const onApproveReject = (status, item, remarks, pos, ind) => {
-
+    setLoad(true);
     console.log('chck', item, status, id, pos, ind)
     const { name, approvers, form_fields, category } = item;
     let contractid = null;
@@ -131,7 +132,7 @@ export default (props) => {
       approvers: dep,
     };
 
-    console.log('ccc', payload, status, item, remarks)
+    console.log('ccc', payload, category)
     updateRequest(item.name, payload)
     .then((response) => {
         if (category == 'Email Activation') {
@@ -140,14 +141,17 @@ export default (props) => {
             status === 'Approve'
           ? message.success('Request Approve Successfully')
           : message.success('Request Reject Successfully');
+          setLoad(false);
           updateReqApi();
           })
         } if (category == 'Card Activation'){
+          console.log('categoty', category);
           contractid = form_fields.find(fx => fx.field_label == 'Contract ID').field_value;
           contractApi({card_activation_status:  status === 'Approve' ? 'Active' : 'Inactive'}, contractid).then(xs => {
             status === 'Approve'
           ? message.success('Request Approve Successfully')
           : message.success('Request Reject Successfully');
+          setLoad(false);
           updateReqApi();
           })
         } else if(category == 'Warning Letter Approval') {
@@ -159,7 +163,7 @@ export default (props) => {
           if (status === 'Approve')  {
             sendWarning(wbody).then(res => {
               message.success('Request Approve Successfully')
-              
+              setLoad(false);
             }).catch(e => {
               console.log(e);
               setLoad(false);
@@ -168,6 +172,7 @@ export default (props) => {
             })
           } else {
             message.success('Request Reject Successfully');
+            setLoad(false);
           }
         } else if(category == 'Show Cause Letter') {
           const wbody2 = {
@@ -178,6 +183,7 @@ export default (props) => {
           if (status === 'Approve')  {
             sendShowCause(wbody2).then(res => {
               message.success('Request Approve Successfully')
+              setLoad(false);
               
             }).catch(e => {
               console.log(e);
@@ -187,20 +193,28 @@ export default (props) => {
             })
           } else {
             message.success('Request Reject Successfully');
+            setLoad(false);
           }
-        } else if(category == 'Carry Froward Leave Extension') {
-          if (status === 'Approve')  {
-              updateCarryForwardApprove(userdetail.name).then(xy => {
+        } else if(category == 'Carry Forward Leave Extension') {
+          if (status == 'Approve')  {
+              updateCarryForwardApprove(item.requester_id).then(xy => {
                   message.success('Request Approve Successfully')
+                  setLoad(false);
+                  updateReqApi();
               })
           } else {
-              updateCarryForwardApprove(userdetail.name).then(xy => {
+            updateCarryForwardReject(item.requester_id).then(xy => {
                 message.success('Request Reject Successfully');
+                setLoad(false);
+                updateReqApi();
               })
           }
         }
       })
-      .catch((error) => message.error(error));
+      .catch((error) => {
+        message.error(error)
+        setLoad(false);
+      });
   };
 
   
@@ -214,7 +228,7 @@ export default (props) => {
             expandIconPosition='right'>
               {value && value.map(item => (
                 <Panel className='ch-black' header={panelHeader(item?.approvers, item?.form_name, item?.status)} key={item?.name}>
-                  <RequestPanel id={id} item={item} activeTab={activeTab} onApproveReject={onApproveReject} onRevert={onRevert} onCancel={onCancel} />
+                  <RequestPanel id={id} item={item} activeTab={activeTab} onApproveReject={onApproveReject} onRevert={onRevert} onCancel={onCancel} load={load} />
                 </Panel>
                 ))}
             </Collapse>

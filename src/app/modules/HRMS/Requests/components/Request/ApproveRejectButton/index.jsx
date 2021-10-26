@@ -12,7 +12,6 @@ export default ({data, currentID, onAction}) => {
     })
   
     useEffect(() => {
-      console.log('i am here in', data, permit, currentID)
       if (data) {
         setApproverPermit({
           pos : data.approvers.find(y => Object.keys(permit).find(z => z == y.approver_detail)),
@@ -59,7 +58,8 @@ export default ({data, currentID, onAction}) => {
           </>
           :
           <>
-          {(approverPermit.pos && approverPermit.pos?.status == 'Pending' || approverPermit.ind && approverPermit.ind?.status == 'Pending' || approverPermit.other && approverPermit.other?.status == 'Pending') && <>
+          {(approverPermit.pos && approverPermit.pos?.status == 'Pending' || approverPermit.ind && approverPermit.ind?.status == 'Pending' || approverPermit.other && approverPermit.other?.status == 'Pending') && 
+          <>
             <Col span={12}>
               <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null, approverPermit.pos, approverPermit.ind)}>Approve</Button>
             </Col>
