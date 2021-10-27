@@ -4,15 +4,13 @@ import HeadingChip from '../../../../molecules/HeadingChip';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useTranslate } from 'Translate';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../configs/constants';
-import axios from '../../../../../services/axiosInterceptor';
 import SideDetails from '../../../../molecules/SideDetails';
 import SideDetailResponsive from '../../../../molecules/SideDetailResponsive';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../../../configs/constantData';
 import RequestForm from './RequestForm';
 import moment from 'moment';
+import {createRequest, getApproverLead, getRequest} from '../ducks/services'
 
 const defVal = {
     formName: '',
@@ -21,36 +19,16 @@ const defVal = {
 
 export default (props) => {
 
-    const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
-    const department = location.pathname.split('/')[1];
+    const uid = location?.state?.code;
     const { control, errors, handleSubmit, reset } = useForm(defVal);
     const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
-    const [depart, setDepart] = useState();
-
+    const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+    
+    
     const i18n = useTranslate();
     const { t } = i18n;
-
-    const caseDepart = (dept) => {
-        switch(dept) {
-          case 'aqa' :
-            return { department: 'AQA', link:'/aqa' };
-    
-          case 'registry' :
-            return { department: 'Registry', link:'/registry' };
-    
-          case 'faculty' :
-            return { department: 'Faculty', link:'/faculty' };
-          
-          default:
-            break;
-        }
-      }
-    
-    useEffect(() => {
-        setDepart(caseDepart(department))
-    }, []);
 
     const sideData = [
         {
@@ -75,51 +53,111 @@ export default (props) => {
 
     const onFinish = async (data) => {
         props.setLoading(true);
-        let fields = [];
-        Object.entries(data).map(([key, val]) => {
-            if (key != 'formName') {
-                if (key == 'Date') {
-                    fields.push({field_label: key, field_type: 'date', field_value : moment(val).format('YYYY MM DD')});
-                } else {
-                    fields.push({field_label: key, field_type: 'text', field_value : val});
+        getRequest(data.formName.label).then(req => {
+            console.log('now in')
+        getApproverLead(id).then(appr => {
+            let approvetemp = [];
+            req?.data?.data?.approvers.map(x => {
+              let aid = '';
+              if (x.approvers == 'Manager') {
+                aid = appr?.data?.message[0]?.manager_id;
+              } else if (x.approvers == 'Supervisor') {
+                aid = appr?.data?.message[0]?.supervisor_id;
+              } else if(x.approvers == 'Team Leader') {
+                aid = appr?.data?.message[0]?.team_leader;
+              }
+              approvetemp.push({
+                  approvers: x.approvers,
+                  approver_detail: x.approver_detail || '',
+                  approver_id: aid,
+                  Status:"Pending",
+                  remarks:""
+              })
+            })
+
+            let fields = [];
+            Object.entries(data).map(([key, val]) => {
+                if (key != 'formName') {
+                    if (key == 'Date') {
+                        fields.push({field_label: key, field_type: 'date', field_value : moment(val).format('YYYY MM DD')});
+                    } else {
+                        fields.push({field_label: key, field_type: 'text', field_value : val});
+                    }
                 }
+            })
+            fields.push({field_label: 'Requester ID', field_type: 'text', field_value : id});
+            
+            const body1 = {
+                form_name: data.formName.label,
+                sender: req.data.data.sender,
+                category: '',
+                approvers: approvetemp,
+                status: 'Pending',
+                form_fields: fields
             }
-        })
-        let dept = [];
-        data.formName.departments.map(it => {
-            console.log('depart', it.department, depart.department)
-            if (it.department == depart.department) {
-                dept.push({
-                    department: it.department,
-                    status: "Approve" 
-                })
-            } else {
-                dept.push({
-                    department: it.department,
-                    status: "Pending" 
-                })
-            }
+            createRequest(body1).then(resi => {
+            props.setLoading(false);
+              message.success('Request Created');
+            }).catch(e => {
+                const {response} = e
+                console.log("error", response);
+                props.setLoading(false);
+                message.error('Request Created Failed')
+            })
+  
+          })
+        }).catch(e => {
+            const {response} = e
+            console.log("error", response);
+            props.setLoading(false);
+            message.error('Request Created Failed')
         })
 
-        let body = {
-            form_name: data.formName.label,
-            status:"Pending",
-            form_fields: fields,
-            departments: dept
-        }
+        // let fields = [];
+        // Object.entries(data).map(([key, val]) => {
+        //     if (key != 'formName') {
+        //         if (key == 'Date') {
+        //             fields.push({field_label: key, field_type: 'date', field_value : moment(val).format('YYYY MM DD')});
+        //         } else {
+        //             fields.push({field_label: key, field_type: 'text', field_value : val});
+        //         }
+        //     }
+        // })
+        // let dept = [];
+        // data.formName.departments.map(it => {
+        //     console.log('depart', it.department, depart.department)
+        //     if (it.department == depart.department) {
+        //         dept.push({
+        //             department: it.department,
+        //             status: "Approve" 
+        //         })
+        //     } else {
+        //         dept.push({
+        //             department: it.department,
+        //             status: "Pending" 
+        //         })
+        //     }
+        // })
 
-        const url = `${apiresource}/AQA Form Request`;
-        try {
-            await axios.post(url, body);
-            message.success('Request Successfully Created');
-            props.setLoading(false);
-            reset();
-            setTimeout(() => history.push(`${depart?.link}/requests`), 1000);
-        } catch (e) {
-            const {response} = e;
-            props.setLoading(false);
-            message.error('Something went wrong'); 
-        }
+        // let body = {
+        //     form_name: data.formName.label,
+        //     status:"Pending",
+        //     form_fields: fields,
+        //     departments: dept
+        // }
+
+        // const url = `${apiresource}/AQA Form Request`;
+        // try {
+        //     await axios.post(url, body);
+        //     message.success('Request Successfully Created');
+        //     props.setLoading(false);
+        //     reset();
+        //     setTimeout(() => history.push(`${depart?.link}/requests`), 1000);
+        // } catch (e) {
+        //     const {response} = e;
+            // props.setLoading(false);
+        //     message.error('Something went wrong'); 
+        // }
     }
 
     return (
@@ -152,7 +190,7 @@ export default (props) => {
                             layout="horizontal"
                             labelAlign="left"
                             >
-                            <RequestForm title='Requests' Department={caseDepart(department)} control={control} errors={errors} />
+                            <RequestForm title='Requests' control={control} errors={errors} />
                         </Form>
                         </Card>
                     </div>

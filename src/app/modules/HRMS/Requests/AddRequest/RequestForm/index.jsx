@@ -17,10 +17,11 @@ export default (props) => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const formList = useSelector(state => state.hrmsrequests.formList)
+    const formList1 = useSelector(state => state.hrmsrequests.formList)
     const [forming, setForming] = useState();
-    const { title, control, errors, Department } = props;
-    const user = localStorage.getItem('user');
+    const [formList, setFormList] = useState([]);
+    const { title, control, errors } = props;
+    const user = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
 
     useEffect(() => {
         dispatch(getFormFields());
@@ -31,6 +32,22 @@ export default (props) => {
             setForming(e);
         }
     }
+
+    useEffect(() => {
+        if (formList1 && formList1.length > 0) {
+            let temp = [];
+            formList1.map(x => {
+                if(x?.category != '')  {
+                    // if(x?.category == 'Show Cause Letter') {
+                    //     temp.push(x)
+                    // }
+                } else {
+                    temp.push(x)
+                }
+            })
+            setFormList(temp);
+        }
+    }, [formList1]);
 
     const panelHeader = () => {
         return <Space size={30}>
@@ -79,7 +96,7 @@ export default (props) => {
                     validate={errors.formName && 'error'}
                     validMessage={errors.formName && errors.formName.message}
                     />
-                    {forming?.fields.length > 0 && 
+                    {forming?.fields.length > 0 &&  
                     <>
                     <InputField 
                         fieldname={'requester'}
@@ -87,7 +104,7 @@ export default (props) => {
                         class='labeldefaultFont'
                         control={control}
                         iProps={{ readOnly: true }}
-                        initValue={''}
+                        initValue={user.full_name}
                     />
                     <InputField 
                         fieldname={'requester_team'}
@@ -95,7 +112,7 @@ export default (props) => {
                         class='labeldefaultFont'
                         control={control}
                         iProps={{ readOnly: true }}
-                        initValue={''}
+                        initValue={user.team_name}
                     />
                     <DateField 
                         fieldname={'current_date'}
@@ -106,6 +123,17 @@ export default (props) => {
                         initValue={moment()}
                     />
                     <Divider />
+                    <InputField 
+                        isRequired={true}
+                        fieldname={'Staff ID'}
+                        label={'Staff ID'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ readOnly: false }}
+                        initValue={''}
+                        rules={{required: 'Please state'}}
+                        validate={errors['Staff ID'] && 'error'}
+                    />
                     </>
                     }
                     {forming?.fields.map((item,index) => (
@@ -113,29 +141,28 @@ export default (props) => {
                         {item.field_type == 'Date' ?
                             <DateField 
                             isRequired={true}
-                            fieldname={item.field_name}
+                            fieldname={item?.field_name}
                             label={item.field_name}
                             class='labeldefaultFont'
                             control={control}
                             iProps={{placeholder: 'Select Request Form'}}
                             rules={{required: 'Please state'}}
-                            initValue={''}
-                            validate={errors[item.field_name] && 'error'}
+                            initValue={item?.field_name ? item?.field_name : ''}
+                            validate={errors[item?.field_name] && 'error'}
                             />
                         :
                             <InputField 
                             isRequired={true}
-                            fieldname={item.field_name}
+                            fieldname={item?.field_name}
                             label={item.field_name}
                             class='labeldefaultFont'
                             control={control}
                             iProps={{placeholder: 'Please state',
-                            readOnly: item.field_name == 'Department' ? true
-                            : item.field_name == 'Requester' ? user : false
+                            readOnly: item?.field_name == 'Requester' ? user : false
                             }}
                             rules={{required: 'Please state'}}
-                            initValue={''}
-                            validate={errors[item.field_name] && 'error'}
+                            initValue={item?.field_name ? item?.field_name : ''}
+                            validate={errors[item?.field_name] && 'error'}
                             />
                         }
                         </Fragment>

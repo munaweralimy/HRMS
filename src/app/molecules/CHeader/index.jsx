@@ -25,9 +25,8 @@ export default (props) => {
   const { t } = i18n;
 
     const logoutHandler = () => {
+        localStorage.clear();
         dispatch(logout());
-        localStorage.removeItem("token");
-        localStorage.removeItem('userdetails');
         history.push("/");
     };
     

@@ -14,7 +14,7 @@ export default {
     LEAVES_INDIVIDUAL: 'leave_individual',
     LEAVES_TEAMS: 'leaves_teams',
     LEAVES: 'leaves_company',
-    POLICY: 'policy_company',
+    POLICY: 'policy',
     POLICY_INDIVIDUAL: 'policy_individual',
     REQUESTS: 'requests',
     REQUESTS_MANAGER: 'request_team',

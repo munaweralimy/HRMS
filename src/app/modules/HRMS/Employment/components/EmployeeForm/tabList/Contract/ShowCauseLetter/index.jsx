@@ -30,7 +30,7 @@ export default (props) => {
           ListData={data?.showCause}
           pagination={false}
           extraBtn={'Request Show Cause'}
-          extraAction={() => history.push(`/requests/${id}`)}
+          extraAction={() => history.push({pathname: `/requests/addnew`, state: { code: id, category: 'Show Cause Letter' }})}
           btnClass='red-btn'
           listClass="nospace-card"
           />

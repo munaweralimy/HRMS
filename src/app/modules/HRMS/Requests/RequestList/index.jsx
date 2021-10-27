@@ -95,7 +95,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.REQUESTS_INDIVIDUAL]),
+      visible: allowed([Roles.REQUESTS_MANAGER]),
       title: 'Archive',
       key: 'archive',
       Comp: RequestSection,

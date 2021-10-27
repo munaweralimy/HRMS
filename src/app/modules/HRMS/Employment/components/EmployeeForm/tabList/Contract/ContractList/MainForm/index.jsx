@@ -78,7 +78,7 @@ import Activations from '../Activations';
 
 export default (props) => {
 
-    const { control, errors, setValue, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh, id } = props;
+    const { control, errors, setValue, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh, id, setLoad, updateApi } = props;
     const [noEdit, setNoedit] = useState(true);
     const [templateList, setTemplateList] = useState([]);
     
@@ -414,7 +414,7 @@ export default (props) => {
         title={'Employment Contract'}
         fieldsList={contractDetails}
         backbtnTitle='Employment History'
-        extraComp={<Activations id={id} data={recordData} />}
+        extraComp={<Activations id={id} data={recordData} setLoad={setLoad} onBack={onBack} updateApi={updateApi} />}
         />
     )
 }

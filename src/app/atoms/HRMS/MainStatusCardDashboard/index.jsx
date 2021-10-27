@@ -11,7 +11,7 @@ export default (props) => {
   const history = useHistory();
   const statuses = (status) => {
     switch (status) {
-      case 'Excellent':
+      case 'Execllent':
         return 'b-success';
       case 'Poor':
         return 'b-error';
