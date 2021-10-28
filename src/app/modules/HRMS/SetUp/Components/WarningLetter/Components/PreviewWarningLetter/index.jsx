@@ -42,34 +42,37 @@ const PreviewWarningLetter = (props) => {
           </Col>
         </Row>
       </Col>
-      <Col span={24}>
-        <Row gutter={24} justify="start" align="middle">
-          <Col>
-            <Image
-              preview={false}
-              width="100%"
-              height={110}
-              src={`http://cms2dev.limkokwing.net${letterImages.signature}`}
-            />
-          </Col>
-          <Col span={24}>
-            <Title level={5} className="mb-0 font-500" style={{ color: 'black' }}>
-              {letterImages.signee}
-            </Title>
-          </Col>
-          {/* <Col></Col> */}
-          <Col span={24}>
-            <Text className="mb-0" style={{ color: 'black' }}>
-              LimkokWing University Creative Technology.
-            </Text>
-          </Col>
-          <Col span={24}>
-            <Text className="mb-0" style={{ color: 'black' }}>
-              {moment(new Date()).format('Do MMMM YYYY')}
-            </Text>
-          </Col>
-        </Row>
-      </Col>
+      {letterImages.signature && (
+        <Col span={24}>
+          <Row gutter={24} justify="start" align="middle">
+            <Col>
+              <Image
+                preview={false}
+                width="100%"
+                height={110}
+                src={`http://cms2dev.limkokwing.net${letterImages.signature}`}
+              />
+            </Col>
+            <Col span={24}>
+              <Title level={5} className="mb-0 font-500" style={{ color: 'black' }}>
+                {letterImages.signee}
+              </Title>
+            </Col>
+            {/* <Col></Col> */}
+            <Col span={24}>
+              <Text className="mb-0" style={{ color: 'black' }}>
+                LimkokWing University Creative Technology.
+              </Text>
+            </Col>
+            <Col span={24}>
+              <Text className="mb-0" style={{ color: 'black' }}>
+                {moment(new Date()).format('Do MMMM YYYY')}
+              </Text>
+            </Col>
+          </Row>
+        </Col>
+      )}
+
       <Col span={24}>
         <Divider className="m-0" style={{ background: 'black' }} />
       </Col>

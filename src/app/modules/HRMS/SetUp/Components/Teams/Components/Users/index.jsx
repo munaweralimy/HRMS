@@ -38,7 +38,7 @@ const Users = (props) => {
         </Col>
         <Col span={24}>
           <SelectField
-            label="Select Employee"
+            label={`Select ${department ? 'Team' : 'Employee'}`}
             fieldname="employee"
             class="mb-0 w-100"
             control={control}
