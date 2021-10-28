@@ -9,6 +9,9 @@ import { useHistory } from 'react-router-dom';
 import { getFormFields } from '../../ducks/actions';
 import { Fragment } from 'react';
 import moment from 'moment';
+import { getWarnLetter } from '../../../Employment/ducks/action';
+import {allowed} from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -17,14 +20,17 @@ export default (props) => {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const { title, control, errors, setValue, dvalue } = props;
     const formList1 = useSelector(state => state.hrmsrequests.formList)
     const [forming, setForming] = useState();
     const [formList, setFormList] = useState([]);
-    const { title, control, errors } = props;
+    const letters = useSelector(state => state.employment.warnLetter);
+    const [letterList, setLetterList] = useState([]);
     const user = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
 
     useEffect(() => {
         dispatch(getFormFields());
+        dispatch(getWarnLetter());
     }, []);
 
     const onChangeForm = (e) => {
@@ -34,13 +40,26 @@ export default (props) => {
     }
 
     useEffect(() => {
+        if (letters && letters.length) {
+          let temp = [];
+          letters.map(x => {
+            temp.push({
+              value: x.writing_letter_name,
+              label: x.writing_letter_name,
+            });
+          })
+          setLetterList(temp);
+        }
+      }, [letters]);
+
+    useEffect(() => {
         if (formList1 && formList1.length > 0) {
             let temp = [];
             formList1.map(x => {
                 if(x?.category != '')  {
-                    // if(x?.category == 'Show Cause Letter') {
-                    //     temp.push(x)
-                    // }
+                    if(x?.category == 'Show Cause Letter' && allowed([Roles.REQUESTS_MANAGER])) {
+                        temp.push(x)
+                    }
                 } else {
                     temp.push(x)
                 }
@@ -48,6 +67,15 @@ export default (props) => {
             setFormList(temp);
         }
     }, [formList1]);
+
+    useEffect(() => {
+        if (formList.length > 0 && dvalue) {
+            let e = formList.find(x => x.category == dvalue.category);
+            let x = {label: e.form_name, value: e.name, fields: e.form_field, category: e.category}
+            setValue('formName', x);
+            setForming(x);
+        }
+    }, [formList]);
 
     const panelHeader = () => {
         return <Space size={30}>
@@ -91,15 +119,23 @@ export default (props) => {
                     control={control}
                     onChange={onChangeForm}
                     rules={{required: 'Please Select Form'}}
-                    selectOption={formList?.map(e => ({label: e.form_name, value: e.name, fields: e.form_field}))}
+                    selectOption={formList?.map(e => ({label: e.form_name, value: e.name, fields: e.form_field, category: e.category}))}
                     initValue={''}
                     validate={errors.formName && 'error'}
                     validMessage={errors.formName && errors.formName.message}
                     />
-                    {forming?.fields.length > 0 &&  
-                    <>
+                {forming && forming?.fields.length > 0 &&  
+                <>
                     <InputField 
-                        fieldname={'requester'}
+                        fieldname={'Requester ID'}
+                        label={'Requester ID'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ readOnly: true }}
+                        initValue={user.name}
+                    />
+                    <InputField 
+                        fieldname={'Requester'}
                         label={'Requester'}
                         class='labeldefaultFont'
                         control={control}
@@ -107,7 +143,7 @@ export default (props) => {
                         initValue={user.full_name}
                     />
                     <InputField 
-                        fieldname={'requester_team'}
+                        fieldname={'Requester Team'}
                         label={'Requester Team'}
                         class='labeldefaultFont'
                         control={control}
@@ -115,7 +151,7 @@ export default (props) => {
                         initValue={user.team_name}
                     />
                     <DateField 
-                        fieldname={'current_date'}
+                        fieldname={'Date'}
                         label={'Date'}
                         class='labeldefaultFont'
                         control={control}
@@ -123,6 +159,7 @@ export default (props) => {
                         initValue={moment()}
                     />
                     <Divider />
+                    
                     <InputField 
                         isRequired={true}
                         fieldname={'Staff ID'}
@@ -130,12 +167,51 @@ export default (props) => {
                         class='labeldefaultFont'
                         control={control}
                         iProps={{ readOnly: false }}
-                        initValue={''}
+                        initValue={dvalue ? dvalue.code : ''}
                         rules={{required: 'Please state'}}
                         validate={errors['Staff ID'] && 'error'}
                     />
-                    </>
-                    }
+                    {forming.category == 'Show Cause Letter' &&
+                    <>
+                    <InputField 
+                        fieldname={'Request For'}
+                        label={'Request For'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ placeholder: 'please state' }}
+                        initValue={dvalue ? dvalue.name : ''}
+                    />
+                    <InputField 
+                        fieldname={'Request For Team'}
+                        label={'Request For Team'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ placeholder: 'Enter Team' }}
+                        initValue={dvalue ? dvalue.team : ''}
+                    />
+                    <InputField 
+                        fieldname={'Company'}
+                        label={'Company'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ placeholder: 'Enter company' }}
+                        initValue={dvalue ? dvalue.company : ''}
+                    />
+                    <SelectField 
+                        isRequired={true}
+                        fieldname={'Warning Letter Type'}
+                        label={'Warning Letter Type'}
+                        class='labeldefaultFont'
+                        control={control}
+                        iProps={{ placeholder: 'Enter Team' }}
+                        initValue={''}
+                        selectOption={letterList}
+                        rules={{required: 'Please select'}}
+                        validate={errors['Warning Letter'] && 'error'}
+                    />
+                    </>}
+                </>}
+
                     {forming?.fields.map((item,index) => (
                         <Fragment key={index}>
                         {item.field_type == 'Date' ?
@@ -152,7 +228,7 @@ export default (props) => {
                             />
                         :
                             <InputField 
-                            isRequired={true}
+                            // isRequired={true}
                             fieldname={item?.field_name}
                             label={item.field_name}
                             class='labeldefaultFont'
@@ -160,9 +236,9 @@ export default (props) => {
                             iProps={{placeholder: 'Please state',
                             readOnly: item?.field_name == 'Requester' ? user : false
                             }}
-                            rules={{required: 'Please state'}}
-                            initValue={item?.field_name ? item?.field_name : ''}
-                            validate={errors[item?.field_name] && 'error'}
+                            // rules={{required: 'Please state'}}
+                            initValue={''}
+                            // validate={errors[item?.field_name] && 'error'}
                             />
                         }
                         </Fragment>

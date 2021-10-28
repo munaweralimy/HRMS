@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Form, Row, Col, Button } from 'antd';
 
-export default ({data, currentID, onAction}) => {
+export default ({data, currentID, onAction, getValues}) => {
 
     const permit = JSON.parse(localStorage.getItem('access'));
     const [rejectEnable, setRejectEnable] = useState(false);
     const [approverPermit, setApproverPermit] = useState({
       pos : null,
       ind : null,
-      other: null,
+      // other: null,
     })
   
     useEffect(() => {
       if (data) {
         setApproverPermit({
           pos : data.approvers.find(y => Object.keys(permit).find(z => z == y.approver_detail)),
-          ind : data.approvers.find(y => y.approver_detail == currentID),
-          other : data.approvers.find(y => y.approver_id == currentID),
+          // ind : data.approvers.find(y => y.approver_detail == currentID),
+          ind : data.approvers.find(y => y.approver_id == currentID),
         })
       }
       
@@ -58,7 +58,13 @@ export default ({data, currentID, onAction}) => {
           </>
           :
           <>
-          {(approverPermit.pos && approverPermit.pos?.status == 'Pending' || approverPermit.ind && approverPermit.ind?.status == 'Pending' || approverPermit.other && approverPermit.other?.status == 'Pending') && 
+          {(approverPermit.pos && approverPermit.pos?.status == 'Pending' || approverPermit.ind && approverPermit.ind?.status == 'Pending') && 
+          <>
+          {approverPermit.ind && approverPermit.ind?.approvers == 'Individual' ?
+          <Col>
+            <Button type='primary' htmlType='button' size='large' onClick={() => onAction('Approve', data, null, approverPermit.pos, approverPermit.ind)}>Submit</Button>
+          </Col>
+          :
           <>
             <Col span={12}>
               <Button type='primary' htmlType='button' className='w-100 green-btn' size='large' onClick={() => onAction('Approve', data, null, approverPermit.pos, approverPermit.ind)}>Approve</Button>
@@ -66,6 +72,7 @@ export default ({data, currentID, onAction}) => {
             <Col span={12}>
               <Button type='primary' htmlType='button' className='w-100 red-btn' size='large' onClick={() => setRejectEnable(true)}>Reject</Button>
             </Col>
+            </>}
             </>}
           </>}
         </>

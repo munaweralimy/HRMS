@@ -72,7 +72,7 @@ export const emptyRequestDetails = () => {
     return async (dispatch) => {
     const {
         data: { data },
-      } = await axios.get(`${apiresource}/HRMS Form Setting?fields=["name","field_label","type"]`);
+      } = await axios.get(`${apiresource}/HRMS Form Setting?fields=["name","field_label","type"]&limit_page_length=0`);
       dispatch({
         type: action_types.FIELDS_LIST,
         data: data,
