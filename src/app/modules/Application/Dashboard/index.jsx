@@ -26,7 +26,7 @@ export default (props) => {
                 <ProgressCard timesheetData={timesheetData} />
             </Col>
             <Col flex='1 0 398px'>
-                <LeaveCalendar />
+                <LeaveCalendar dashboard={true} />
             </Col>
         </Row>
     )

@@ -10,83 +10,56 @@ const { Title } = Typography;
 
 export default (props) => {
   const dispatch = useDispatch();
-  //const {calenderData} = props;
+  const { dashboard } = props;
   const calenderData = useSelector(state => state.global.calenderData);
-  const companyName = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   let startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
   let endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
 
   useEffect(() => {
-    dispatch(getCalenderData(startOfMonth,endOfMonth,companyName));
+    dispatch(getCalenderData(startOfMonth,endOfMonth,company));
   }, [])
 
-  function getListData(array) {
-    let listData;
-    array?.map(resp => {
-      if(resp?.compareDate) {
-        if(resp?.leave_type == 'Annual Leave'){
-          listData = [
-            { type: 'success', content: 'Annual Leave' },
-          ];
-        }
-        if(resp?.leave_type == 'Medical Leave'){
-          listData = [
-            { type: 'error', content: 'Medical Leave' },
-          ];
-        }
-      }
-    })
-    
-    // switch (value.date()) {
-    //   case 8:
-    //     listData = [
-    //       { type: 'warning', content: 'This is warning event.' },
-    //       { type: 'success', content: 'This is usual event.' },
-    //     ];
-    //     break;
-    //   case 10:
-    //     listData = [
-    //       { type: 'warning', content: 'This is warning event.' },
-    //       { type: 'success', content: 'This is usual event.' },
-    //       { type: 'error', content: 'This is error event.' },
-    //     ];
-    //     break;
-    //   case 23:
-    //     listData = [
-    //       { type: 'warning', content: 'This is warning event' },
-    //       { type: 'success', content: 'This is very long usual event。。....' },
-    //       { type: 'error', content: 'This is error event 1.' },
-    //       { type: 'error', content: 'This is error event 2.' },
-    //       { type: 'purple', content: 'This is error event 3.' },
-    //       { type: 'error', content: 'This is error event 4.' },
-    //     ];
-    //     break;
-    //   default:
-    // }
-    return listData || [];
+  function getDates(startDate, stopDate) {
+    var dateArray = [];
+    var currentDate = moment(startDate);
+    var stopDate = moment(stopDate);
+    while (currentDate <= stopDate) {
+        dateArray.push( moment(currentDate).format('YYYY-MM-DD') )
+        currentDate = moment(currentDate).add(1, 'days');
+    }
+    return dateArray;
+  }
+
+  function caseCol(val) {
+    switch (val) {
+      case 'Annual Leave': return 'success';
+      case 'Medical Leave': return 'error';
+      case 'Holiday': return 'warning';
+      case 'Unpaid Leave': return 'purple';
+    }
   }
 
   function dateCellRender(value) {
+
     let sDate = null;
     let eDate = null;
-    let cDate = null;
-    let vDate = null
-    let array = []
+    let cDate = moment(value).format('YYYY-MM-DD');
+    let array = [];
     calenderData?.map(resp => {
       sDate = moment(resp?.start_date).format('YYYY-MM-DD');
       eDate = moment(resp?.end_date).format('YYYY-MM-DD');
-      cDate = moment(value);
-      vDate = cDate?.isBetween(sDate,eDate)
-      array.push({
-        compareDate: vDate,
-        leave_type: resp?.leave_type,
-        date: value.date()
+      getDates(sDate, eDate).map(x=> {
+        if(x == cDate) {
+          array.push({
+            type: caseCol(resp?.leave_type),
+            content: resp?.employee_name,
+          })
+        }
       })
     })
-    //console.log('value',array,vDate)
-    
-    const listData = getListData(array);
-    const unique = [...new Map(listData.map(item => [item.type, item])).values()];
+
+    const unique = [...new Map(array.map(item => [item.type, item])).values()];
     return (
       <Space size={3} className='justify-cetner' wrap>
         {unique.map(item => (
@@ -96,10 +69,10 @@ export default (props) => {
     );
   }
 
-  function onPanelChange(value, mode) {
+  function onPanelChange(value) {
     startOfMonth = moment(value).startOf('month').format('YYYY-MM-DD');
     endOfMonth   = moment(value).endOf('month').format('YYYY-MM-DD');
-    dispatch(getCalenderData(startOfMonth,endOfMonth,companyName))
+    dispatch(getCalenderData(startOfMonth,endOfMonth,company))
   }
 
   const customHeader = ({value, type, onChange, onTypeChange}) => {
@@ -147,12 +120,16 @@ export default (props) => {
     );
   }
 
+  const onCellSelect = (val) => {
+    console.log('cehck', val)
+  }
+
     return (
-        <Card bordered={false} className='uni-card dashboard-card main-card-hover'>
+        <Card bordered={false} className={`uni-card dashboard-card ${dashboard ? 'main-card-hover' : ''}`}>
             <Row gutter={20}>
-                <Col span={24}>
+                {dashboard && <Col span={24}>
                     <Title level={4} className='mb-10PX c-default'>Calendar</Title>
-                </Col>
+                </Col>}
                 <Col span={24}>
                     <ConfigProvider locale={en_GB}>
                         <Calendar 
@@ -163,6 +140,7 @@ export default (props) => {
                               return  moment(current).day() === 0 || moment(current).day() === 6 
                             }
                           }
+                          onSelect={onCellSelect}
                           onPanelChange={onPanelChange}
                           headerRender={customHeader}
                         />
@@ -170,7 +148,7 @@ export default (props) => {
                 </Col>
                 <Col span={24}>
                     <Divider className='mt-0 mb-10PX' />
-                    <Row gutter={20} justify='space-between'>
+                    <Row gutter={20} justify='center'>
                         <Col>
                             <Badge className='bottom-badge' status="success" text='Annual' />
                         </Col>
@@ -189,3 +167,5 @@ export default (props) => {
         </Card>
     )
 }
+
+

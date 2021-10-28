@@ -12,7 +12,7 @@ import Roles from '../../../../routing/config/Roles';
 import {allowed} from '../../../../routing/config/utils';
 import { getTeamsDetail } from '../../Application/ducks/actions';
 import TeamStatistics from './components/TeamStatistics';
-import LeaveCalendar from './components/LeaveCalendar';
+import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 
 const filtersOverall = [
   {
