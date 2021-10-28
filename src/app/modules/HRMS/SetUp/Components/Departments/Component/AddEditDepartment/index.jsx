@@ -125,7 +125,7 @@ export default (props) => {
                 <AddUser
                   userData={userData}
                   setUserData={setUserData}
-                  title="Team Member"
+                  title="Teams"
                   department={{ bool: true, deptName: departmentField.name ? departmentField.name : '' }}
                   control={control}
                 />

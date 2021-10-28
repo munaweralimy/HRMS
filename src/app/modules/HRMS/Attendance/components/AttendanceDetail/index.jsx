@@ -28,8 +28,8 @@ const AttendanceDetails = (props) => {
         attendanceData?.total_work_hour?.substring(0, attendanceData?.total_work_hour.indexOf(':')),
       );
       setValue('status', { value: attendanceData?.status, label: attendanceData.status });
-      setValue('time_in', attendanceData?.time_in ? moment(attendanceData?.time_in, 'h:mm:ss a') : '');
-      setValue('time_out', attendanceData?.time_out ? moment(attendanceData?.time_out, 'h:mm:ss a') : '');
+      setValue('time_in', attendanceData?.time_in !== '0:00:00' ? moment(attendanceData?.time_in, 'h:mm:ss a') : '');
+      setValue('time_out', attendanceData?.time_out !== '0:00:00' ? moment(attendanceData?.time_out, 'h:mm:ss a') : '');
       setValue('remarks', attendanceData?.remarks);
     }
   }, [attendanceData]);
