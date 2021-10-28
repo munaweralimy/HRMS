@@ -2,11 +2,11 @@ import axios from '../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../configs/constants';
 
-export const getPendingIssues = () => {
+export const getPendingIssues = (company) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.pending_issues`);
+    } = await axios.get(`${apiMethod}/hrms.dashboard_api.pending_issues?company=${company}`);
     dispatch({
       type: action_types.PENDING_ISSUES,
       data: message,
@@ -26,11 +26,11 @@ export const getPolicyList = () => {
   };
 };
 
-export const getTimesheetData = () => {
+export const getTimesheetData = (company) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_current_month_timesheet`);
+    } = await axios.get(`${apiMethod}/hrms.api.get_current_month_timesheet?company=${company}`);
     dispatch({
       type: action_types.TIMESHEET_DATA,
       data: message,
