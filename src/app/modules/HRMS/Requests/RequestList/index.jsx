@@ -71,7 +71,7 @@ export default (props) => {
         innerKey: 'employee_id',
         activeTab: activeKey,
         updateApi: onAction1,
-        limit: props.dashboard== true ? 3 : 6
+        limit: props.dashboard == true ? 3 : 6
       },
     },
     {

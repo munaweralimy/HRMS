@@ -25,6 +25,7 @@
             
         }
         .ant-picker-cell {
+            pointer-events: none;
             .ant-picker-calendar-date {
                 color: transparent;
             }
@@ -53,6 +54,8 @@
             color: #fff;
         }
         .ant-picker-cell-in-view {
+            pointer-events: auto;
+            cursor: pointer;
             .ant-picker-calendar-date-content {
                 display: block;
             }

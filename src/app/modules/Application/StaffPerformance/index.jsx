@@ -12,18 +12,18 @@ import { getStaffPerformance } from '../../Application/ducks/actions';
 
 export default (props) => {
   const {performanceData} = props;
-  console.log('performanceData', performanceData)
   const dispatch = useDispatch();
   const history = useHistory();
   const [activeKey, setActiveKey] = useState('pending');
   const staffData = useSelector(state => state.global.staffData);
   const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+  
   const onAction1 = (status, page, sort) => {
-    dispatch(getRequestPending(page, sort));
+    dispatch(getStaffPerformance(company));
   }
 
   useEffect(() => {
-    dispatch(getStaffPerformance(company));
+    // dispatch(getStaffPerformance(company));
     //dispatch(getCalenderData());
 }, [])
 
