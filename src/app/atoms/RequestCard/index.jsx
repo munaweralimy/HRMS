@@ -3,12 +3,13 @@ import { Row, Col, Typography, Avatar, Card, Space } from 'antd';
 import SmallStatusCard from '../SmallStatusCard';
 import { ClockCircleFilled, CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import { useHistory } from 'react-router';
+import { baseUrl } from '../../../configs/constants';
 const { Title, Text } = Typography;
 
 export default (props) => {
   const { data, link, stateKey } = props;
   const history = useHistory();
-
+console.log('data', data)
   return (
     <Card
       bordered={false}
@@ -19,7 +20,7 @@ export default (props) => {
       <Row gutter={[20, 30]}>
         <Col span={24}>
           <Space size={17}>
-            <Avatar size="large" src="" />
+            <Avatar size="large" src={data?.image ? `${baseUrl}${data?.image}` : ''} />
             <Space direction="vertical" size={0}>
               <Text className="c-gray lineHeight20">{data?.employee_name}</Text>
               <Text className="lineHeight20">{data?.name}</Text>
