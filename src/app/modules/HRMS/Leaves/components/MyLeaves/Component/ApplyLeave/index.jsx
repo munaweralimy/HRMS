@@ -37,7 +37,7 @@ export default (props) => {
     setLoad(true);    
     const startDate = moment(val?.leaveStart);
     const endDate = moment(val?.leaveEnd);
-    const daysDiff = endDate.diff(startDate, 'days');
+    const daysDiff = endDate.diff(startDate, 'days') + 1;
 
     let approvers = [];
     leaveApproversData?.map(resp => {
@@ -80,11 +80,15 @@ export default (props) => {
 
     let url = `${apiMethod}/hrms.leaves_api.leave_create_with_validation`;
     try {
-        await axios.post(url, temp);
+      const res = await axios.post(url, temp);
+      if (res.data.message.success ==  false) {
+        message.error(res.data.message.message);
+        setLoad(false);
+      } else {        
         message.success('Leave Applied Successfully');
         setLoad(false);
-        
         setTimeout(() => {setAddVisible(false); updateApi()}, 1000)
+      }
     } catch(e) {
         const { response } = e;
         message.error(e);
