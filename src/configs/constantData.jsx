@@ -133,5 +133,5 @@ export const alternateSat = [
 export const pStatus = [
   { label: 'Expiring', value: 'Expiring' },
   { label: 'Expired', value: 'Expired' },
-  { label: 'Active', value: 'Active' },
+  // { label: 'Active', value: 'Active' },
 ];

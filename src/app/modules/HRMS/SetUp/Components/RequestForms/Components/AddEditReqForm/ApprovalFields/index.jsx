@@ -72,14 +72,11 @@ export default (props) => {
 
     useEffect(() => {
       if (watch1.label == 'Job Position') {
-        setVisible2(false);
+        // setVisible2(false);
           setVisible(true);
-      } else if(watch1.label == 'Individual') {
-          setVisible(false);
-          setVisible2(true);
       } else {
         setVisible(false);
-        setVisible2(false);
+        // setVisible2(false);
       }
     }, [watch1]);
 
@@ -116,7 +113,7 @@ export default (props) => {
                   selectOption={position?.map(x => ({label: x.name, value: x.name}))}
                 />
             </Col>}
-            {visible2 &&
+            {/* {visible2 &&
             <Col span={24}>
               <Form.Item label={''} className={'mb-0'}>
                 <Controller
@@ -142,7 +139,7 @@ export default (props) => {
                   )}
                 />
               </Form.Item>
-            </Col>}
+            </Col>} */}
         </Row>
     )
 }

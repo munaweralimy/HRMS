@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Form, Space, Typography, Collapse, Row, Col, Button, Tabs, message } from 'antd';
+import { Form, Space, Typography, Collapse, Tabs, message } from 'antd';
 import { UpOutlined } from '@ant-design/icons';
 import SmallStatusCard from '../../../../../atoms/SmallStatusCard';
 import { CheckCircleFilled, CloseCircleFilled, ClockCircleFilled } from '@ant-design/icons';
 import { cancelRequest, updateRequest } from '../../ducks/services';
-import { contractApi, sendWarning } from '../../../Employment/ducks/services';
+import { contractApi, sendShowCause, sendWarning } from '../../../Employment/ducks/services';
 import { updateCarryForwardApprove, updateCarryForwardReject } from '../../../Leaves/ducks/services';
 import RequestPanel from './RequestPanel';
+
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -16,11 +17,12 @@ export default (props) => {
   
   const { data, selectedTab, selectedPanel, updateReqApi, id } = props;
   const [ activeTab, setActiveTab ] = useState(selectedTab);
+  
   const [ load, setLoad ] = useState(false);
 
   const panelHeader = (appr, title, status) => {
     let x = '';
-    appr.map(y => x += y.approvers == 'Job Position' ? y.approver_detail : y.approvers)
+    appr.map(y => x += y.approvers == 'Job Position' ? y.approver_detail : y.approvers + ' ')
       return <Space size={30}>
         <SmallStatusCard
           status={status == 'Archive' ? appr.find(x => x.status == 'Reject') ? 'Reject' : 'Approved' : 'Pending'}
@@ -79,26 +81,35 @@ export default (props) => {
   }
 
   const onCancel = async (item) => {
+    setLoad(true);
     cancelRequest(item)
     .then((response) => {
+      setLoad(false);
         message.success('Request Canceled')
         updateReqApi();
     })
-    .catch((error) => message.error(error));
+    .catch((error) => { setLoad(false); message.error(error) });
   }
 
-  const onApproveReject = (status, item, remarks, pos, ind) => {
+  const onApproveReject = (status, item, remarks, pos, ind, val) => {
     setLoad(true);
-    console.log('chck', item, status, id, pos, ind)
+    console.log('chck', item, status, id, pos, ind, val)
     const { name, approvers, form_fields, category } = item;
     let contractid = null;
+    let field = [];
+    Object.entries(val).map(([key,val]) => {
+      field.push({
+        field_label: key,
+        field_value: val,
+      })
+    })
     let dep =[];
     approvers.map(z => {
       if (z.approvers == 'Job Position' && pos?.status == 'Pending') {
         dep.push({
           approvers: z.approvers,
           approver_detail: z.approver_detail,
-          approvers_id: z.approver_id,
+          approver_id: z.approver_id,
           status: status,
           remarks: remarks
         })
@@ -106,7 +117,7 @@ export default (props) => {
         dep.push({
           approvers: z.approvers,
           approver_detail: z.approver_detail,
-          approvers_id: z.approver_id,
+          approver_id: z.approver_id,
           status: status,
           remarks: remarks
         })
@@ -114,7 +125,7 @@ export default (props) => {
         dep.push({
           approvers: z.approvers,
           approver_detail: z.approver_detail,
-          approvers_id: z.approver_id,
+          approver_id: z.approver_id,
           status: status,
           remarks: remarks
         })
@@ -122,7 +133,7 @@ export default (props) => {
         dep.push({
           approvers: z.approvers,
           approver_detail: z.approver_detail,
-          approvers_id: z.approver_id,
+          approver_id: z.approver_id,
           status: z.status
         })
       }
@@ -130,6 +141,7 @@ export default (props) => {
 
     const payload = {
       approvers: dep,
+      form_fields: field
     };
 
     console.log('ccc', payload, category)
@@ -221,18 +233,34 @@ export default (props) => {
       });
   };
 
+  const sendWarn = (field) => {
+    setLoad(true);
+    let ids = field.find(x => x.field_label == 'Staff ID');
+    let letter = field.find(x => x.field_label == 'Warning Letter Type');
+    const body = {
+        employee_id: ids?.field_value,
+        show_cause: letter?.field_value
+    }
+    sendShowCause(body).then(rest => {
+
+    }).catch(e => {
+        setLoad(false);
+        message.error("Something went worng");
+    })
+  }
+
   
   
   return (
       <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={(e) => setActiveTab(e)}>
         {Object.entries(data).map(([key,value]) => (
-          <TabPane tab={<span className='SentanceCase'>{key == 'yourrequests' ? 'Your Requests' :  key}</span>} key={key}>
+          <TabPane tab={<span className='SentanceCase'>{key == 'yourrequests' ? 'My Requests' :  key}</span>} key={key}>
             <Collapse accordion className='reqPanel' bordered={false} defaultActiveKey={selectedPanel} 
             expandIcon={({isActive}) => panelRight(isActive)}
             expandIconPosition='right'>
               {value && value.map(item => (
                 <Panel className='ch-black' header={panelHeader(item?.approvers, item?.form_name, item?.status)} key={item?.name}>
-                  <RequestPanel id={id} item={item} activeTab={activeTab} onApproveReject={onApproveReject} onRevert={onRevert} onCancel={onCancel} load={load} />
+                  <RequestPanel id={id} sendWarn={sendWarn} item={item} activeTab={activeTab} onApproveReject={onApproveReject} onRevert={onRevert} onCancel={onCancel} load={load} />
                 </Panel>
                 ))}
             </Collapse>

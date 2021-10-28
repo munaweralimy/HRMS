@@ -196,7 +196,7 @@ export default (props) => {
             <Col span={24}>
               <SelectField
                 fieldname={`form_fields[${index}].field_name`}
-                label={``}
+                label={`field`}
                 control={control}
                 class={`mb-0`}
                 iProps={{ placeholder: 'Please select' }}

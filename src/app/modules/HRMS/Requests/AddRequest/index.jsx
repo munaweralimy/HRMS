@@ -21,8 +21,8 @@ export default (props) => {
 
     const history = useHistory();
     const location = useLocation();
-    const uid = location?.state?.code;
-    const { control, errors, handleSubmit, reset } = useForm(defVal);
+    const uid = location?.state;
+    const { control, errors, setValue, handleSubmit, reset } = useForm(defVal);
     const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
     const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
     
@@ -54,7 +54,6 @@ export default (props) => {
     const onFinish = async (data) => {
         props.setLoading(true);
         getRequest(data.formName.label).then(req => {
-            console.log('now in')
         getApproverLead(id).then(appr => {
             let approvetemp = [];
             req?.data?.data?.approvers.map(x => {
@@ -65,6 +64,8 @@ export default (props) => {
                 aid = appr?.data?.message[0]?.supervisor_id;
               } else if(x.approvers == 'Team Leader') {
                 aid = appr?.data?.message[0]?.team_leader;
+              } else if(x.approvers == 'Individual') {
+                aid = data['Staff ID'];
               }
               approvetemp.push({
                   approvers: x.approvers,
@@ -80,24 +81,28 @@ export default (props) => {
                 if (key != 'formName') {
                     if (key == 'Date') {
                         fields.push({field_label: key, field_type: 'date', field_value : moment(val).format('YYYY MM DD')});
+                    } else if(key == 'Warning Letter Type') {
+                        fields.push({field_label: key, field_type: 'text', field_value : val.label});
                     } else {
                         fields.push({field_label: key, field_type: 'text', field_value : val});
                     }
                 }
             })
-            fields.push({field_label: 'Requester ID', field_type: 'text', field_value : id});
+            // fields.push({field_label: 'Requester ID', field_type: 'text', field_value : id});
             
             const body1 = {
                 form_name: data.formName.label,
                 sender: req.data.data.sender,
-                category: '',
+                category: data.formName.label == 'Show Cause Letter' ? data.formName.label : '',
                 approvers: approvetemp,
                 status: 'Pending',
                 form_fields: fields
             }
+            console.log('bodd', body1);
             createRequest(body1).then(resi => {
             props.setLoading(false);
               message.success('Request Created');
+              history.push('/requests')
             }).catch(e => {
                 const {response} = e
                 console.log("error", response);
@@ -113,51 +118,6 @@ export default (props) => {
             message.error('Request Created Failed')
         })
 
-        // let fields = [];
-        // Object.entries(data).map(([key, val]) => {
-        //     if (key != 'formName') {
-        //         if (key == 'Date') {
-        //             fields.push({field_label: key, field_type: 'date', field_value : moment(val).format('YYYY MM DD')});
-        //         } else {
-        //             fields.push({field_label: key, field_type: 'text', field_value : val});
-        //         }
-        //     }
-        // })
-        // let dept = [];
-        // data.formName.departments.map(it => {
-        //     console.log('depart', it.department, depart.department)
-        //     if (it.department == depart.department) {
-        //         dept.push({
-        //             department: it.department,
-        //             status: "Approve" 
-        //         })
-        //     } else {
-        //         dept.push({
-        //             department: it.department,
-        //             status: "Pending" 
-        //         })
-        //     }
-        // })
-
-        // let body = {
-        //     form_name: data.formName.label,
-        //     status:"Pending",
-        //     form_fields: fields,
-        //     departments: dept
-        // }
-
-        // const url = `${apiresource}/AQA Form Request`;
-        // try {
-        //     await axios.post(url, body);
-        //     message.success('Request Successfully Created');
-        //     props.setLoading(false);
-        //     reset();
-        //     setTimeout(() => history.push(`${depart?.link}/requests`), 1000);
-        // } catch (e) {
-        //     const {response} = e;
-            // props.setLoading(false);
-        //     message.error('Something went wrong'); 
-        // }
     }
 
     return (
@@ -190,7 +150,7 @@ export default (props) => {
                             layout="horizontal"
                             labelAlign="left"
                             >
-                            <RequestForm title='Requests' control={control} errors={errors} />
+                            <RequestForm title='Requests' setValue={setValue} control={control} errors={errors} dvalue={uid} />
                         </Form>
                         </Card>
                     </div>
