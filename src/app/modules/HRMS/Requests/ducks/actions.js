@@ -3,7 +3,6 @@ import * as action_types from "./constants";
 import { apiMethod, apiresource } from "../../../../../configs/constants";
 
 export const getRequestPending = (page, sort, limit, id) => {
-    console.log('hcekci', page, 'limit', limit)
     return async (dispatch) => {
         const {
             data: { message },
