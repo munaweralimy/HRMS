@@ -197,6 +197,18 @@ export const getLeaveApprovers = (type,company,employeeID) => {
   };
 };
 
+export const getHolidaysList = (company) => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_holiday_list_and_criteria?company=${company}`);
+    dispatch({
+      type: action_types.HOLIDAYS_LIST,
+      data: message,
+    });
+  };
+};
+
 export const getAddProjectName = () => {
   return async (dispatch) => {
     const {

@@ -143,6 +143,7 @@ export default ({details, updateApi, progressData}) => {
               onAction2={onAction2}
               btn2title={'Cancel Application'}
               btnClass2='red-btn'
+              updateApi={updateApi}
             />
             }
         </>
