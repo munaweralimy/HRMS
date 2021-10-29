@@ -24,8 +24,17 @@ export default (props) => {
   const { control, errors, setValue, getValues, reset, handleSubmit } = useForm();
   const history = useHistory();
 
-  const onFinish = async (val) => {
-    console.log('value', val);
+  const onDraft = () => {
+    const val = getValues();
+    if(val.first_name) {
+      onFinish(val, 'Draft');
+    } else {
+      message.error('Please Enter Name')
+    }
+  }
+
+  const onFinish = async (val, vstatus) => {
+    // console.log('value', val);
     setLoad(true);
 
     let profileImg = '';
@@ -50,9 +59,9 @@ export default (props) => {
     if (val.emergency_contact && val.emergency_contact.length > 0) {
       val.emergency_contact.map(x => {
         emergency.push({
-          title: x.title.value,
+          title: x.title ? x.title.value : '',
           relation_name: x.relation_name,
-          relation: x.relation.value,
+          relation: x.relation ? x.relation.value :  '',
           email: x.email,
           phone: x.phone
         })
@@ -62,11 +71,11 @@ export default (props) => {
     if (val.employee_children && val.employee_children.length > 0) {
       val.employee_children.map(x => {
         children.push({
-          salutation: x.salutation.value,
+          salutation: x.salutation ? x.salutation.value : '',
           dob: x.dob,
           email: x.email,
           full_name: x.full_name,
-          gender: x.gender.value,
+          gender: x.gender ? x.gender.value : '',
           occupation: x.occupation,
         })
       })
@@ -74,17 +83,18 @@ export default (props) => {
 
     const body = {
         //personal
-        salutation: val.salutation?.value,
+        status: typeof(vstatus) == 'string' ? vstatus : 'Active',
+        salutation: val?.salutation ? val.salutation?.value : '',
         first_name: val.first_name,
         image: "",
         gender: val.gender ? val.gender.value : '',
-        marital_status: val.marital_status?.value,
-        nationality: val.nationality?.value,
-        identification_type: val.identification_type?.value,
+        marital_status: val.marital_status ? val.marital_status?.value : '',
+        nationality: val.nationality ? val.nationality?.value : '',
+        identification_type: val.identification_type ? val.identification_type?.value : '',
         identification_no: val.identification_no,
         date_of_birth: val.date_of_birth,
-        race: val.race?.value,
-        religious: val.religious?.value,
+        race: val.race ? val.race?.value : '',
+        religious: val.religious ? val.religious?.value : '',
         primary_phone_no: val.primary_phone_no,
         secondary_phone_no: val.secondary_phone_no,
         primary_email: val.primary_email,
@@ -95,7 +105,7 @@ export default (props) => {
               current_address_1: val.current_address_1,
               current_city: val.current_city,
               current_post_code: val.current_post_code,
-              current_country: val.current_country.value,
+              current_country: val.current_country ? val.current_country.value : '',
               permanent_state: val.current_state,
               current_address: 1
           },
@@ -103,24 +113,24 @@ export default (props) => {
               current_address_1: val.permanent_address_1,
               current_city: val.permanent_city,
               current_post_code: val.permanent_post_code,
-              current_country: val.permanent_country.value,
+              current_country: val.permanent_country ? val.permanent_country.value : '',
               permanent_state: val.permanent_state,
               permanent_address: 1
           }
         ],
 
-        spouse_salutation: val.spouse_salutation?.value,
+        spouse_salutation: val.spouse_salutation ? val.spouse_salutation?.value : '',
         spouse_name: val.spouse_name,
-        spouse_gender: val.spouse_gender?.value,
-        spouse_martial_status: val.spouse_martial_status?.value,
-        spouse_nationality: val.spouse_nationality?.value,
-        spouse_identification_type: val.spouse_identification_type?.value,
+        spouse_gender: val.spouse_gender ? val.spouse_gender?.value : '',
+        spouse_martial_status: val.spouse_martial_status ? val.spouse_martial_status?.value : '',
+        spouse_nationality: val.spouse_nationality ? val.spouse_nationality?.value : '',
+        spouse_identification_type: val.spouse_identification_type ? val.spouse_identification_type?.value : '',
         spouse_identification_no: val.spouse_identification_no,
         spouse_dob: val.spouse_dob, 
-        spouse_race: val.spouse_race?.value,
-        spouse_religious: val.spouse_religious?.value,
+        spouse_race: val.spouse_race ? val.spouse_race?.value : '',
+        spouse_religious: val.spouse_religious ? val.spouse_religious?.value : '',
         spouse_employee_name: val.spouse_employee_name,
-        spouse_employee_email: val.spouse_employee_email?.value,
+        spouse_employee_email: val.spouse_employee_email,
         spouse_phone_no: val.spouse_phone_no,
         spouse_income_tax_no: val.spouse_income_tax_no,
 
@@ -131,7 +141,7 @@ export default (props) => {
 
       // passport
         passport_number: val.passport_number,
-        passport_status: val.passport_status.value,
+        passport_status: val.passport_status ? val.passport_status.value : '',
         date_of_issue: val.date_of_issue,
         valid_upto: val.valid_upto,
         employment_pass_no: val.employment_pass_no,
@@ -143,6 +153,7 @@ export default (props) => {
         weight: val.weight,
         health_details: val.health_details
     }
+    console.log('checking', body)
     await employAddApi(body).then(async (res) => {
       console.log('res', res);
       let id = res.data.data.name;      
@@ -162,12 +173,12 @@ export default (props) => {
 
           educate.push({
             cgpa: x.cgpa,
-            country: x.country?.value,
-            fields: x.fields.value,
+            country: x.country ? x.country?.value : '',
+            fields: x.fields ? x.fields.value : '',
             year_of_passing: x.year_of_passing,
             from_date: x.from_date,
-            level: x.level?.value,
-            school_univ: x.school_univ?.value,
+            level: x.level ? x.level?.value : '',
+            school_univ: x.school_univ ? x.school_univ?.value : '',
             to_date: x.to_date,
             transcript: url ? url.replace('http://cms2dev.limkokwing.net', '') : '',
           })
@@ -187,9 +198,9 @@ export default (props) => {
         val.work_hour_template_detail.map(x => {
           workhours.push({
             day: x.day,
-            work_hour_type: x.work_hour_type.value,
+            work_hour_type: x.work_hour_type ? x.work_hour_type.value : '',
             start_time: `${x.time_hour}:${x.time_min}:00`,
-            time_type: x.time_type.value,
+            time_type: x.time_type ? x.time_type.value : '',
             work_hours: x.work_hours
           })
         })
@@ -210,16 +221,16 @@ export default (props) => {
       let body3 = {
         party_name: id,
         default_contract: 1,
-        contract_type: val?.contract_type?.value,
-        employement_type: val?.employement_type?.value,
+        contract_type: val?.contract_type ? val?.contract_type?.value : '',
+        employement_type: val?.employement_type ? val?.employement_type?.value : '',
         start_date: val.start_date ? val.start_date : '',
         end_date: val.end_date ? val.end_date : "",
-        staff_category: val?.staff_category?.value,
-        company: val?.company?.value,
-        team: val?.team?.value,
-        job_title: val?.job_title?.value,
-        position_level: val?.position_level?.value,
-        supervisor: val?.supervisor?.value,
+        staff_category: val?.staff_category ? val?.staff_category?.value : '',
+        company: val?.company ? val?.company?.value : '',
+        team: val?.team ? val?.team?.value : '',
+        job_title: val?.job_title ? val?.job_title?.value : '',
+        position_level: val?.position_level ? val?.position_level?.value : '',
+        supervisor: val?.supervisor ? val?.supervisor?.value : '',
         employee_role: empRole,
         contract_attachment: contactPDF,
         work_hour_template: val?.work_hour_template?.value != 'Custom Template' ? val?.work_hour_template?.value : '',    
@@ -230,16 +241,21 @@ export default (props) => {
       if (workhours.length > 0) {
         body['work_hour_template_detail'] = workhours;
       }
-
-      contractApi(body3, null).then(res => {
+      if (vstatus != 'Draft') {
+        contractApi(body3, null).then(res => {
+          setLoad(false);
+          message.success('Detaila Successfully Saved')
+          setTimeout(() =>  history.push('/employment'),2000)
+        }).catch(e => {
+          console.log(e);
+          setLoad(false);
+          message.error('Something went wrong')
+        })
+      } else {
         setLoad(false);
         message.success('Detaila Successfully Saved')
         setTimeout(() =>  history.push('/employment'),2000)
-      }).catch(e => {
-        console.log(e);
-        setLoad(false);
-        message.error('Something went wrong')
-      })
+      }
 
     }).catch(e => {
       console.log(e);
@@ -257,8 +273,9 @@ export default (props) => {
   const bottomList = [
       {
           title: 'Save Draft',
-          type: 'submit',
+          type: 'button',
           class: 'black-btn',
+          action: onDraft
       },
       {
           title: 'Add Employee',
