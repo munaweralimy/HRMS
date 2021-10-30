@@ -274,7 +274,7 @@ export default (props) => {
 
       contractApi(body, getID).then(res => {
         setLoad(false);
-        message.success('Detaila Successfully Saved')
+        message.success('Detail Successfully Saved')
         setFormVisible(false);
         setRecord(null)
         setVisible({

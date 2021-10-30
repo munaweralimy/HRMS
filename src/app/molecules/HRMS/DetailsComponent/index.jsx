@@ -23,7 +23,7 @@ export default (props) => {
         <Col span={24}>
             <Descriptions className='reqData' bordered colon={false} column={1}>
               {data?.map((fd, index) => {
-                if (fd.label != 'Name') {
+                if (fd.label != 'Name' && fd?.status != 'hidden' ) {
                   return <Descriptions.Item key={index} label={fd.label}><span className={fd.classi ? fd.classi : ''}>{fd.value}</span></Descriptions.Item>
                 }
               })}

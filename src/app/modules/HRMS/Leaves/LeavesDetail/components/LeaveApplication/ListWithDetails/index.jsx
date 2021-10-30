@@ -11,7 +11,7 @@ export default ({details, updateApi, progressData}) => {
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  
+  const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   const annualLeaves = progressData?.find(element => element?.leave_type === 'Annual Leave')
   const replacementLeaves = progressData?.find(element => element?.leave_type === 'Replacement Leave')
 
@@ -69,6 +69,11 @@ export default ({details, updateApi, progressData}) => {
             value: record?.status,
             classi: record?.application_status =='Pending' ? 'c-pending' : record?.status == 'Approved' ? 'c-success' : 'c-error' 
           },
+          {
+            label: 'Approver',
+            value: record?.approvers_list,
+            status: 'hidden'
+          },
         ];
         setRowData(temp)
       },
@@ -85,6 +90,20 @@ export default ({details, updateApi, progressData}) => {
       updateApi(key, pagination.current, pagination.pageSize, '', '');
     }
   }
+
+  // const allowBtn = () => {
+  //   const approvers = rowData?.find(x => x.label == 'Approver');
+  //   console.log('approvers', rowData)
+  //   let showBtn = false;
+  //   approvers && approvers?.value?.forEach(x => {
+  //     if (x?.status == 'Pending') {
+  //       if (x?.approver_id == id) {
+  //         showBtn = true;
+  //       }
+  //     }
+  //   })
+  //   return showBtn
+  // }
 
     return (
         <>
@@ -145,6 +164,7 @@ export default ({details, updateApi, progressData}) => {
             onAction2={onAction2}
             btnClass1='green-btn'
             btnClass2='red-btn'
+
             />
             }
         </>

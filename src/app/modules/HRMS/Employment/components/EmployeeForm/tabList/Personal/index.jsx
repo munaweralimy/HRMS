@@ -226,7 +226,7 @@ export default (props) => {
       employApi(body, id).then(res => {
         setLoad(false);
         updateApi();
-        message.success('Detaila Successfully Saved')
+        message.success('Detail Successfully Saved')
       }).catch(e => {
         console.log(e);
         setLoad(false);
