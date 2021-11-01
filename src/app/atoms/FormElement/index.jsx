@@ -30,7 +30,7 @@ export const InputField = (props) => {
           defaultValue={initValue != undefined ? initValue : ''}
           rules={rules}
           render={({ onBlur, value, onChange }) => (
-            <Input value={value} onChange={onChange} onBlur={props.onBlur} {...iProps} />
+            <Input value={value} onChange={onChange} onBlur={(e) => props?.onBlur && props?.onBlur(e)} {...iProps} />
           )}
         />
       </Form.Item>

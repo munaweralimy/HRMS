@@ -17,6 +17,10 @@ export const delWarning = (id, json) => {
   return axios.put(`${apiresource}/EMP Warning Letter/${id}`, json);
 };
 
+export const emailCheck = (email) => {
+  return axios.get(`${apiMethod}/hrms.api.user_email_exists?email=${email}`)
+}
+
 export const employApi = (payload, id) => {
   if (id) {
     return axios.put(`${apiresource}/Employee/${id}`, payload);

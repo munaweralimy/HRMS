@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Typography, Button } from 'antd';
+import { Row, Col, Typography, Button, message } from 'antd';
 import FormGroup from '../../../../../../../../molecules/FormGroup';
 import { useSelector } from 'react-redux';
 import { useFieldArray } from 'react-hook-form';
@@ -11,6 +11,7 @@ import {
   identificationList,
   titleList,
 } from '../../../../../../../../../configs/constantData';
+import { emailCheck } from '../../../../../ducks/services';
 
 const _ = require('lodash');
 const { Title } = Typography;
@@ -107,6 +108,17 @@ export default (props) => {
       setValue('current_city', getValues('permanent_city'));
     }
   };
+
+  const onEmailCheck = (e) => {
+    console.log('checking', e.target.value);
+    emailCheck(e.target.value).then(res => {
+      if (res.data.message.success == false) {
+        message.error(res.data.message.message)
+      } else {
+        console.log('check response', res.data.message.message);
+      }
+    })
+  }
 
   const personalFields = [
     {
@@ -239,6 +251,7 @@ export default (props) => {
       twocol: true,
       email: true,
       reqmessage: 'Required',
+      onBlur: onEmailCheck,
     },
     {
       type: 'input',
