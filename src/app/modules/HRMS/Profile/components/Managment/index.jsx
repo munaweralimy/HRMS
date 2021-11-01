@@ -6,7 +6,7 @@ import StatsCard from './components/Stats';
 import JobRelatedSkills from './components/JobRelatedSkills';
 import OtherSkills from './components/OtherSkills'
 
-import { getFitFigure } from '../../../Advancement/dcuks/action';
+import { getSingleSkills } from '../../ducks/actions';
 
 let arr = [
   { percent: 65, jobRole: 'Front-end Developer' },
@@ -20,14 +20,14 @@ const { Title, Text } = Typography;
 export default ({id}) => {
 
   const dispatch = useDispatch();
-  const figures = useSelector(state => state.advancement.fitFigures)
+  const figures = useSelector(state => state.employeeProfile.singleSkillsData)
 
   useEffect(() => {
     updateApi();
   }, []);
 
   const updateApi = () => {
-    dispatch(getFitFigure(id));
+    dispatch(getSingleSkills(id));
   }
 
   return (

@@ -13,3 +13,15 @@ export const getEmployeeProfile = (employeeID) => {
     });
   };
 };
+
+export const getSingleSkills = (employeeID) => {
+  return async (dispatch) => {
+    const {
+      data: { data },
+    } = await axios.get(`${apiresource}/HRMS Advancement/${employeeID}`);
+    dispatch({
+      type: action_types.SINGLE_SKILLS,
+      data: data,
+    });
+  };
+};

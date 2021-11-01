@@ -1,1 +1,2 @@
 export const PROFILE_DATA = "PROFILE_DATA";
+export const SINGLE_SKILLS = "SINGLE_SKILLS";
