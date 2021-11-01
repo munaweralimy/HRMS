@@ -264,6 +264,8 @@ export default (props) => {
         placeholder: 'Please Select',
         multiple: true,
         twocol: false,
+        req: true,
+        reqmessage: 'Please select role',
         options: roleList.map(x => ({label: x.name, value: x.name})),
       },
       {
