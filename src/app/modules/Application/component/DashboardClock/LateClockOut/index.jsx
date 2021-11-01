@@ -43,11 +43,16 @@ const LateclockOut = (props) => {
         setLoad(false);
         onClose();
       })
-      .catch(() => {
+      .catch((e) => {
         message.error('Something went worong');
         setLoad(false);
         onClose();
       });
+    // .catch(() => {
+    //   message.error('Something went worong');
+    //   setLoad(false);
+    //   onClose();
+    // });
   };
 
   useEffect(() => {

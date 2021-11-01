@@ -53,17 +53,18 @@ export default (props) => {
     } else {
       log = 'IN';
     }
-    clockINOUT(id, log, todayDateTime)
+    clockINOUT(id, log)
       .then((response) => {
         const resData = response?.data;
         if (resData.Attendance_status.overtime == 1 || resData.Attendance_status.last_check_in_status == 'IN') {
-          console.log({ resData });
           setVisible(true);
           setLateData(resData.Attendance_status.data);
         }
         if (resData.Response.success == true) {
           message.success(resData.Response.message);
-          dispatch(getCheckInData(id, todayDate));
+          if (log != 'OUT') {
+            dispatch(getCheckInData(id));
+          }
         } else {
           message.error(resData.Response.message);
         }
