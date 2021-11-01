@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Row, Col, Space, Button, Input, Select, Avatar, Dropdown, Typography, Menu, Card } from 'antd';
 import { useTranslate } from 'Translate';
 import { useDispatch } from "react-redux";
@@ -13,13 +13,7 @@ const { Text } = Typography;
 export default (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const [profileImg , setProfileImg] = useState();
     const userProfile = JSON.parse(localStorage.getItem('userdetails')).user_image;
-
-    useEffect(() => {
-      setProfileImg(userProfile ? `http://cms2dev.limkokwing.net${userProfile}` : userImage)
-    }, [])
-
 
   const i18n = useTranslate();
   const { t } = i18n;
@@ -91,7 +85,7 @@ export default (props) => {
                 <Dropdown className="userDropdown" overlay={menu} placement="bottomRight">
                     <Space size={20}>
                         <Text style={{textTransform: 'capitalize'}}>{window.localStorage.getItem("user")}</Text>
-                        <Avatar className="userImage" size={60} src={profileImg}/>
+                        <Avatar className="userImage" size={60} src={userProfile ? `http://cms2dev.limkokwing.net${userProfile}` : userImage}/>
                     </Space>
                 </Dropdown>
             </Col> 

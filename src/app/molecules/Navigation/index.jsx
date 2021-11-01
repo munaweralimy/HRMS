@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Row, Col, Image, Menu, Typography, Card, Badge } from 'antd';
 import loginLogo from '../../../assets/img/limkokwing-logo.svg';
 import {
@@ -77,7 +77,7 @@ export default (props) => {
                 <Card bordered={false} className='transparent-card' style={{ height: 'calc(100vh - 220px)'}}>
                     <Menu mode="inline" theme= 'dark' defaultSelectedKeys={[selected]} defaultOpenKeys={[subkey]} className="main-menu">
                         {Object.entries(menuList).map(([key, val], index) => (
-                            <>
+                            <Fragment key={index}>
                                 {Array.isArray(val) ? 
                                     <SubMenu key={val[0].key} title={key} className='submenu-item'>
                                     {val.map((item, i) => {
@@ -103,7 +103,7 @@ export default (props) => {
                                     <Menu.Item disabled key="hrms" className='static-menu'>HUMAN RESOURCE</Menu.Item>}
                                     </>
                                 }
-                            </>
+                            </Fragment>
                         ))}
                     </Menu>
                 </Card>

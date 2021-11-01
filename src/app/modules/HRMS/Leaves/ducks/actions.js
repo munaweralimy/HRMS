@@ -56,7 +56,7 @@ export const getTeamTasks = (task, page, limit, order, orderby) => {
     };
 };
 
-const emptyAllLeaves = () => {
+export const emptyAllLeaves = () => {
   return (dispatch) => {
     dispatch({
       type: action_types.EMPTY_ALL_LEAVES,

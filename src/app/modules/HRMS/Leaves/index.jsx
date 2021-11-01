@@ -3,7 +3,7 @@ import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
-import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks } from './ducks/actions';
+import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, emptyAllLeaves } from './ducks/actions';
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
 import MyLeaves from './components/MyLeaves';
