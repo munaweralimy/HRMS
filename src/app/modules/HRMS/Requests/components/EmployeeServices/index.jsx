@@ -9,8 +9,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const { Title } = Typography;
 
-
-
 export default (props) => {
 
     const { id } = props;
