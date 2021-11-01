@@ -41,7 +41,7 @@ const ListCol = [
     key: 'total_work_hour',
     align: 'center',
     sorter: true,
-    render: (text) => (text === '0:00:00' ? '-' : `${text.substring(0, text.indexOf(':'))} Hours`),
+    render: (text) => (text === '0:00:00' ? '-' : `${text}`),
   },
   {
     title: 'Status',
@@ -51,7 +51,7 @@ const ListCol = [
     sorter: true,
     render: (text) => {
       let clname = '';
-      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave') {
+      if (text == 'On Duty' || text == 'Rest Day' || text == 'On Leave' || text == 'Holiday') {
         clname = 'c-success';
       } else if (text == 'Absent') {
         clname = 'c-error';
