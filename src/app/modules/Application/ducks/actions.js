@@ -42,7 +42,7 @@ export const getCheckInData = (id, date) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.checkin_dashboard?employee_id=${id}&attendance_date=${date}`);
+    } = await axios.get(`${apiMethod}/hrms.last_clock.checkin_dashboard?employee_id=${id}`);
     dispatch({
       type: action_types.CHECK_IN_DATA,
       data: message,
@@ -68,14 +68,15 @@ export const getStaffPerformance = (company) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.dashboard_api.staff_performance?company=${company}&order=ASC&orderby=employee_id`);
+    } = await axios.get(
+      `${apiMethod}/hrms.dashboard_api.staff_performance?company=${company}&order=ASC&orderby=employee_id`,
+    );
     dispatch({
       type: action_types.STAFF_DATA,
       data: message,
     });
   };
 };
-
 
 export const getTeamsDetail = (employeeid) => {
   return async (dispatch) => {

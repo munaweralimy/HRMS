@@ -13,6 +13,8 @@ import { BreakingPoint } from '../../../../configs/constantData';
 import { LeftOutlined } from '@ant-design/icons';
 import ListCard from '../../../molecules/ListCard';
 import { DownloadIcon } from '../../../atoms/CustomIcons';
+import { allowed } from '../../../../routing/config/utils';
+import Roles from '../../../../routing/config/Roles';
 
 const ListData = [
   {
@@ -188,9 +190,9 @@ export default (props) => {
         <div className="twocol-3070">
           <div className="side-detail">
             {isHDScreen ? (
-              <SideDetails data={sideData} type="button" bottom={bottomList} />
+              <SideDetails data={sideData} type="button" bottom={allowed([Roles.EMPLOYMENT]) ? bottomList : null} />
             ) : (
-              <SideDetailResponsive data={sideData} type="button" bottom={bottomList} />
+              <SideDetailResponsive data={sideData} type="button" bottom={allowed([Roles.EMPLOYMENT]) ? bottomList : null} />
             )}
           </div>
           <div className="side-form">

@@ -15,7 +15,7 @@ const defaultImage =
 
 export default (props) => {
 
-    const { control, handleSubmit } = useForm();
+    const { control, errors, handleSubmit } = useForm();
     const [feed, setFeed] = useState([])
     const i18n = useTranslate();
     const { t } = i18n;
@@ -104,6 +104,8 @@ return (
                                         control={control}
                                         iProps={{size: 'large', placeholder: 'Write your comments..'}}
                                         initValue=''
+                                        rules={{ required: 'Please Type'}}
+                                        validate={errors.comment && 'error'}
                                         />
                                     </Col>
                                     <Col flex='30px'><Button htmlType='submit' type='link' icon={<ChatUpdateIcon />} /></Col>
@@ -125,8 +127,8 @@ return (
                                             description={item.author}
                                         />
                                         <Row gutter={20} wrap={false} className='w-100' align='middle' justify='end'>
-                                            <Col flex='0 1 100%'>
-                                                {item.action && <Title level={5} className='w-100 reply-box'>{item.action}</Title>}
+                                             <Col flex='0 1 100%'>
+                                             {item.action && <Title level={5} className='w-100 reply-box'>{item.action}</Title>}
                                             </Col>
                                             <Col  flex='100px'>
                                                 <Text className='comment-date'>{item.datetime}</Text>
