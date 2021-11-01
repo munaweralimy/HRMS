@@ -14,6 +14,18 @@ export const getRequestPending = (page, sort, limit, id) => {
     };
 };
 
+export const getEmployeeStatus = (id) => {
+    return async (dispatch) => {
+        const {
+            data: { message },
+        } = await axios.get(`${apiMethod}/hrms.api.pending_issues_staff?staff_id=${id}`);
+        dispatch({
+            type: action_types.EMPLOYEE_STATUS,
+            data: message,
+        });
+    };
+};
+
 export const getRequestArchive = (page, sort, limit, id) => {
     return async(dispatch) => {
         const {
