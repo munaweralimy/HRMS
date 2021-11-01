@@ -23,10 +23,7 @@ const AttendanceDetails = (props) => {
         'attendance_date_out',
         attendanceData?.Attendance_date_out ? moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD') : '',
       );
-      setValue(
-        'total_job_hour',
-        attendanceData?.total_work_hour?.substring(0, attendanceData?.total_work_hour.indexOf(':')),
-      );
+      setValue('total_job_hour', attendanceData?.total_work_hour);
       setValue('status', { value: attendanceData?.status, label: attendanceData.status });
       setValue('time_in', attendanceData?.time_in !== '0:00:00' ? moment(attendanceData?.time_in, 'h:mm:ss a') : '');
       setValue('time_out', attendanceData?.time_out !== '0:00:00' ? moment(attendanceData?.time_out, 'h:mm:ss a') : '');
