@@ -5,3 +5,4 @@ export const FORMS_LIST = "FORMS_LIST";
 export const REQUEST_DATA = "REQUEST_DATA";
 export const FIELDS_LIST = "FIELDS_LIST";
 export const EMPTY_REQUEST_DATA = "EMPTY_REQUEST_DATA";
+export const EMPLOYEE_STATUS = "EMPLOYEE_STATUS";
