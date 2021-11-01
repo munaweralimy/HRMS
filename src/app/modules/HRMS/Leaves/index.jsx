@@ -248,7 +248,7 @@ export default (props) => {
           field2: [{ label: 'All', value: 'All' }],
           field3: [{ label: 'All', value: 'All' }],
         },
-        addon: 'Timesheet',
+        addon: 'Leave Application',
         statusKey: 'application_status',
         extraComp1: <TeamStatistics />,
         extraComp2: <LeaveCalendar />,

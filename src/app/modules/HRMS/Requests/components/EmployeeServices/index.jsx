@@ -97,7 +97,7 @@ export default (props) => {
             }
           } else if (Object.keys(x) == 'finance_count') {
             if (x.finance_count > 0) {
-              temp[3].text = `${x.finance_count} Outstanding Loan`;
+              temp[3].text = `${x.finance_count} Issue(s)`;
               temp[3].status = 'c-error'
             }
           }
