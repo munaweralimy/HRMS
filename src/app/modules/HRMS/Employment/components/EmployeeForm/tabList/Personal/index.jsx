@@ -168,6 +168,7 @@ export default (props) => {
     }
 
     const body = {
+      status: 'Active',
       salutation: val.salutation?.value,
       first_name: val.first_name,
       image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",
