@@ -42,7 +42,7 @@ export const getCheckInData = (id, date) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.dashboard_api.checkin_dashboard?employee_id=${id}&attendance_date=${date}`);
+    } = await axios.get(`${apiMethod}/hrms.last_clock.checkin_dashboard?employee_id=${id}`);
     dispatch({
       type: action_types.CHECK_IN_DATA,
       data: message,

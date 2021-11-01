@@ -1,8 +1,10 @@
 import axios from '../../../../services/axiosInterceptor';
-import { apiMethod } from '../../../../configs/constants';
+import { apiMethod, apiresource } from '../../../../configs/constants';
 
 export const clockINOUT = (id, log, todayDateTime) => {
-  return axios.post(
-    `${apiMethod}/hrms.api.employee_check_in_out?employee=${id}&log_type=${log}&attendance_date=${todayDateTime}`,
-  );
+  return axios.post(`${apiMethod}/hrms.last_clock.test_previous_checkin_out?employee_id=${id}&logtype=${log}`);
+};
+
+export const lateClockOutReason = (data) => {
+  return axios.post(`${apiresource}/HRMS Late Clock Out`, data);
 };

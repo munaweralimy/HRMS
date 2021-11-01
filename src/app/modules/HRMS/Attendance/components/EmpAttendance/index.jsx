@@ -41,7 +41,7 @@ const ListCol = [
     title: 'Hours',
     dataIndex: 'total_work_hour',
     key: 'total_work_hour',
-    render: (text) => (text === '0:00:00' ? '-' : `${text.substring(0, text.indexOf(':'))} Hours`),
+    render: (text) => (text === '0:00:00' ? '-' : `${text}`),
     sorter: true,
   },
   {

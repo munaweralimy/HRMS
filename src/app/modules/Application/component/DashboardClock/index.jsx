@@ -14,6 +14,7 @@ const { Title, Text } = Typography;
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [lateData, setLateData] = useState({});
   const [uDate, setUDate] = useState({
     date: '',
     time: '',
@@ -21,12 +22,10 @@ export default (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
-
   const checkInData = useSelector((state) => state.global.checkInData);
   const todayDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
   const todayDate = moment().format('YYYY-MM-DD');
   const clockin = checkInData?.last_log_time ? moment(checkInData?.last_log_time).format('hh:mm A') : '';
-  const clockout = '18:20';
 
   useEffect(() => {
     setInterval(() => {
@@ -36,17 +35,10 @@ export default (props) => {
       });
     }, 1000);
   }, []);
-  function getTimeDiff(start, end) {
-    let diff = moment.duration(moment(end, 'HH:mm:ss a').diff(moment(start, 'HH:mm:ss a')));
-    let hour = diff.hours();
-    let min = diff.minutes();
-    let duration = `${hour} ${hour > 1 ? 'Hours' : 'Hour'} ${min} ${min > 1 ? 'Mins' : 'Min'}`;
-    return duration;
-  }
 
   useEffect(() => {
     if (checkInData?.log_type_last === 'IN') {
-      dispatch(getCheckInData(id, todayDate));
+      dispatch(getCheckInData(id));
     }
   }, [uDate.time]);
 
@@ -55,7 +47,6 @@ export default (props) => {
   }, []);
 
   const getTimeInOut = () => {
-    //setVisible(true);
     let log = '';
     if (checkInData?.log_type_last == 'IN') {
       log = 'OUT';
@@ -64,21 +55,26 @@ export default (props) => {
     }
     clockINOUT(id, log, todayDateTime)
       .then((response) => {
-        console.log({ response });
-        if (response.data.Response.success == true) {
-          message.success(response.data.Response.message);
+        const resData = response?.data;
+        if (resData.Attendance_status.overtime == 1 || resData.Attendance_status.last_check_in_status == 'IN') {
+          console.log({ resData });
+          setVisible(true);
+          setLateData(resData.Attendance_status.data);
+        }
+        if (resData.Response.success == true) {
+          message.success(resData.Response.message);
           dispatch(getCheckInData(id, todayDate));
         } else {
-          message.error(response.data.Response.message);
+          message.error(resData.Response.message);
         }
       })
       .catch((e) => message.error('Something went worong'));
   };
 
   const popup = {
-    closable: true,
+    closable: false,
     visibility: visible,
-    content: <LateCockOutReason title="Late Clock Out" onClose={() => setVisible(false)} />,
+    content: <LateCockOutReason lateData={lateData} title="Late Clock Out" onClose={() => setVisible(false)} />,
     width: 536,
     onCancel: () => setVisible(false),
   };
@@ -138,7 +134,9 @@ export default (props) => {
                       htmlType="button"
                       className="w-100 red-btn"
                     >
-                      {checkInData?.log_type_last == 'IN' ? 'Clock Out' : 'Clock IN'}
+                      {checkInData?.log_type_last == 'IN' || checkInData?.yesterday_forget_status == 'IN'
+                        ? 'Clock Out'
+                        : 'Clock IN'}
                     </Button>
                   </Col>
                 </Row>

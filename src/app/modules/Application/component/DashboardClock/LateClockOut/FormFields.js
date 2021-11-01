@@ -7,6 +7,7 @@ const formFields = [
     type: 'input',
     twocol: false,
     static: true,
+    format: 'Do MMMM YYYY',
   },
   {
     name: 'clock_in_time',
@@ -25,6 +26,7 @@ const formFields = [
     type: 'date',
     reqMessage: 'date required',
     twocol: false,
+    format: 'Do MMMM YYYY',
   },
   {
     subheader: 'Clock out Time',
