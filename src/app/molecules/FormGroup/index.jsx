@@ -40,6 +40,7 @@ export default (props) => {
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
           control={control}
+          onBlur={item?.onBlur}
           class={`mb-0 ${item.hidden ? 'd-none' : ''} ${item.arrow == false ? 'no-arrow' : ''}`}
           iProps={{
             readOnly: props.static ? props.static : item.static ? true : false,
