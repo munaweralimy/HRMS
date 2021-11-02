@@ -14,6 +14,7 @@ const { Title, Text } = Typography;
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
+  const [load, setLoad] = useState(false);
   const [lateData, setLateData] = useState({});
   const [uDate, setUDate] = useState({
     date: '',
@@ -47,6 +48,7 @@ export default (props) => {
   }, []);
 
   const getTimeInOut = () => {
+    setLoad(true);
     let log = '';
     if (checkInData?.log_type_last == 'IN') {
       log = 'OUT';
@@ -68,8 +70,12 @@ export default (props) => {
         } else {
           message.error(resData.Response.message);
         }
+        setLoad(false);
       })
-      .catch((e) => message.error('Something went worong'));
+      .catch((e) => {
+        setLoad(false);
+        message.error('Something went worong');
+      });
   };
 
   const popup = {
@@ -134,6 +140,7 @@ export default (props) => {
                       size="large"
                       htmlType="button"
                       className="w-100 red-btn"
+                      loading={load}
                     >
                       {checkInData?.log_type_last == 'IN' || checkInData?.yesterday_forget_status == 'IN'
                         ? 'Clock Out'
