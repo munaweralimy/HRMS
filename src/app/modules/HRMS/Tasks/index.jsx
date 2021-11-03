@@ -12,6 +12,7 @@ import MyTasks from './components/MyTasks';
 import { useLocation } from 'react-router-dom';
 import Roles from '../../../../routing/config/Roles';
 import {allowed} from '../../../../routing/config/utils';
+import moment from 'moment';
 
 const filtersOverall = [
   {
@@ -174,24 +175,35 @@ export default (props) => {
   }
   
 
-  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
+  const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
     // dispatch(emptyOverall());
     if (type == 'list') {
-      dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby))
+      if (search) {
+        let searchVal = {};
+        searchVal = {
+          employee_id: search?.id ? search?.id : '',
+          employee_name: search?.name ? search?.name : '',
+          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+          project: search?.project ? search?.project.value : '',
+          company:  search?.company ? search?.company.value : '',
+          team_name: search?.team ? search?.team.value : '',
+        }
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
+      } else {
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, null))
+      }
     } else {
       dispatch(getOverallTasks(page, limit, sort, sortby));
     }
   }
 
-  const onTeamAction = (filter, page, limit, sort, sortby, type, searching, team) => {
+  const onTeamAction = (filter, page, limit, sort, sortby, type, search, team) => {
     if (type == 'list') {
       dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby))
     } else {
       dispatch(getTeamTasks(team, page, limit, sort, sortby));
     }    
   }
-
-  
 
   const tabs = [
   {
@@ -211,9 +223,9 @@ export default (props) => {
       updateApi: onOverallAction,
       Search: Search,
       searchDropdowns: {
-        field1: [{label: 'All', value: 'All'}],
-        field2: [{label: 'All', value: 'All'}],
-        field3: [{label: 'All', value: 'All'}],
+        field1: [{label: 'All', value: ''}],
+        field2: [{label: 'All', value: ''}],
+        field3: [{label: 'All', value: ''}],
       },
       addon: 'Timesheet',
       statusKey:'status'
