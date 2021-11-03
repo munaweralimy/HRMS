@@ -14,7 +14,8 @@ export const getOverallTasks = (page, limit, order, orderby) => {
   };
 };
 
-export const getOverallTasksWithStatus = (status, page, limit, order, orderby) => {
+export const getOverallTasksWithStatus = (status, page, limit, order, orderby, search = null) => {
+  console.log('check', search)
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -24,7 +25,7 @@ export const getOverallTasksWithStatus = (status, page, limit, order, orderby) =
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_overall_task_list_with_status?status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_overall_task_list_with_status?status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
     dispatch({
       type: action_types.OVERALL_TASKS_WITH_STATUS,
       data: message,
