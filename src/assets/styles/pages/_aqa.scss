@@ -1,0 +1,12 @@
+.offeredCard {
+    border: 0;
+    margin-bottom: 30px;
+
+    &:last-child {
+        margin-bottom: 10px;
+    }
+
+    .ant-card-body {
+        padding: 0;
+    }
+}

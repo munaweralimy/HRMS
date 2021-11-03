@@ -1,0 +1,15 @@
+@import '../../../../assets/styles/base/colors';
+
+.task-card-pending {
+    background-color: $errors;
+    .ant-card-body {
+      padding: 15px;
+    }
+}
+
+.task-card-missed {
+    background-color: $gold-color;
+    .ant-card-body {
+      padding: 15px;
+    }
+}
