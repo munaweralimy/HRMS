@@ -299,3 +299,17 @@ export const updateMenu = (stat) => {
     });
   };
 };
+
+export const getAllProjects = () => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(
+      `${apiMethod}/hrms.setup.hrms_projects_pagination?page_number=1&limit=0`,
+    );
+    dispatch({
+      type: action_types.ALL_PROJECTS,
+      data: message,
+    });
+  };
+};
