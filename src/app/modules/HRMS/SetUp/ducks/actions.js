@@ -2,7 +2,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../../configs/constants';
 
-export const getTeamList = (page, limit, order, orderby) => {
+export const getTeamList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -15,7 +15,7 @@ export const getTeamList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_team_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.TEAMS_LIST,
@@ -24,7 +24,7 @@ export const getTeamList = (page, limit, order, orderby) => {
   };
 };
 
-export const getLeaveTypesList = (page, limit, order, orderby) => {
+export const getLeaveTypesList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -37,7 +37,7 @@ export const getLeaveTypesList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.leave_type_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.LEAVE_TYPE_LIST,
@@ -46,7 +46,7 @@ export const getLeaveTypesList = (page, limit, order, orderby) => {
   };
 };
 
-export const getLeaveEntitlementsList = (page, limit, order, orderby) => {
+export const getLeaveEntitlementsList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -59,7 +59,7 @@ export const getLeaveEntitlementsList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_leave_entitlement_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.LEAVE_ENTITLEMENTS_LIST,
@@ -68,7 +68,7 @@ export const getLeaveEntitlementsList = (page, limit, order, orderby) => {
   };
 };
 
-export const getUserRolesList = (page, limit, order, orderby) => {
+export const getUserRolesList = (page, limit, order, orderby = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -81,7 +81,7 @@ export const getUserRolesList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_team_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.TEAMS_LIST,
@@ -90,7 +90,7 @@ export const getUserRolesList = (page, limit, order, orderby) => {
   };
 };
 
-export const getWorkingHoursList = (page, limit, order, orderby) => {
+export const getWorkingHoursList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -103,7 +103,7 @@ export const getWorkingHoursList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.work_hour_template_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.WORKING_HOURS_LIST,
@@ -112,7 +112,7 @@ export const getWorkingHoursList = (page, limit, order, orderby) => {
   };
 };
 
-export const getJobPositionsList = (page, limit, order, orderby) => {
+export const getJobPositionsList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -125,7 +125,7 @@ export const getJobPositionsList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.job_position_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.JOB_POSITIONS_LIST,
@@ -134,7 +134,7 @@ export const getJobPositionsList = (page, limit, order, orderby) => {
   };
 };
 
-export const getEducationalFieldsList = (page, limit, order, orderby) => {
+export const getEducationalFieldsList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -147,7 +147,7 @@ export const getEducationalFieldsList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_education_field_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.EDUCATIONAL_FIELDS_LIST,
@@ -156,7 +156,7 @@ export const getEducationalFieldsList = (page, limit, order, orderby) => {
   };
 };
 
-export const getInstitutionsList = (page, limit, order, orderby) => {
+export const getInstitutionsList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -169,7 +169,7 @@ export const getInstitutionsList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.institution_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.INSTITUTIONS_LIST,
@@ -178,7 +178,7 @@ export const getInstitutionsList = (page, limit, order, orderby) => {
   };
 };
 
-export const getNationalitiesList = (page, limit, order, orderby) => {
+export const getNationalitiesList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -191,7 +191,7 @@ export const getNationalitiesList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_nationality_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.NATIONALITIES_LIST,
@@ -200,7 +200,7 @@ export const getNationalitiesList = (page, limit, order, orderby) => {
   };
 };
 
-export const getHolidaysList = (page, limit, order, orderby) => {
+export const getHolidaysList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -213,7 +213,7 @@ export const getHolidaysList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_holidays_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.HOLIDAYS_LIST,
@@ -222,7 +222,7 @@ export const getHolidaysList = (page, limit, order, orderby) => {
   };
 };
 
-export const getReligionsList = (page, limit, order, orderby) => {
+export const getReligionsList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -235,7 +235,7 @@ export const getReligionsList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.religion_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.RELIGIONS_LIST,
@@ -244,7 +244,7 @@ export const getReligionsList = (page, limit, order, orderby) => {
   };
 };
 
-export const getRacesList = (page, limit, order, orderby) => {
+export const getRacesList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -257,7 +257,7 @@ export const getRacesList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.race_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.RACES_LIST,
@@ -266,7 +266,7 @@ export const getRacesList = (page, limit, order, orderby) => {
   };
 };
 
-export const getProjectsList = (page, limit, order, orderby) => {
+export const getProjectsList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -279,7 +279,7 @@ export const getProjectsList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_projects_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.PROJECTS_LIST,
@@ -288,7 +288,7 @@ export const getProjectsList = (page, limit, order, orderby) => {
   };
 };
 
-export const getWarningLetterList = (page, limit, order, orderby) => {
+export const getWarningLetterList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -301,7 +301,7 @@ export const getWarningLetterList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.warning_letter_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.WARNING_LETTER_LIST,
@@ -310,7 +310,7 @@ export const getWarningLetterList = (page, limit, order, orderby) => {
   };
 };
 
-export const getLetterTemplateList = (page, limit, order, orderby) => {
+export const getLetterTemplateList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -323,7 +323,7 @@ export const getLetterTemplateList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.letter_template_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.LETTER_TEMPLATE_LIST,
@@ -332,7 +332,7 @@ export const getLetterTemplateList = (page, limit, order, orderby) => {
   };
 };
 
-export const getApproversList = (page, limit, order, orderby) => {
+export const getApproversList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -345,7 +345,7 @@ export const getApproversList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_approver_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.APPROVERS_LIST,
@@ -354,7 +354,7 @@ export const getApproversList = (page, limit, order, orderby) => {
   };
 };
 
-export const getAssetsList = (page, limit, order, orderby) => {
+export const getAssetsList = (page, limit, order, orderby, search = nullaa) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -367,7 +367,7 @@ export const getAssetsList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.hrms_assets_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.ASSETS_LIST,
@@ -376,7 +376,7 @@ export const getAssetsList = (page, limit, order, orderby) => {
   };
 };
 
-export const getRequestFormsList = (page, limit, order, orderby) => {
+export const getRequestFormsList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -389,7 +389,7 @@ export const getRequestFormsList = (page, limit, order, orderby) => {
     } = await axios.get(
       `${apiMethod}/hrms.setup.request_form_listing?${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
-      }`,
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
     dispatch({
       type: action_types.REQUEST_FORMS_LIST,
@@ -432,25 +432,27 @@ export const getLeaveList = () => async (dispatch) => {
   });
 };
 
-export const getUserList = (page, limit, order, orderby) => async (dispatch) => {
-  let ordering = '';
-  if (order == 'ascend') {
-    ordering = 'ASC';
-  } else if (order == 'descend') {
-    ordering = 'DESC';
-  }
-  const {
-    data: { message },
-  } = await axios.get(
-    `${apiMethod}/hrms.setup.hrms_user_role_pagination?page_number=${page}&limit=${limit}${
-      order ? `&order=${ordering}&orderby=${orderby}` : ''
-    }`,
-  );
-  dispatch({
-    type: action_types.USERS,
-    data: message,
-  });
-};
+export const getUserList =
+  (page, limit, order, orderby, search = null) =>
+  async (dispatch) => {
+    let ordering = '';
+    if (order == 'ascend') {
+      ordering = 'ASC';
+    } else if (order == 'descend') {
+      ordering = 'DESC';
+    }
+    const {
+      data: { message },
+    } = await axios.get(
+      `${apiMethod}/hrms.setup.hrms_user_role_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${ordering}&orderby=${orderby}` : ''
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
+    );
+    dispatch({
+      type: action_types.USERS,
+      data: message,
+    });
+  };
 
 export const getSkillList = () => async (dispatch) => {
   const {
@@ -479,25 +481,27 @@ export const leaveTypeSelect = (data) => (dispach) => {
   });
 };
 
-export const getDepartments = (page, limit, order, orderby) => async (dispatch) => {
-  let ordering = '';
-  if (order == 'ascend') {
-    ordering = 'ASC';
-  } else if (order == 'descend') {
-    ordering = 'DESC';
-  }
-  const {
-    data: { message },
-  } = await axios.get(
-    `${apiMethod}/hrms.api.hrms_department_pagination?page_number=${page}&limit=${limit}${
-      order ? `&order=${ordering}&orderby=${orderby}` : ''
-    }`,
-  );
-  dispatch({
-    type: action_types.DEPARTMENT_LSIT,
-    data: message,
-  });
-};
+export const getDepartments =
+  (page, limit, order, orderby, search = null) =>
+  async (dispatch) => {
+    let ordering = '';
+    if (order == 'ascend') {
+      ordering = 'ASC';
+    } else if (order == 'descend') {
+      ordering = 'DESC';
+    }
+    const {
+      data: { message },
+    } = await axios.get(
+      `${apiMethod}/hrms.api.hrms_department_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${ordering}&orderby=${orderby}` : ''
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
+    );
+    dispatch({
+      type: action_types.DEPARTMENT_LSIT,
+      data: message,
+    });
+  };
 
 export const showWarningLetter = (data) => (dispatch) => {
   dispatch({

@@ -15,6 +15,7 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
+  const [searchValue, setSearchVal] = useState(null);
   const projectsListData = useSelector((state) => state.setup.projectsListData);
 
   useEffect(() => {
@@ -84,7 +85,14 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        project: value?.project ? value?.project : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getProjectsList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -92,9 +100,9 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getProjectsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getProjectsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getProjectsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getProjectsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 
@@ -108,7 +116,7 @@ export default (props) => {
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={projectsListData?.rows}
             pagination={{

@@ -15,6 +15,7 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
+  const [searchValue, setSearchVal] = useState(null);
   const workingHoursListData = useSelector((state) => state.setup.workingHoursListData);
 
   useEffect(() => {
@@ -90,17 +91,26 @@ export default (props) => {
     };
   };
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        company_name: value?.company_name ? value?.company_name.value : '',
+        template_name: value?.template_name ? value?.template_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getWorkingHoursList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getWorkingHoursList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getWorkingHoursList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getWorkingHoursList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getWorkingHoursList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 
