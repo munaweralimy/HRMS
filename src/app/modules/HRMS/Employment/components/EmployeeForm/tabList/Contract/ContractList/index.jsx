@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { getWHTemplateList } from '../../../../../ducks/action';
 import { getFileName, uniquiFileName, getSingleUpload } from '../../../../../../../../../features/utility';
 import moment from 'moment';
-import { contractApi } from '../../../../../ducks/services';
+import { contractApi, employApi } from '../../../../../ducks/services';
 import MainForm from './MainForm';
 
   const colName = [
@@ -273,6 +273,7 @@ export default (props) => {
       }
 
       contractApi(body, getID).then(res => {
+        employApi({status: 'Active'}, id);
         setLoad(false);
         message.success('Detail Successfully Saved')
         setFormVisible(false);

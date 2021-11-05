@@ -162,7 +162,6 @@ export default (props) => {
   }
 
   const onSearch = (search) => {
-    setSearchVal(search);
     setPage(1);
     if (search) {
       let searching = {};
@@ -173,6 +172,10 @@ export default (props) => {
         end_date: search?.date ? moment(search?.date[1]).format('YYYY-MM-DD') : '',
         project: search?.project ? search?.project.value : '',
       }
+      setSearchVal(searching);
+      dispatch(getMyTasks(id, 1, limit, '', '', searching));
+    }else {
+      setSearchVal(null);
       dispatch(getMyTasks(id, 1, limit, '', '', searching));
     }
   }

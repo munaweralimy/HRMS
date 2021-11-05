@@ -49,9 +49,10 @@ export default (props) => {
     <>
     {mode == 'edit' ?
       <Row gutter={[20,20]}>
+        {props.data.status != 'Draft' && 
         <Col span={24}>
           <Insurance {...props} setVisible={setVisible} refresh={refreshForm} />
-        </Col>
+        </Col>}
         {visisble &&
         <Col span={24}>
           <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>

@@ -49,7 +49,7 @@ export const getTeamAttendance = (team, page, limit, order, orderby) => async (d
     data: message,
   });
 };
-export const getTeamAttendanceList = (team, page, limit, order, orderby) => async (dispatch) => {
+export const getTeamAttendanceList = (team, page, limit, order, orderby, search = null) => async (dispatch) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -68,7 +68,7 @@ export const getTeamAttendanceList = (team, page, limit, order, orderby) => asyn
     data: message,
   });
 };
-export const getMyAttendance = (employeeID, page, limit, order, orderby) => async (dispatch) => {
+export const getMyAttendance = (employeeID, page, limit, order, orderby, search = null) => async (dispatch) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -80,7 +80,7 @@ export const getMyAttendance = (employeeID, page, limit, order, orderby) => asyn
   } = await axios.get(
     `${apiMethod}/hrms.attendance_api.get_single_employee_attendance_pagination?employee=${employeeID}&page_number=${page}&limit=${limit}${
       orderby ? `&order=${ordering}&orderby=${orderby}` : ''
-    }`,
+    }${search ? '&filters=' + JSON.stringify(search) : ''}`
   );
   dispatch({
     type: action_types.MY_ATTENDANCE,

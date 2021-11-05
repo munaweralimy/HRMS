@@ -26,10 +26,10 @@ export default (props) => {
 
   const onDraft = () => {
     const val = getValues();
-    if(val.first_name) {
+    if(val.first_name && val.primary_email) {
       onFinish(val, 'Draft');
     } else {
-      message.error('Please Enter Name')
+      message.error('Please Enter Name and Primary Email')
     }
   }
 

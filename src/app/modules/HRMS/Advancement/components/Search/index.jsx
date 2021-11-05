@@ -19,7 +19,7 @@ export default (props) => {
       </Title>
       <Form onFinish={handleSubmit(onSubmit)} layout="inline" className="w-100 inline-form">
         <InputField
-          fieldname="staffname"
+          fieldname="name"
           class="mb-0 w-100"
           label=""
           control={control}
