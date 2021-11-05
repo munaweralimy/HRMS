@@ -17,7 +17,7 @@ import MyAttendance from './components/MyAttendance';
 import moment from 'moment';
 import Roles from '../../../../routing/config/Roles';
 import { allowed } from '../../../../routing/config/utils';
-import { getTeamsDetail } from '../../Application/ducks/actions';
+import { getCompany, getTeams, getTeamsDetail } from '../../Application/ducks/actions';
 
 const ListColOverall = [
   {
@@ -173,6 +173,18 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(6);
 
+  const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
+  const overallAttendanceDataList = useSelector((state) => state.attendance.overallAttendanceList);
+  const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
+  const teamAttendanceList = useSelector((state) => state.attendance.teamAttendanceList);
+  const myAttendance = useSelector((state) => state.attendance.myAttendance);
+  const teamsDetailData = useSelector((state) => state.global.teamsDetailData);
+  const company = useSelector(state => state.global.companies);
+  const team = useSelector(state => state.global.teams);
+  const [allCompany, setAllCompany] = useState([]);
+  const [allTeam, setAllTeam] = useState([]);
+  const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+
   let activeTab = '';
 
   if (allowed([Roles.ATTENDANCE])) {
@@ -183,35 +195,85 @@ export default (props) => {
     activeTab = 'mytask';
   }
 
-  const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
-  const overallAttendanceDataList = useSelector((state) => state.attendance.overallAttendanceList);
-  const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
-  const teamAttendanceList = useSelector((state) => state.attendance.teamAttendanceList);
-  const myAttendance = useSelector((state) => state.attendance.myAttendance);
-  const teamsDetailData = useSelector((state) => state.global.teamsDetailData);
-  const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  useEffect(() => {
+    dispatch(getMyAttendance(id, 1, 10, '', ''));
+    dispatch(getTeamsDetail(id));
+    dispatch(getCompany());
+    dispatch(getTeams())
+  }, []);
 
-  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
-    console.log({ page, limit, sort, sortby });
+  useEffect(() => {
+    if (Object.keys(company).length > 0) {
+      let temp = []
+      company.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.name, value: x.name})
+        } else {
+          temp.push({label: x.name, value: x.name})
+        }
+      });
+      setAllCompany(temp);
+    }
+  }, [company]);
+
+  useEffect(() => {
+    if (Object.keys(team).length > 0) {
+      let temp = []
+      team.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.team_name, value: x.name})
+        } else {
+          temp.push({label: x.team_name, value: x.name})
+        }
+      });
+      setAllTeam(temp);
+    }
+  }, [team]);
+
+  const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
     if (type == 'list') {
-      dispatch(getOverallAttendanceList(page, limit, sort, sortby));
+      if (search) {
+        let searchVal = {};
+          searchVal = {
+            name: search?.id ? search?.id : '',
+            employee_name: search?.name ? search?.name : '',
+            attendance_date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+            company:  search?.company ? search?.company.value : '',
+            team: search?.team ? search?.team.value : '',
+            m_status: search?.status ? search?.status.value : '',
+          }
+          dispatch(getOverallAttendanceList(page, limit, sort, sortby, searchVal));
+        } else {
+          dispatch(getOverallAttendanceList(page, limit, sort, sortby, null));
+        }
     } else {
       dispatch(getOverallAttendance(page, limit, sort, sortby));
     }
   };
 
-  const onTeamAction = (filter, page, limit, sort, sortby, type, searching, team) => {
+  const onTeamAction = (filter, page, limit, sort, sortby, type, search, team) => {
     if (type == 'list') {
-      dispatch(getTeamAttendanceList(team, page, limit, sort, sortby));
+      if (search) {
+        let searchVal = {};
+        searchVal = {
+          name: search?.id ? search?.id : '',
+          employee_name: search?.name ? search?.name : '',
+          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+          m_status: search?.status ? search?.status.value : '',
+        }
+        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, searchVal));
+      } else {
+        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, null));
+      }
+      
     } else {
       dispatch(getTeamAttendance(team, page, limit, sort, sortby));
     }
   };
 
-  useEffect(() => {
-    dispatch(getMyAttendance(id, 1, 10, '', ''));
-    dispatch(getTeamsDetail(id));
-  }, []);
+  
 
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
@@ -240,6 +302,10 @@ export default (props) => {
         Search: Search,
         statusKey: 'status',
         updateApi: onOverallAction,
+        searchDropdowns: {
+          field1: allCompany,
+          field2: allTeam,
+        },
       },
     },
     {

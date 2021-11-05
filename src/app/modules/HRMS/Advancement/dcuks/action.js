@@ -39,7 +39,7 @@ export const getSuitableApplicants = (job, page, limit, order, orderby) => {
     };
 };
 
-export const getOverallFit = (status, page, limit, order, orderby) => {
+export const getOverallFit = (status, page, limit, order, orderby, search =  null) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -49,7 +49,7 @@ export const getOverallFit = (status, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_fit_index_pagination?${status ? `status=${status}&` : ''}page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_advancement_fit_index_pagination_list?${status ? `status=${status}&` : ''}page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
       dispatch({
         type: action_types.OVERALL_FITINDEX,
         data: message,
@@ -61,7 +61,7 @@ export const getOverallFitCard = (page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_fit_index_pagination?status=Active&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_advancement_fit_index_pagination?status=Active&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
       dispatch({
         type: action_types.OVERALL_FITINDEX_CARD,
         data: message,

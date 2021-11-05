@@ -62,6 +62,14 @@ const ListCol = [
   },
 ]
 
+const statuses = [
+  {label: 'All', value: ''},
+  {label: 'Pending', value: 'Pending'},
+  {label: 'Missed', value: 'Missed'},
+  {label: 'Approved', value: 'Approved'},
+  {label: 'Reject', value: 'Reject'},
+]
+
 export default (props) => {
   const { iProps } = props;
   const dispatch = useDispatch();
@@ -75,8 +83,11 @@ export default (props) => {
   const [activeKey, setActiveKey] = useState('1');
   const [page, setPage] = useState(1);
   const [limit,setLimit] = useState(10);
+  const [allProj, setAllProj] = useState([]);
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const projects = useSelector(state => state.global.projects);
+  const [searchVal, setSearchVal] = useState(null);
 
   useEffect(() => {
     dispatch(getMyTasks(id, page, limit, '', ''));
@@ -91,7 +102,20 @@ export default (props) => {
     },
   ];
 
-  
+  useEffect(() => {
+    if (Object.keys(projects).length > 0) {
+      let temp = []
+      projects?.rows.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.project_name, value: x.name})
+        } else {
+          temp.push({label: x.project_name, value: x.name})
+        }
+      });
+      setAllProj(temp);
+    }
+  }, [projects]);  
 
   useEffect(() => {
     if(iProps?.activeAddTimeSheet) {
@@ -101,7 +125,7 @@ export default (props) => {
 
   const updateApi = () => {
     setRecord(null);
-    dispatch(getMyTasks(id, 1, limit, '', ''));
+    dispatch(getMyTasks(id, 1, limit, '', '', search));
   }
 
   const onClickRow = (record) => {
@@ -137,17 +161,29 @@ export default (props) => {
     };
   }
 
-  const onSearch = (val) => {
-    console.log('---------', val);
+  const onSearch = (search) => {
+    setSearchVal(search);
+    setPage(1);
+    if (search) {
+      let searching = {};
+      console.log('search', search)
+      searching = {
+        status: search?.status ? search?.status.value : '',
+        start_date: search?.date ? moment(search?.date[0]).format('YYYY-MM-DD') : '',
+        end_date: search?.date ? moment(search?.date[1]).format('YYYY-MM-DD') : '',
+        project: search?.project ? search?.project.value : '',
+      }
+      dispatch(getMyTasks(id, 1, limit, '', '', searching));
+    }
   }
 
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getMyTasks(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getMyTasks(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchVal));
     } else {
-        dispatch(getMyTasks(id, pagination.current, pagination.pageSize, '', ''));
+        dispatch(getMyTasks(id, pagination.current, pagination.pageSize, '', '', searchVal));
     }
   }
 
@@ -172,6 +208,8 @@ export default (props) => {
               ListCol={ListCol}
               ListData={myTaskData?.rows}
               onChange={onTableChange}
+              field1={allProj}
+              field2={statuses}
               pagination={{
                 total: myTaskData?.count,
                 current: page,
