@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Col, Button, Form, Row, message, Space, Spin } from 'antd';
+import { Typography, Col, Button, Form, Row, message, Space, Spin, Tag } from 'antd';
 import { TextAreaField, SelectField, DateField, InputField } from '../../../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
@@ -24,6 +24,7 @@ export default (props) => {
   const leaveApproversData = useSelector(state => state.leaves.leaveApproversData);
   const holidaysListData = useSelector(state => state.leaves.holidaysListData);
 
+  console.log('leaveApproversData', leaveApproversData)
 
   useEffect(() => {
     dispatch(getLeaveType());
@@ -96,7 +97,7 @@ export default (props) => {
       total_leave_days: leaves_count,
       application_status: "Pending",
       reason: val?.reason,
-      attachment: "/private/files/CMS2_03_AQA_Flowchart.pdf",
+      //attachment: "/private/files/CMS2_03_AQA_Flowchart.pdf",
       doctype: "HRMS Leave Application",
       employee_name: fullName,
       //date_of_joining: "2020-03-01",
@@ -198,6 +199,25 @@ export default (props) => {
               initValue=''
             />
           </Col>
+          {leaveApproversData?.length > 0 && (
+            <>
+              <Col span={24}>
+                <Title level={4} className='c-default mb-0'>Approvers</Title>
+              </Col>
+              {leaveApproversData?.map(e => (
+                <Col span={24}>
+                  <Row>
+                    <Col span={8}>
+                      <Tag className="program-list">
+                        <span className="p-name">{e?.approver}</span>
+                      </Tag>
+                    </Col>
+                  </Row>
+                </Col>
+              ))}
+            </>
+          )}
+
           <Col span={24}>
             <Row gutter={[20, 20]} justify="end">
               <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='button' className='w-100 black-btn' onClick={() => setAddVisible(false)}>Cancel</Button></Col>

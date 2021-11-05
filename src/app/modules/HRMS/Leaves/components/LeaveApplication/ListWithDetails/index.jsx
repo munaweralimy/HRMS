@@ -61,10 +61,10 @@ export default ({details, updateApi, progressData}) => {
             label: 'Reason',
             value: record?.reason
           },
-          {
-            label: 'Attachment',
-            value: record?.tasks
-          },
+          // {
+          //   label: 'Attachment',
+          //   value: record?.tasks
+          // },
           {
             label: 'Status',
             value: record?.application_status,
