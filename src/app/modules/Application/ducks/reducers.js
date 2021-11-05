@@ -27,7 +27,8 @@ const initialState = {
     teams: [],
     roles: [],
     staff: [],
-    menu: false
+    menu: false,
+    projects: {}
 };
 
 export default (state = initialState, action) => {
@@ -87,7 +88,8 @@ export default (state = initialState, action) => {
             return { ...state, roles: data };
         case action_types.SUPERVISOR_LIST:
             return { ...state, staff: data };
-            
+        case action_types.ALL_PROJECTS:
+            return { ...state, projects: data };
         default:
             return state;
     }

@@ -17,7 +17,7 @@ export default (props) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const requestFormsList = useSelector((state) => state.setup.requestFormsListData);
 
@@ -36,7 +36,9 @@ export default (props) => {
       key: 'form_name',
       sorter: true,
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => onClickRow(record)}>{text}</Button>
+        <Button type="link" className="list-links" onClick={() => onClickRow(record)}>
+          {text}
+        </Button>
       ),
     },
     {
@@ -78,45 +80,65 @@ export default (props) => {
 
   const onUpdate = () => {
     setVisible(false);
-    setFormFields(null)
+    setFormFields(null);
     dispatch(getRequestFormsList(page, limit, '', ''));
-  }
+  };
 
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditReqForm title="Add New Form" data={formFields} onClose={() => {setVisible(false); setFormFields(null)}} onUpdate={onUpdate} />,
+    content: (
+      <AddEditReqForm
+        title="Add New Form"
+        data={formFields}
+        onClose={() => {
+          setVisible(false);
+          setFormFields(null);
+        }}
+        onUpdate={onUpdate}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
-  
 
   const deleteRequest = async (name) => {
     props.setLoading(true);
-    delRequest(name).then(res => {
-      message.success('Request Deleted');
-      onUpdate();
-      props.setLoading(false);
-    }).catch(e => {
-      props.setLoading(false);
-      message.error('Something went wrong');
-    });
+    delRequest(name)
+      .then((res) => {
+        message.success('Request Deleted');
+        onUpdate();
+        props.setLoading(false);
+      })
+      .catch((e) => {
+        props.setLoading(false);
+        message.error('Something went wrong');
+      });
   };
 
   const onClickRow = (record) => {
-      setFormFields(record);
-      setVisible(true);
+    setFormFields(record);
+    setVisible(true);
   };
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        request_form: value?.request_form ? value?.request_form : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getRequestFormsList(1, 10, '', '', searchVal));
+    }
   };
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getRequestFormsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (

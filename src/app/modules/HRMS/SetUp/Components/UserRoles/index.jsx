@@ -15,6 +15,7 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
+  const [searchValue, setSearchVal] = useState(null);
   const userList = useSelector((state) => state.setup.userList);
 
   useEffect(() => {
@@ -90,16 +91,23 @@ export default (props) => {
     };
   };
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        user_role_name: value?.user_role ? value?.user_role : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getUserList(1, 10, '', '', searchVal));
+    }
   };
   const onTableChange = (pagination, filters, sorter) => {
     console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getUserList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getUserList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getUserList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getUserList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (

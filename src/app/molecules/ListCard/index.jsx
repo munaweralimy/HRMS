@@ -51,7 +51,7 @@ export default (props) => {
             </Space>
           </Col>
         )}
-        {onFilter && (
+        {filters && (
           <Col span={24}>
             <Radio.Group
               size="large"

@@ -14,6 +14,7 @@ export default (props) => {
   const [institutionFiled, setInstitutionField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const institutionsListData = useSelector((state) => state.setup.institutionsListData);
 
@@ -81,7 +82,14 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        institution: value?.institution ? value?.institution : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getInstitutionsList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -89,9 +97,11 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getInstitutionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getInstitutionsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (

@@ -38,7 +38,7 @@ const AttendanceDetails = (props) => {
       attendance_date_out: moment(values.Attendance_date_out).format('YYYY-MM-DD'),
       // total_job_hour: values.total_job_hour,
       time_in: moment(values.time_in).format('HH:mm:ss'),
-      time_out: moment(values.time_out).format('HH:mm:ss'),
+      time_out: values.time_out ? moment(values.time_out).format('HH:mm:ss') : '00:00:00',
       remarks: values.remarks,
       // status: values.status.value,
     };

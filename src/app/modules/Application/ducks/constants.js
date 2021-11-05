@@ -24,3 +24,4 @@ export const ROLE_LIST = "ROLE_LIST";
 export const JOBS_LIST = "JOBS_LIST";
 export const COMPANY_LIST = "COMPANY_LIST";
 export const SUPERVISOR_LIST = "SUPERVISOR_LIST";
+export const ALL_PROJECTS = "ALL_PROJECTS";

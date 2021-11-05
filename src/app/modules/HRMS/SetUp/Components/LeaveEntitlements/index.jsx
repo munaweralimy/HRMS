@@ -14,6 +14,7 @@ export default (props) => {
   const [entitlementLeave, setEntitlementLeave] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const leaveEntitlementsListData = useSelector((state) => state.setup.leaveEntitlementsListData);
 
@@ -166,6 +167,17 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
+    if (value) {
+      let searchVal = {
+        leave_type: value?.leave_type ? value?.leave_type.value : '',
+        leave_entitlement_name: value?.leave_entitlement_name ? value?.leave_entitlement_name.value : '',
+        entitlement_days: value?.entitlement_days ? value?.entitlement_days.value : '',
+        min_years: value?.min_years ? value?.min_years.value : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getLeaveEntitlementsList(1, 10, '', '', searchVal));
+    }
     console.log('check values', value);
   };
 
@@ -174,9 +186,11 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getLeaveEntitlementsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getLeaveEntitlementsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getLeaveEntitlementsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getLeaveEntitlementsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (
@@ -189,7 +203,7 @@ export default (props) => {
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={leaveEntitlementsListData?.rows}
             pagination={{
