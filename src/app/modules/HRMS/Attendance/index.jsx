@@ -9,7 +9,6 @@ import {
   getOverallAttendanceList,
   getTeamAttendance,
   getTeamAttendanceList,
-  getMyAttendance,
 } from './ducks/actions';
 import Search from './components/Search/OverallSearch';
 import TeamSearch from './components/Search/TeamSearch';
@@ -166,18 +165,30 @@ const ListColTeams = [
   },
 ];
 
+const statusList = [
+  {label: 'All', value: ''},
+  {label: 'Absent', value: 'Absent'},
+  {label: 'On Leave', value: 'On Leave'},
+  {label: 'Half Day', value: 'Half Day'},
+  {label: 'On Duty', value: 'On Duty'},
+  {label: 'Rest Day', value: 'Rest Day'},
+  {label: 'Holiday', value: 'Holiday'},
+  {label: 'Late Clock In', value: 'Late Clock In'},
+  {label: 'Early Clock Out', value: 'Early Clock Out'},
+  {label: 'Replacement Leave', value: 'Replacement Leave'},
+  {label: 'Late Clock Out', value: 'Late Clock Out'},
+]
+
 export default (props) => {
   const dispatch = useDispatch();
   const il8n = useTranslate();
   const { t } = il8n;
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(6);
 
   const overallAttendanceData = useSelector((state) => state.attendance.overallAttendance);
   const overallAttendanceDataList = useSelector((state) => state.attendance.overallAttendanceList);
   const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
   const teamAttendanceList = useSelector((state) => state.attendance.teamAttendanceList);
-  const myAttendance = useSelector((state) => state.attendance.myAttendance);
+  
   const teamsDetailData = useSelector((state) => state.global.teamsDetailData);
   const company = useSelector(state => state.global.companies);
   const team = useSelector(state => state.global.teams);
@@ -196,7 +207,6 @@ export default (props) => {
   }
 
   useEffect(() => {
-    dispatch(getMyAttendance(id, 1, 10, '', ''));
     dispatch(getTeamsDetail(id));
     dispatch(getCompany());
     dispatch(getTeams())
@@ -223,9 +233,9 @@ export default (props) => {
       team.map((x, i) => {
         if (i == 0) {
           temp.push({label: 'All', value: ''})
-          temp.push({label: x.team_name, value: x.name})
+          temp.push({label: x.team_name, value: x.team_name})
         } else {
-          temp.push({label: x.team_name, value: x.name})
+          temp.push({label: x.team_name, value: x.team_name})
         }
       });
       setAllTeam(temp);
@@ -273,18 +283,6 @@ export default (props) => {
     }
   };
 
-  
-
-  const onTableChange = (pagination, filters, sorter) => {
-    setPage(pagination.current);
-    setLimit(pagination.pageSize);
-    if (sorter.order) {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
-    } else {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', ''));
-    }
-  };
-
   const tabs = [
     {
       visible: allowed([Roles.ATTENDANCE]),
@@ -305,6 +303,7 @@ export default (props) => {
         searchDropdowns: {
           field1: allCompany,
           field2: allTeam,
+          field3: statusList
         },
       },
     },
@@ -324,6 +323,9 @@ export default (props) => {
         statusKey: 'status',
         updateApi: onTeamAction,
         teamDrop: teamsDetailData,
+        searchDropdowns: {
+          field1: statusList
+        },
       },
       Comp: MultiView,
     },
@@ -331,18 +333,10 @@ export default (props) => {
       visible: allowed([Roles.ATTENDANCE_INDIVIDUAL]),
       title: 'My Attendance',
       key: 'mytask',
-      iProps: {
-        listdata: myAttendance?.rows || [],
-        listcount: myAttendance?.count || 0,
-        onTableChange: onTableChange,
-        page: page,
-        limit: limit,
-      },
-      count: myAttendance?.count || 0,
       Comp: MyAttendance,
     },
   ];
-
+ 
   return (
     <Row gutter={[20, 30]}>
       <Col span={24}>
