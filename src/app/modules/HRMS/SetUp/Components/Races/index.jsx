@@ -14,6 +14,7 @@ export default (props) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const racesListData = useSelector((state) => state.setup.racesListData);
 
@@ -79,7 +80,14 @@ export default (props) => {
     };
   };
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        race: value?.race ? value?.race : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getRacesList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -87,9 +95,9 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getRacesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getRacesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getRacesList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getRacesList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 

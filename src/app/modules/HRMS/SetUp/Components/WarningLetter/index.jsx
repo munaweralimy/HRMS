@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 export default (props) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchVal] = useState(null);
   const [limit, setLimit] = useState(10);
   const warningLetterListData = useSelector((state) => state.setup.warningLetterListData);
 
@@ -65,17 +66,25 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        warning_letter_name: value?.warning_letter_name ? value?.warning_letter_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getWarningLetterList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getWarningLetterList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getWarningLetterList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getWarningLetterList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getWarningLetterList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 

@@ -15,6 +15,7 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
+  const [searchValue, setSearchVal] = useState(null);
   const approversList = useSelector((state) => state.setup.approversListData);
 
   useEffect(() => {
@@ -75,16 +76,23 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        approver_name: value?.approver_name ? value?.approver_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getApproversList(1, 10, '', '', searchVal));
+    }
   };
   const onTableChange = (pagination, filters, sorter) => {
     console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getApproversList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getApproversList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getApproversList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getApproversList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (
@@ -97,7 +105,7 @@ export default (props) => {
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={approversList?.rows}
             pagination={{

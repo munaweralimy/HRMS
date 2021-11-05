@@ -13,6 +13,7 @@ export default (props) => {
   const [visible, setVisible] = useState(false);
   const [assetField, setAssetField] = useState('');
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchVal] = useState(null);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const assetsList = useSelector((state) => state.setup.assetsListData);
@@ -116,22 +117,24 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        asset_name: value?.asset_name ? value?.asset_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getAssetsList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getAssetsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
-  };
-
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getAssetsList(pg, pageSize));
   };
 
   return (
@@ -144,7 +147,7 @@ export default (props) => {
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={assetsList?.rows}
             pagination={{
