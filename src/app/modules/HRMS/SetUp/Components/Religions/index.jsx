@@ -14,6 +14,7 @@ export default (props) => {
   const [religionFiled, setReligionField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const religionsListData = useSelector((state) => state.setup.religionsListData);
 
@@ -81,7 +82,14 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        religion: value?.religion ? value?.religion : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getReligionsList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -89,9 +97,9 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getReligionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getReligionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getReligionsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getReligionsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (

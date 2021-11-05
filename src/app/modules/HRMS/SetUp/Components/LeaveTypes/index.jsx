@@ -15,6 +15,7 @@ export default (props) => {
   const [leaveType, setLeaveTpe] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const leaveTypesListData = useSelector((state) => state.setup.leaveTypesListData);
 
@@ -109,7 +110,15 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    console.log({ value });
+    if (value) {
+      let searchVal = {
+        leave_type: value?.leaveType ? value?.leaveType : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getLeaveTypesList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -143,7 +152,7 @@ export default (props) => {
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={leaveTypesListData?.rows}
             pagination={{

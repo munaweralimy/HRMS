@@ -14,6 +14,7 @@ export default (props) => {
   const [holidayFields, setHolidayFields] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const holidaysListData = useSelector((state) => state.setup.holidaysListData);
 
@@ -95,12 +96,21 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getHolidaysList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getHolidaysList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getHolidaysList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getHolidaysList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
-  const onSearch = () => {};
+  const onSearch = () => {
+    if (value) {
+      let searchVal = {
+        holiday: value?.holiday ? value?.holiday : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getHolidaysList(1, 10, '', '', searchVal));
+    }
+  };
 
   return (
     <>
@@ -112,7 +122,7 @@ export default (props) => {
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={holidaysListData?.rows}
             pagination={{
