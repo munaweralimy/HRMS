@@ -91,19 +91,19 @@ export default ({details, updateApi, progressData}) => {
     }
   }
 
-  // const allowBtn = () => {
-  //   const approvers = rowData?.find(x => x.label == 'Approver');
-  //   console.log('approvers', rowData)
-  //   let showBtn = false;
-  //   approvers && approvers?.value?.forEach(x => {
-  //     if (x?.status == 'Pending') {
-  //       if (x?.approver_id == id) {
-  //         showBtn = true;
-  //       }
-  //     }
-  //   })
-  //   return showBtn
-  // }
+  const allowBtn = () => {
+    const approvers = rowData?.find(x => x.label == 'Approver');
+    console.log('approvers', rowData)
+    let showBtn = false;
+    approvers && approvers?.value?.forEach(x => {
+      if (x?.status == 'Pending') {
+        if (x?.approver_id == id) {
+          showBtn = true;
+        }
+      }
+    })
+    return showBtn
+  }
 
     return (
         <>
