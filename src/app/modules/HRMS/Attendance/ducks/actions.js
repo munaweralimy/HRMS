@@ -16,7 +16,7 @@ export const getOverallAttendance = (page, limit, order, orderby) => async (disp
   });
 };
 
-export const getOverallAttendanceList = (page, limit, order, orderby) => async (dispatch) => {
+export const getOverallAttendanceList = (page, limit, order, orderby, search = null) => async (dispatch) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -28,7 +28,7 @@ export const getOverallAttendanceList = (page, limit, order, orderby) => async (
   } = await axios.get(
     `${apiMethod}/hrms.attendance_api.get_overall_attendance_pagination_list?page_number=${page}&limit=${limit}${
       order ? `&order=${ordering}&orderby=${orderby}` : ''
-    }`,
+    }${search ? '&filters=' + JSON.stringify(search) : ''}`
   );
   dispatch({
     type: action_types.OVERALL_ATTENDANCE_LIST,
@@ -61,7 +61,7 @@ export const getTeamAttendanceList = (team, page, limit, order, orderby) => asyn
   } = await axios.get(
     `${apiMethod}/hrms.attendance_api.get_my_team_attendance_pagination_list?company=Limkokwing University Creative Technology&team=${team}&page_number=${page}&limit=${limit}${
       orderby ? `&order=${ordering}&orderby=${orderby}` : ''
-    }`,
+    }${search ? '&filters=' + JSON.stringify(search) : ''}`
   );
   dispatch({
     type: action_types.TEAM_ATTENDANCE_LIST,

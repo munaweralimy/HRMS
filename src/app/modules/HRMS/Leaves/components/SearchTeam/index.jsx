@@ -41,15 +41,6 @@ export default (props) => {
                 iProps={{ placeholder: 'Date', size: 'large'}}
                 initValue=''
                 />
-                <SelectField
-                fieldname='project'
-                label=''
-                class='mb-0 w-100'
-                initValue={props?.field1?.length > 0 ? props.field1[0] : ''}
-                control={control}
-                iProps={{ placeholder: 'Project'}}
-                selectOption={props?.field1}
-                />
                 <Button size='large' type='primary' htmlType='submit'>Search</Button>
             </Form>
         </Space>
