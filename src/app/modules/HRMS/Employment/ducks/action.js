@@ -42,7 +42,7 @@ export const getTeams = (page, limit, order, orderby, search = null) => {
       return async (dispatch) => {
         const {
           data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&company=' + search : ''}`);
         dispatch({
           type: action_types.TEAM_LIST,
           data: message,

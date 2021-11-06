@@ -19,15 +19,18 @@ export default (props) => {
       {visisble.set1 && <Col span={24}>
         <ContractList {...props} setVisible={setVisible} />
       </Col>}
-      {visisble.set2 && props.data.status != 'Draft' && <Col span={24}>
+      {props?.data?.status != 'Draft' && props.mode == 'edit' &&
+      <>
+      {visisble.set2 && <Col span={24}>
         <ResignTeminate {...props} setVisible={setVisible} />
       </Col>}
-      {visisble.set3 && props.data.status != 'Draft' && <Col span={24}>
+      {visisble.set3 && <Col span={24}>
         <ShowCauseLetter {...props} />
       </Col>}
-      {visisble.set4 && props.data.status != 'Draft' && <Col span={24}>
+      {visisble.set4 && <Col span={24}>
         <WarningLetter {...props} setVisible={setVisible} />
       </Col>}
+      </>}
     </Row>
   );
 };
