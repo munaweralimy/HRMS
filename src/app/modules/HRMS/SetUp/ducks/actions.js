@@ -354,7 +354,7 @@ export const getApproversList = (page, limit, order, orderby, search = null) => 
   };
 };
 
-export const getAssetsList = (page, limit, order, orderby, search = nullaa) => {
+export const getAssetsList = (page, limit, order, orderby, search = null) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -550,4 +550,12 @@ export const getSpecificEmployee = (url, id) => async (dispatch) => {
     type: action_types.GET_USER_SPCIFIC,
     data: message,
   });
+};
+export const filterLeaveType = () => {
+  return axios.get(`${apiresource}/HRMS Leave Type?filters=[["company", "=", "Limkokwing University Creative Technology"]]&fields=["name","leave_type"]
+  `);
+};
+export const filterLeaveEntitlementName = () => {
+  return axios.get(`${apiresource}/HRMS Leave Entitlement?filters=[["company", "=", "Limkokwing University Creative Technology"]]&fields=["name"]
+  `);
 };

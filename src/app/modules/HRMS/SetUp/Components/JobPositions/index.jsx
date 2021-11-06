@@ -122,7 +122,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        companyjob_title_name: value?.job_title ? value?.job_title : '',
+        job_position_name: value?.job_title ? value?.job_title : '',
       };
       setSearchVal(searchVal);
       setPage(1);

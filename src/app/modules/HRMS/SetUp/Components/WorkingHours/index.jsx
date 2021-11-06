@@ -93,7 +93,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        company_name: value?.company_name ? value?.company_name.value : '',
+        company: value?.company_name ? value?.company_name.value : '',
         template_name: value?.template_name ? value?.template_name : '',
       };
       setSearchVal(searchVal);

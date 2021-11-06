@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Space, Typography } from 'antd';
 import { InputField, SelectField, DateField } from '../../../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+import { filterLeaveType, filterLeaveEntitlementName } from '../../../../ducks/actions';
 
 const { Title } = Typography;
 
 export default (props) => {
   const { control, handleSubmit } = useForm();
+  const dispatch = useDispatch();
 
+  // useEffect(() => {
+  //   dispatch(filterLeaveType());
+  //   dispatch(filterLeaveEntitlementName());
+  // });
+
+  // const filterLeaveName = useSelector((state) => state.setup.filterLeaveType);
   const onSubmit = (val) => {
     props.onSearch(val);
   };
