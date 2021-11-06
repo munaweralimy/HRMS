@@ -25,7 +25,7 @@ export default (props) => {
     };
     
       const menu = (
-        <Menu>
+        <Menu className="pofile-menu">
           <Menu.Item>
             <Button
               onClick={() => history.push("/myprofile")}

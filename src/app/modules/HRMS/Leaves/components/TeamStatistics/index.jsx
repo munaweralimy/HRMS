@@ -111,17 +111,24 @@ export default (props) => {
   );
 
   return (
-    <Collapse accordion onChange={callback} className="leaves-statistic">
-      {leaveStatisticsBar.map((item, index) => (
-        <Panel header={leavesPanelHeader(item, index)} key={index} showArrow={false}>
-          <ListCard
-            onRow={onClickRow}
-            ListCol={ListCol}
-            ListData={leaveStatAnnualList?.rows}
-            pagination={true}
-          />
-        </Panel>
-      ))}
-    </Collapse>
+    <>
+      <Row>
+        <Col span={24}>
+        <Title level={3}>Leave Statistics</Title>
+        </Col>
+      </Row>
+      <Collapse accordion onChange={callback} className="leaves-statistic">
+        {leaveStatisticsBar.map((item, index) => (
+          <Panel header={leavesPanelHeader(item, index)} key={index} showArrow={false}>
+            <ListCard
+              onRow={onClickRow}
+              ListCol={ListCol}
+              ListData={leaveStatAnnualList?.rows}
+              pagination={true}
+            />
+          </Panel>
+        ))}
+      </Collapse>
+    </>
   )
 }
