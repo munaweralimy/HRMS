@@ -31,6 +31,8 @@ const initialState = {
   getAllDepartments: [],
   getSpecificEmployeeList: [],
   letterTempList: [],
+  filterLeaveType: [],
+  filterEntitlmentName: [],
   selectedLeave: { manager: false, supervisor: false, teamLead: false },
   viewWarninLette: { name: '', warning_letter_template: '', visible: false },
 };
@@ -102,6 +104,10 @@ export default (state = initialState, action) => {
       return { ...state, letterTempList: data };
     case action_types.GET_USER_SPCIFIC:
       return { ...state, getSpecificEmployeeList: data };
+    case action_types.FILTER_LEAVE_TYPE:
+      return { ...state, filterLeaveType: data };
+    case action_types.FILTER_ENTITLEMENT:
+      return { ...state, filterEntitlmentName: data };
     default:
       return state;
   }
