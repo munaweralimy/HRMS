@@ -122,22 +122,12 @@ export default (props) => {
           <Row gutter={[20, 20]} justify="space-between">
             <Col flex="0 1 285px">
               <RateField
-                class="ratingField green-rate mb-0"
-                fieldname={`${array}[${index}].supervisor_assessment`}
-                label="Supervisor Assessment"
-                control={control}
-                initValue={item.supervisor_assessment ? item.supervisor_assessment : 0}
-                iProps={{ character: ({ index }) => RatingStars[index + 1] }}
-              />
-            </Col>
-            <Col flex="0 1 285px">
-              <RateField
                 class="ratingField blue-rate mb-0"
                 fieldname={`${array}[${index}].self_staff_assessment`}
                 label="Staff Self Assessment"
                 control={control}
                 initValue={item.self_staff_assessment ? item.self_staff_assessment : 0}
-                iProps={{ disabled: !allowed([Roles.ADVANCEMENT]),character: ({ index }) => RatingStars[index + 1] }}
+                iProps={{ character: ({ index }) => RatingStars[index + 1] }}
               />
             </Col>
           </Row>

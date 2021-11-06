@@ -87,7 +87,7 @@ export default ({ data, id, updateApi }) => {
           job_related.push({
             name: x.name,
             skill_name: x.skill_name,
-            supervisor_assessment: x.supervisor_assessment,
+            supervisor_assessment: 0,
             self_staff_assessment: x.self_staff_assessment
           });
         })
@@ -96,7 +96,7 @@ export default ({ data, id, updateApi }) => {
           job_related.push({
             name: x.name,
             skill_name: x.skill_name,
-            supervisor_assessment: x.supervisor_assessment,
+            supervisor_assessment: 0,
             self_staff_assessment: x.self_staff_assessment
           });
         })
@@ -106,7 +106,7 @@ export default ({ data, id, updateApi }) => {
           job_related_skills: job_related
         }
 
-        let url = `${apiMethod}/hrms.api.hrms_update_job_releated_skill`;
+        let url = `${apiMethod}/hrms.dashboard_api.hrms_job_related_skills`;
         try {
           await axios.post(url, body);
           message.success('Assessment updated');
