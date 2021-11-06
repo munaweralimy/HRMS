@@ -23,7 +23,7 @@ export default (props) => {
           class="mb-0 w-100"
           label=""
           control={control}
-          iProps={{ placeholder: 'Type team name' }}
+          iProps={{ placeholder: 'Type user role name' }}
           initValue=""
         />
         <Button size="large" type="primary" htmlType="submit">
