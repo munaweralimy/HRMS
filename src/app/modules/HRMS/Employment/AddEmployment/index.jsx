@@ -244,7 +244,7 @@ export default (props) => {
       if (vstatus != 'Draft') {
         contractApi(body3, null).then(res => {
           setLoad(false);
-          message.success('Detaila Successfully Saved')
+          message.success('Details Successfully Saved')
           setTimeout(() =>  history.push('/employment'),2000)
         }).catch(e => {
           console.log(e);
@@ -253,7 +253,7 @@ export default (props) => {
         })
       } else {
         setLoad(false);
-        message.success('Detaila Successfully Saved')
+        message.success('Details Successfully Saved')
         setTimeout(() =>  history.push('/employment'),2000)
       }
 
