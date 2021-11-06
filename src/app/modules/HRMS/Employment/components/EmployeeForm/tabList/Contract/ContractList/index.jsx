@@ -273,18 +273,24 @@ export default (props) => {
       }
 
       contractApi(body, getID).then(res => {
-        employApi({status: 'Active'}, id);
-        setLoad(false);
-        message.success('Detail Successfully Saved')
-        setFormVisible(false);
-        setRecord(null)
-        setVisible({
-            set1: true,
-            set2: true,
-            set3: true,
-            set4: true,
-        });
-        updateApi();
+        employApi({status: 'Active'}, id).then(ax => {
+          setLoad(false);
+          message.success('Details Successfully Saved')
+          setFormVisible(false);
+          setRecord(null)
+          setVisible({
+              set1: true,
+              set2: true,
+              set3: true,
+              set4: true,
+          });
+          updateApi();
+        }).catch(e => {
+          setLoad(false);
+          message.error('Something went wrong')
+          message.error(e);
+        })
+        
       }).catch(e => {
         console.log(e);
         setLoad(false);
