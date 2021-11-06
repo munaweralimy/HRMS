@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Row, Col } from 'antd';
 // import Acquisitions from './Acquisitions';
 import { useTranslate } from 'Translate';
@@ -11,6 +11,7 @@ import { getOverallCard, getOverallList } from './ducks/action';
 import { useHistory } from 'react-router';
 import {allowed} from '../../../../routing/config/utils';
 import Roles from '../../../../routing/config/Roles';
+import { getCompany, getTeams } from '../../Application/ducks/actions';
 
 const colName = [
   {
@@ -81,10 +82,61 @@ export default (props) => {
   const { t } = il8n;
   const data = useSelector(state => state.employment.empcard);
   const datalist = useSelector(state => state.employment.emplist);
+  const company = useSelector(state => state.global.companies);
+  const team = useSelector(state => state.global.teams);
+  const [allCompany, setAllCompany] = useState([]);
+  const [allTeam, setAllTeam] = useState([]);
 
-  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
+  useEffect(() => {
+    dispatch(getCompany());
+    dispatch(getTeams())
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(company).length > 0) {
+      let temp = []
+      company.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.name, value: x.name})
+        } else {
+          temp.push({label: x.name, value: x.name})
+        }
+      });
+      setAllCompany(temp);
+    }
+  }, [company]);
+
+  useEffect(() => {
+    if (Object.keys(team).length > 0) {
+      let temp = []
+      team.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.team_name, value: x.team_name})
+        } else {
+          temp.push({label: x.team_name, value: x.team_name})
+        }
+      });
+      setAllTeam(temp);
+    }
+  }, [team]);
+
+  const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
     if (type == 'list') {
-      dispatch(getOverallList(filter, page, limit, sort, sortby))
+      if (search) {
+        let searchVal = {};
+          searchVal = {
+            employee_id: search?.id ? search?.id : '',
+            employee_name: search?.name ? search?.name : '',
+            company:  search?.company ? search?.company.value : '',
+            team_name: search?.team ? search?.team.value : '',
+            contract_type: search?.contract ? search?.contract.value : '',
+          }
+          dispatch(getOverallList(filter, page, limit, sort, sortby, searchVal))
+        } else {
+          dispatch(getOverallList(filter, page, limit, sort, sortby, null))
+        }
     } else {
       dispatch(getOverallCard(page, limit, sort, sortby));
     }
@@ -109,9 +161,9 @@ export default (props) => {
         filters: filters,
         updateApi: onOverallAction,
         searchDropdowns: {
-          field1: [{ label: 'All', value: 'All' }],
-          field2: [{ label: 'All', value: 'All' }],
-          field3: [{ label: 'All', value: 'All' }],
+          field1: allCompany,
+          field2: allTeam,
+          field3: [{label:'All', value: ''},{label:'Permanent', value: 'Permanent'},{label:'Contract', value: 'Contract'},{label:'Probation', value: 'Probation'},],
         },
         statusKey:'status',
         addonkey: 'exp_type',

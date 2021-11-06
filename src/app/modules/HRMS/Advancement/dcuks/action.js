@@ -3,7 +3,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod, apiresource } from '../../../../../configs/constants';
 
 
-export const getJobOpening = (page, limit, order, orderby) => {
+export const getJobOpening = (page, limit, order, orderby, company) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -13,7 +13,7 @@ export const getJobOpening = (page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.hrms_job_opening_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_job_opening_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}${company ? `company=${company}` : ''}` : ''}`);
       dispatch({
         type: action_types.JOB_OPENING,
         data: message,
@@ -31,7 +31,7 @@ export const getSuitableApplicants = (job, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_job_opening_pagination?job_opening=${job}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_advancement_job_opening_pagination?job_opening=${job}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
       dispatch({
         type: action_types.SUITABLE_APPLICANTS,
         data: message,

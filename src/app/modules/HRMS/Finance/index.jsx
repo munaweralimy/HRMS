@@ -8,6 +8,7 @@ import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import { getOverallFinance, getOverallFinanceList } from './ducks/action';
 import { allowed } from '../../../../routing/config/utils';
 import Roles from '../../../../routing/config/Roles';
+import { getCompany, getTeams } from '../../Application/ducks/actions';
 
 const colName = [
   {
@@ -69,15 +70,66 @@ const filters = [
     value: 'Archive',
   },
 ];
+
 const Finance = () => {
   const dispatch = useDispatch();
   const il8n = useTranslate();
   const overallFinance = useSelector((state) => state.finance.overallFinanceData);
   const overallFinanceList = useSelector((state) => state.finance.overallFinanceListData);
+  const company = useSelector(state => state.global.companies);
+  const team = useSelector(state => state.global.teams);
+  const [allCompany, setAllCompany] = useState([]);
+  const [allTeam, setAllTeam] = useState([]);
 
-  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
+  useEffect(() => {
+    dispatch(getCompany());
+    dispatch(getTeams())
+  }, []);
+  
+  useEffect(() => {
+    if (Object.keys(company).length > 0) {
+      let temp = []
+      company.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.name, value: x.name})
+        } else {
+          temp.push({label: x.name, value: x.name})
+        }
+      });
+      setAllCompany(temp);
+    }
+  }, [company]);
+
+  useEffect(() => {
+    if (Object.keys(team).length > 0) {
+      let temp = []
+      team.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.team_name, value: x.team_name})
+        } else {
+          temp.push({label: x.team_name, value: x.team_name})
+        }
+      });
+      setAllTeam(temp);
+    }
+  }, [team]);
+
+  const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
     if (type === 'list') {
-      dispatch(getOverallFinanceList(filter, page, limit, sort, sortby));
+      if (search) {
+        let searchVal = {};
+          searchVal = {
+            employee_name: search?.name ? search?.name : '',
+            company:  search?.company ? search?.company.value : '',
+            team_name: search?.team ? search?.team.value : '',
+            contract_type: search?.contract ? search?.contract.value : '',
+          }
+          dispatch(getOverallFinanceList(filter, page, limit, sort, sortby, searchVal));
+        } else {
+          dispatch(getOverallFinanceList(filter, page, limit, sort, sortby, null));
+        }
     } else {
       dispatch(getOverallFinance(page, limit, sort, sortby));
     }
@@ -101,6 +153,11 @@ const Finance = () => {
         link: '/finance/',
         statusKey: 'status',
         updateApi: onOverallAction,
+        searchDropdowns: {
+          field1: allCompany,
+          field2: allTeam,
+          field3: [{label:'All', value: ''},{label:'Permanent', value: 'Permanent'},{label:'Contract', value: 'Contract'},{label:'Probation', value: 'Probation'},],
+        },
       },
     },
   ];

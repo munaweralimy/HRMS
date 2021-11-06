@@ -38,13 +38,13 @@ const colName = [
   },
   {
     title: 'Team',
-    dataIndex: 'team',
-    key: 'team',
+    dataIndex: 'team_name',
+    key: 'team_name',
     sorter: true,
   },
   {
     title: 'Contract',
-    dataIndex: 'contract',
+    dataIndex: 'contract_type',
     key: 'contract_type',
     sorter: true,
   },
@@ -108,9 +108,9 @@ export default (props) => {
       team.map((x, i) => {
         if (i == 0) {
           temp.push({label: 'All', value: ''})
-          temp.push({label: x.team_name, value: x.name})
+          temp.push({label: x.team_name, value: x.team_name})
         } else {
-          temp.push({label: x.team_name, value: x.name})
+          temp.push({label: x.team_name, value: x.team_name})
         }
       });
       setAllTeam(temp);

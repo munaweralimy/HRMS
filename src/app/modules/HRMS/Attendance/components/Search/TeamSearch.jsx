@@ -47,10 +47,10 @@ export default (props) => {
           fieldname="status"
           label=""
           class="mb-0 w-100"
-          initValue={props?.field3?.length > 0 ? props.field3[0] : ''}
+          initValue={props?.field1?.length > 0 ? props.field1[0] : ''}
           control={control}
           iProps={{ placeholder: 'Status' }}
-          selectOption={props?.field3}
+          selectOption={props?.field1}
         />
         <Button size="large" type="primary" htmlType="submit">
           Search
