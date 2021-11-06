@@ -93,7 +93,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        user_role_name: value?.user_role ? value?.user_role : '',
+        role_name: value?.user_role ? value?.user_role : '',
       };
       setSearchVal(searchVal);
       setPage(1);
