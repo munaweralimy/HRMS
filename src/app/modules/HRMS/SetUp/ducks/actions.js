@@ -493,7 +493,7 @@ export const getDepartments =
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.api.hrms_department_pagination?page_number=${page}&limit=${limit}${
+      `${apiMethod}/hrms.setup.hrms_department_pagination?page_number=${page}&limit=${limit}${
         order ? `&order=${ordering}&orderby=${orderby}` : ''
       }${search ? '&filters=' + JSON.stringify(search) : ''}`,
     );
@@ -551,11 +551,23 @@ export const getSpecificEmployee = (url, id) => async (dispatch) => {
     data: message,
   });
 };
-export const filterLeaveType = () => {
-  return axios.get(`${apiresource}/HRMS Leave Type?filters=[["company", "=", "Limkokwing University Creative Technology"]]&fields=["name","leave_type"]
+export const filterLeaveType = () => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get(`${apiresource}/HRMS Leave Type?filters=[["company", "=", "Limkokwing University Creative Technology"]]&fields=["name","leave_type"]
   `);
+  dispatch({
+    type: action_types.FILTER_LEAVE_TYPE,
+    data: data,
+  });
 };
-export const filterLeaveEntitlementName = () => {
-  return axios.get(`${apiresource}/HRMS Leave Entitlement?filters=[["company", "=", "Limkokwing University Creative Technology"]]&fields=["name"]
+export const filterLeaveEntitlementName = () => async (dispatch) => {
+  const {
+    data: { data },
+  } = await axios.get(`${apiresource}/HRMS Leave Entitlement?filters=[["company", "=", "Limkokwing University Creative Technology"]]&fields=["name"]
   `);
+  dispatch({
+    type: action_types.FILTER_ENTITLEMENT,
+    data: data,
+  });
 };

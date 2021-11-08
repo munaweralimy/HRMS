@@ -82,7 +82,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        race: value?.race ? value?.race : '',
+        name1: value?.race ? value?.race : '',
       };
       setSearchVal(searchVal);
       setPage(1);
