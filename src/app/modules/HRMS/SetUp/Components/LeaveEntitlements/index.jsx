@@ -171,7 +171,7 @@ export default (props) => {
       let searchVal = {
         leave_type: value?.leave_type ? value?.leave_type.value : '',
         leave_entitlement_name: value?.leave_entitlement_name ? value?.leave_entitlement_name.value : '',
-        enitlement: value?.entitlement_days ? value?.entitlement_days : '',
+        entitlement: value?.entitlement_days ? value?.entitlement_days : '',
         min_years: value?.min_years ? value?.min_years : '',
       };
       setSearchVal(searchVal);
