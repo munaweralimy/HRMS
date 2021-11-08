@@ -3,10 +3,10 @@ import { Row, Col, Typography, Space, Tag, Card, Form, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import StatsCard from './components/Stats';
-import JobRelatedSkills from './components/JobRelatedSkills';
+import JobRelatedAssessment from './components/JobRelatedAssessment';
 import OtherSkills from './components/OtherSkills'
 
-import { getFitFigure } from '../../../Advancement/dcuks/action';
+import { getSingleSkills } from '../../ducks/actions';
 
 let arr = [
   { percent: 65, jobRole: 'Front-end Developer' },
@@ -20,14 +20,15 @@ const { Title, Text } = Typography;
 export default ({id}) => {
 
   const dispatch = useDispatch();
-  const figures = useSelector(state => state.advancement.fitFigures)
+  const figures = useSelector(state => state.employeeProfile.singleSkillsData)
+  console.log('figures', figures)
 
   useEffect(() => {
     updateApi();
   }, []);
 
   const updateApi = () => {
-    dispatch(getFitFigure(id));
+    dispatch(getSingleSkills(id));
   }
 
   return (
@@ -54,7 +55,7 @@ export default ({id}) => {
         </Row>
       </Col>
       <Col span={24}>
-          <JobRelatedSkills data={figures} updateApi={updateApi} id={id} />
+          <JobRelatedAssessment data={figures} updateApi={updateApi} id={id} />
       </Col>
       <Col span={24}>
           <OtherSkills data={figures} updateApi={updateApi} id={id} />

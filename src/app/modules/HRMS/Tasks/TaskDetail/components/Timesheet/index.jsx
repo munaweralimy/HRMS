@@ -91,11 +91,25 @@ export default (props) => {
             key: 'action',
             align: 'center',
             width: 120,
-            render: (text) => (
-                <Button type="primary" htmlType='button' danger>Notify</Button>
+            render: (text, record) => (
+                <Button type="primary" htmlType='button' danger onClick={() => notifyUser(record)}>Notify</Button>
             ),
         },
       ]
+
+      const notifyUser = async (record) => {
+        setLoad(true)
+        let url = `${apiMethod}/hrms.tasks_api.send_missed_timesheet_main?employee_id=${id}&date=${record?.date}`
+        try {
+            await axios.get(url);
+            setLoad(false)
+            message.success('User Successfully Notified');            
+        } catch(e) {
+            const { response } = e;
+            message.error('Something went wrong');
+            setLoad(false)
+        }
+      }
 
     const onApprove = async (name) => {
         setLoad(true)
@@ -111,7 +125,6 @@ export default (props) => {
             message.error('Something went wrong');
             setLoad(false)
         }
-        
     }
 
     const onReject = async (name) => {

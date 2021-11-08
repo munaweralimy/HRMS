@@ -2,6 +2,8 @@ import * as action_types from "./constants";
 
 const initialState = {
     employeeProfileData: [],
+    singleSkillsData: [],
+    fitFigures: {}
 };
 
 export default (state = initialState, action) => {
@@ -9,6 +11,10 @@ export default (state = initialState, action) => {
     switch (type) {
         case action_types.PROFILE_DATA:
             return {...state, employeeProfileData: data };
+        case action_types.SINGLE_SKILLS:
+            return {...state, singleSkillsData: data };
+        case action_types.FITINDEX_DETAILS:
+            return { ...state, fitFigures: data };
         default:
             return state;
     }

@@ -35,8 +35,8 @@ const ListCol = [
   },
   {
     title: 'Entitlement',
-    dataIndex: 'till_date',
-    key: 'till_date',
+    dataIndex: 'total_leaves',
+    key: 'total_leaves',
     sorter: true,
     align: 'center',
     render: (text) => {
@@ -91,7 +91,8 @@ export default (props) => {
 
   const updateTimesheet = (status, page, limit, sort, sortby) => {
     dispatch(getMyLeaves(userdetail?.name, status, page, limit, sort, sortby));
-    dispatch(getCarryForwardStatus(userdetail?.name))
+    dispatch(getCarryForwardStatus(userdetail?.name));
+    dispatch(getMyAvailableLeaves(userdetail?.name));
   }
 
   const btnList = [
@@ -105,6 +106,7 @@ export default (props) => {
   const updateApi = () => {
     setRecord(null);
     dispatch(getMyLeaves(userdetail.name,'Pending', 1, 10, '', ''));
+    dispatch(getMyAvailableLeaves(userdetail?.name));
   }
 
   const carryForward = async () => {

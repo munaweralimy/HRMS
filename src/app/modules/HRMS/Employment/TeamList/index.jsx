@@ -74,10 +74,10 @@ export default (props) => {
   const onSearch = (val) => {
     if (val.company) {
       setSearching(val.company);
-      dispatch(getTeams(page, limit, sort, sortby, val.company));
+      dispatch(getTeams(1, 5, '', '', val.company));
     } else {
       setSearching(null);
-      dispatch(getTeams(page, limit, sort, sortby, null));
+      dispatch(getTeams(1, 5, '', '', null));
     }
   };
 

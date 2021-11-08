@@ -172,6 +172,7 @@ export default (props) => {
     }
 
     const body = {
+      status: 'Active',
       salutation: val.salutation?.value,
       first_name: val.first_name,
       image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",
@@ -230,7 +231,7 @@ export default (props) => {
       employApi(body, id).then(res => {
         setLoad(false);
         updateApi();
-        message.success('Detaila Successfully Saved')
+        message.success('Detail Successfully Saved')
       }).catch(e => {
         console.log(e);
         setLoad(false);

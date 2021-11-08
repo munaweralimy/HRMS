@@ -157,7 +157,7 @@ export default (props) => {
         listCol: colName,
         Search: Search,
         link: '/employment/',
-        listLink: '/requests/',
+        listLink: '/employment/',
         filters: filters,
         updateApi: onOverallAction,
         searchDropdowns: {

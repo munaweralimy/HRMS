@@ -15,6 +15,7 @@ const initialState = {
     leaveInfoData: [],
     leaveApproversData: [],
     entitlementData: [],
+    holidaysListData: [],
 
     myProjectData: [],
     myAddProjectData: [],
@@ -56,6 +57,8 @@ export default (state = initialState, action) => {
             return {...state, leaveApproversData: data };
         case action_types.ENTITLEMENT:
             return {...state, entitlementData: data };
+        case action_types.HOLIDAYS_LIST:
+            return {...state, holidaysListData: data };
 
             
         case action_types.PROJECT_NAME:

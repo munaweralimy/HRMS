@@ -14,19 +14,19 @@ export default ({ data, id, updateApi }) => {
   const { control, handleSubmit, setValue } = useForm();
   const { append, remove, fields } = useFieldArray({
     control,
-    name: `other_skills`,
+    name: `job_related_skills`,
   });
 
   useEffect(() => {
     if (Object.keys(data).length > 0) {
       let temp = [];
-      data.other_skills.map((x) => {
+      data.job_related_skills.map((x) => {
         temp.push({
           id: x.name,
           ...x,
         });
       });
-      setValue('other_skills', temp);
+      setValue('job_related_skills', temp);
     }
   }, [data]);
 
@@ -36,7 +36,7 @@ export default ({ data, id, updateApi }) => {
 
     let skills = [];
     let duplicate = false;
-    val?.other_skills?.map((x) => {
+    val?.job_related_skills?.map((x) => {
       let a = skills?.find((y) => y.skill_name == x.skill_name);
       if (a) {
         message.error('Skill Already Exist');
@@ -52,8 +52,8 @@ export default ({ data, id, updateApi }) => {
       } else {
         skills.push({
           name: x.name,
-          skill_name: x.skill_name,
-          supervisor_assessment: 0,
+          // skill_name: x.skill_name,
+          // supervisor_assessment: x.supervisor_assessment,
           self_staff_assessment: x.self_staff_assessment,
         });
       }
@@ -61,13 +61,13 @@ export default ({ data, id, updateApi }) => {
 
     const body = {
       employee_id: id,
-      other_skills: skills,
+      job_related_skills: skills,
     };
 
     console.log('noth', body);
 
     if (!duplicate) {
-      let url = `${apiMethod}/hrms.dashboard_api.hrms_other_skills`;
+      let url = `${apiMethod}/hrms.dashboard_api.hrms_job_related_skills`;
       try {
         await axios.post(url, body);
         message.success('Assessment updated');
@@ -104,19 +104,16 @@ export default ({ data, id, updateApi }) => {
           <Col flex="auto">
             <Space size={10} direction="vertical" className="w-100">
               <Title level={4} className="mb-0 c-default">
-                Other Skills
+                Job Related Skills
               </Title>
             </Space>
-          </Col>
-          <Col>
-            <Text className="c-gray">Last Assessed : 3 Months Ago</Text>
           </Col>
           <Col span={24}>
             <Space size={20} direction="vertical" className="w-100">
               {fields.map((item, index) => (
                 <RateCard
                   key={item.id}
-                  array={'other_skills'}
+                  array={'job_related_skills'}
                   item={item}
                   index={index}
                   control={control}
