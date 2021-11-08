@@ -97,7 +97,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        department_name: value?.department_name ? value?.department_name : '',
+        name: value?.department_name ? value?.department_name : '',
       };
       setSearchVal(searchVal);
       setPage(1);

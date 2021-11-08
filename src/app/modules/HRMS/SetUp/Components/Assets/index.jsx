@@ -119,7 +119,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        asset_name: value?.asset_name ? value?.asset_name : '',
+        assets_name: value?.asset_name ? value?.asset_name : '',
       };
       setSearchVal(searchVal);
       setPage(1);

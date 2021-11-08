@@ -101,10 +101,10 @@ export default (props) => {
       dispatch(getHolidaysList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
-  const onSearch = () => {
+  const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        holiday: value?.holiday ? value?.holiday : '',
+        holiday_name: value?.holiday ? value?.holiday : '',
       };
       setSearchVal(searchVal);
       setPage(1);

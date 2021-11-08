@@ -68,7 +68,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        warning_letter_name: value?.warning_letter_name ? value?.warning_letter_name : '',
+        writing_letter_name: value?.warning_letter_name ? value?.warning_letter_name : '',
       };
       setSearchVal(searchVal);
       setPage(1);
