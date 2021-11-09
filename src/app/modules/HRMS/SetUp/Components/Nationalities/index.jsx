@@ -83,7 +83,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        nationality: value?.nationality ? value?.nationality : '',
+        country_name: value?.nationality ? value?.nationality : '',
       };
       setSearchVal(searchVal);
       setPage(1);
