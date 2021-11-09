@@ -12,6 +12,9 @@ export default ({details, updateApi}) => {
   const [limit, setLimit] = useState(10);
   const [approverID, setApproverID] = useState('');
 
+  const userID = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+
+
   const btnList = [
     {
       text: '+ Add New Timesheet',
@@ -93,11 +96,10 @@ return (
         mainTitle={detailTitle}
         backbtnTitle={heading}
         data={rowData}
-        btn1title={'Approve'}
-        btn2title={'Reject'}
-        ApproverID={approverID}
-        onAction1={onAction1}
-        onAction2={onAction2}
+        btn1title={approverID == userID ? 'Approve' : null}
+        btn2title={approverID == userID ? 'Reject' : null}
+        onAction1={approverID == userID ? onAction1 : null}
+        onAction2={approverID == userID ? onAction2 : null}
         btnClass1='green-btn'
         btnClass2='red-btn'
       />
