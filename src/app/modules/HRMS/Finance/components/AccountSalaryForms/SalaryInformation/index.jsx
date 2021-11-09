@@ -28,7 +28,10 @@ const SalaryInformation = (props) => {
         label: financeDetails?.payment_frequency,
       });
       setValue('payment_type', { value: financeDetails?.payment_type, label: financeDetails?.payment_type });
-      setValue('effective_date', moment(financeDetails?.effective_date, 'YYYY-MM-DD'));
+      setValue(
+        'effective_date',
+        financeDetails?.effective_date ? moment(financeDetails?.effective_date, 'YYYY-MM-DD') : '',
+      );
     }
   }, [financeDetails]);
 
