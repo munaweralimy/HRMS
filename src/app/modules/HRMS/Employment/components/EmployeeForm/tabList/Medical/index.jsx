@@ -21,7 +21,7 @@ export default (props) => {
     setTimeout(() => {
       setValueIn('weight', data?.weight);
       setValueIn('height', data?.height);
-      setValueIn('blood_group', data?.blood_group);
+      setValueIn('blood_group', data?.blood_group ? {label: data?.blood_group, value: data?.blood_group} : "");
       setValueIn('health_details', data?.health_details);
     }, 1500)
   }
@@ -29,7 +29,7 @@ export default (props) => {
   const onFinish = async (val) => {
     setLoad(true);
     const body = {
-        blood_group: val.blood_group,
+        blood_group: val.blood_group.value,
         height: val.height,
         weight: val.weight,
         health_details: val.health_details

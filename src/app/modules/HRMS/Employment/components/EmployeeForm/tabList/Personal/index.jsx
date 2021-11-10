@@ -85,7 +85,6 @@ export default (props) => {
   }, [data]);
 
   const onFinish = async (val) => {
-    console.log('dkdk', data)
     if (data.status == 'Draft') {
       message.warning('Please Add Contract to Activate your account')
     }
@@ -172,7 +171,6 @@ export default (props) => {
     }
 
     const body = {
-      status: 'Active',
       salutation: val.salutation?.value,
       first_name: val.first_name,
       image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",

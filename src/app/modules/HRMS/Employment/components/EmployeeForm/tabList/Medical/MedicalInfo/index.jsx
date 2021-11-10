@@ -1,17 +1,18 @@
 import React, { Fragment } from 'react';
 import { Row, Col, Typography, Button } from 'antd';
 import FormGroup from '../../../../../../../../molecules/FormGroup';
+import {bloodList} from '../../../../../../../../../configs/constantData';
 
 const { Title } = Typography;
 
 const medicalFields = [
   {
-    type: 'input',
+    type: 'select',
     label: 'Blood Type',
     name: 'blood_group',
     twocol: false,
     colWidth: '1 0 200px',
-    placeholder: 'Blood Type',
+    options: bloodList,
     req: true,
     reqmessage: 'Please enter blood type',
   },
