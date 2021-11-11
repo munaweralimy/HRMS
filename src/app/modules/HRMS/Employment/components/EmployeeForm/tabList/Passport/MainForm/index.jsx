@@ -25,7 +25,7 @@ export default (props) => {
       name: 'passport_status',
       twocol: true,
       options: pStatus,
-      req: true,
+      req: false,
       reqmessage: 'Please enter passport status',
     },
     {
