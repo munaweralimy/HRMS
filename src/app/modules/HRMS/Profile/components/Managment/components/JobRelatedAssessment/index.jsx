@@ -87,7 +87,7 @@ export default ({ data, id, updateApi }) => {
           job_related.push({
             name: x.name,
             skill_name: x.skill_name,
-            supervisor_assessment: 0,
+            //supervisor_assessment: 0,
             self_staff_assessment: x.self_staff_assessment
           });
         })
@@ -96,7 +96,7 @@ export default ({ data, id, updateApi }) => {
           job_related.push({
             name: x.name,
             skill_name: x.skill_name,
-            supervisor_assessment: 0,
+            //supervisor_assessment: 0,
             self_staff_assessment: x.self_staff_assessment
           });
         })
@@ -124,7 +124,7 @@ export default ({ data, id, updateApi }) => {
       append({
         name: item?.name,
         skill_name: item?.skill_name,
-        supervisor_assessment: item?.supervisor_assessment,
+        //supervisor_assessment: item?.supervisor_assessment,
         self_staff_assessment: item?.self_staff_assessment,
       })
       let temp = tags.filter(x => x.name != item.name);
@@ -136,7 +136,7 @@ export default ({ data, id, updateApi }) => {
       tags.push({
         name: item.name,
         skill_name: item.skill_name,
-        supervisor_assessment: 0,
+        //supervisor_assessment: 0,
         self_staff_assessment: 0,
       })
     }
