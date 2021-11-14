@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { SearchIcon, ChangePasswordIcon, UserIcon, LogOutIcon } from '../../atoms/CustomIcons';
 import LanguageSwitcher from '../../molecules/LanguageSwitcher';
 import { Popup } from '../../atoms/Popup';
-import ForgetPassword from '../../templates/Dashboard/components/ForgetPassword';
+import PopupPassword from '../../modules/Application/component/PopupPassword';
 
 const { Text } = Typography;
 export default (props) => {
@@ -23,7 +23,7 @@ export default (props) => {
   const popup = {
     closable: true,
     visibility: visible,
-    content: <ForgetPassword title="Change Password" onClose={() => setVisisble(false)} />,
+    content: <PopupPassword title="Change Password" onClose={() => setVisisble(false)} />,
     width: 410,
     onCancel: () => setVisisble(false),
   };
