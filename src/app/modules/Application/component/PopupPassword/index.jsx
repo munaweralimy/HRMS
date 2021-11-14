@@ -4,37 +4,39 @@ import { useForm } from 'react-hook-form';
 import { InputPassword } from '../../../../atoms/FormElement';
 import { LoadingOutlined } from '@ant-design/icons';
 import { changePassword } from '../../../../../services/dashboard';
+
 const antIcon = <LoadingOutlined spin />;
-const emailID = JSON.parse(localStorage.getItem('userdetails')).name;
+const { Title } = Typography;
 
-const ForgetPassword = (props) => {
-  const { title, onClose, lateData } = props;
-  const { Title, Text } = Typography;
+export default (props) => {
+  const { title, onClose } = props;
   const [load, setLoad] = useState(false);
-  const { control, errors, setValue, handleSubmit, watch, reset } = useForm();
+  const { control, errors, handleSubmit, watch, reset } = useForm();
 
-  let new_password = watch('new');
-  let confirm_password = watch('confirm');
+  let checkPassword =  watch('password');
 
   const onSubmitHandler = (values) => {
+    setLoad(true);
     const payload = {
-      username: emailID,
+      username: JSON.parse(localStorage.getItem('userdetails'))?.name,
       old: values?.current,
-      new: values?.new,
+      new: values?.password,
     };
     changePassword(payload)
       .then((response) => {
         if (response?.data?.message?.success === true) {
-          message.success(response?.data?.message.message);
+          message.success(response?.data?.message?.message);
+          setLoad(false);
           reset();
           onClose();
         } else {
-          message.error(response?.data?.message.message);
+          message.error(response?.data?.message?.message);
+          setLoad(false);
         }
       })
       .catch((e) => {
         message.error('something went wrong');
-        onClose();
+        setLoad(false);
       });
   };
 
@@ -53,6 +55,7 @@ const ForgetPassword = (props) => {
           </Col>
           <Col span={24}>
             <InputPassword
+              isRequired={true}
               fieldname="current"
               label="Current Password"
               control={control}
@@ -69,7 +72,8 @@ const ForgetPassword = (props) => {
           </Col>
           <Col span={24}>
             <InputPassword
-              fieldname="new"
+              isRequired={true}
+              fieldname="password"
               label="New Password"
               control={control}
               initValue=""
@@ -79,12 +83,13 @@ const ForgetPassword = (props) => {
               rules={{
                 required: 'Please enter password',
               }}
-              validate={errors.new && 'error'}
-              validMessage={errors.new && errors.new.message}
+              validate={errors.password && 'error'}
+              validMessage={errors.password && errors.password.message}
             />
           </Col>
           <Col span={24}>
             <InputPassword
+              isRequired={true}
               fieldname="confirm"
               label="Re-type Password"
               control={control}
@@ -93,22 +98,22 @@ const ForgetPassword = (props) => {
                 size: 'large',
               }}
               rules={{
-                required: 'Please enter password',
+                required: 'Please confirm your password',
+                validate: (value) => value === checkPassword || "The Password does not match"
               }}
-              validate={confirm_password != new_password ? 'error' : ''}
-              validMessage={confirm_password != new_password ? <p>Password does not match</p> : <></>}
+              validate={errors.confirm ? 'error' : ''}
+              validMessage={errors.confirm && errors.confirm.message}
             />
           </Col>
           <Col span={24}>
             <Row gutter={24} align="middle">
               <Col span={12}>
-                <Button type="primary" size="large" className="w-100 black-btn" htmlType="button" onClick={onClose}>
+                <Button type="primary" size="large" className="w-100 black-btn" htmlType="button" onClick={() => { reset(); onClose();}}>
                   Close
                 </Button>
               </Col>
               <Col span={12}>
                 <Button
-                  disabled={new_password != confirm_password}
                   type="primary"
                   size="large"
                   htmlType="submit"
@@ -124,5 +129,3 @@ const ForgetPassword = (props) => {
     </Spin>
   );
 };
-
-export default ForgetPassword;
