@@ -1,16 +1,18 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Space, Button, Row, Col, Typography, Form, message, Spin } from 'antd';
+import { Space, Button, Row, Col, Typography, Form, message, Spin, Collapse } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import AddUser from '../../../Teams/Components/AddUser';
-import { rolesFields } from './FormFields';
+import { rolesFields, totalRoles } from './FormFields';
 import { getSingleRole, addUserRoles, updateUserRoles, deleteUserRoles } from '../../../../ducks/services';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { CheckboxGroup, InputField } from '../../../../../../../atoms/FormElement';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
   const { title, onClose, roleData } = props;
   const { Title, Text } = Typography;
+  const { Panel } = Collapse;
   const [teamData, setTeamData] = useState('');
   const [load, setLoad] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -46,43 +48,44 @@ export default (props) => {
   }, [teamData]);
 
   const onFinish = (values) => {
-    setLoad(true);
-    const newObj = {};
-    const keys = Object.keys(values);
-    for (const key of keys) {
-      if (typeof values[key] === 'string') {
-        newObj[key] = values[key];
-        continue;
-      } else if (values[key].length == 0) {
-        newObj[key] = 0;
-      } else {
-        newObj[key] = values[key][0];
-      }
-    }
-    const payload = {
-      ...newObj,
-      user_staff: userData.map((value) => ({ employee: value.id })),
-    };
-    console.log('roleData', roleData, payload)
-    !roleData.name
-      ? addUserRoles(payload).then((response) => {
-          if (response.data.message.success == true) {
-            message.success(response.data.message.message);
-          } else {
-            message.error(response.data.message.message);
-          }
-          setLoad(false);
-          onClose();
-        })
-      : updateUserRoles(roleData.name, payload).then((response) => {
-          if (response.data.message.success == true) {
-            message.success(response.data.message.message);
-          } else {
-            message.error(response.data.message.message);
-          }
-          setLoad(false);
-          onClose();
-        });
+    console.log({ values });
+    // setLoad(true);
+    // const newObj = {};
+    // const keys = Object.keys(values);
+    // for (const key of keys) {
+    //   if (typeof values[key] === 'string') {
+    //     newObj[key] = values[key];
+    //     continue;
+    //   } else if (values[key].length == 0) {
+    //     newObj[key] = 0;
+    //   } else {
+    //     newObj[key] = values[key][0];
+    //   }
+    // }
+    // const payload = {
+    //   ...newObj,
+    //   user_staff: userData.map((value) => ({ employee: value.id })),
+    // };
+    // console.log('roleData', roleData, payload);
+    // !roleData.name
+    //   ? addUserRoles(payload).then((response) => {
+    //       if (response.data.message.success == true) {
+    //         message.success(response.data.message.message);
+    //       } else {
+    //         message.error(response.data.message.message);
+    //       }
+    //       setLoad(false);
+    //       onClose();
+    //     })
+    //   : updateUserRoles(roleData.name, payload).then((response) => {
+    //       if (response.data.message.success == true) {
+    //         message.success(response.data.message.message);
+    //       } else {
+    //         message.error(response.data.message.message);
+    //       }
+    //       setLoad(false);
+    //       onClose();
+    //     });
   };
 
   const onDeleteTeam = () => {
@@ -112,10 +115,71 @@ export default (props) => {
               </Col>
             </Row>
           </Col>
-
           <Col span={16}>
             <Row gutter={[24, 18]}>
-              {rolesFields().map((item, idx) => (
+              <Col span={24}>
+                <InputField
+                  fieldname="role_name"
+                  class="mb-0 w-100"
+                  label="User Role Name"
+                  control={control}
+                  iProps={{ placeholder: 'Type role name', size: 'large' }}
+                  initValue=""
+                />
+              </Col>
+              <Col span={24}>
+                <Text className="c-gray">User Role Access</Text>
+              </Col>
+              {totalRoles.map((value, index) => (
+                <Col span={12} key={index}>
+                  <Collapse
+                    bordered={false}
+                    collapsible="header"
+                    expandIcon={({ isActive }) => (!isActive ? <PlusOutlined /> : <MinusOutlined />)}
+                  >
+                    <Panel
+                      style={{ border: '0px' }}
+                      header={value}
+                      extra={
+                        <CheckboxGroup
+                          fieldname={`${value}-main`}
+                          label=""
+                          class="mb-0 fullWidth-checbox"
+                          control={control}
+                          initValue=""
+                          option={[{ label: '', value: 1 }]}
+                        />
+                      }
+                    >
+                      <CheckboxGroup
+                        fieldname={`${value}-read`}
+                        label=""
+                        class="mb-0 fullWidth-checbox"
+                        control={control}
+                        initValue=""
+                        option={[{ label: 'Read', value: 1 }]}
+                      />
+                      <CheckboxGroup
+                        fieldname={`${value}-write`}
+                        label=""
+                        class="mb-0 fullWidth-checbox"
+                        control={control}
+                        initValue=""
+                        option={[{ label: 'Write', value: 1 }]}
+                      />
+                      <CheckboxGroup
+                        fieldname={`${value}-delete`}
+                        label=""
+                        class="mb-0 fullWidth-checbox"
+                        control={control}
+                        initValue=""
+                        option={[{ label: 'Delete', value: 1 }]}
+                      />
+                    </Panel>
+                  </Collapse>
+                </Col>
+              ))}
+              {/* {rolesFields().map((item, idx) => (
                 <Fragment key={idx}>
                   {item.subheading && (
                     <Col span={24}>
@@ -124,7 +188,7 @@ export default (props) => {
                   )}
                   <FormGroup item={item} control={control} errors={errors} />
                 </Fragment>
-              ))}
+              ))} */}
             </Row>
           </Col>
           <Col span={8}>
