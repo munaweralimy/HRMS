@@ -28,7 +28,7 @@ export default (props) => {
                 </Fragment>
               ))}
               <Button type='primary' htmlType='button' className={data?.policy_status == 'View' ? 'green-btn' : 'gray-btn'} onClick={() => onView(data)}>{data?.policy_status}</Button>
-              {allowed([Roles.POLICY]) ? <Button type='link' size="large" className='cross-iconbtn graycross-icon' htmlType='button' icon={<CloseCircleFilled />} onClick={() => onDelete(data?.name)} />: null}
+              {allowed([Roles.POLICY], 'delete') ? <Button type='link' size="large" className='cross-iconbtn graycross-icon' htmlType='button' icon={<CloseCircleFilled />} onClick={() => onDelete(data?.name)} />: null}
             </Space>
           </Col>
         </Row>

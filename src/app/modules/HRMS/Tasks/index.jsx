@@ -222,7 +222,7 @@ export default (props) => {
   if(location?.state?.addTimeSheet) {
     activeTab = 'mytask';
   } else {
-    if (allowed([Roles.TASK])) {
+    if (allowed([Roles.TASK], 'read')) {
       activeTab = 'overall';
     } else if(allowed([Roles.TASK_TEAMS])) {
       activeTab = 'team';
@@ -276,7 +276,7 @@ export default (props) => {
 
   const tabs = [
   {
-    visible: allowed([Roles.TASK]),
+    visible: allowed([Roles.TASK], 'read'),
     title: 'Overall Tasks',
     key: 'overall',
     count: overallData?.count || overallDataList?.count || 0,

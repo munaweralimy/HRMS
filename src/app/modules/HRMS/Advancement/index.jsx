@@ -139,7 +139,7 @@ export default (props) => {
 
   const tabs = [
     {
-      visible: allowed([Roles.ADVANCEMENT_TEAMS]),
+      visible: allowed([Roles.ADVANCEMENT]),
       title: 'Overall Fit Index',
       key: 'overall',
       count: data?.count,

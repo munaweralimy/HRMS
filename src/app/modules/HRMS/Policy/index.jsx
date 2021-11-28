@@ -89,7 +89,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Policy" btnList={allowed([Roles.POLICY]) ? btnList : null} />
+          <HeadingChip title="Policy" btnList={allowed([Roles.POLICY], 'write') ? btnList : null} />
         </Col>
         {policyListData && policyListData?.rows?.length > 0 && policyListData?.rows[0]?.map((resp, i) => (
           <Fragment key={i}>
