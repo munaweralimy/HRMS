@@ -14,6 +14,10 @@ export default ({details, updateApi}) => {
   const [limit, setLimit] = useState(10);
   const [approverID, setApproverID] = useState('');
 
+  const userID = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const isAdmin = allowed([Roles.REQUESTS]);
+  console.log('isAdmin', isAdmin)
+
   const btnList = [
     {
       text: '+ Add New Timesheet',
