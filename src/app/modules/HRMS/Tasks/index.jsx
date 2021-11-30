@@ -168,7 +168,7 @@ export default (props) => {
   let activeTab = ''
 
   useEffect(() => {
-    dispatch(getTeamsDetail(id));
+    allowed([Roles.TASK_TEAMS], 'read') && dispatch(getTeamsDetail(id));
     dispatch(getAllProjects());
     dispatch(getCompany());
     dispatch(getTeams())
@@ -301,7 +301,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.TASK_TEAMS]),
+      visible: allowed([Roles.TASK_TEAMS], 'read'),
       title: 'Team Tasks',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
@@ -324,7 +324,7 @@ export default (props) => {
       Comp: MultiView,
     },
     {
-      visible: allowed([Roles.TASK_INDIVIDUAL]),
+      visible: allowed([Roles.TASK_INDIVIDUAL], 'read'),
       title: 'My Tasks',
       key: 'mytask',
       Comp: MyTasks,

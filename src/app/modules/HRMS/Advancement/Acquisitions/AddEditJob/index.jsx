@@ -10,6 +10,8 @@ import { useHistory } from 'react-router-dom';
 import axios from '../../../../../../services/axiosInterceptor';
 import { apiresource } from '../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 const { Title } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -174,6 +176,7 @@ export default ({ data, updateApi }) => {
             <>
               <Col span={24}>
                 <Row gutter={24} justify="end">
+                {allowed([Roles.ADVANCEMENT], 'delete') && 
                   <Col>
                     <Button
                       size="large"
@@ -184,12 +187,13 @@ export default ({ data, updateApi }) => {
                     >
                       Delete Job Openinges
                     </Button>
-                  </Col>
+                  </Col>}
+                  {allowed([Roles.ADVANCEMENT], 'write') && 
                   <Col>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn">
                       Save Changes
                     </Button>
-                  </Col>
+                  </Col>}
                 </Row>
               </Col>
               <Col span={24}>

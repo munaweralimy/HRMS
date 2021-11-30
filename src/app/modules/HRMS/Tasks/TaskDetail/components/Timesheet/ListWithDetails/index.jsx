@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ListCard from '../../../../../../../molecules/ListCard';
 import DetailsComponent from '../../../../../../../molecules/HRMS/DetailsComponent';
 import moment from 'moment';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 
 export default ({details, updateApi}) => {
 
@@ -96,8 +98,8 @@ return (
         btn1title={'Approve'}
         btn2title={'Reject'}
         ApproverID={approverID}
-        onAction1={onAction1}
-        onAction2={onAction2}
+        onAction1={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction1 : null}
+        onAction2={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction2 : null}
         btnClass1='green-btn'
         btnClass2='red-btn'
       />

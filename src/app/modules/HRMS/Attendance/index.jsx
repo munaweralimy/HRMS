@@ -198,9 +198,9 @@ export default (props) => {
 
   let activeTab = '';
 
-  if (allowed([Roles.ATTENDANCE])) {
+  if (allowed([Roles.ATTENDANCE], 'read')) {
     activeTab = 'overall';
-  } else if (allowed([Roles.ATTENDANCE_TEAMS])) {
+  } else if (allowed([Roles.ATTENDANCE_TEAMS], 'read')) {
     activeTab = 'team';
   } else {
     activeTab = 'mytask';
@@ -285,7 +285,7 @@ export default (props) => {
 
   const tabs = [
     {
-      visible: allowed([Roles.ATTENDANCE]),
+      visible: allowed([Roles.ATTENDANCE], 'read'),
       title: 'Overall Attendance',
       key: 'overall',
       count: overallAttendanceData?.count || overallAttendanceDataList?.count || 0,
@@ -308,7 +308,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.ATTENDANCE_TEAMS]),
+      visible: allowed([Roles.ATTENDANCE_TEAMS], 'read'),
       title: 'Team Attendance',
       key: 'team',
       count: teamAttendance?.count || teamAttendanceList?.count || 0,
@@ -330,7 +330,7 @@ export default (props) => {
       Comp: MultiView,
     },
     {
-      visible: allowed([Roles.ATTENDANCE_INDIVIDUAL]),
+      visible: allowed([Roles.ATTENDANCE_INDIVIDUAL], 'read'),
       title: 'My Attendance',
       key: 'mytask',
       Comp: MyAttendance,

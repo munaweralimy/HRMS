@@ -61,9 +61,12 @@ export function allowed(permission, str = '') {
     } else {
         let bol = false;
         Object.entries(permit2[0]).forEach(([key, val]) => {
-            if (key === permission[0] && val[str] === 1) {
-                bol = true;
-            }
+            permission.map(y => {
+                if (key === y && val[str] === 1) {
+                    bol = true;
+                }
+            })
+            
         })
         return bol;
     }

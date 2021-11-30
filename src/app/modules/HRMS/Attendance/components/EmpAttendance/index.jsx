@@ -6,6 +6,8 @@ import ListCard from '../../../../../molecules/ListCard';
 import EditAttendance from '../AttendanceDetail';
 import { LeftOutlined } from '@ant-design/icons';
 import { getMyAttendance, getSingleAttendanceDetail, getTotalAttendance } from '../../ducks/actions';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 // import { getTotalAbsent } from '../../ducks/services';
 import moment from 'moment';
 const ListCol = [
@@ -86,8 +88,10 @@ export default (props) => {
   const onRowClick = (record) => {
     return {
       onClick: () => {
-        setViewForm(true);
-        setEmpID(record?.name);
+        if (allowed([Roles.ATTENDANCE_TEAMS, Roles.ATTENDANCE], 'write')) {
+          setViewForm(true);
+          setEmpID(record?.name);
+        }
       },
     };
   };

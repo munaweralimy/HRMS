@@ -5,6 +5,8 @@ import RateCard from '../RateCard';
 import {PlusCircleFilled, LoadingOutlined} from '@ant-design/icons';
 import { apiMethod } from '../../../../../../configs/constants';
 import axios from '../../../../../../services/axiosInterceptor';
+import Roles from '../../../../../../routing/config/Roles';
+import {allowed} from '../../../../../../routing/config/utils';
 
 const antIcon = <LoadingOutlined spin />;
 
@@ -164,7 +166,7 @@ export default ({ data, id, updateApi }) => {
             <Row gutter={[15, 15]}>
             {tags.map((y, i) => (
               <Col key={i}>
-                <Tag className="info-tag info-black" onClick={() => onAdd(y)}>
+                <Tag className="info-tag info-black" onClick={() => allowed([Roles.ADVANCEMENT], 'write') ? onAdd(y): null}>
                   <Space size={15}>
                     <span>{y.skill_name}</span>
                     <PlusCircleFilled />
@@ -174,13 +176,14 @@ export default ({ data, id, updateApi }) => {
             ))}
             </Row>
           </Col>
+          {allowed([Roles.ADVANCEMENT], 'write') && 
           <Col span={24}>
             <Row gutter={24} justify='end'>
               <Col>
                 <Button size='large' type='primary' htmlType='submit' className='green-btn'>Save Changes</Button>
               </Col>
             </Row>
-          </Col>
+          </Col>}
         </Row>
         </Form>
       </Spin>
