@@ -122,7 +122,7 @@ export const deleteSingleTeam = (id) => {
 };
 
 export const getSingleRole = (id) => {
-  return axios.get(`${apiresource}/User Roles/${id}`);
+  return axios.get(`${apiMethod}/hrms.setup.get_single_role_record?role_id=${id}`);
 };
 
 export const addUserRoles = (payload) => {
