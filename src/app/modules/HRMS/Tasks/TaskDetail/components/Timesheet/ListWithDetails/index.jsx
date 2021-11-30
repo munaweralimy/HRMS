@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ListCard from '../../../../../../../molecules/ListCard';
 import DetailsComponent from '../../../../../../../molecules/HRMS/DetailsComponent';
 import moment from 'moment';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 
 export default ({details, updateApi}) => {
 
@@ -11,6 +13,10 @@ export default ({details, updateApi}) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [approverID, setApproverID] = useState('');
+
+  const userID = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const isAdmin = allowed([Roles.REQUESTS]);
+  console.log('isAdmin', isAdmin)
 
   const btnList = [
     {
@@ -93,11 +99,10 @@ return (
         mainTitle={detailTitle}
         backbtnTitle={heading}
         data={rowData}
-        btn1title={'Approve'}
-        btn2title={'Reject'}
-        ApproverID={approverID}
-        onAction1={onAction1}
-        onAction2={onAction2}
+        btn1title={approverID == userID || isAdmin ? 'Approve' : null}
+        btn2title={approverID == userID || isAdmin ? 'Reject' : null}
+        onAction1={approverID == userID || isAdmin ? onAction1 : null}
+        onAction2={approverID == userID || isAdmin ? onAction2 : null}
         btnClass1='green-btn'
         btnClass2='red-btn'
       />

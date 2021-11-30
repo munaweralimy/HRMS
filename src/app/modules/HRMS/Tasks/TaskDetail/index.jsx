@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Typography, Card, Tabs, Form, Spin, message } from 'antd';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleTaskDetail, getAddProjectName, getTimesheet} from '../ducks/actions';
+import { getSingleTaskDetail, getAddProjectName, getTimesheet } from '../ducks/actions';
 import StaffDetails from '../../StaffDetails';
 import Timesheet from './components/Timesheet';
 import Projects from './components/Projects';
@@ -100,18 +100,18 @@ export default (props) => {
     if (val.form_projects.length > 0) {
       let proj = [];
       val.form_projects.map((item) => {
-          proj.push({
-              employee_id: id,
-              project_name: item.project.label,
-          });
+        proj.push({
+          employee_id: id,
+          project_name: item.project.label,
+        });
       });
       const json = {
-          projects: proj
+        projects: proj
       };
       let url = `${apiMethod}/hrms.tasks_api.add_projects`;
       try {
         const res = await axios.post(url, json);
-        if (res.data.message.success ==  false) {
+        if (res.data.message.success == false) {
           message.error(res.data.message.message);
         } else {
           message.success(res.data.message.message);
@@ -138,29 +138,29 @@ export default (props) => {
             <Button icon={<LeftOutlined />} size='middle' className="c-graybtn small-btn" onClick={() => history.push(`/requests/${id}`)}>Categories</Button>
           </Col>
           <Col span={24}>
-        <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
-            <TabPane tab="Timesheet" key="1">
+            <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
+              <TabPane tab="Timesheet" key="1">
                 <Timesheet id={id} updateApi={updateTimesheet} data={timesheetData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
-            </TabPane>
-            <TabPane tab="Projects" key="2">
+              </TabPane>
+              <TabPane tab="Projects" key="2">
                 <Form onFinish={handleSubmit(onFinish)} layout="vertical" scrollToFirstError={true}>
                   <Spin indicator={antIcon} size="large" spinning={load}>
-                    <Projects 
-                    title='Projects in Hand'
-                    btnTitle='+ Add other project'
-                    data={options} 
-                    deleted={deleted}
-                    setDeleted={setDeleted} 
-                    tags={tags} 
-                    setTags={setTags} 
-                    control={control}
-                    errors={errors}
+                    <Projects
+                      title='Projects in Hand'
+                      btnTitle='+ Add other project'
+                      data={options}
+                      deleted={deleted}
+                      setDeleted={setDeleted}
+                      tags={tags}
+                      setTags={setTags}
+                      control={control}
+                      errors={errors}
                     />
                   </Spin>
                 </Form>
-            </TabPane>
-        </Tabs>
-        </Col>
+              </TabPane>
+            </Tabs>
+          </Col>
         </Row>
       </Card>
     </StaffDetails>

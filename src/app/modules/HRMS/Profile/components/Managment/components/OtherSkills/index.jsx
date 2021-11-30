@@ -46,14 +46,14 @@ export default ({ data, id, updateApi }) => {
       if (x.name == '') {
         skills.push({
           skill_name: x.skill_name,
-          supervisor_assessment: 0,
+          //supervisor_assessment: 0,
           self_staff_assessment: x.self_staff_assessment,
         });
       } else {
         skills.push({
           name: x.name,
           skill_name: x.skill_name,
-          supervisor_assessment: 0,
+          //supervisor_assessment: 0,
           self_staff_assessment: x.self_staff_assessment,
         });
       }
@@ -88,7 +88,7 @@ export default ({ data, id, updateApi }) => {
     append({
       name: '',
       skill_name: '',
-      supervisor_assessment: 0,
+      //supervisor_assessment: 0,
       self_staff_assessment: 0,
     });
   };

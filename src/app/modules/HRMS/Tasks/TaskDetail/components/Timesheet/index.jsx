@@ -4,6 +4,8 @@ import ListWithDetails from './ListWithDetails';
 import { apiMethod } from '../../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 import axios from '../../../../../../../services/axiosInterceptor';
+import { allowed } from '../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../routing/config/Roles';
 
 const { TabPane } = Tabs;
 const antIcon = <LoadingOutlined spin />;
@@ -112,8 +114,13 @@ export default (props) => {
       }
 
     const onApprove = async (name) => {
-        setLoad(true)
-        let url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved`
+        setLoad(true);
+        let url = ''
+        if(allowed([Roles.REQUESTS])) {
+          url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=Admin`
+        } else {
+          url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=`
+        }
         try {
             await axios.get(url);
             setLoad(false)
@@ -129,7 +136,12 @@ export default (props) => {
 
     const onReject = async (name) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected`
+        let url = ''
+        if(allowed([Roles.REQUESTS])) {
+          url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected&role=Admin`
+        } else {
+          url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected&role=`
+        }
         try {
             await axios.get(url);
             setLoad(false)
