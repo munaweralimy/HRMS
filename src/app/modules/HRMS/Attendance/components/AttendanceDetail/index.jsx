@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 import { updateAttendance } from '../../ducks/services';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 const AttendanceDetails = (props) => {

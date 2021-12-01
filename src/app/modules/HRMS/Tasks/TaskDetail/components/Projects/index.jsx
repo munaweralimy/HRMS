@@ -3,6 +3,8 @@ import { Row, Col, Button, Tag, Card, Typography } from 'antd';
 import { SelectField } from '../../../../../../atoms/FormElement';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { useFieldArray } from 'react-hook-form';
+import { allowed } from '../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../routing/config/Roles';
 
 const { Title } = Typography;
 
@@ -49,7 +51,7 @@ export default (props) => {
             {tags.map((tag, index) => (
               <Col span={24} key={index}>
                 <Tag
-                  closable
+                  closable={allowed([Roles.TASK_TEAMS, Roles.TASK], 'delete')}
                   closeIcon={<CloseCircleFilled />}
                   className="program-list"
                   key={tag.name}
@@ -90,9 +92,10 @@ export default (props) => {
           ))}
         </Row>
       </Col>
+      {allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') && 
       <Col span={24}>
           <Button htmlType='button'type="dashed" size='large' className='w-100' onClick={onAdd}>{btnTitle}</Button>
-      </Col>
+      </Col>}
       <Col span={24}>
         <Row gutter={20} justify="end">
           <Col>

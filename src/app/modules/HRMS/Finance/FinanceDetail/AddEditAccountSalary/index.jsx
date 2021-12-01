@@ -8,6 +8,8 @@ import { LeftOutlined } from '@ant-design/icons';
 import SalaryInformation from '../../components/AccountSalaryForms/SalaryInformation';
 import AddAccount from '../../components/AccountSalaryForms/AddAccount';
 import AddAllowence from '../../components/AccountSalaryForms/AddAllowances';
+import Roles from '../../../../../../routing/config/Roles';
+import {allowed} from '../../../../../../routing/config/utils';
 
 const AddEditAccountSalary = (props) => {
   const { accountData, allowanceData, salaryInfo } = props;
@@ -22,11 +24,11 @@ const AddEditAccountSalary = (props) => {
   const empEditRecords = [
     {
       heading: 'Account List',
-      btnAcation: (
+      btnAcation: allowed([Roles.FINANCE], 'write') ? (
         <Button size="large" type="primary" onClick={() => onFormViewHandler('accountForm', '')}>
           + Add New Account
         </Button>
-      ),
+      ) : null,
 
       empHistoryCol: [
         {
@@ -52,11 +54,11 @@ const AddEditAccountSalary = (props) => {
     },
     {
       heading: 'Allowances List',
-      btnAcation: (
+      btnAcation: allowed([Roles.FINANCE], 'write') ? (
         <Button size="large" type="primary" onClick={() => onFormViewHandler('allowanceForm', '')}>
           + Add New Allowence
         </Button>
-      ),
+      ) : null,
 
       empHistoryCol: [
         {

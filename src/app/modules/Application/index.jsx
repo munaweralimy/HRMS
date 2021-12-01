@@ -30,7 +30,7 @@ export default (props) => {
     
     
     useEffect(() => {
-        dispatch(getPolicyList());
+        dispatch(getPolicyList(company));
         dispatch(getTimesheetData(company));
         //dispatch(getCalenderData());
     }, [])
@@ -40,13 +40,13 @@ export default (props) => {
            <Col span={24}>
                <Dashboard policyData={policyData} timesheetData={timesheetData} />
            </Col>
-           {allowed([Roles.REQUESTS]) ? <Col span={24}>
+           {allowed([Roles.REQUESTS], 'read') ? <Col span={24}>
                <RequestList dashboard={true} />
            </Col> : null}
-           {allowed([Roles.ADVANCEMENT]) ? <Col span={24}>
+           {allowed([Roles.ADVANCEMENT], 'read') ? <Col span={24}>
                <StaffPerformance />
            </Col> : null}
-           {allowed([Roles.SETUP]) ? <Col span={24}>
+           {allowed([Roles.SETUP], 'read') ? <Col span={24}>
                 <PendingRequests />
             </Col> : null}
        </Row>

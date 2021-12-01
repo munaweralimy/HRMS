@@ -110,7 +110,7 @@ export default (props) => {
             </Radio.Button>
           </Radio.Group>
         </Space>
-        {topbtn && (
+        {topbtn && topbtn.title && (
           <Button type="primary" size="large" className="green-btn" onClick={topbtn.topAction}>
             {topbtn.title}
           </Button>

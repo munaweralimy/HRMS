@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import { Row, Col, Typography, Button } from 'antd';
 import FormGroup from '../../../../../../../../molecules/FormGroup';
 import {bloodList} from '../../../../../../../../../configs/constantData';
+import { allowed } from '../../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../../routing/config/Roles';
 
 const { Title } = Typography;
 
@@ -66,7 +68,7 @@ export default (props) => {
             <FormGroup item={item} control={control} errors={errors} />
         </Fragment>
         ))}
-        {mode == 'edit' && 
+        {mode == 'edit' && allowed([Roles.EMPLOYMENT], 'write') &&
         <Col span={24}>
         <Row gutter={20} justify='end'>
             <Col><Button type='primary' htmlType='submit' size='large' className='green-btn'>Save Changes</Button></Col>

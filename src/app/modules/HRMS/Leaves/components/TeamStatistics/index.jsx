@@ -56,6 +56,7 @@ export default (props) => {
   const dispatch = useDispatch();
   const leaveStatAnnualList = useSelector(state => state.leaves.leaveStatAnnualList);
   const leaveStatisticsBar = useSelector(state => state.leaves.leaveStatisticsBar);
+  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
 
   const getCompanyPercent = (totalLeaves, totalTaken) => {
     const percent = totalTaken / totalLeaves * 100;
@@ -68,7 +69,7 @@ export default (props) => {
   }
 
   useEffect(() => {
-    dispatch(getLeaveStatisticBar());
+    dispatch(getLeaveStatisticBar(company));
   }, []);
 
   const onClickRow = (record) => {
@@ -78,7 +79,7 @@ export default (props) => {
   }
 
   function callback(key) {
-    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type));
+    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type), company);
   }
 
   const leavesPanelHeader = (item, index) => (

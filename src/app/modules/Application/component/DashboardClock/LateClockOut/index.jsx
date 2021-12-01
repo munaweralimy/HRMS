@@ -17,13 +17,14 @@ const LateclockOut = (props) => {
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
   const dispatch = useDispatch();
+  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
 
   const onFormSubmitHandler = (values) => {
     setLoad(true);
     let time = values?.hour.concat(':', values?.min, ' ', values.time_type.value);
     console.log({ time });
     const payload = {
-      company: 'Limkokwing University Creative Technology',
+      company: company,
       employee_id: lateData?.employee,
       attendance_id: lateData?.name,
       clock_in_date: moment(values?.clock_in_date, 'Do MMMM YYYY').format('YYYY-MM-DD'),

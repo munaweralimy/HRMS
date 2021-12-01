@@ -10,6 +10,8 @@ import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../../../../configs/constantData';
 import DetailsComponent from '../../../../../molecules/HRMS/DetailsComponent';
 import moment from 'moment';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -219,7 +221,7 @@ export default (props) => {
                 pageSize: limit
               }}
               />}
-              {addVisible && <AddNewTimeSheet id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
+              {addVisible && allowed([Roles.TASK_INDIVIDUAL], 'write') && <AddNewTimeSheet id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
               {rowDetails && (
                 <DetailsComponent 
                   setRecord={setRecord}
@@ -227,7 +229,7 @@ export default (props) => {
                   mainTitle='Timesheet Details'
                   backbtnTitle='My Timesheet'
                   data={rowData}
-                  onAction3={onEdit}
+                  onAction3={allowed([Roles.TASK_INDIVIDUAL], 'write') ? onEdit : null}
                   btn3title={'Edit Timesheet'}
                   />
               )}

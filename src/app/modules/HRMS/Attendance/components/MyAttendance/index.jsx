@@ -91,9 +91,10 @@ export default (props) => {
   const [searching, setSearching] = useState(null)
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   
   useEffect(() => {
-    dispatch(getMyAttendance(id, page, limit, '', '', null));
+    dispatch(getMyAttendance(id, page, limit, '', '', null, company));
   }, []);
 
   const onSearch = (search) => {
@@ -105,10 +106,10 @@ export default (props) => {
           m_status: search?.status ? search?.status.value : '',
         }
         setSearching(searchVal);
-        dispatch(getMyAttendance(id, 1, limit, '', '', searchVal));
+        dispatch(getMyAttendance(id, 1, limit, '', '', searchVal, company));
       } else {
         setSearching(null);
-        dispatch(getMyAttendance(id, 1, limit, '', '', null));
+        dispatch(getMyAttendance(id, 1, limit, '', '', null, company));
       }
   };
 
@@ -116,9 +117,9 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searching));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searching, company));
     } else {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', '', searching));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', '', searching, company));
     }
   };
 

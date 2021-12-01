@@ -26,7 +26,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
-    if (allowed([Roles.REQUESTS])) {
+    if (allowed([Roles.REQUESTS], 'read')) {
       dispatch(getRequestDetails(id, null));
     } else {
       dispatch(getRequestDetails(id, uid));
@@ -41,7 +41,6 @@ export default (props) => {
 
   useEffect(() => {
     if (dataRequest.length > 0) {
-      console.log('data', dataRequest)
       setRequests({
         pending: dataRequest.filter((value) => value.status == 'Pending' && value.requester_id != uid),
         yourrequests: dataRequest.filter((value) => value.status == 'Pending' && value.requester_id == uid),
@@ -53,7 +52,7 @@ export default (props) => {
   }, [dataRequest]);
 
   const updateReqApi = () => {
-    if (allowed([Roles.REQUESTS])) {
+    if (allowed([Roles.REQUESTS], 'read')) {
       dispatch(getRequestDetails(id));
     } else {
       dispatch(getRequestDetails(id, uid));
@@ -79,7 +78,7 @@ return (
             </Row>
           </Card>
         </Col>
-        {allowed([Roles.REQUESTS]) ?
+        {allowed([Roles.REQUESTS, Roles.REQUESTS_MANAGER], 'read') ?
         <Col span={24}>
           <EmployeeServices id={id} />
         </Col> : null}

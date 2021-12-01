@@ -116,7 +116,7 @@ export default (props) => {
     const onApprove = async (name) => {
         setLoad(true);
         let url = ''
-        if(allowed([Roles.REQUESTS])) {
+        if(allowed([Roles.TASK], 'write')) {
           url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=Admin`
         } else {
           url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=`
@@ -137,7 +137,7 @@ export default (props) => {
     const onReject = async (name) => {
         setLoad(true)
         let url = ''
-        if(allowed([Roles.REQUESTS])) {
+        if(allowed([Roles.TASK], 'write')) {
           url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected&role=Admin`
         } else {
           url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected&role=`

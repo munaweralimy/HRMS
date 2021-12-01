@@ -9,6 +9,8 @@ import { getFileName, uniquiFileName, getSingleUpload } from '../../../../../../
 import moment from 'moment';
 import { contractApi, employApi } from '../../../../../ducks/services';
 import MainForm from './MainForm';
+import Roles from '../../../../../../../../../routing/config/Roles';
+import {allowed} from '../../../../../../../../../routing/config/utils';
 
   const colName = [
     {
@@ -310,7 +312,7 @@ export default (props) => {
                 ListCol={colName}
                 ListData={data?.contracts}
                 pagination={false}
-                extraBtn={'+ Add New Contract'}
+                extraBtn={allowed([Roles.EMPLOYMENT], 'write') ? '+ Add New Contract' : null}
                 extraAction={addNew}
                 listClass="nospace-card"
                 classes='clickRow'

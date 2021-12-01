@@ -8,6 +8,8 @@ import { SwitchField } from '../../../../../atoms/FormElement';
 import { updateLoan, addNewLoan, deleteLoan } from '../../ducks/services';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 const AddLoan = (props) => {
@@ -102,16 +104,18 @@ const AddLoan = (props) => {
             <Row gutter={24} justify="end">
               {data?.name ? (
                 <>
+                {allowed([Roles.FINANCE], 'delete') && 
                   <Col>
                     <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
                       Delete Loan
                     </Button>
-                  </Col>
+                  </Col>}
+                  {allowed([Roles.FINANCE], 'write') && 
                   <Col>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn">
                       Save Changes
                     </Button>
-                  </Col>
+                  </Col>}
                 </>
               ) : (
                 <Col>

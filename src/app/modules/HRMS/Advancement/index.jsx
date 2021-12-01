@@ -139,7 +139,7 @@ export default (props) => {
 
   const tabs = [
     {
-      visible: allowed([Roles.ADVANCEMENT_TEAMS]),
+      visible: allowed([Roles.ADVANCEMENT], 'read'),
       title: 'Overall Fit Index',
       key: 'overall',
       count: data?.count,
@@ -169,7 +169,7 @@ export default (props) => {
       <Col span={24}>
         <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
       </Col>
-      {allowed([Roles.ADVANCEMENT]) && 
+      {allowed([Roles.ADVANCEMENT], 'read') && 
       <Col span={24}>
         <Acquisitions />
       </Col>}
