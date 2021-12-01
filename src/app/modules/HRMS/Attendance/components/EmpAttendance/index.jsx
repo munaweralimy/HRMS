@@ -145,7 +145,7 @@ export default (props) => {
             Categories
           </Button>
         </Col>
-        {viewForm ? (
+        {viewForm && allowed([Roles.ATTENDANCE_TEAMS, Roles.ATTENDANCE], 'write') ? (
           <Col span={24}>
             <Button
               type="link"

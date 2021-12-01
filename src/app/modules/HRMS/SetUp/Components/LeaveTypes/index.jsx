@@ -9,6 +9,7 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import { getLeaveTypesList, getAllApprovers, getLeaveList } from '../../ducks/actions';
 import { deleteSingleLeave } from '../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
+const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -117,7 +118,7 @@ export default (props) => {
       };
       setSearchVal(searchVal);
       setPage(1);
-      dispatch(getLeaveTypesList(1, 10, '', '', searchVal));
+      dispatch(getLeaveTypesList(1, 10, '', '', searchVal, company));
     }
   };
 
@@ -125,21 +126,21 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, company));
     } else {
-      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, '', '', company));
     }
   };
 
   useEffect(() => {
     if (!visible) {
-      dispatch(getLeaveTypesList(page, limit, '', ''));
+      dispatch(getLeaveTypesList(page, limit, '', '', company));
     }
   }, [visible]);
 
   useEffect(() => {
     dispatch(getAllApprovers());
-    dispatch(getLeaveList());
+    dispatch(getLeaveList(company));
   }, []);
 
   return (

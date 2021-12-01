@@ -144,7 +144,7 @@ export default (props) => {
 
   const tabs = [
     {
-      visible: allowed([Roles.EMPLOYMENT]),
+      visible: allowed([Roles.EMPLOYMENT], 'read'),
       title: 'Overall Employment',
       key: 'overall',
       count: data?.count,
@@ -169,7 +169,7 @@ export default (props) => {
         addonkey: 'exp_type',
         topbtn: {
           topAction: () => history.push('/employment/add'),
-          title: '+ Add New Employee'
+          title: allowed([Roles.EMPLOYMENT], 'write') ? '+ Add New Employee' : null
         }
       },
     },

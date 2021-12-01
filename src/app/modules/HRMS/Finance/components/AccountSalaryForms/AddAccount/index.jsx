@@ -6,6 +6,8 @@ import { addAccount } from './FormFileds';
 import FormGroup from '../../../../../../molecules/FormGroup';
 import { updateAccount, addNewAccount, deleteAccount } from '../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 const AddAccount = (props) => {
@@ -75,16 +77,18 @@ const AddAccount = (props) => {
             <Row gutter={24} justify="end">
               {selectedAccout?.name ? (
                 <>
+                {allowed([Roles.FINANCE], 'write') && 
                   <Col>
                     <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
                       Delete Account
                     </Button>
-                  </Col>
+                  </Col>}
+                  {allowed([Roles.FINANCE], 'delete') && 
                   <Col>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn">
                       Save Changes
                     </Button>
-                  </Col>
+                  </Col>}
                 </>
               ) : (
                 <Col>

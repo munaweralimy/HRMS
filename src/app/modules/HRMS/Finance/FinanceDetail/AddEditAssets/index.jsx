@@ -8,6 +8,8 @@ import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
 import AddAsset from '../../components/AddAssest';
 import moment from 'moment';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 const assetsCol = [
   {
@@ -93,11 +95,12 @@ const AddEditAssets = (props) => {
                 scrolling={500}
               />
             </Col>
+            {allowed([Roles.FINANCE], 'write') &&
             <Col>
               <Button size="large" type="primary" onClick={onFormViewer}>
                 + Add New Asset
               </Button>
-            </Col>
+            </Col>}
           </Row>
         </Col>
       )}

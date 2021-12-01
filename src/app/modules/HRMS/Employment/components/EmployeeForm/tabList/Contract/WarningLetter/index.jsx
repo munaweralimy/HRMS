@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getWarnLetter } from '../../../../../ducks/action';
 import moment from 'moment';
 import { createRequest, getRequest, getApproverLead } from '../../../../../../Requests/ducks/services';
+import { allowed } from '../../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../../routing/config/Roles';
 
 const colName = [
   {
@@ -253,7 +255,7 @@ export default (props) => {
                 ListCol={colName}
                 ListData={data?.warningLetter}
                 pagination={false}
-                extraBtn={'Issue Warning Letter'}
+                extraBtn={allowed([Roles.EMPLOYMENT], 'write') ? 'Issue Warning Letter' : null}
                 extraAction={addNew}
                 btnClass='red-btn'
                 listClass="nospace-card"
@@ -273,16 +275,16 @@ export default (props) => {
                 title={'Issue Warning Letter'}
                 fieldsList={insuranceFields}
                 backbtnTitle='Warning Letter History'
-                btnMain={{
+                btnMain={allowed([Roles.EMPLOYMENT], 'write') ? {
                   title: 'Proceed',
                   class: 'red-btn',
                   nomain: recordData != null,
-                }}
-                extrabtn={{
+                }: null}
+                extrabtn={allowed([Roles.EMPLOYMENT], 'delete') ? {
                     title: 'Delete',
                     class: 'red-btn',
                     onAction: onDelete
-                }}
+                } : null}
                 />
               </Form>
             </Col>}

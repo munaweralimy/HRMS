@@ -14,11 +14,11 @@ export const getPendingIssues = (company) => {
   };
 };
 
-export const getPolicyList = () => {
+export const getPolicyList = (company) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_policy_list?company=Limkokwing University Creative Technology`);
+    } = await axios.get(`${apiMethod}/hrms.api.get_policy_list?company=${company}`);
     dispatch({
       type: action_types.POLICY_LIST,
       data: message,

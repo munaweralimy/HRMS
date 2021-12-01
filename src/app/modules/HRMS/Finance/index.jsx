@@ -137,7 +137,7 @@ const Finance = () => {
 
   const tabs = [
     {
-      visible: allowed([Roles.FINANCE]),
+      visible: allowed([Roles.FINANCE], 'read'),
       title: 'Overall Finance',
       key: 'overall',
       count: overallFinance?.count,

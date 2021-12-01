@@ -152,6 +152,7 @@ export default (props) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const il8n = useTranslate();
+  
   const { t } = il8n;
   const overallData = useSelector(state => state.tasks.overallTaskData);
   const overallDataList = useSelector(state => state.tasks.overallTaskDataWithStatus);
@@ -165,6 +166,7 @@ export default (props) => {
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   let activeTab = ''
 
   useEffect(() => {
@@ -245,12 +247,12 @@ export default (props) => {
           company:  search?.company ? search?.company.value : '',
           team_name: search?.team ? search?.team.value : '',
         }
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal, company1))
       } else {
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, null))
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, null, company1))
       }
     } else {
-      dispatch(getOverallTasks(page, limit, sort, sortby));
+      dispatch(getOverallTasks(page, limit, sort, sortby, company1));
     }
   }
 
@@ -264,13 +266,13 @@ export default (props) => {
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
           project: search?.project ? search?.project.value : '',
         }
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal))
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal, company1))
       } else {
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null))
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null, company1))
       }
       
     } else {
-      dispatch(getTeamTasks(team, page, limit, sort, sortby));
+      dispatch(getTeamTasks(team, page, limit, sort, sortby, company1));
     }    
   }
 

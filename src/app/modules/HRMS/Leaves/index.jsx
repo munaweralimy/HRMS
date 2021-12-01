@@ -196,6 +196,7 @@ export default (props) => {
   const team = useSelector(state => state.global.teams);
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
+  const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
 
   let activeTab = ''
 
@@ -255,12 +256,12 @@ export default (props) => {
           company:  search?.company ? search?.company.value : '',
           team_name: search?.team ? search?.team.value : '',
         }
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, searchVal))
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, searchVal, company1))
       } else {
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, null))
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, null, company1))
       }
     } else {
-      dispatch(getOverallTasks(page, limit, sort, employeeId, sortby));
+      dispatch(getOverallTasks(page, limit, sort, employeeId, sortby, company1));
     }
   }
 
@@ -273,20 +274,20 @@ export default (props) => {
           employee_name: search?.name ? search?.name : '',
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
         }
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal))
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal, company1))
       } else {
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null))
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null, company1))
       }
       
     } else {
-      dispatch(getTeamTasks(team, page, limit, sort, sortby));
+      dispatch(getTeamTasks(team, page, limit, sort, sortby, company1));
     }
   }
 
   
   const tabs = [
     {
-      visible: allowed([Roles.LEAVES]),
+      visible: allowed([Roles.LEAVES], 'read'),
       title: 'Overall Leaves',
       key: 'overall',
       count: overallData?.count || overallDataList?.count || 0,
@@ -312,7 +313,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.LEAVES_TEAMS]),
+      visible: allowed([Roles.LEAVES_TEAMS], 'read'),
       title: 'Team Leaves',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
@@ -334,7 +335,7 @@ export default (props) => {
       Comp: MultiView,
     },
     {
-      visible: allowed([Roles.LEAVES_INDIVIDUAL]),
+      visible: allowed([Roles.LEAVES_INDIVIDUAL], 'read'),
       title: 'My Leaves',
       key: 'myleaves',
       Comp: MyLeaves,

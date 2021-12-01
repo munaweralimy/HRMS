@@ -7,6 +7,8 @@ import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
 import AddLoan from '../../components/AddLoan';
 import moment from 'moment';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 const loanCol = [
   {
@@ -100,11 +102,12 @@ const AddEditLoans = (props) => {
                 scrolling={500}
               />
             </Col>
+            {allowed([Roles.FINANCE], 'write') &&
             <Col>
               <Button size="large" type="primary" onClick={onFormViewer}>
                 + Add New Loan
               </Button>
-            </Col>
+            </Col>}
           </Row>
         </Col>
       )}

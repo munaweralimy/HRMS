@@ -2,11 +2,12 @@ import axios from '../../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../../configs/constants';
 
-export const getOverallAttendance = (page, limit, order, orderby) => async (dispatch) => {
+
+export const getOverallAttendance = (page, limit, order, orderby, company) => async (dispatch) => {
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.attendance_api.get_overall_attendance_pagination?page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.attendance_api.get_overall_attendance_pagination?company=${company}&page_number=${page}&limit=${limit}${
       order ? `&order=${order}&orderby=creation` : ''
     }`,
   );
@@ -16,7 +17,7 @@ export const getOverallAttendance = (page, limit, order, orderby) => async (disp
   });
 };
 
-export const getOverallAttendanceList = (page, limit, order, orderby, search = null) => async (dispatch) => {
+export const getOverallAttendanceList = (page, limit, order, orderby, search = null, company) => async (dispatch) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -26,7 +27,7 @@ export const getOverallAttendanceList = (page, limit, order, orderby, search = n
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.attendance_api.get_overall_attendance_pagination_list?page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.attendance_api.get_overall_attendance_pagination_list?company=${company}&page_number=${page}&limit=${limit}${
       order ? `&order=${ordering}&orderby=${orderby}` : ''
     }${search ? '&filters=' + JSON.stringify(search) : ''}`
   );
@@ -36,11 +37,11 @@ export const getOverallAttendanceList = (page, limit, order, orderby, search = n
   });
 };
 
-export const getTeamAttendance = (team, page, limit, order, orderby) => async (dispatch) => {
+export const getTeamAttendance = (team, page, limit, order, orderby, company) => async (dispatch) => {
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.attendance_api.get_my_team_attendance_pagination?company=Limkokwing University Creative Technology&team=${team}&page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.attendance_api.get_my_team_attendance_pagination?company=${company}&team=${team}&page_number=${page}&limit=${limit}${
       order ? `&order=${order}` : ''
     }`,
   );
@@ -49,7 +50,7 @@ export const getTeamAttendance = (team, page, limit, order, orderby) => async (d
     data: message,
   });
 };
-export const getTeamAttendanceList = (team, page, limit, order, orderby, search = null) => async (dispatch) => {
+export const getTeamAttendanceList = (team, page, limit, order, orderby, search = null, company) => async (dispatch) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -59,7 +60,7 @@ export const getTeamAttendanceList = (team, page, limit, order, orderby, search 
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.attendance_api.get_my_team_attendance_pagination_list?company=Limkokwing University Creative Technology&team=${team}&page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.attendance_api.get_my_team_attendance_pagination_list?company=${company}&team=${team}&page_number=${page}&limit=${limit}${
       orderby ? `&order=${ordering}&orderby=${orderby}` : ''
     }${search ? '&filters=' + JSON.stringify(search) : ''}`
   );
@@ -68,7 +69,7 @@ export const getTeamAttendanceList = (team, page, limit, order, orderby, search 
     data: message,
   });
 };
-export const getMyAttendance = (employeeID, page, limit, order, orderby, search = null) => async (dispatch) => {
+export const getMyAttendance = (employeeID, page, limit, order, orderby, search = null, company) => async (dispatch) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -78,7 +79,7 @@ export const getMyAttendance = (employeeID, page, limit, order, orderby, search 
   const {
     data: { message },
   } = await axios.get(
-    `${apiMethod}/hrms.attendance_api.get_single_employee_attendance_pagination?employee=${employeeID}&page_number=${page}&limit=${limit}${
+    `${apiMethod}/hrms.attendance_api.get_single_employee_attendance_pagination?company=${company}&employee=${employeeID}&page_number=${page}&limit=${limit}${
       orderby ? `&order=${ordering}&orderby=${orderby}` : ''
     }${search ? '&filters=' + JSON.stringify(search) : ''}`
   );

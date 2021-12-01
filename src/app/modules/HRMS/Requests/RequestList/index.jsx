@@ -58,7 +58,7 @@ export default (props) => {
 
   const tabs = [
     {
-      visible: allowed([Roles.REQUESTS_MANAGER]),
+      visible: allowed([Roles.REQUESTS_MANAGER, Roles.REQUESTS], 'read'),
       title: 'Staff Requests',
       key: 'pending',
       count: dataPending?.count,
@@ -75,7 +75,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.REQUESTS_INDIVIDUAL]),
+      visible: allowed([Roles.REQUESTS_INDIVIDUAL], 'read'),
       title: 'My Requests',
       key: 'yourrequests',
       count: dataYour?.count,
@@ -95,7 +95,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.REQUESTS_MANAGER]),
+      visible: allowed([Roles.REQUESTS_MANAGER, Roles.REQUESTS], 'read'),
       title: 'Archive',
       key: 'archive',
       Comp: RequestSection,
@@ -113,7 +113,7 @@ export default (props) => {
   ]
 
   useEffect(() => {
-    if (allowed(Roles.REQUESTS)) {
+    if (allowed([Roles.REQUESTS, Roles.REQUESTS_MANAGER], 'read')) {
       setActiveKey('pending')
     } else {
       setActiveKey('yourrequests')

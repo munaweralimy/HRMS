@@ -17,10 +17,11 @@ export default (props) => {
 
   const il8n = useTranslate();
   const { t } = il8n;
+  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   const dispatch = useDispatch();
   const policyListData = useSelector((state) => state.policy.policyListData);
   const [visible, setVisible] = useState(false);
-  const callList = () => dispatch(getPolicyList());
+  const callList = () => dispatch(getPolicyList(company));
   
   const btnList = [
     {
@@ -53,7 +54,7 @@ export default (props) => {
     try {
       await axios.delete(url);
       message.success('Policy Successfully Deleted');
-      dispatch(getPolicyList());
+      dispatch(getPolicyList(company));
       props.setLoading(false);
     } catch (e) {
       const { response } = e;
@@ -78,7 +79,7 @@ export default (props) => {
     
     try {
         await axios.put(url, json);
-        dispatch(getPolicyList());
+        dispatch(getPolicyList(company));
     } catch(e) {
         const { response } = e;
         message.error(response?.data?.message);

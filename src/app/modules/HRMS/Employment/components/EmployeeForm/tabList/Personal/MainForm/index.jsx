@@ -12,6 +12,8 @@ import {
   titleList,
 } from '../../../../../../../../../configs/constantData';
 import { emailCheck } from '../../../../../ducks/services';
+import { allowed } from '../../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../../routing/config/Roles';
 
 const _ = require('lodash');
 const { Title } = Typography;
@@ -835,7 +837,7 @@ export default (props) => {
           )}
         </Fragment>
       ))}
-      {mode == 'edit' && (
+      {mode == 'edit' && allowed([Roles.EMPLOYMENT], 'write') && (
         <Col span={24}>
           <Row gutter={20} justify="end">
             <Col>

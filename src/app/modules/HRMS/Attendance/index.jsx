@@ -18,6 +18,7 @@ import Roles from '../../../../routing/config/Roles';
 import { allowed } from '../../../../routing/config/utils';
 import { getCompany, getTeams, getTeamsDetail } from '../../Application/ducks/actions';
 
+
 const ListColOverall = [
   {
     title: 'Date In',
@@ -194,6 +195,7 @@ export default (props) => {
   const team = useSelector(state => state.global.teams);
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
+  const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
 
   let activeTab = '';
@@ -254,12 +256,12 @@ export default (props) => {
             team: search?.team ? search?.team.value : '',
             m_status: search?.status ? search?.status.value : '',
           }
-          dispatch(getOverallAttendanceList(page, limit, sort, sortby, searchVal));
+          dispatch(getOverallAttendanceList(page, limit, sort, sortby, searchVal, company1));
         } else {
-          dispatch(getOverallAttendanceList(page, limit, sort, sortby, null));
+          dispatch(getOverallAttendanceList(page, limit, sort, sortby, null, company1));
         }
     } else {
-      dispatch(getOverallAttendance(page, limit, sort, sortby));
+      dispatch(getOverallAttendance(page, limit, sort, sortby, company1));
     }
   };
 
@@ -273,13 +275,13 @@ export default (props) => {
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
           m_status: search?.status ? search?.status.value : '',
         }
-        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, searchVal));
+        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, searchVal, company1));
       } else {
-        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, null));
+        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, null, company1));
       }
       
     } else {
-      dispatch(getTeamAttendance(team, page, limit, sort, sortby));
+      dispatch(getTeamAttendance(team, page, limit, sort, sortby, company1));
     }
   };
 

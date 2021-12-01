@@ -7,6 +7,8 @@ import axios from '../../../../../../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../../../../../../configs/constants';
 import moment from 'moment';
 import Activations from '../Activations';
+import { allowed } from '../../../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../../../routing/config/Roles';
 
   const custom = [
     {
@@ -412,11 +414,11 @@ export default (props) => {
         onBack={onBack}
         setValue={setValue}
         mode={mode}
-        noButton={mode == 'add' ? true : false}
+        noButton={mode == 'add' ? true : allowed([Roles.EMPLOYMENT], 'write') ? false : true}
         title={'Employment Contract'}
         fieldsList={contractDetails}
         backbtnTitle='Employment History'
-        extraComp={<Activations id={id} data={recordData} setLoad={setLoad} onBack={onBack} updateApi={updateApi} />}
+        extraComp={allowed([Roles.EMPLOYMENT], 'write') ? <Activations id={id} data={recordData} setLoad={setLoad} onBack={onBack} updateApi={updateApi} /> : null}
         />
     )
 }

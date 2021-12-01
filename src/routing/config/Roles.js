@@ -1,6 +1,6 @@
 export default {
     ADVANCEMENT: 'advancement',
-    EMPLOYMENT: "employement",
+    EMPLOYMENT: "employment",
     FINANCE: "finance",
     REPORTS: "reports",
     SETUP: "setup",

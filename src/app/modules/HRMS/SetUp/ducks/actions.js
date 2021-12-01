@@ -420,11 +420,11 @@ export const getEmployeeList = (companyName) => async (dispatch) => {
   });
 };
 
-export const getLeaveList = () => async (dispatch) => {
+export const getLeaveList = (company) => async (dispatch) => {
   const {
     data: { data },
   } = await axios.get(
-    'http://cms2dev.limkokwing.net/api/resource/HRMS Leave Type?filters=[["company","=","Limkokwing University Creative Technology"]]&fields=["name","leave_type"]',
+    `http://cms2dev.limkokwing.net/api/resource/HRMS Leave Type?filters=[["company","=",${company}]]&fields=["name","leave_type"]`,
   );
   dispatch({
     type: action_types.LEAVE_TYPE,
