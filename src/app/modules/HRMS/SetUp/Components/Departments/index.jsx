@@ -17,7 +17,7 @@ export default (props) => {
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const departmentList = useSelector((state) => state.setup.departmentList);
-  console.log({ departmentList });
+
   useEffect(() => {
     if (!visible) {
       dispatch(getDepartments(page, limit, '', ''));

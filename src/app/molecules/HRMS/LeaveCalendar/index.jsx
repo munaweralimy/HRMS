@@ -192,7 +192,7 @@ export default (props) => {
                             dateCellRender={dateCellRender} 
                             disabledDate = {
                                 current => {
-                                return  moment(current).day() === 0 || moment(current).day() === 6 
+                                return  moment(current).day() === 0
                               }
                             }
                             onSelect={onCellSelect}

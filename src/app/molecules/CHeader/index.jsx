@@ -68,16 +68,14 @@ export default (props) => {
                 placeholder="Select option"
                 style={{ width: 190 }}
                 options={[
-                  { value: 'Marketing', label: 'Marketing' },
-                  { value: 'Faculty', label: 'Faculty' },
-                  { value: 'Quality Assurance', label: 'Quality Assurance' },
+                  { value: 'Human Resource', label: 'Human Resource' },
                 ]}
               />
               <Input
                 size="large"
                 prefix={<SearchIcon />}
                 className="search-input"
-                placeholder="Search Quality Assurance..."
+                placeholder="Search HRMS..."
               />
             </Space>
           </Col>
