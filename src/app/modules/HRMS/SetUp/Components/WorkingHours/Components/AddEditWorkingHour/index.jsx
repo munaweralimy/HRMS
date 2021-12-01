@@ -9,6 +9,9 @@ import { workType, timelap } from '../../../../../../../../configs/constantData'
 import { LoadingOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { addWorkingHourTemp, updateWorkingHourTemp, deleteWorkingHourTemp } from '../../../../ducks/services';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
+
 const antIcon = <LoadingOutlined spin />;
 const init = {
   day: '',
@@ -331,6 +334,7 @@ export default (props) => {
                 <Row gutter={24}>
                   {workingHourTemp.name ? (
                     <>
+                    {allowed([Roles.SETUP], 'delete') && 
                       <Col span={12}>
                         <Button
                           size="large"
@@ -341,7 +345,7 @@ export default (props) => {
                         >
                           Delete
                         </Button>
-                      </Col>
+                      </Col>}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

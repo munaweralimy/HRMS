@@ -7,6 +7,8 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getWarningLetterList, showWarningLetter, getAllApprovers, getALlLetterTemp } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 export default (props) => {
   const dispatch = useDispatch();
@@ -14,10 +16,11 @@ export default (props) => {
   const [searchValue, setSearchVal] = useState(null);
   const [limit, setLimit] = useState(10);
   const warningLetterListData = useSelector((state) => state.setup.warningLetterListData);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
     dispatch(getWarningLetterList(page, limit, '', ''));
-    dispatch(getAllApprovers());
+    dispatch(getAllApprovers(company));
     dispatch(getALlLetterTemp());
   }, []);
 
@@ -91,7 +94,7 @@ export default (props) => {
   return (
     <Row gutter={[20, 30]}>
       <Col span={24}>
-        <HeadingChip title="Warning Letter" btnList={btnList} />
+        <HeadingChip title="Warning Letter" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
       </Col>
       <Col span={24}>
         <ListCard

@@ -9,9 +9,11 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import { getLeaveTypesList, getAllApprovers, getLeaveList } from '../../ducks/actions';
 import { deleteSingleLeave } from '../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
-const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 export default (props) => {
+  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   const [visible, setVisible] = useState(false);
   const [leaveType, setLeaveTpe] = useState('');
   const [page, setPage] = useState(1);
@@ -104,8 +106,10 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setLeaveTpe(record);
         setVisible(true);
+        }
       },
     };
   };
@@ -118,7 +122,7 @@ export default (props) => {
       };
       setSearchVal(searchVal);
       setPage(1);
-      dispatch(getLeaveTypesList(1, 10, '', '', searchVal, company));
+      dispatch(getLeaveTypesList(1, 10, '', '', searchVal));
     }
   };
 
@@ -126,20 +130,20 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, company));
+      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
-      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, '', '', company));
+      dispatch(getLeaveTypesList(pagination.current, pagination.pageSize, '', ''));
     }
   };
 
   useEffect(() => {
     if (!visible) {
-      dispatch(getLeaveTypesList(page, limit, '', '', company));
+      dispatch(getLeaveTypesList(page, limit, '', ''));
     }
   }, [visible]);
 
   useEffect(() => {
-    dispatch(getAllApprovers());
+    dispatch(getAllApprovers(company));
     dispatch(getLeaveList(company));
   }, []);
 
@@ -147,7 +151,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Leave Types" btnList={btnList} />
+          <HeadingChip title="Leave Types" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard

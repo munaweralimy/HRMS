@@ -5,13 +5,16 @@ import { useForm } from 'react-hook-form';
 import { raceFields } from './FormFields';
 import { addSingleRace, updateSingleRace, deleteSingleRace } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
+
 export default (props) => {
   const { title, onClose, race } = props;
   const { Title, Text } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
-  console.log({ race });
+  
   const onFinish = (values) => {
     setLoad(true);
     const payload = {
@@ -59,6 +62,7 @@ export default (props) => {
         onClose();
       });
   };
+  
   useEffect(() => {
     if (race.race.length > 0) {
       setValue('race_name', race.race);
@@ -97,11 +101,12 @@ export default (props) => {
                 </>
               ) : (
                 <>
+                {allowed([Roles.SETUP], 'delete') && 
                   <Col span={12}>
                     <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteNationality}>
                       Delete
                     </Button>
-                  </Col>
+                  </Col>}
                   <Col span={12}>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                       Save

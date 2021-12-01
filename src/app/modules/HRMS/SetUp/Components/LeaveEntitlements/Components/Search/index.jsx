@@ -8,12 +8,13 @@ import { filterLeaveType, filterLeaveEntitlementName } from '../../../../ducks/a
 const { Title } = Typography;
 
 export default (props) => {
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   const { control, handleSubmit } = useForm();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(filterLeaveType());
-    dispatch(filterLeaveEntitlementName());
+    dispatch(filterLeaveType(company));
+    dispatch(filterLeaveEntitlementName(company));
   }, []);
 
   const filterLeaveName = useSelector((state) => state.setup.filterLeaveType);

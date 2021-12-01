@@ -190,9 +190,9 @@ export default (props) => {
         <div className="twocol-3070">
           <div className="side-detail">
             {isHDScreen ? (
-              <SideDetails data={sideData} type="button" bottom={allowed([Roles.EMPLOYMENT]) ? bottomList : null} />
+              <SideDetails data={sideData} type="button" bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null} />
             ) : (
-              <SideDetailResponsive data={sideData} type="button" bottom={allowed([Roles.EMPLOYMENT]) ? bottomList : null} />
+              <SideDetailResponsive data={sideData} type="button" bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null} />
             )}
           </div>
           <div className="side-form">

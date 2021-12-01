@@ -9,6 +9,8 @@ import {
   deleteSingleLeaveEntitlement,
 } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -282,11 +284,12 @@ export default (props) => {
                     </>
                   ) : (
                     <>
+                    {allowed([Roles.SETUP], 'delete') && 
                       <Col span={6}>
                         <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
                           Delete
                         </Button>
-                      </Col>
+                      </Col>}
                       <Col span={6}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

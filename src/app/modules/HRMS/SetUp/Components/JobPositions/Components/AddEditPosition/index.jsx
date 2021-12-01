@@ -8,6 +8,8 @@ import AddUser from '../../../Teams/Components/AddUser';
 import { SliderFiled } from '../../../../../../../atoms/FormElement';
 import { getSingleJob, addjobPosition, updatejobPosition, deletejobPosition } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -18,6 +20,7 @@ export default (props) => {
   const { control, errors, setValue, watch, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
   const employeeList = useSelector((state) => state.setup.employeeList);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   const skillSet = [
     { label: 'Work Quality', fieldname: 'work_quality', updateVal: watch('work_quality', 1) },
@@ -60,7 +63,7 @@ export default (props) => {
   const onFinish = async (val) => {
     setLoad(true);
     const payload = {
-      company: 'Limkokwing University Creative Technology',
+      company: company,
       job_position_name: val.job_position_name,
       work_quality: val.work_quality,
       work_speed: val.work_speed,
@@ -158,6 +161,7 @@ export default (props) => {
                 <Row gutter={24}>
                   {jobPosition.name ? (
                     <>
+                    {allowed([Roles.SETUP], 'delete') && 
                       <Col span={12}>
                         <Button
                           size="large"
@@ -168,7 +172,7 @@ export default (props) => {
                         >
                           Delete
                         </Button>
-                      </Col>
+                      </Col>}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

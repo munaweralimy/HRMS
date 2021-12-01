@@ -79,7 +79,7 @@ export default (props) => {
   }
 
   function callback(key) {
-    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type), company);
+    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type, company));
   }
 
   const leavesPanelHeader = (item, index) => (

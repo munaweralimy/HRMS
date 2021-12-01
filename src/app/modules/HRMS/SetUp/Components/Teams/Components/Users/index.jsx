@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { getDepartmentList } from '../../../../ducks/services';
 
 const Users = (props) => {
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   const { title, addNewUser, onClose, department } = props;
   const { Title } = Typography;
   const [departmentData, setDepartmentData] = useState([]);
@@ -18,7 +19,7 @@ const Users = (props) => {
 
   useEffect(() => {
     if (department?.bool) {
-      getDepartmentList(department.deptName).then((response) => {
+      getDepartmentList(department.deptName, company).then((response) => {
         let data = response?.data?.message;
         setDepartmentData(data);
       });

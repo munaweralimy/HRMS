@@ -71,7 +71,7 @@ export default (props) => {
         <Card bordered={false} className='navBar'>
         <Row gutter={[30, 24]}>
             <Col span={24} className='text-center'>
-                <Image style={{width: 160, height: 'auto'}} preview={false} src={loginLogo} alt="Limkokwing University of Creative Technology" />
+                <Image style={{width: 160, height: 'auto'}} preview={false} src={loginLogo} alt="Logo" />
             </Col>
             <Col span={24}>
                 <Card bordered={false} className='transparent-card' style={{ height: 'calc(100vh - 220px)'}}>

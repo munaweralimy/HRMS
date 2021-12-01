@@ -27,14 +27,14 @@ export default (props) => {
   console.log('leaveApproversData', leaveApproversData)
 
   useEffect(() => {
-    dispatch(getLeaveType());
+    dispatch(getLeaveType(company));
     dispatch(getHolidaysList(company))
   }, []);
 
 
   const onLeaveChange = (e) => {
-    dispatch(getLeaveData(e.label, company, id));
-    dispatch(getLeaveApprovers(e.label, company, id));
+    dispatch(getLeaveData(e.label, id, company));
+    dispatch(getLeaveApprovers(e.label, id, company));
   }
 
   const onFinish = async (val) => {

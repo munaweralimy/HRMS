@@ -3,7 +3,7 @@ import * as action_types from "./constants";
 import { apiMethod, apiresource } from "../../../../../configs/constants";
 
 
-export const getRequestPending = (page, sort, limit, id) => {
+export const getRequestPending = (page, sort, limit, id, company) => {
     return async (dispatch) => {
         const {
             data: { message },
@@ -27,7 +27,7 @@ export const getEmployeeStatus = (id) => {
     };
 };
 
-export const getRequestArchive = (page, sort, limit, id) => {
+export const getRequestArchive = (page, sort, limit, id, company) => {
     return async(dispatch) => {
         const {
             data: { message },
@@ -39,7 +39,7 @@ export const getRequestArchive = (page, sort, limit, id) => {
     };
 };
 
-export const getYourRequest = (page, sort, limit, id) => {
+export const getYourRequest = (page, sort, limit, id, company) => {
     return async(dispatch) => {
         const {
             data: { message },
