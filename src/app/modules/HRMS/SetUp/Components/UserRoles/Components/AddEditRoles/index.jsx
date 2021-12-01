@@ -7,6 +7,8 @@ import { totalRoles } from './FormFields';
 import { getSingleRole, addUserRoles, updateUserRoles, deleteUserRoles } from '../../../../ducks/services';
 import { LoadingOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { CheckboxGroup, InputField } from '../../../../../../../atoms/FormElement';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -20,6 +22,7 @@ export default (props) => {
   const { control, errors, setValue, reset, handleSubmit, getValues } = useForm();
   const employeeList = useSelector((state) => state.setup.employeeList);
   const [seachPermission, setSearchPermission] = useState('');
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
     if (roleData.name.length > 0) {
@@ -75,7 +78,7 @@ export default (props) => {
       role_name: values.role_name,
       grand_permissions: permissions,
       user_staff: userData.map((value) => ({ employee: value.name })),
-      company: 'Limkokwing University Creative Technology',
+      company: company,
     };
     console.log({ payload });
     !roleData.name
@@ -271,6 +274,7 @@ export default (props) => {
                 <Row gutter={24}>
                   {roleData.name ? (
                     <>
+                    {allowed([Roles.SETUP], 'delete') && 
                       <Col span={12}>
                         <Button
                           size="large"
@@ -281,7 +285,7 @@ export default (props) => {
                         >
                           Delete
                         </Button>
-                      </Col>
+                      </Col>}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

@@ -84,6 +84,7 @@ export default (props) => {
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
   const singleAttendanceDetail = useSelector((state) => state.attendance.singleAttendance);
   const totalAbsent = useSelector((state) => state.attendance.totalAbsent);
+  const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
 
   const onRowClick = (record) => {
     return {
@@ -97,7 +98,7 @@ export default (props) => {
   };
 
   useEffect(() => {
-    dispatch(getMyAttendance(id, page, limit, '', ''));
+    dispatch(getMyAttendance(id, page, limit, '', '', company1));
     dispatch(getTotalAttendance(id));
   }, [id]);
 
@@ -106,7 +107,7 @@ export default (props) => {
       dispatch(getSingleAttendanceDetail(empID));
     } else if (!viewForm) {
       setPage(1);
-      dispatch(getMyAttendance(id, 1, 6, '', ''));
+      dispatch(getMyAttendance(id, 1, 6, '', '', company1));
       dispatch(getTotalAttendance(id));
     }
   }, [empID, viewForm]);
@@ -122,9 +123,9 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, company1));
     } else {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', ''));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', '', company1));
     }
   };
   return (

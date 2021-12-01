@@ -6,6 +6,8 @@ import { holidayInputFields } from './FormFields';
 import { addSingleHoliday, updateSingleHoliday, deleteSingleHoliday } from '../../../../ducks/services';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -14,12 +16,13 @@ export default (props) => {
   const { Title, Text } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   const onFinish = (values) => {
     setLoad(true);
     const payload = {
       holiday_name: values.holiday_name,
-      company: 'Limkokwing University Creative Technology',
+      company: company,
       holiday_date: moment(values.holiday_date).format('YYYY-MM-DD'),
       note: values.note,
     };
@@ -110,11 +113,12 @@ export default (props) => {
                 </>
               ) : (
                 <>
+                {allowed([Roles.SETUP], 'delete') && 
                   <Col span={12}>
                     <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
                       Delete
                     </Button>
-                  </Col>
+                  </Col>}
                   <Col span={12}>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                       Save

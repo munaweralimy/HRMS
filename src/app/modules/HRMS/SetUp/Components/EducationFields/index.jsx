@@ -9,6 +9,8 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import { getEducationalFieldsList } from '../../ducks/actions';
 import { deleteEducationLeave } from '../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -108,8 +110,10 @@ export default (props) => {
   const onRowClick = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setField(record);
         setVisible(true);
+        }
       },
     };
   };
@@ -118,7 +122,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Education Fields" btnList={btnList} />
+          <HeadingChip title="Education Fields" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard

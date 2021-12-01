@@ -7,6 +7,8 @@ import { getSingleProject, addProject, updateProjecat, deleteProject } from '../
 import { projectFields } from './FormFields';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 
 const antIcon = <LoadingOutlined spin />;
 
@@ -18,6 +20,7 @@ export default (props) => {
   const { control, errors, setValue, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
   const employeeList = useSelector((state) => state.setup.employeeList);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
     if (projectData.name.length > 0) {
@@ -50,7 +53,7 @@ export default (props) => {
     const payload = {
       project_code: values.project,
       project: values.project,
-      company: 'Limkokwing University Creative Technology',
+      company: company,
       user_staff: userData.map((value) => ({ employee: value.id })),
     };
     projectData.name.length == 0
@@ -122,6 +125,7 @@ export default (props) => {
                 <Row gutter={24}>
                   {projectData.name ? (
                     <>
+                    {allowed([Roles.SETUP], 'delete') && 
                       <Col span={12}>
                         <Button
                           size="large"
@@ -132,7 +136,7 @@ export default (props) => {
                         >
                           Delete
                         </Button>
-                      </Col>
+                      </Col>}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

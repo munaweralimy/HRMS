@@ -245,9 +245,9 @@ export const deleteWorkingHourTemp = (id) => {
 export const getWorkingHourTempDetail = (id) => {
   return axios.get(`${apiresource}/Work Hour Template/${id}`);
 };
-export const getDepartmentList = (id) => {
+export const getDepartmentList = (id, company) => {
   return axios.get(
-    `${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}&company=Limkokwing University Creative Technology`,
+    `${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}&company=${company}`,
   );
 };
 

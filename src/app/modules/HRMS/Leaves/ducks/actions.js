@@ -44,11 +44,11 @@ export const getCarryForwardStatus = (id) => {
   };
 };
 
-export const getTeamTasks = (task, page, limit, order, orderby) => {
+export const getTeamTasks = (task, page, limit, order, orderby, company) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list?team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list?company=${company}&team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
       dispatch({
         type: action_types.TEAM_LEAVES,
         data: message,
@@ -129,7 +129,7 @@ export const getLeaveStatisticBar = (company) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_bar?company=${company}&leave_type=Annual Leave&company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_bar?company=${company}&leave_type=Annual Leave`);
     dispatch({
       type: action_types.STATISTIC_BAR,
       data: message,

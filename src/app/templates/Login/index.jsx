@@ -21,7 +21,7 @@ export default (props) => {
           <Col flex='0 0 536px'>
             <Row gutter={[24, 50]}>
               <Col span={24} className='text-center'>
-                <Image style={{width: 240, height: 'auto'}} preview={false} src={loginLogo} alt="Limkokwing University of Creative Technology" />
+                <Image style={{width: 240, height: 'auto'}} preview={false} src={loginLogo} alt="Logo" />
               </Col>
               <Col span={24}>
                 <Card bordered={false} className='login-card'>

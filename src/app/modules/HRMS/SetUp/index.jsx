@@ -30,13 +30,14 @@ export default (props) => {
   const [tabComp, setTabComp] = useState(null);
   const dispatch = useDispatch();
   const warningLetterData = useSelector((state) => state.setup.viewWarninLette);
-  console.log({ warningLetterData });
-  dispatch(getEmployeeList('Limkokwing University Creative Technology'));
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+  
+  dispatch(getEmployeeList(company));
   const data = [
     {
       tabTitle: 'Teams',
       comp: <Teams />,
-      permission: true,
+      permission: false,
     },
     {
       tabTitle: 'Leave Types',

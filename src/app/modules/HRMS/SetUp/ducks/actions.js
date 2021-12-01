@@ -424,7 +424,7 @@ export const getLeaveList = (company) => async (dispatch) => {
   const {
     data: { data },
   } = await axios.get(
-    `http://cms2dev.limkokwing.net/api/resource/HRMS Leave Type?filters=[["company","=",${company}]]&fields=["name","leave_type"]`,
+    `${apiresource}/HRMS Leave Type?filters=[["company","=","${company}"]]&fields=["name","leave_type"]`,
   );
   dispatch({
     type: action_types.LEAVE_TYPE,
@@ -457,17 +457,17 @@ export const getUserList =
 export const getSkillList = () => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get('http://cms2dev.limkokwing.net/api/resource/Skill');
+  } = await axios.get(`${apiresource}/Skill`);
   dispatch({
     type: action_types.SKILLS_LIST,
     data: data,
   });
 };
-export const getAllApprovers = () => async (dispatch) => {
+export const getAllApprovers = (company) => async (dispatch) => {
   const {
     data: { data },
   } = await axios.get(
-    'http://cms2dev.limkokwing.net/api/resource/HRMS%20Approver?%20filters=[[company,=,Limkokwing%20University%20Creative%20Technology]]%20&fields=[%22name%22,%22approver_name%22,%22approver_id%22]',
+    `${apiresource}/HRMS Approver?filters=[["company","=","${company}"]]&fields=["name","approver_name","approver_id"]`,
   );
   dispatch({
     type: action_types.ALL_APPROVERS,
@@ -520,11 +520,11 @@ export const getTempList = () => async (dispatch) => {
   });
 };
 
-export const getAllDepartmentList = () => async (dispatch) => {
+export const getAllDepartmentList = (company) => async (dispatch) => {
   const {
     data: { data },
   } = await axios.get(
-    `http://cms2dev.limkokwing.net/api/resource/HRMS Department?filters=[["company","=", "Limkokwing University Creative Technology" ]]&fields=["name","department_name"]&order_by=name&start=1 `,
+    `${apiresource}/HRMS Department?filters=[["company","=", "${company}"]]&fields=["name","department_name"]&order_by=name&start=1 `,
   );
   dispatch({
     type: action_types.GET_DEAPRTMENTS,
@@ -535,36 +535,36 @@ export const getAllDepartmentList = () => async (dispatch) => {
 export const getALlLetterTemp = () => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(`http://cms2dev.limkokwing.net/api/resource/Letter Template`);
+  } = await axios.get(`${apiresource}/Letter Template`);
   dispatch({
     type: action_types.LETTER_TEMP,
     data: data,
   });
 };
 
-export const getSpecificEmployee = (url, id) => async (dispatch) => {
+export const getSpecificEmployee = (url, id, company) => async (dispatch) => {
   const {
     data: { message },
-  } = await axios.get(`${apiMethod}/${url}?name_id=${id}&company=Limkokwing University Creative Technology`);
+  } = await axios.get(`${apiMethod}/${url}?name_id=${id}&company=${company}`);
   dispatch({
     type: action_types.GET_USER_SPCIFIC,
     data: message,
   });
 };
-export const filterLeaveType = () => async (dispatch) => {
+export const filterLeaveType = (company) => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(`${apiresource}/HRMS Leave Type?filters=[["company", "=", "Limkokwing University Creative Technology"]]&fields=["name","leave_type"]
+  } = await axios.get(`${apiresource}/HRMS Leave Type?filters=[["company", "=", "${company}"]]&fields=["name","leave_type"]
   `);
   dispatch({
     type: action_types.FILTER_LEAVE_TYPE,
     data: data,
   });
 };
-export const filterLeaveEntitlementName = () => async (dispatch) => {
+export const filterLeaveEntitlementName = (company) => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(`${apiresource}/HRMS Leave Entitlement?filters=[["company", "=", "Limkokwing University Creative Technology"]]&fields=["name"]
+  } = await axios.get(`${apiresource}/HRMS Leave Entitlement?filters=[["company", "=", "${company}"]]&fields=["name"]
   `);
   dispatch({
     type: action_types.FILTER_ENTITLEMENT,
