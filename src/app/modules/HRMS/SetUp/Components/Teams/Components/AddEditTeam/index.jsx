@@ -6,6 +6,8 @@ import { addNewTeamFields } from './FormFields';
 import AddUser from '../AddUser';
 import { addSingleTeam, updateSingleTeam, deleteSingleTeam, getSingleTeam } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -15,6 +17,7 @@ export default (props) => {
   const [userData, setUserData] = useState([]);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
   const [load, setLoad] = useState(false);
+  const employeeList = useSelector((state) => state.setup.employeeList);
 
   useEffect(() => {
     if (team.name.length > 0) {
@@ -23,8 +26,8 @@ export default (props) => {
         setTeamData(response?.data?.data);
         setUserData(
           response?.data?.data?.user_staff.map((value) => ({
-            full_name: value.employee_full_name,
-            id: value.employee,
+            employee_name: value.employee_full_name,
+            name: value.employee,
           })),
         );
         setLoad(false);
@@ -119,7 +122,7 @@ export default (props) => {
           <Col span={12}>
             <Row gutter={[24, 30]}>
               <Col span={24}>
-                <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
+                <AddUser userData={userData} setUserData={setUserData} title="Team Member" allListing={employeeList} />
               </Col>
               <Col span={24}>
                 <Row gutter={24}>

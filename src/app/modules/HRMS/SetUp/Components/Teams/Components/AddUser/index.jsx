@@ -10,7 +10,6 @@ const tabVals = [
 const AddUser = (props) => {
   const { userData, setUserData, title, department, allListing } = props;
   const { Title, Text } = Typography;
-  const [visible, setVisible] = useState(false);
   const [tabVal, setTabVal] = useState(tabVals[0]?.value);
   const [allUsers, setAllUsers] = useState(allListing);
   const [onSearhUser, setOnSearchUser] = useState('');

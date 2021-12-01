@@ -17,6 +17,7 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, watch, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
+  const employeeList = useSelector((state) => state.setup.employeeList);
 
   const skillSet = [
     { label: 'Work Quality', fieldname: 'work_quality', updateVal: watch('work_quality', 1) },
@@ -32,12 +33,11 @@ export default (props) => {
         setTeamData(response?.data?.data);
         setUserData(
           response?.data?.data?.user_staff.map((value) => ({
-            full_name: value.employee_full_name,
-            id: value.employee,
+            employee_name: value.employee_full_name,
+            name: value.employee,
           })),
         );
         setLoad(false);
-
       });
     } else {
       reset();
@@ -152,7 +152,7 @@ export default (props) => {
           <Col span={8}>
             <Row gutter={[24, 30]}>
               <Col span={24}>
-                <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
+                <AddUser userData={userData} setUserData={setUserData} title="Team Member" allListing={employeeList} />
               </Col>
               <Col span={24}>
                 <Row gutter={24}>

@@ -9,7 +9,6 @@ import {
   deleteDepartment,
   getSingleDepartment,
 } from '../../../../ducks/services';
-import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
 import AddUser from '../../../Teams/Components/AddUser';
 const antIcon = <LoadingOutlined spin />;
@@ -79,8 +78,8 @@ export default (props) => {
       getSingleDepartment(departmentField.name).then((response) => {
         setUserData(
           response?.data?.data?.team.map((value) => ({
-            full_name: value.team_name,
-            id: value.team,
+            employee_name: value.team_name,
+            name: value.team,
           })),
         );
       });
