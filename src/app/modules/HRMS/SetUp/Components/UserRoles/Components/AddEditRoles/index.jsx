@@ -48,9 +48,9 @@ export default (props) => {
       setValue('role_name', teamData.role_name);
       if (teamData.grand_permissions.length) {
         teamData.grand_permissions.map((value) => {
-          setValue(`${value.permission_name}-read`, [value.read]);
-          setValue(`${value.permission_name}-write`, [value.write]);
-          setValue(`${value.permission_name}-delete`, [value.delete]);
+          setValue(`${value.permission_name}-read`, value.read == 1 ? [value.read] : []);
+          setValue(`${value.permission_name}-write`, value.write == 1 ? [value.write] : []);
+          setValue(`${value.permission_name}-delete`, value.delete == 1 ? [value.delete] : []);
           if (value.read == 1 && value.write == 1 && value.delete == 1) {
             setValue(`${value.permission_name}`, [1]);
           }
