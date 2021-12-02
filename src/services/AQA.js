@@ -1,11 +1,10 @@
-import authInterceptors from './axiosInterceptor'
-const apiResource = process.env.REACT_APP_BASE_URL + "/api/resource";
-const apiMethod = process.env.REACT_APP_BASE_URL + "/api/method";
+import axios from './axiosInterceptor'
+import { apiMethod, apiresource } from '../configs/constants';
 
 export const getInstitutions=()=> {
-    return authInterceptors.get(`${apiResource}/Institutions`);
+    return axios.get(`${apiresource}/Institutions`);
 }
 
 export const createFaculty=(data)=>{
-    return authInterceptors.post(`${apiResource}/Institution Faculty`,data)
+    return axios.post(`${apiresource}/Institution Faculty`,data)
 }

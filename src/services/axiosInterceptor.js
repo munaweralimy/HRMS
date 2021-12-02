@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { baseUrl } from '../configs/constants';
+import { apiMethod } from '../configs/constants';
 import { refreshAuth } from '../services/services';
-const apiMethod = process.env.REACT_APP_BASE_URL + '/api/method';
 const auth = apiMethod + '/frappe.integrations.oauth2.get_token';
 
 const authInterceptors = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: baseUrl,
 });
 authInterceptors.interceptors.request.use(
   (config) => {
