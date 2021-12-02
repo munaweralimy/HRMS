@@ -11,7 +11,7 @@ const getQueryString = (data = {}) => {
 export const authentications = (username, password) => {
   const data = {
     grant_type: 'password',
-    client_id: 'b9092f2e04',
+    client_id: '684e559103',
     redirect_url: 'https://getpostman.com/oauth2/callback',
     username: username,
     password: password,

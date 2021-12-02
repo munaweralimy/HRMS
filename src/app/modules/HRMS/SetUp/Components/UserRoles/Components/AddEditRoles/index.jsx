@@ -48,16 +48,18 @@ export default (props) => {
       setValue('role_name', teamData.role_name);
       if (teamData.grand_permissions.length) {
         teamData.grand_permissions.map((value) => {
-          setValue(`${value.permission_name}-read`, [value.read]);
-          setValue(`${value.permission_name}-write`, [value.write]);
-          setValue(`${value.permission_name}-delete`, [value.delete]);
+          setValue(`${value.permission_name}-read`, value.read == 1 ? [value.read] : []);
+          setValue(`${value.permission_name}-write`, value.write == 1 ? [value.write] : []);
+          setValue(`${value.permission_name}-delete`, value.delete == 1 ? [value.delete] : []);
           if (value.read == 1 && value.write == 1 && value.delete == 1) {
             setValue(`${value.permission_name}`, [1]);
+          } else {
+            setValue(`${value.permission_name}`, []);
           }
         });
+      } else {
+        reset({ role_name: teamData.role_name });
       }
-    } else {
-      reset();
     }
   }, [teamData]);
 
@@ -232,7 +234,7 @@ export default (props) => {
                         class="mb-0 fullWidth-checbox"
                         control={control}
                         initValue=""
-                        option={[{ label: 'Read', value: 1 }]}
+                        option={[{ label: 'Visibility', value: 1 }]}
                         onChange={() => onSingelCheckhandler(value)}
                       />
                       <CheckboxGroup
@@ -241,7 +243,7 @@ export default (props) => {
                         class="mb-0 fullWidth-checbox"
                         control={control}
                         initValue=""
-                        option={[{ label: 'Write', value: 1 }]}
+                        option={[{ label: 'Modify', value: 1 }]}
                         onChange={() => onSingelCheckhandler(value)}
                       />
                       <CheckboxGroup
@@ -274,18 +276,19 @@ export default (props) => {
                 <Row gutter={24}>
                   {roleData.name ? (
                     <>
-                    {allowed([Roles.SETUP], 'delete') && 
-                      <Col span={12}>
-                        <Button
-                          size="large"
-                          type="primary"
-                          htmlType="button"
-                          className="red-btn w-100"
-                          onClick={onDeleteTeam}
-                        >
-                          Delete
-                        </Button>
-                      </Col>}
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            className="red-btn w-100"
+                            onClick={onDeleteTeam}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save
