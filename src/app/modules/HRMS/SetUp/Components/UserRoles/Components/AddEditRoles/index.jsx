@@ -53,6 +53,8 @@ export default (props) => {
           setValue(`${value.permission_name}-delete`, value.delete == 1 ? [value.delete] : []);
           if (value.read == 1 && value.write == 1 && value.delete == 1) {
             setValue(`${value.permission_name}`, [1]);
+          } else {
+            setValue(`${value.permission_name}`, []);
           }
         });
       } else {
