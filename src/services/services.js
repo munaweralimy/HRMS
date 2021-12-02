@@ -1,5 +1,5 @@
 import axiosInterceptor from './axiosInterceptor';
-const apiMethod = process.env.REACT_APP_BASE_URL + '/api/method';
+import { apiMethod, apiresource } from '../configs/constants';
 const auth = apiMethod + '/frappe.integrations.oauth2.get_token';
 
 const getQueryString = (data = {}) => {
