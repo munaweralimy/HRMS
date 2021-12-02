@@ -9,9 +9,10 @@ const tabVals = [
 
 const AddUser = (props) => {
   const { userData, setUserData, title, department, allListing } = props;
+  console.log({ allListing });
   const { Title, Text } = Typography;
   const [tabVal, setTabVal] = useState(tabVals[0]?.value);
-  const [allUsers, setAllUsers] = useState(allListing);
+  const [allUsers, setAllUsers] = useState([]);
   const [onSearhUser, setOnSearchUser] = useState('');
 
   const onTabClickHandler = (e) => {
@@ -56,6 +57,10 @@ const AddUser = (props) => {
       );
     }
   }, [userData]);
+
+  useEffect(() => {
+    setAllUsers(allListing);
+  }, [allListing]);
 
   return (
     <Card bordered={false} className="uni-card b-black">
