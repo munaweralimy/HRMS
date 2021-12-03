@@ -33,7 +33,7 @@ function getDateData(data, cDate) {
   let sDate = null;
   let eDate = null;
   let array = [];
-  if (data) {
+  if (data && data.length) {
     data?.map(resp => {
       sDate = moment(resp?.start_date).format('YYYY-MM-DD');
       eDate = moment(resp?.end_date).format('YYYY-MM-DD');

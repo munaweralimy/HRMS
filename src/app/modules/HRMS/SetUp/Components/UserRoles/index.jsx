@@ -88,8 +88,10 @@ export default (props) => {
     return {
       onClick: () => {
         if (allowed([Roles.SETUP], 'write')) {
-        setUserFileds(record);
-        setVisible(true);
+        if (record.role_name != 'Staff') {
+          setUserFileds(record);
+          setVisible(true);
+        }
         }
       },
     };
@@ -105,7 +107,6 @@ export default (props) => {
     }
   };
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
