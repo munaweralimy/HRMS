@@ -233,7 +233,7 @@ export default (props) => {
     const createWorkingHourTemp = {
       company: val?.company.value,
       template_name: val?.template_name,
-      user_staff: userData.map((value) => ({ employee: value.id })),
+      user_staff: userData.map((value) => ({ employee: value.name })),
       work_hours: val?.work_hours.map((value) => ({
         day: value.day,
         time_type: value.time_type.value,
@@ -334,18 +334,19 @@ export default (props) => {
                 <Row gutter={24}>
                   {workingHourTemp.name ? (
                     <>
-                    {allowed([Roles.SETUP], 'delete') && 
-                      <Col span={12}>
-                        <Button
-                          size="large"
-                          type="primary"
-                          htmlType="button"
-                          className="red-btn w-100"
-                          onClick={onDeleteWorkingHourTemp}
-                        >
-                          Delete
-                        </Button>
-                      </Col>}
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            className="red-btn w-100"
+                            onClick={onDeleteWorkingHourTemp}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

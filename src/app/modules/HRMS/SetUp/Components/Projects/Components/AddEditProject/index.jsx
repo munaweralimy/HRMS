@@ -54,7 +54,7 @@ export default (props) => {
       project_code: values.project,
       project: values.project,
       company: company,
-      user_staff: userData.map((value) => ({ employee: value.id })),
+      user_staff: userData.map((value) => ({ employee: value.name })),
     };
     projectData.name.length == 0
       ? addProject(payload).then((response) => {
@@ -125,18 +125,19 @@ export default (props) => {
                 <Row gutter={24}>
                   {projectData.name ? (
                     <>
-                    {allowed([Roles.SETUP], 'delete') && 
-                      <Col span={12}>
-                        <Button
-                          size="large"
-                          type="primary"
-                          htmlType="button"
-                          className="red-btn w-100"
-                          onClick={onDeleteTeam}
-                        >
-                          Delete
-                        </Button>
-                      </Col>}
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            className="red-btn w-100"
+                            onClick={onDeleteTeam}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

@@ -55,8 +55,8 @@ export default (props) => {
     const payload = {
       team_name: values.team_name,
       team_leader: values.team_leader.value,
-      company: values.company.value,
-      user_staff: userData.map((value) => ({ employee: value.id })),
+      // company: values.company.value,
+      user_staff: userData.map((value) => ({ employee: value.name })),
       department: values.department.value,
     };
     team.name.length == 0
@@ -130,18 +130,19 @@ export default (props) => {
                 <Row gutter={24}>
                   {team.name ? (
                     <>
-                    {allowed([Roles.SETUP], 'delete') &&
-                      <Col span={12}>
-                        <Button
-                          size="large"
-                          type="primary"
-                          htmlType="button"
-                          className="red-btn w-100"
-                          onClick={onDeleteTeam}
-                        >
-                          Delete
-                        </Button>
-                      </Col>}
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            className="red-btn w-100"
+                            onClick={onDeleteTeam}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save
