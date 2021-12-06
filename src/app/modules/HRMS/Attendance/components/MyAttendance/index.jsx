@@ -1,10 +1,11 @@
-import React from 'react';
-import { Card, Typography } from 'antd';
+import React, {useState, useEffect} from 'react';
+import { Card } from 'antd';
 import Search from '../Search/OverallSearch';
 import ListCard from '../../../../../molecules/ListCard';
 import moment from 'moment';
-
-const { Title } = Typography;
+import { useDispatch, useSelector } from 'react-redux';
+import MySearch from '../Search/MySearch';
+import { getMyAttendance } from '../../ducks/actions';
 
 const ListCol = [
   {
@@ -68,25 +69,73 @@ const ListCol = [
   },
 ];
 
+const statusList = [
+  {label: 'All', value: ''},
+  {label: 'Absent', value: 'Absent'},
+  {label: 'On Leave', value: 'On Leave'},
+  {label: 'Half Day', value: 'Half Day'},
+  {label: 'On Duty', value: 'On Duty'},
+  {label: 'Rest Day', value: 'Rest Day'},
+  {label: 'Holiday', value: 'Holiday'},
+  {label: 'Late Clock In', value: 'Late Clock In'},
+  {label: 'Early Clock Out', value: 'Early Clock Out'},
+  {label: 'Replacement Leave', value: 'Replacement Leave'},
+  {label: 'Late Clock Out', value: 'Late Clock Out'},
+]
+
 export default (props) => {
-  const { iProps } = props;
-  const { listdata, listcount, onTableChange, limit, page } = iProps;
-  const onSearch = (value) => {
-    console.log('check values', value);
+
+  const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [searching, setSearching] = useState(null)
+  const myAttendance = useSelector((state) => state.attendance.myAttendance);
+  const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
+  
+  useEffect(() => {
+    dispatch(getMyAttendance(id, page, limit, '', '', null, company));
+  }, []);
+
+  const onSearch = (search) => {
+    setPage(1);
+    if (search) {
+      let searchVal = {};
+        searchVal = {
+          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+          m_status: search?.status ? search?.status.value : '',
+        }
+        setSearching(searchVal);
+        dispatch(getMyAttendance(id, 1, limit, '', '', searchVal, company));
+      } else {
+        setSearching(null);
+        dispatch(getMyAttendance(id, 1, limit, '', '', null, company));
+      }
+  };
+
+  const onTableChange = (pagination, filters, sorter) => {
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searching, company));
+    } else {
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', '', searching, company));
+    }
   };
 
   return (
     <Card bordered={false} className="uni-card">
       <ListCard
-        Search={Search}
+        Search={MySearch}
         ListCol={ListCol}
-        ListData={listdata}
+        ListData={myAttendance?.rows}
         onSearch={onSearch}
+        field1={statusList}
         pagination={true}
         listClass="nospace-card"
         onChange={onTableChange}
         pagination={{
-          total: listcount,
+          total: myAttendance?.count,
           current: page,
           pageSize: limit,
         }}

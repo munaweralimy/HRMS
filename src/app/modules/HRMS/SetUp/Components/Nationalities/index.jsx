@@ -8,11 +8,14 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getNationalitiesList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Roles from '../../../../../../routing/config/Roles';
+import {allowed} from '../../../../../../routing/config/utils';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [nationalityField, setNaionalityField] = useState('');
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchVal] = useState(null);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const nationalitiesListData = useSelector((state) => state.setup.nationalitiesListData);
@@ -73,23 +76,34 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
-        setNaionalityField(record);
-        setVisible(true);
+        if (allowed([Roles.SETUP], 'write')) {
+          setNaionalityField(record);
+          setVisible(true);
+        }
       },
     };
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        country_name: value?.nationality ? value?.nationality : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getNationalitiesList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getNationalitiesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getNationalitiesList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 
@@ -97,7 +111,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Nationality" btnList={btnList} />
+          <HeadingChip title="Nationality" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard

@@ -26,10 +26,10 @@ export default (props) => {
 
   const onDraft = () => {
     const val = getValues();
-    if(val.first_name) {
+    if(val.first_name && val.primary_email) {
       onFinish(val, 'Draft');
     } else {
-      message.error('Please Enter Name')
+      message.error('Please Enter Name and Primary Email')
     }
   }
 
@@ -81,9 +81,9 @@ export default (props) => {
       })
     }
 
-    const body = {
+    let body = {
         //personal
-        status: typeof(vstatus) == 'string' ? vstatus : 'Active',
+        
         salutation: val?.salutation ? val.salutation?.value : '',
         first_name: val.first_name,
         image: "",
@@ -148,10 +148,13 @@ export default (props) => {
         emp_pass_expiration_date: val.emp_pass_expiration_date != 'Invalid date' ? val.emp_pass_expiration_date : '',
 
       // medical
-        blood_group: val.blood_group,
+        blood_group: val.blood_group.value,
         height: val.height,
         weight: val.weight,
         health_details: val.health_details
+    }
+    if (typeof(vstatus) == 'string') {
+      body["status"] = vstatus
     }
     console.log('checking', body)
     await employAddApi(body).then(async (res) => {
@@ -184,11 +187,7 @@ export default (props) => {
           })
         }));
       }
-      let body2 = {
-        image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",
-        education: educate,
-      }
-      employApi(body2, id);
+      
 
       let empRole = [];
       let workhours = [];
@@ -244,8 +243,14 @@ export default (props) => {
       if (vstatus != 'Draft') {
         contractApi(body3, null).then(res => {
           setLoad(false);
-          message.success('Detaila Successfully Saved')
-          setTimeout(() =>  history.push('/employment'),2000)
+          message.success('Details Successfully Saved')
+          setTimeout(() =>  history.push('/employment'),2000);
+          let body2 = {
+            image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",
+            education: educate,
+            status: 'Active'
+          }
+          employApi(body2, id);
         }).catch(e => {
           console.log(e);
           setLoad(false);
@@ -253,7 +258,7 @@ export default (props) => {
         })
       } else {
         setLoad(false);
-        message.success('Detaila Successfully Saved')
+        message.success('Details Successfully Saved')
         setTimeout(() =>  history.push('/employment'),2000)
       }
 

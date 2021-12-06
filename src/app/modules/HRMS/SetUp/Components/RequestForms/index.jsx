@@ -11,13 +11,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { delRequest } from '../../ducks/services';
 import { getRoles } from '../../../../Application/ducks/actions';
 import { getFieldsList } from '../../../Requests/ducks/actions';
+import Roles from '../../../../../../routing/config/Roles';
+import { allowed } from '../../../../../../routing/config/utils';
 
 export default (props) => {
   const [formFields, setFormFields] = useState();
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const requestFormsList = useSelector((state) => state.setup.requestFormsListData);
 
@@ -36,7 +38,9 @@ export default (props) => {
       key: 'form_name',
       sorter: true,
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => onClickRow(record)}>{text}</Button>
+        <Button type="link" className="list-links" onClick={() => onClickRow(record)}>
+          {text}
+        </Button>
       ),
     },
     {
@@ -59,9 +63,9 @@ export default (props) => {
       key: 'Action',
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRequest(record.form_name)}>
+        allowed([Roles.SETUP], 'delete') ? <Button type="link" className="list-links" onClick={() => deleteRequest(record.form_name)}>
           <CloseCircleFilled />
-        </Button>
+        </Button> : null
       ),
     },
   ];
@@ -78,52 +82,74 @@ export default (props) => {
 
   const onUpdate = () => {
     setVisible(false);
-    setFormFields(null)
+    setFormFields(null);
     dispatch(getRequestFormsList(page, limit, '', ''));
-  }
+  };
 
   const popup = {
     closable: true,
     visibility: visible,
-    content: <AddEditReqForm title="Add New Form" data={formFields} onClose={() => {setVisible(false); setFormFields(null)}} onUpdate={onUpdate} />,
+    content: (
+      <AddEditReqForm
+        title="Add New Form"
+        data={formFields}
+        onClose={() => {
+          setVisible(false);
+          setFormFields(null);
+        }}
+        onUpdate={onUpdate}
+      />
+    ),
     width: 536,
     onCancel: () => setVisible(false),
   };
-  
 
   const deleteRequest = async (name) => {
     props.setLoading(true);
-    delRequest(name).then(res => {
-      message.success('Request Deleted');
-      onUpdate();
-      props.setLoading(false);
-    }).catch(e => {
-      props.setLoading(false);
-      message.error('Something went wrong');
-    });
+    delRequest(name)
+      .then((res) => {
+        message.success('Request Deleted');
+        onUpdate();
+        props.setLoading(false);
+      })
+      .catch((e) => {
+        props.setLoading(false);
+        message.error('Something went wrong');
+      });
   };
 
   const onClickRow = (record) => {
+    if (allowed([Roles.SETUP], 'write')) {
       setFormFields(record);
       setVisible(true);
+    }
   };
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        request_form: value?.request_form ? value?.request_form : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getRequestFormsList(1, 10, '', '', searchVal));
+    }
   };
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getRequestFormsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getRequestFormsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Request Form" btnList={btnList} />
+          <HeadingChip title="Request Form" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard

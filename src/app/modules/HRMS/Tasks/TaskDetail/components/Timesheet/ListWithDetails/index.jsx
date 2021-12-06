@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ListCard from '../../../../../../../molecules/ListCard';
 import DetailsComponent from '../../../../../../../molecules/HRMS/DetailsComponent';
 import moment from 'moment';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 
 export default ({details, updateApi}) => {
 
@@ -12,13 +14,13 @@ export default ({details, updateApi}) => {
   const [limit, setLimit] = useState(10);
   const [approverID, setApproverID] = useState('');
 
-  const btnList = [
-    {
-      text: '+ Add New Timesheet',
-      classes: 'green-btn',
-      action: () => { setAddVisible(true); setActiveKey('1')},
-    },
-  ];
+  // const btnList = [
+  //   {
+  //     text: '+ Add New Timesheet',
+  //     classes: 'green-btn',
+  //     action: () => { setAddVisible(true); setActiveKey('1')},
+  //   },
+  // ];
 
   const onClickRow = (record) => {
     return {
@@ -58,7 +60,6 @@ export default ({details, updateApi}) => {
   }
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo',pagination)
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
@@ -96,8 +97,8 @@ return (
         btn1title={'Approve'}
         btn2title={'Reject'}
         ApproverID={approverID}
-        onAction1={onAction1}
-        onAction2={onAction2}
+        onAction1={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction1 : null}
+        onAction2={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction2 : null}
         btnClass1='green-btn'
         btnClass2='red-btn'
       />

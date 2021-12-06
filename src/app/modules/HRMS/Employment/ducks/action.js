@@ -2,7 +2,7 @@ import * as action_types from './constant';
 import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod, apiresource } from '../../../../../configs/constants';
 
-export const getOverallList = (status, page, limit, order, orderby) => {
+export const getOverallList = (status, page, limit, order, orderby, search = null) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -12,7 +12,7 @@ export const getOverallList = (status, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.get_overall_employment_list?status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.api.get_overall_employment_list?status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
       dispatch({
         type: action_types.EMPLOYEE_LIST,
         data: message,
@@ -32,7 +32,7 @@ export const getOverallCard = (page, limit, order, orderby) => {
     };
 };
 
-export const getTeams = (page, limit, order, orderby) => {
+export const getTeams = (page, limit, order, orderby, search = null) => {
     let ordering = '';
       if(order == "ascend") {
           ordering = 'ASC'
@@ -42,7 +42,7 @@ export const getTeams = (page, limit, order, orderby) => {
       return async (dispatch) => {
         const {
           data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&company=' + search : ''}`);
         dispatch({
           type: action_types.TEAM_LIST,
           data: message,

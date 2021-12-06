@@ -7,16 +7,20 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getWarningLetterList, showWarningLetter, getAllApprovers, getALlLetterTemp } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 export default (props) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchVal] = useState(null);
   const [limit, setLimit] = useState(10);
   const warningLetterListData = useSelector((state) => state.setup.warningLetterListData);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
     dispatch(getWarningLetterList(page, limit, '', ''));
-    dispatch(getAllApprovers());
+    dispatch(getAllApprovers(company));
     dispatch(getALlLetterTemp());
   }, []);
 
@@ -65,24 +69,32 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        writing_letter_name: value?.warning_letter_name ? value?.warning_letter_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getWarningLetterList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getWarningLetterList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getWarningLetterList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getWarningLetterList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getWarningLetterList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 
   return (
     <Row gutter={[20, 30]}>
       <Col span={24}>
-        <HeadingChip title="Warning Letter" btnList={btnList} />
+        <HeadingChip title="Warning Letter" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
       </Col>
       <Col span={24}>
         <ListCard

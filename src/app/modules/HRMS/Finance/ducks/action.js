@@ -24,7 +24,7 @@ export const getOverallFinance = (page, limit, order, orderby) => async (dispatc
     data: message,
   });
 };
-export const getOverallFinanceList = (status, page, limit, order, orderby) => async (dispatch) => {
+export const getOverallFinanceList = (status, page, limit, order, orderby, search = null) => async (dispatch) => {
   let ordering = '';
   if (order == 'ascend') {
     ordering = 'ASC';
@@ -35,8 +35,7 @@ export const getOverallFinanceList = (status, page, limit, order, orderby) => as
     data: { message },
   } = await axios.get(
     `${apiMethod}/hrms.api.get_overall_finance_list?status=${status}&page_number=${page}&limit=${limit}${
-      order ? `&order=${ordering}&orderby=${orderby}` : ''
-    }`,
+      order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`
   );
   dispatch({
     type: action_types.OVERALL_FINANCE_LIST,

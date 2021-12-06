@@ -6,6 +6,10 @@ import AddUser from '../../../Teams/Components/AddUser';
 import { getSingleProject, addProject, updateProjecat, deleteProject } from '../../../../ducks/services';
 import { projectFields } from './FormFields';
 import { LoadingOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
+
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -15,6 +19,8 @@ export default (props) => {
   const [userData, setUserData] = useState([]);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
+  const employeeList = useSelector((state) => state.setup.employeeList);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
     if (projectData.name.length > 0) {
@@ -24,8 +30,8 @@ export default (props) => {
         setTeamData(response?.data?.data);
         setUserData(
           response?.data?.data?.user_staff.map((value) => ({
-            full_name: value.employee_full_name,
-            id: value.employee,
+            employee_name: value.employee_full_name,
+            name: value.employee,
           })),
         );
         setLoad(false);
@@ -47,8 +53,8 @@ export default (props) => {
     const payload = {
       project_code: values.project,
       project: values.project,
-      company: 'Limkokwing University Creative Technology',
-      user_staff: userData.map((value) => ({ employee: value.id })),
+      company: company,
+      user_staff: userData.map((value) => ({ employee: value.name })),
     };
     projectData.name.length == 0
       ? addProject(payload).then((response) => {
@@ -113,23 +119,25 @@ export default (props) => {
           <Col span={24}>
             <Row gutter={[24, 20]}>
               <Col span={24}>
-                <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
+                <AddUser userData={userData} setUserData={setUserData} title="Team Member" allListing={employeeList} />
               </Col>
               <Col span={24}>
                 <Row gutter={24}>
                   {projectData.name ? (
                     <>
-                      <Col span={12}>
-                        <Button
-                          size="large"
-                          type="primary"
-                          htmlType="button"
-                          className="red-btn w-100"
-                          onClick={onDeleteTeam}
-                        >
-                          Delete
-                        </Button>
-                      </Col>
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            className="red-btn w-100"
+                            onClick={onDeleteTeam}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

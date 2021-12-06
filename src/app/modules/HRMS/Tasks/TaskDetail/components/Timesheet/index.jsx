@@ -4,6 +4,8 @@ import ListWithDetails from './ListWithDetails';
 import { apiMethod } from '../../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 import axios from '../../../../../../../services/axiosInterceptor';
+import { allowed } from '../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../routing/config/Roles';
 
 const { TabPane } = Tabs;
 const antIcon = <LoadingOutlined spin />;
@@ -91,15 +93,34 @@ export default (props) => {
             key: 'action',
             align: 'center',
             width: 120,
-            render: (text) => (
-                <Button type="primary" htmlType='button' danger>Notify</Button>
+            render: (text, record) => (
+                <Button type="primary" htmlType='button' danger onClick={() => notifyUser(record)}>Notify</Button>
             ),
         },
       ]
 
-    const onApprove = async (name) => {
+      const notifyUser = async (record) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved`
+        let url = `${apiMethod}/hrms.tasks_api.send_missed_timesheet_main?employee_id=${id}&date=${record?.date}`
+        try {
+            await axios.get(url);
+            setLoad(false)
+            message.success('User Successfully Notified');            
+        } catch(e) {
+            const { response } = e;
+            message.error('Something went wrong');
+            setLoad(false)
+        }
+      }
+
+    const onApprove = async (name) => {
+        setLoad(true);
+        let url = ''
+        if(allowed([Roles.TASK], 'write')) {
+          url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=Admin`
+        } else {
+          url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=`
+        }
         try {
             await axios.get(url);
             setLoad(false)
@@ -111,12 +132,16 @@ export default (props) => {
             message.error('Something went wrong');
             setLoad(false)
         }
-        
     }
 
     const onReject = async (name) => {
         setLoad(true)
-        let url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected`
+        let url = ''
+        if(allowed([Roles.TASK], 'write')) {
+          url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected&role=Admin`
+        } else {
+          url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected&role=`
+        }
         try {
             await axios.get(url);
             setLoad(false)

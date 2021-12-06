@@ -8,14 +8,18 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getLeaveEntitlementsList, getLeaveList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Roles from '../../../../../../routing/config/Roles';
+import { allowed } from '../../../../../../routing/config/utils';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [entitlementLeave, setEntitlementLeave] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const leaveEntitlementsListData = useSelector((state) => state.setup.leaveEntitlementsListData);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
     if (!visible) {
@@ -24,7 +28,7 @@ export default (props) => {
   }, [visible]);
 
   useEffect(() => {
-    dispatch(getLeaveList());
+    dispatch(getLeaveList(company));
   }, []);
 
   const ListCol = [
@@ -159,13 +163,26 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setEntitlementLeave(record);
         setVisible(true);
+        }
       },
     };
   };
 
   const onSearch = (value) => {
+    if (value) {
+      let searchVal = {
+        leave_type: value?.leave_type ? value?.leave_type.value : '',
+        leave_entitlement_name: value?.leave_entitlement_name ? value?.leave_entitlement_name.value : '',
+        entitlement: value?.entitlement_days ? value?.entitlement_days : '',
+        min_years: value?.min_years ? value?.min_years : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getLeaveEntitlementsList(1, 10, '', '', searchVal));
+    }
     console.log('check values', value);
   };
 
@@ -174,22 +191,24 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getLeaveEntitlementsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getLeaveEntitlementsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getLeaveEntitlementsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getLeaveEntitlementsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Leave Entitlements" btnList={btnList} />
+          <HeadingChip title="Leave Entitlements" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={leaveEntitlementsListData?.rows}
             pagination={{

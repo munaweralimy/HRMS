@@ -9,12 +9,15 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import { getEducationalFieldsList } from '../../ducks/actions';
 import { deleteEducationLeave } from '../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [field, setField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const educationalFieldsListData = useSelector((state) => state.setup.educationalFieldsListData);
 
@@ -81,7 +84,14 @@ export default (props) => {
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        education_field: value?.education_field ? value?.education_field : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getEducationalFieldsList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -89,17 +99,21 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getEducationalFieldsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getEducationalFieldsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 
   const onRowClick = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setField(record);
         setVisible(true);
+        }
       },
     };
   };
@@ -108,7 +122,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Education Fields" btnList={btnList} />
+          <HeadingChip title="Education Fields" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard

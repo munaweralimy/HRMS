@@ -12,7 +12,7 @@ const forYou = `${apiMethod}/marketing.api.get_all_user_tag_comments?user_tag=${
   
 // }
 
-const feedurl = `${apiMethod}/hrms.api.get_all_timeline_update`;
+const feedurl = `${apiMethod}/hrms.update_section_api.get_version_all_update`;
 
 
 

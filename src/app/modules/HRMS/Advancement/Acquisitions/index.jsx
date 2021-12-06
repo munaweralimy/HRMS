@@ -7,6 +7,8 @@ import { getJobOpening } from '../dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
 import HeadingChip from '../../../../molecules/HeadingChip';
 import moment from 'moment';
+import { allowed } from '../../../../../routing/config/utils';
+import Roles from '../../../../../routing/config/Roles';
 
 const colName = [
   {
@@ -45,9 +47,10 @@ export default (props) => {
   const [viewJobOpenings, setViewJobOpenings] = useState(false);
   const [rowData, setRowData] = useState();
   const openJobs = useSelector((state) => state.advancement.jobopen);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
-    dispatch(getJobOpening(page, limit, '', ''))
+    dispatch(getJobOpening(page, limit, '', '', company))
   }, []);
 
   const updateApi = () => {
@@ -91,7 +94,7 @@ export default (props) => {
   return (
     <Row gutter={[20,30]}>
       <Col span={24}>
-        <HeadingChip title={'Acquisitions'} btnList={btnList} />
+        <HeadingChip title={'Acquisitions'} btnList={allowed([Roles.ADVANCEMENT], 'write') ? btnList : null} />
       </Col>
       <Col span={24}>
       {viewJobOpenings ? (

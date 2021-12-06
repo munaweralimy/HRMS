@@ -7,6 +7,8 @@ import FormGroup from '../../../../../../molecules/FormGroup';
 import { salaryInformation } from './FormFields';
 import { LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import { allowed } from '../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 const SalaryInformation = (props) => {
@@ -28,7 +30,10 @@ const SalaryInformation = (props) => {
         label: financeDetails?.payment_frequency,
       });
       setValue('payment_type', { value: financeDetails?.payment_type, label: financeDetails?.payment_type });
-      setValue('effective_date', moment(financeDetails?.effective_date, 'YYYY-MM-DD'));
+      setValue(
+        'effective_date',
+        financeDetails?.effective_date ? moment(financeDetails?.effective_date, 'YYYY-MM-DD') : '',
+      );
     }
   }, [financeDetails]);
 
@@ -69,6 +74,7 @@ const SalaryInformation = (props) => {
               <FormGroup item={item} control={control} errors={errors} />
             </Fragment>
           ))}
+          {allowed([Roles.FINANCE], 'write') && 
           <Col span={24}>
             <Row gutter={24} justify="end">
               <Col>
@@ -77,7 +83,7 @@ const SalaryInformation = (props) => {
                 </Button>
               </Col>
             </Row>
-          </Col>
+          </Col>}
         </Row>
       </Form>
     </Spin>

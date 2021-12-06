@@ -12,18 +12,18 @@ const addNewTeamFields = () => {
       req: true,
       reqmessage: 'Team Name required',
     },
-    {
-      label: 'Company',
-      name: 'company',
-      type: 'select',
-      twocol: false,
-      placeholder: 'Select company',
-      req: true,
-      reqmessage: 'Company required',
-      options: [
-        { label: 'Limkokwing University Creative Technology', value: 'Limkokwing University Creative Technology' },
-      ],
-    },
+    // {
+    //   label: 'Company',
+    //   name: 'company',
+    //   type: 'select',
+    //   twocol: false,
+    //   placeholder: 'Select company',
+    //   req: true,
+    //   reqmessage: 'Company required',
+    //   options: [
+    //     { label: 'Limkokwing University Creative Technology', value: 'Limkokwing University Creative Technology' },
+    //   ],
+    // },
     {
       label: 'Assign Team Leader',
       name: 'team_leader',

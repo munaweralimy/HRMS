@@ -6,6 +6,8 @@ import ListCard from '../../../../../molecules/ListCard';
 import EditAttendance from '../AttendanceDetail';
 import { LeftOutlined } from '@ant-design/icons';
 import { getMyAttendance, getSingleAttendanceDetail, getTotalAttendance } from '../../ducks/actions';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 // import { getTotalAbsent } from '../../ducks/services';
 import moment from 'moment';
 const ListCol = [
@@ -82,18 +84,21 @@ export default (props) => {
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
   const singleAttendanceDetail = useSelector((state) => state.attendance.singleAttendance);
   const totalAbsent = useSelector((state) => state.attendance.totalAbsent);
+  const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
 
   const onRowClick = (record) => {
     return {
       onClick: () => {
-        setViewForm(true);
-        setEmpID(record?.name);
+        if (allowed([Roles.ATTENDANCE_TEAMS, Roles.ATTENDANCE], 'write')) {
+          setViewForm(true);
+          setEmpID(record?.name);
+        }
       },
     };
   };
 
   useEffect(() => {
-    dispatch(getMyAttendance(id, page, limit, '', ''));
+    dispatch(getMyAttendance(id, page, limit, '', '', company1));
     dispatch(getTotalAttendance(id));
   }, [id]);
 
@@ -102,7 +107,7 @@ export default (props) => {
       dispatch(getSingleAttendanceDetail(empID));
     } else if (!viewForm) {
       setPage(1);
-      dispatch(getMyAttendance(id, 1, 6, '', ''));
+      dispatch(getMyAttendance(id, 1, 6, '', '', company1));
       dispatch(getTotalAttendance(id));
     }
   }, [empID, viewForm]);
@@ -118,9 +123,9 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, company1));
     } else {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', ''));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', '', company1));
     }
   };
   return (
@@ -141,7 +146,7 @@ export default (props) => {
             Categories
           </Button>
         </Col>
-        {viewForm ? (
+        {viewForm && allowed([Roles.ATTENDANCE_TEAMS, Roles.ATTENDANCE], 'write') ? (
           <Col span={24}>
             <Button
               type="link"

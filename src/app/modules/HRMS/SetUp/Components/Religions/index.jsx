@@ -8,12 +8,15 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getReligionsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Roles from '../../../../../../routing/config/Roles';
+import { allowed } from '../../../../../../routing/config/utils';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [religionFiled, setReligionField] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const religionsListData = useSelector((state) => state.setup.religionsListData);
 
@@ -74,14 +77,23 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setReligionField(record);
         setVisible(true);
+        }
       },
     };
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        name1: value?.religion ? value?.religion : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getReligionsList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -89,16 +101,16 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getReligionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getReligionsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getReligionsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getReligionsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={btnList} />
+          <HeadingChip title="Teams" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard

@@ -9,9 +9,12 @@ import {
   deleteDepartment,
   getSingleDepartment,
 } from '../../../../ducks/services';
-import moment from 'moment';
+import axios from '../../../../../../../../services/axiosInterceptor';
+import { apiMethod } from '../../../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 import AddUser from '../../../Teams/Components/AddUser';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -20,6 +23,7 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const [userData, setUserData] = useState([]);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
+  const [departments, setDepartments] = useState([]);
 
   const onFinish = (values) => {
     setLoad(true);
@@ -29,7 +33,7 @@ export default (props) => {
       employee_name: values?.employee_name.value,
       employee_id: values?.employee_name.id,
       status: 'Active',
-      team: userData.map((value) => ({ team: value.id })),
+      team: userData.map((value) => ({ team: value.name })),
     };
     departmentField.name.length == 0
       ? addSingleDepartment(payload)
@@ -79,8 +83,8 @@ export default (props) => {
       getSingleDepartment(departmentField.name).then((response) => {
         setUserData(
           response?.data?.data?.team.map((value) => ({
-            full_name: value.team_name,
-            id: value.team,
+            employee_name: value.team_name,
+            name: value.team,
           })),
         );
       });
@@ -96,6 +100,12 @@ export default (props) => {
       setUserData([]);
     }
   }, [departmentField]);
+
+  useEffect(() => {
+    axios.get(`${apiMethod}/hrms.setup.get_team_list_for_hrms_dpt`).then((response) => {
+      setDepartments(response?.data?.message);
+    });
+  }, []);
 
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
@@ -128,6 +138,7 @@ export default (props) => {
                   title="Teams"
                   department={{ bool: true, deptName: departmentField.name ? departmentField.name : '' }}
                   control={control}
+                  allListing={departments}
                 />
               </Col>
               <Col span={24}>
@@ -153,11 +164,13 @@ export default (props) => {
                     </>
                   ) : (
                     <>
-                      <Col span={12}>
-                        <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
-                          Delete
-                        </Button>
-                      </Col>
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

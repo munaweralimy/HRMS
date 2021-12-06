@@ -8,12 +8,15 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getHolidaysList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Roles from '../../../../../../routing/config/Roles';
+import { allowed } from '../../../../../../routing/config/utils';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [holidayFields, setHolidayFields] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const holidaysListData = useSelector((state) => state.setup.holidaysListData);
 
@@ -85,8 +88,10 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setHolidayFields(record);
         setVisible(true);
+        }
       },
     };
   };
@@ -95,24 +100,33 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getHolidaysList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getHolidaysList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getHolidaysList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getHolidaysList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
-  const onSearch = () => {};
+  const onSearch = (value) => {
+    if (value) {
+      let searchVal = {
+        holiday_name: value?.holiday ? value?.holiday : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getHolidaysList(1, 10, '', '', searchVal));
+    }
+  };
 
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Holidays" btnList={btnList} />
+          <HeadingChip title="Holidays" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={holidaysListData?.rows}
             pagination={{

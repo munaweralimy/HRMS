@@ -39,7 +39,7 @@ export const InputField = (props) => {
 };
 
 export const InputPassword = (props) => {
-  const { fieldname, label, control, iProps, rules, initValue, isRequired, validate, validMessage } = props;
+  const { fieldname, label, control, iProps, rules, initValue, isRequired, validate, validMessage, onChange } = props;
 
   useEffect(() => {
     props.valueGot && props.setValue(fieldname, props.valueGot);
@@ -196,7 +196,7 @@ export const DateField = (props) => {
 };
 
 export const InputCheckbox = (props) => {
-  const { fieldname, label, control, rules, initValue, isRequired, validate, validMessage } = props;
+  const { fieldname, label, control, rules, initValue, isRequired, validate, validMessage, onChange } = props;
 
   useEffect(() => {
     props.valueGot && props.setValue(fieldname, props.valueGot);
@@ -220,6 +220,7 @@ export const InputCheckbox = (props) => {
             checked={value}
             onChange={(e) => {
               onChange(e.target.checked);
+              props.onChange && props.onChange(e);
             }}
           >
             {label}

@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import moment from 'moment';
 import { insuranceApi } from '../../../../../ducks/services';
 import { uniquiFileName, getSingleUpload, getFileName } from '../../../../../../../../../features/utility';
+import { allowed } from '../../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../../routing/config/Roles';
 
 const colName = [
   {
@@ -114,7 +116,7 @@ export default (props) => {
 
       return {
         onClick: () => {
-          
+          if(allowed([Roles.EMPLOYMENT], 'write')) {
           setRecord([
             {
               field: 'name',
@@ -143,6 +145,7 @@ export default (props) => {
           ]);
           setVisible(false);
           setFormVisible(true);
+          }
         },
       };
     }
@@ -249,7 +252,7 @@ export default (props) => {
                 ListData={data?.employee_medical}
                 pagination={false}
                 
-                extraBtn={'+ Add New Insurance'}
+                extraBtn={allowed([Roles.EMPLOYMENT], 'write') ? '+ Add New Insurance' : null}
                 extraAction={addNew}
                 scrolling={500}
                 listClass="nospace-card"
@@ -269,11 +272,11 @@ export default (props) => {
                 title={'Insurance Details'}
                 fieldsList={insuranceFields}
                 backbtnTitle='Insurance History'
-                extrabtn={{
+                extrabtn={allowed([Roles.EMPLOYMENT], 'delete')  ? {
                   title: 'Delete Insurance',
                   class: 'red-btn',
                   onAction: onDelete,
-                }}
+                }: null}
                 />
               </Form>
             </Col>}

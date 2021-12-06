@@ -8,6 +8,8 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getWorkingHoursList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Roles from '../../../../../../routing/config/Roles';
+import {allowed} from '../../../../../../routing/config/utils';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -15,6 +17,7 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
+  const [searchValue, setSearchVal] = useState(null);
   const workingHoursListData = useSelector((state) => state.setup.workingHoursListData);
 
   useEffect(() => {
@@ -84,23 +87,34 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setWorkingHourFields(record);
         setVisible(true);
+        }
       },
     };
   };
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        company: value?.company_name ? value?.company_name.value : '',
+        template_name: value?.template_name ? value?.template_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getWorkingHoursList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getWorkingHoursList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(
+        getWorkingHoursList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue),
+      );
     } else {
-      dispatch(getWorkingHoursList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getWorkingHoursList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 
@@ -108,7 +122,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Working Hours" btnList={btnList} />
+          <HeadingChip title="Working Hours" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard

@@ -19,6 +19,8 @@ export default (props) => {
       {visisble.set1 && <Col span={24}>
         <ContractList {...props} setVisible={setVisible} />
       </Col>}
+      {props?.data?.status != 'Draft' && props.mode == 'edit' &&
+      <>
       {visisble.set2 && <Col span={24}>
         <ResignTeminate {...props} setVisible={setVisible} />
       </Col>}
@@ -28,6 +30,7 @@ export default (props) => {
       {visisble.set4 && <Col span={24}>
         <WarningLetter {...props} setVisible={setVisible} />
       </Col>}
+      </>}
     </Row>
   );
 };

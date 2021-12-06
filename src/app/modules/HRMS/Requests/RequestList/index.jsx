@@ -21,29 +21,30 @@ export default (props) => {
   const dataYour = useSelector((state) => state.hrmsrequests.requestListYourRequest);
   const dataArchive = useSelector((state) => state.hrmsrequests.requestListArchive);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   
   const onAction1 = (status, page, sort, limit) => {
-    if(allowed([Roles.REQUESTS])) {
-      dispatch(getRequestPending(page, sort,limit, ''));
+    if(allowed([Roles.REQUESTS], 'read')) {
+      dispatch(getRequestPending(page, sort,limit, '', company));
     } else {
-      dispatch(getRequestPending(page, sort,limit, id));
+      dispatch(getRequestPending(page, sort,limit, id, company));
     }
   }
 
   const onAction2 = (status, page, sort, limit) => {
-    if(allowed([Roles.REQUESTS])) {
-      dispatch(getYourRequest(page, sort,limit,''));
+    if(allowed([Roles.REQUESTS], 'read')) {
+      dispatch(getYourRequest(page, sort,limit,'', company));
     } else {
-      dispatch(getYourRequest(page, sort,limit,id));
+      dispatch(getYourRequest(page, sort,limit,id, company));
     }
     
   }
 
   const onAction3 = (status, page, sort, limit) => {
-    if(allowed([Roles.REQUESTS])) {
-      dispatch(getRequestArchive(page, sort,limit, ''));
+    if(allowed([Roles.REQUESTS], 'read')) {
+      dispatch(getRequestArchive(page, sort,limit, '', company));
     } else {
-      dispatch(getRequestArchive(page, sort,limit, id));
+      dispatch(getRequestArchive(page, sort,limit, id, company));
     }
       
   }
@@ -58,7 +59,7 @@ export default (props) => {
 
   const tabs = [
     {
-      visible: allowed([Roles.REQUESTS_MANAGER]),
+      visible: allowed([Roles.REQUESTS_MANAGER, Roles.REQUESTS], 'read'),
       title: 'Staff Requests',
       key: 'pending',
       count: dataPending?.count,
@@ -75,7 +76,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.REQUESTS_INDIVIDUAL]),
+      visible: allowed([Roles.REQUESTS_INDIVIDUAL], 'read'),
       title: 'My Requests',
       key: 'yourrequests',
       count: dataYour?.count,
@@ -95,7 +96,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.REQUESTS_MANAGER]),
+      visible: allowed([Roles.REQUESTS], 'read'),
       title: 'Archive',
       key: 'archive',
       Comp: RequestSection,
@@ -113,7 +114,7 @@ export default (props) => {
   ]
 
   useEffect(() => {
-    if (allowed(Roles.REQUESTS)) {
+    if (allowed([Roles.REQUESTS, Roles.REQUESTS_MANAGER], 'read')) {
       setActiveKey('pending')
     } else {
       setActiveKey('yourrequests')

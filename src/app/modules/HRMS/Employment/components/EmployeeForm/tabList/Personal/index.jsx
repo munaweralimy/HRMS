@@ -27,6 +27,7 @@ export default (props) => {
 
   useEffect(() => {
     if (mode == 'edit' && data && Object.keys(data).length > 0) {
+      console.log('checking', data)
       setValueIn('salutation', data?.salutation ? {label: data?.salutation, value: data?.salutation}: '');
       setValueIn('first_name', data?.first_name);
       setValueIn('image', data?.image ? {fileList: [{uid: '-1', name: getFileName(data?.image), status: 'done', url: `http://cms2dev.limkokwing.net${data?.image}`}]} : '');
@@ -84,7 +85,9 @@ export default (props) => {
   }, [data]);
 
   const onFinish = async (val) => {
-
+    if (data.status == 'Draft') {
+      message.warning('Please Add Contract to Activate your account')
+    }
     setLoad(true);
 
     let profileImg = '';
@@ -226,7 +229,7 @@ export default (props) => {
       employApi(body, id).then(res => {
         setLoad(false);
         updateApi();
-        message.success('Detaila Successfully Saved')
+        message.success('Detail Successfully Saved')
       }).catch(e => {
         console.log(e);
         setLoad(false);

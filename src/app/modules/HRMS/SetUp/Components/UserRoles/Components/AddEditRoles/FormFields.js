@@ -234,4 +234,24 @@ const rolesFields = () => {
     },
   ];
 };
-export { rolesFields };
+const totalRoles = [
+  'Advancement',
+  'Reports',
+  'Task-Overall',
+  'Task-Teams',
+  'Task-Individual',
+  'Employment',
+  'Finance',
+  'Attendance-Overall',
+  'Attendance-Teams',
+  'Attendance-Individual',
+  'Requests-Overall',
+  'Requests-Teams',
+  'Requests-Individual',
+  'Leaves-Overall',
+  'Leaves-Teams',
+  'Leaves-Individual',
+  'Policy',
+  'Setup',
+];
+export { rolesFields, totalRoles };

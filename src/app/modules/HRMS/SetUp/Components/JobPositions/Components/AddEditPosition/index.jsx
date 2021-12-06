@@ -8,6 +8,8 @@ import AddUser from '../../../Teams/Components/AddUser';
 import { SliderFiled } from '../../../../../../../atoms/FormElement';
 import { getSingleJob, addjobPosition, updatejobPosition, deletejobPosition } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -17,6 +19,8 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, watch, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
+  const employeeList = useSelector((state) => state.setup.employeeList);
+  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   const skillSet = [
     { label: 'Work Quality', fieldname: 'work_quality', updateVal: watch('work_quality', 1) },
@@ -32,12 +36,11 @@ export default (props) => {
         setTeamData(response?.data?.data);
         setUserData(
           response?.data?.data?.user_staff.map((value) => ({
-            full_name: value.employee_full_name,
-            id: value.employee,
+            employee_name: value.employee_full_name,
+            name: value.employee,
           })),
         );
         setLoad(false);
-
       });
     } else {
       reset();
@@ -60,7 +63,7 @@ export default (props) => {
   const onFinish = async (val) => {
     setLoad(true);
     const payload = {
-      company: 'Limkokwing University Creative Technology',
+      company: company,
       job_position_name: val.job_position_name,
       work_quality: val.work_quality,
       work_speed: val.work_speed,
@@ -68,7 +71,7 @@ export default (props) => {
       critical_thinking: val.critical_thinking,
       team_work: val.team_work,
       skills: val.skills.map((value) => ({ skill_name: value.value })),
-      user_staff: userData.map((value) => ({ employee: value.id })),
+      user_staff: userData.map((value) => ({ employee: value.name })),
     };
     jobPosition.name.length == 0
       ? addjobPosition(payload).then((response) => {
@@ -152,23 +155,25 @@ export default (props) => {
           <Col span={8}>
             <Row gutter={[24, 30]}>
               <Col span={24}>
-                <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
+                <AddUser userData={userData} setUserData={setUserData} title="Team Member" allListing={employeeList} />
               </Col>
               <Col span={24}>
                 <Row gutter={24}>
                   {jobPosition.name ? (
                     <>
-                      <Col span={12}>
-                        <Button
-                          size="large"
-                          type="primary"
-                          htmlType="button"
-                          className="red-btn w-100"
-                          onClick={onDeleteJobPosition}
-                        >
-                          Delete
-                        </Button>
-                      </Col>
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            className="red-btn w-100"
+                            onClick={onDeleteJobPosition}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

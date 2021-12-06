@@ -135,3 +135,14 @@ export const pStatus = [
   { label: 'Expired', value: 'Expired' },
   // { label: 'Active', value: 'Active' },
 ];
+
+export const bloodList = [
+  { label: 'A+', value: 'A+' },
+  { label: 'A-', value: 'A-' },
+  { label: 'B+', value: 'B+' },
+  { label: 'B-', value: 'B-' },
+  { label: 'O-', value: 'O-' },
+  { label: 'O+', value: 'O+' },
+  { label: 'AB+', value: 'AB+' },
+  { label: 'AB-', value: 'AB-' },
+];

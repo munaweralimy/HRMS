@@ -1,6 +1,6 @@
-import authInterceptor from './axiosInterceptor'
-const apiMethod = process.env.REACT_APP_BASE_URL + "/api/method/login?";
+import axios from './axiosInterceptor'
+import { apiMethod } from '../configs/constants'
 
 export const signIn=(username,password)=>{
-   return authInterceptor.post(`${apiMethod}usr=${username}&pwd=${password}`)
+   return axios.post(`${apiMethod}usr=${username}&pwd=${password}`)
 }

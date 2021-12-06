@@ -7,7 +7,11 @@ import { getWorkingHourTempDetail } from '../../../../ducks/services';
 import ArrayForm from '../../../../../Employment/components/EmployeeForm/tabList/Personal/ArrayForm';
 import { workType, timelap } from '../../../../../../../../configs/constantData';
 import { LoadingOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
 import { addWorkingHourTemp, updateWorkingHourTemp, deleteWorkingHourTemp } from '../../../../ducks/services';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
+
 const antIcon = <LoadingOutlined spin />;
 const init = {
   day: '',
@@ -83,6 +87,7 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const [userData, setUserData] = useState([]);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
+  const employeeList = useSelector((state) => state.setup.employeeList);
 
   const { fields } = useFieldArray({
     control: control,
@@ -210,8 +215,8 @@ export default (props) => {
         setValue('work_hours', working_hours);
         setUserData(
           data?.user_staff.map((value) => ({
-            full_name: value.employee_full_name,
-            id: value.employee,
+            employee_name: value.employee_full_name,
+            name: value.employee,
           })),
         );
         setLoad(false);
@@ -228,7 +233,7 @@ export default (props) => {
     const createWorkingHourTemp = {
       company: val?.company.value,
       template_name: val?.template_name,
-      user_staff: userData.map((value) => ({ employee: value.id })),
+      user_staff: userData.map((value) => ({ employee: value.name })),
       work_hours: val?.work_hours.map((value) => ({
         day: value.day,
         time_type: value.time_type.value,
@@ -323,23 +328,25 @@ export default (props) => {
           <Col span={8}>
             <Row gutter={[24, 20]}>
               <Col span={24}>
-                <AddUser userData={userData} setUserData={setUserData} title="Team Member" control={control} />
+                <AddUser userData={userData} setUserData={setUserData} title="Team Member" allListing={employeeList} />
               </Col>
               <Col span={24}>
                 <Row gutter={24}>
                   {workingHourTemp.name ? (
                     <>
-                      <Col span={12}>
-                        <Button
-                          size="large"
-                          type="primary"
-                          htmlType="button"
-                          className="red-btn w-100"
-                          onClick={onDeleteWorkingHourTemp}
-                        >
-                          Delete
-                        </Button>
-                      </Col>
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            className="red-btn w-100"
+                            onClick={onDeleteWorkingHourTemp}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

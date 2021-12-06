@@ -7,8 +7,10 @@ import { useDispatch } from 'react-redux';
 import { getWHTemplateList } from '../../../../../ducks/action';
 import { getFileName, uniquiFileName, getSingleUpload } from '../../../../../../../../../features/utility';
 import moment from 'moment';
-import { contractApi } from '../../../../../ducks/services';
+import { contractApi, employApi } from '../../../../../ducks/services';
 import MainForm from './MainForm';
+import Roles from '../../../../../../../../../routing/config/Roles';
+import {allowed} from '../../../../../../../../../routing/config/utils';
 
   const colName = [
     {
@@ -273,17 +275,24 @@ export default (props) => {
       }
 
       contractApi(body, getID).then(res => {
-        setLoad(false);
-        message.success('Detaila Successfully Saved')
-        setFormVisible(false);
-        setRecord(null)
-        setVisible({
-            set1: true,
-            set2: true,
-            set3: true,
-            set4: true,
-        });
-        updateApi();
+        employApi({status: 'Active'}, id).then(ax => {
+          setLoad(false);
+          message.success('Details Successfully Saved')
+          setFormVisible(false);
+          setRecord(null)
+          setVisible({
+              set1: true,
+              set2: true,
+              set3: true,
+              set4: true,
+          });
+          updateApi();
+        }).catch(e => {
+          setLoad(false);
+          message.error('Something went wrong')
+          message.error(e);
+        })
+        
       }).catch(e => {
         console.log(e);
         setLoad(false);
@@ -303,7 +312,7 @@ export default (props) => {
                 ListCol={colName}
                 ListData={data?.contracts}
                 pagination={false}
-                extraBtn={'+ Add New Contract'}
+                extraBtn={allowed([Roles.EMPLOYMENT], 'write') ? '+ Add New Contract' : null}
                 extraAction={addNew}
                 listClass="nospace-card"
                 classes='clickRow'

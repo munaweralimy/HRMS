@@ -1,1 +1,3 @@
 export const PROFILE_DATA = "PROFILE_DATA";
+export const SINGLE_SKILLS = "SINGLE_SKILLS";
+export const FITINDEX_DETAILS = 'FITINDEX_DETAILS';

@@ -9,12 +9,16 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import { getLeaveTypesList, getAllApprovers, getLeaveList } from '../../ducks/actions';
 import { deleteSingleLeave } from '../../ducks/services';
 import { useDispatch, useSelector } from 'react-redux';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 export default (props) => {
+  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   const [visible, setVisible] = useState(false);
   const [leaveType, setLeaveTpe] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
   const leaveTypesListData = useSelector((state) => state.setup.leaveTypesListData);
 
@@ -102,14 +106,24 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setLeaveTpe(record);
         setVisible(true);
+        }
       },
     };
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    console.log({ value });
+    if (value) {
+      let searchVal = {
+        leave_type: value?.leaveType ? value?.leaveType : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getLeaveTypesList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -129,21 +143,21 @@ export default (props) => {
   }, [visible]);
 
   useEffect(() => {
-    dispatch(getAllApprovers());
-    dispatch(getLeaveList());
+    dispatch(getAllApprovers(company));
+    dispatch(getLeaveList(company));
   }, []);
 
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Leave Types" btnList={btnList} />
+          <HeadingChip title="Leave Types" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={leaveTypesListData?.rows}
             pagination={{

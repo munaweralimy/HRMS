@@ -8,6 +8,8 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getApproversList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Roles from '../../../../../../routing/config/Roles';
+import { allowed } from '../../../../../../routing/config/utils';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -15,6 +17,7 @@ export default (props) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
+  const [searchValue, setSearchVal] = useState(null);
   const approversList = useSelector((state) => state.setup.approversListData);
 
   useEffect(() => {
@@ -68,36 +71,45 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
-        setApproverFields(record);
-        setVisible(true);
+        if (allowed([Roles.SETUP], 'write')) {
+          setApproverFields(record);
+          setVisible(true);
+        }
       },
     };
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        approver_name: value?.approver_name ? value?.approver_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getApproversList(1, 10, '', '', searchVal));
+    }
   };
   const onTableChange = (pagination, filters, sorter) => {
     console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getApproversList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getApproversList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getApproversList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getApproversList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Approvers" btnList={btnList} />
+          <HeadingChip title="Approvers" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={approversList?.rows}
             pagination={{

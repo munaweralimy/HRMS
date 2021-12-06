@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
@@ -10,7 +10,7 @@ import MyLeaves from './components/MyLeaves';
 import moment from 'moment';
 import Roles from '../../../../routing/config/Roles';
 import {allowed} from '../../../../routing/config/utils';
-import { getTeamsDetail } from '../../Application/ducks/actions';
+import { getCompany, getTeams, getTeamsDetail } from '../../Application/ducks/actions';
 import TeamStatistics from './components/TeamStatistics';
 import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 
@@ -190,9 +190,13 @@ export default (props) => {
   const overallDataList = useSelector(state => state.leaves.overallTaskDataWithStatus);
   const teamTaskData = useSelector(state => state.leaves.teamTaskData);
   const teamTaskDataList = useSelector(state => state.leaves.teamTaskDataWithStatus);
-  
   const teamsDetailData = useSelector(state => state.global.teamsDetailData);
   const employeeId = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const company = useSelector(state => state.global.companies);
+  const team = useSelector(state => state.global.teams);
+  const [allCompany, setAllCompany] = useState([]);
+  const [allTeam, setAllTeam] = useState([]);
+  const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
 
   let activeTab = ''
 
@@ -206,29 +210,84 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getTeamsDetail(employeeId));
+    dispatch(getCompany());
+    dispatch(getTeams())
     return () => dispatch(emptyAllLeaves())
-  }, [])
+  }, []);
 
-  const onOverallAction = (filter, page, limit, sort, sortby, type, searching) => {
+  useEffect(() => {
+    if (Object.keys(company).length > 0) {
+      let temp = []
+      company.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.name, value: x.name})
+        } else {
+          temp.push({label: x.name, value: x.name})
+        }
+      });
+      setAllCompany(temp);
+    }
+  }, [company]);
+
+  useEffect(() => {
+    if (Object.keys(team).length > 0) {
+      let temp = []
+      team.map((x, i) => {
+        if (i == 0) {
+          temp.push({label: 'All', value: ''})
+          temp.push({label: x.team_name, value: x.team_name})
+        } else {
+          temp.push({label: x.team_name, value: x.team_name})
+        }
+      });
+      setAllTeam(temp);
+    }
+  }, [team]);
+
+  const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
     if (type == 'list') {
-      dispatch(getOverallTasksWithStatus(filter, page, limit, sort,'HR-EMP-00002', sortby))
+      if (search) {
+      let searchVal = {};
+        searchVal = {
+          employee_id: search?.id ? search?.id : '',
+          employee_name: search?.name ? search?.name : '',
+          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+          company:  search?.company ? search?.company.value : '',
+          team_name: search?.team ? search?.team.value : '',
+        }
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, searchVal, company1))
+      } else {
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, null, company1))
+      }
     } else {
-      dispatch(getOverallTasks(page, limit, sort,'HR-EMP-00002', sortby));
+      dispatch(getOverallTasks(page, limit, sort, employeeId, sortby, company1));
     }
   }
 
-  const onTeamAction = (filter, page, limit, sort, sortby, type, searching, team) => {
+  const onTeamAction = (filter, page, limit, sort, sortby, type, search, team) => {
     if (type == 'list') {
-      dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby))
+      if (search) {
+        let searchVal = {};
+        searchVal = {
+          employee_id: search?.id ? search?.id : '',
+          employee_name: search?.name ? search?.name : '',
+          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+        }
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal, company1))
+      } else {
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null, company1))
+      }
+      
     } else {
-      dispatch(getTeamTasks(team, page, limit, sort, sortby));
+      dispatch(getTeamTasks(team, page, limit, sort, sortby, company1));
     }
   }
 
   
   const tabs = [
     {
-      visible: allowed([Roles.LEAVES]),
+      visible: allowed([Roles.LEAVES], 'read'),
       title: 'Overall Leaves',
       key: 'overall',
       count: overallData?.count || overallDataList?.count || 0,
@@ -244,9 +303,8 @@ export default (props) => {
         filters: filtersOverall,
         updateApi: onOverallAction,
         searchDropdowns: {
-          field1: [{ label: 'All', value: 'All' }],
-          field2: [{ label: 'All', value: 'All' }],
-          field3: [{ label: 'All', value: 'All' }],
+          field1: allCompany,
+          field2: allTeam,
         },
         addon: 'Leave Application',
         statusKey: 'application_status',
@@ -255,7 +313,7 @@ export default (props) => {
       },
     },
     {
-      visible: allowed([Roles.LEAVES_TEAMS]),
+      visible: allowed([Roles.LEAVES_TEAMS], 'read'),
       title: 'Team Leaves',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
@@ -269,9 +327,6 @@ export default (props) => {
         filters: filtersOverall,
         updateApi: onTeamAction,
         Search: SearchTeam,
-        searchDropdowns: {
-          field1: [{ label: 'All', value: 'All' }],
-        },
         addon: 'Leave Application',
         statusKey: 'application_status',
         extraComp1: <LeaveCalendar />,
@@ -280,7 +335,7 @@ export default (props) => {
       Comp: MultiView,
     },
     {
-      visible: allowed([Roles.LEAVES_INDIVIDUAL]),
+      visible: allowed([Roles.LEAVES_INDIVIDUAL], 'read'),
       title: 'My Leaves',
       key: 'myleaves',
       Comp: MyLeaves,

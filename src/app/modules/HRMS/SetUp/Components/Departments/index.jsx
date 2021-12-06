@@ -8,15 +8,18 @@ import { getDepartments } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import AddEditDepartment from './Component/AddEditDepartment';
 import Search from './Component/Search';
+import {allowed} from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [departmentFields, setDepartmentFields] = useState('');
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchVal] = useState(null);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const departmentList = useSelector((state) => state.setup.departmentList);
-  console.log({ departmentList });
+
   useEffect(() => {
     if (!visible) {
       dispatch(getDepartments(page, limit, '', ''));
@@ -29,7 +32,6 @@ export default (props) => {
       dataIndex: 'department_name',
       key: 'department_name',
       sorter: true,
-      align: 'center',
     },
     {
       title: 'Company',
@@ -42,20 +44,17 @@ export default (props) => {
       dataIndex: 'employee_name',
       key: 'employee_name',
       sorter: true,
-      align: 'center',
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
       sorter: true,
-      align: 'center',
     },
     {
       title: 'Action',
       dataIndex: 'Action',
       key: 'Action',
-      align: 'center',
       render: (text, record) => (
         <Button type="link" className="list-links" onClick={() => {}}>
           <CloseCircleFilled />
@@ -92,23 +91,31 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
+        if (allowed([Roles.SETUP], 'write')) {
         setDepartmentFields(record);
         setVisible(true);
+        }
       },
     };
   };
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        name: value?.department_name ? value?.department_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getDepartments(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
-    console.log('heloo', pagination);
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getDepartments(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getDepartments(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getDepartments(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getDepartments(pagination.current, pagination.pageSize, '', '', searchValue));
     }
   };
 
@@ -116,13 +123,13 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Departments" btnList={btnList} />
+          <HeadingChip title="Departments" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={departmentList?.rows}
             pagination={{

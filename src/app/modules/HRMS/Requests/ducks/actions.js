@@ -2,11 +2,12 @@ import axios from "../../../../../services/axiosInterceptor";
 import * as action_types from "./constants";
 import { apiMethod, apiresource } from "../../../../../configs/constants";
 
-export const getRequestPending = (page, sort, limit, id) => {
+
+export const getRequestPending = (page, sort, limit, id, company) => {
     return async (dispatch) => {
         const {
             data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_request_listing?status=Staff Request${id ? `&approver_id=${id}` : ''}${sort ? '&order='+sort+'&orderby='+creation: ''}${page ? '&page_number='+page: ''}&limit=${limit}`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_request_listing?company=${company}&status=Staff Request${id ? `&approver_id=${id}` : ''}${sort ? '&order='+sort+'&orderby='+creation: ''}${page ? '&page_number='+page: ''}&limit=${limit}`);
         dispatch({
             type: action_types.REQUEST_LIST_PENDING,
             data: message,
@@ -26,11 +27,11 @@ export const getEmployeeStatus = (id) => {
     };
 };
 
-export const getRequestArchive = (page, sort, limit, id) => {
+export const getRequestArchive = (page, sort, limit, id, company) => {
     return async(dispatch) => {
         const {
             data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_request_listing?status=Archive${id ? `&approver_id=${id}` : ''}${sort && '&order='+sort+'&orderby='+creation}${page ? '&page_number='+page: ''}&limit=${limit}`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_request_listing?company=${company}&status=Archive${id ? `&approver_id=${id}` : ''}${sort && '&order='+sort+'&orderby='+creation}${page ? '&page_number='+page: ''}&limit=${limit}`);
         dispatch({
             type: action_types.REQUEST_LIST_ARCHIVE,
             data: message,
@@ -38,11 +39,11 @@ export const getRequestArchive = (page, sort, limit, id) => {
     };
 };
 
-export const getYourRequest = (page, sort, limit, id) => {
+export const getYourRequest = (page, sort, limit, id, company) => {
     return async(dispatch) => {
         const {
             data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_request_listing?status=My Request${sort && '&order='+sort+'&orderby='+creation}${page ? '&page_number='+page: ''}&limit=${limit}`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_request_listing?company=${company}&status=My Request${sort && '&order='+sort+'&orderby='+creation}${page ? '&page_number='+page: ''}&limit=${limit}`);
         dispatch({
             type: action_types.REQUEST_LIST_YOUR_REQUEST,
             data: message,

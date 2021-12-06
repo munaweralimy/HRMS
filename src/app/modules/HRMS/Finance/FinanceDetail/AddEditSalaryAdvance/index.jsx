@@ -6,6 +6,8 @@ import { closeAllOpenForms, getFinanceDetail } from '../../ducks/action';
 import { LeftOutlined } from '@ant-design/icons';
 import AddSalaryAdvance from '../../components/AddSalaryAdvance';
 import moment from 'moment';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 const salayAdvCol = [
   {
@@ -93,11 +95,12 @@ const AddEditSalaryAdvance = (props) => {
                 scrolling={500}
               />
             </Col>
+            {allowed([Roles.FINANCE], 'write') && 
             <Col>
               <Button size="large" type="primary" onClick={onFormViewer}>
                 + Add New Advance
               </Button>
-            </Col>
+            </Col>}
           </Row>
         </Col>
       )}

@@ -27,7 +27,7 @@ export default (props) => {
           initValue=""
         />
         <InputField
-          fieldname="staff_name"
+          fieldname="name"
           class="mb-0 w-100"
           label=""
           control={control}

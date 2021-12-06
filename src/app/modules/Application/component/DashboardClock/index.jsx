@@ -64,9 +64,7 @@ export default (props) => {
         }
         if (resData.Response.success == true) {
           message.success(resData.Response.message);
-          if (log != 'OUT') {
-            dispatch(getCheckInData(id));
-          }
+          dispatch(getCheckInData(id));
         } else {
           message.error(resData.Response.message);
         }

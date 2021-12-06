@@ -8,11 +8,14 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getAssetsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
   const [assetField, setAssetField] = useState('');
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchVal] = useState(null);
   const [limit, setLimit] = useState(10);
   const dispatch = useDispatch();
   const assetsList = useSelector((state) => state.setup.assetsListData);
@@ -109,42 +112,46 @@ export default (props) => {
   const onClickRow = (record) => {
     return {
       onClick: () => {
-        setAssetField(record);
-        setVisible(true);
+        if (allowed([Roles.SETUP], 'write')) {
+          setAssetField(record);
+          setVisible(true);
+        }
       },
     };
   };
 
   const onSearch = (value) => {
-    console.log('check values', value);
+    if (value) {
+      let searchVal = {
+        assets_name: value?.asset_name ? value?.asset_name : '',
+      };
+      setSearchVal(searchVal);
+      setPage(1);
+      dispatch(getAssetsList(1, 10, '', '', searchVal));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
     } else {
-      dispatch(getAssetsList(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getAssetsList(pagination.current, pagination.pageSize, '', '', searchValue));
     }
-  };
-
-  const onPageChange = (pg) => {
-    setPage(pg);
-    dispatch(getAssetsList(pg, pageSize));
   };
 
   return (
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Assets" btnList={btnList} />
+          <HeadingChip title="Assets" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard
             onRow={onClickRow}
             Search={Search}
-            onSearch={onSearch}
+            onSearch={Search && onSearch}
             ListCol={ListCol}
             ListData={assetsList?.rows}
             pagination={{

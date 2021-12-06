@@ -90,7 +90,7 @@ export default (props) => {
 
   const tabs = [
     {
-      visible: allowed([Roles.ADVANCEMENT]),
+      visible: allowed([Roles.ADVANCEMENT], 'read'),
       title: 'Staff Performance',
       key: 'pending',
       count: staffData?.count,

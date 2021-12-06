@@ -12,6 +12,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { updateCarryForward, updateCarryForwardReject } from '../../ducks/services';
 import { createRequest, getApproverLead, getRequest } from '../../../Requests/ducks/services';
 import moment from 'moment';
+import { allowed } from '../../../../../../routing/config/utils';
+import Roles from '../../../../../../routing/config/Roles';
 
 const { TabPane } = Tabs;
 const antIcon = <LoadingOutlined spin />;
@@ -35,8 +37,8 @@ const ListCol = [
   },
   {
     title: 'Entitlement',
-    dataIndex: 'till_date',
-    key: 'till_date',
+    dataIndex: 'total_leaves',
+    key: 'total_leaves',
     sorter: true,
     align: 'center',
     render: (text) => {
@@ -77,21 +79,23 @@ export default (props) => {
   const [activeKey, setActiveKey] = useState('1');
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const [load, setLoad] = useState(false);
+  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
  
   
   const userdetail = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
   
 
   useEffect(() => {
-    dispatch(getMyLeaves(userdetail?.name,'Pending', 1, 10, '', ''));
-    dispatch(getMyAvailableLeaves(userdetail?.name));
-    dispatch(getCarryForwardStatus(userdetail?.name))
+    dispatch(getMyLeaves(userdetail?.name,'Pending', 1, 10, '', '', company));
+    dispatch(getMyAvailableLeaves(userdetail?.name, company));
+    dispatch(getCarryForwardStatus(userdetail?.name, company))
   }, []);
 
 
   const updateTimesheet = (status, page, limit, sort, sortby) => {
-    dispatch(getMyLeaves(userdetail?.name, status, page, limit, sort, sortby));
-    dispatch(getCarryForwardStatus(userdetail?.name))
+    dispatch(getMyLeaves(userdetail?.name, status, page, limit, sort, sortby, company));
+    dispatch(getCarryForwardStatus(userdetail?.name, company));
+    dispatch(getMyAvailableLeaves(userdetail?.name, company));
   }
 
   const btnList = [
@@ -104,7 +108,8 @@ export default (props) => {
 
   const updateApi = () => {
     setRecord(null);
-    dispatch(getMyLeaves(userdetail.name,'Pending', 1, 10, '', ''));
+    dispatch(getMyLeaves(userdetail.name,'Pending', 1, 10, '', '', company));
+    dispatch(getMyAvailableLeaves(userdetail?.name, company));
   }
 
   const carryForward = async () => {
