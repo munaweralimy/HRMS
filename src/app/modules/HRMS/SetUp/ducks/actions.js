@@ -411,9 +411,7 @@ export const getSingleLeave = (id) => async (dispatch) => {
 export const getEmployeeList = (companyName) => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(
-    `${apiresource}/Employee?limit_page_length=0&filters=[["company","=","${companyName}"]]&fields=["name","employee_name"]`,
-  );
+  } = await axios.get(`${apiMethod}/hrms.setup.get_employee_list`);
   dispatch({
     type: action_types.EMPLOYEE_LIST,
     data: data,

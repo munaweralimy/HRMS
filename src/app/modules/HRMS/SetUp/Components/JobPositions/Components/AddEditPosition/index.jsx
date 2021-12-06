@@ -71,7 +71,7 @@ export default (props) => {
       critical_thinking: val.critical_thinking,
       team_work: val.team_work,
       skills: val.skills.map((value) => ({ skill_name: value.value })),
-      user_staff: userData.map((value) => ({ employee: value.id })),
+      user_staff: userData.map((value) => ({ employee: value.name })),
     };
     jobPosition.name.length == 0
       ? addjobPosition(payload).then((response) => {
@@ -161,18 +161,19 @@ export default (props) => {
                 <Row gutter={24}>
                   {jobPosition.name ? (
                     <>
-                    {allowed([Roles.SETUP], 'delete') && 
-                      <Col span={12}>
-                        <Button
-                          size="large"
-                          type="primary"
-                          htmlType="button"
-                          className="red-btn w-100"
-                          onClick={onDeleteJobPosition}
-                        >
-                          Delete
-                        </Button>
-                      </Col>}
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={12}>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            className="red-btn w-100"
+                            onClick={onDeleteJobPosition}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={12}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save
