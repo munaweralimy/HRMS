@@ -41,7 +41,7 @@ export default (props) => {
       align: 'center',
       width: '100px',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => deleteRecord(record)}>
+        <Button type="link" className="list-links c-gray" onClick={() => deleteRecord(record)}>
           <CloseCircleFilled />
         </Button>
       ),

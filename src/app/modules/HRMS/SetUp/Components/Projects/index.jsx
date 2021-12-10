@@ -45,7 +45,7 @@ export default (props) => {
       key: 'Action',
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => {}}>
+        <Button type="link" className="list-links c-gray" onClick={() => {}}>
           <CloseCircleFilled />
         </Button>
       ),
