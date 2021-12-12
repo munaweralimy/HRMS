@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListCard from '../../../../../molecules/ListCard';
 import EditAttendance from '../AttendanceDetail';
 import { LeftOutlined } from '@ant-design/icons';
-import { getMyAttendance, getSingleAttendanceDetail, getTotalAttendance } from '../../ducks/actions';
+import { getMyAttendance, getSingleAttendanceDetail, getTotalAttendance, getEmpAttendance } from '../../ducks/actions';
 import { allowed } from '../../../../../../routing/config/utils';
 import Roles from '../../../../../../routing/config/Roles';
 // import { getTotalAbsent } from '../../ducks/services';
@@ -81,7 +81,7 @@ export default (props) => {
   const dispatch = useDispatch();
   const [viewForm, setViewForm] = useState(false);
   const [empID, setEmpID] = useState('');
-  const myAttendance = useSelector((state) => state.attendance.myAttendance);
+  const empAttendanceList = useSelector((state) => state.attendance.getEmpAttendance);
   const singleAttendanceDetail = useSelector((state) => state.attendance.singleAttendance);
   const totalAbsent = useSelector((state) => state.attendance.totalAbsent);
   const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
@@ -98,7 +98,7 @@ export default (props) => {
   };
 
   useEffect(() => {
-    dispatch(getMyAttendance(id, page, limit, '', '', company1));
+    dispatch(getEmpAttendance(id, page, limit, '', '', company1));
     dispatch(getTotalAttendance(id));
   }, [id]);
 
@@ -107,14 +107,14 @@ export default (props) => {
       dispatch(getSingleAttendanceDetail(empID));
     } else if (!viewForm) {
       setPage(1);
-      dispatch(getMyAttendance(id, 1, 6, '', '', company1));
+      dispatch(getEmpAttendance(id, 1, 6, '', '', company1));
       dispatch(getTotalAttendance(id));
     }
   }, [empID, viewForm]);
 
   // useEffect(() => {
   //   if (!viewForm) {
-  //     dispatch(getMyAttendance(id, 1, 6, '', ''));
+  //     dispatch(getEmpAttendance(id, 1, 6, '', ''));
   //     dispatch(getTotalAttendance(id));
   //   }
   // }, [viewForm]);
@@ -123,9 +123,9 @@ export default (props) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, company1));
+      dispatch(getEmpAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, company1));
     } else {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', '', company1));
+      dispatch(getEmpAttendance(id, pagination.current, pagination.pageSize, '', '', company1));
     }
   };
   return (
@@ -184,7 +184,7 @@ export default (props) => {
               <ListCard
                 title="Attendance History"
                 ListCol={ListCol}
-                ListData={myAttendance?.rows}
+                ListData={empAttendanceList?.rows}
                 onRow={onRowClick}
                 pagination={true}
                 classes="clickRow"
@@ -192,7 +192,7 @@ export default (props) => {
                 onChange={onTableChange}
                 scrolling={500}
                 pagination={{
-                  total: myAttendance?.count,
+                  total: empAttendanceList?.count,
                   current: page,
                   pageSize: limit,
                 }}
