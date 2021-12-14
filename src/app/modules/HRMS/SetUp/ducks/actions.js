@@ -421,9 +421,7 @@ export const getEmployeeList = (companyName) => async (dispatch) => {
 export const getLeaveList = (company) => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(
-    `${apiresource}/HRMS Leave Type?filters=[["company","=","${company}"]]&fields=["name","leave_type"]`,
-  );
+  } = await axios.get(`${apiresource}/HRMS Leave Type?fields=["name","leave_type"]`);
   dispatch({
     type: action_types.LEAVE_TYPE,
     data: data,
@@ -464,9 +462,7 @@ export const getSkillList = () => async (dispatch) => {
 export const getAllApprovers = (company) => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(
-    `${apiresource}/HRMS Approver?filters=[["company","=","${company}"]]&fields=["name","approver_name","approver_id"]`,
-  );
+  } = await axios.get(`${apiresource}/HRMS Approver?fields=["name","approver_name","approver_id"]`);
   dispatch({
     type: action_types.ALL_APPROVERS,
     data: data,
@@ -521,9 +517,7 @@ export const getTempList = () => async (dispatch) => {
 export const getAllDepartmentList = (company) => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(
-    `${apiresource}/HRMS Department?filters=[["company","=", "${company}"]]&fields=["name","department_name"]&order_by=name&start=1 `,
-  );
+  } = await axios.get(`${apiresource}/HRMS Department?fields=["name","department_name"]&order_by=name&start=1 `);
   dispatch({
     type: action_types.GET_DEAPRTMENTS,
     data: data,
@@ -543,7 +537,7 @@ export const getALlLetterTemp = () => async (dispatch) => {
 export const getSpecificEmployee = (url, id, company) => async (dispatch) => {
   const {
     data: { message },
-  } = await axios.get(`${apiMethod}/${url}?name_id=${id}&company=${company}`);
+  } = await axios.get(`${apiMethod}/${url}?name_id=${id}`);
   dispatch({
     type: action_types.GET_USER_SPCIFIC,
     data: message,
@@ -552,7 +546,7 @@ export const getSpecificEmployee = (url, id, company) => async (dispatch) => {
 export const filterLeaveType = (company) => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(`${apiresource}/HRMS Leave Type?filters=[["company", "=", "${company}"]]&fields=["name","leave_type"]
+  } = await axios.get(`${apiresource}/HRMS Leave Type?fields=["name","leave_type"]
   `);
   dispatch({
     type: action_types.FILTER_LEAVE_TYPE,
@@ -562,7 +556,7 @@ export const filterLeaveType = (company) => async (dispatch) => {
 export const filterLeaveEntitlementName = (company) => async (dispatch) => {
   const {
     data: { data },
-  } = await axios.get(`${apiresource}/HRMS Leave Entitlement?filters=[["company", "=", "${company}"]]&fields=["name"]
+  } = await axios.get(`${apiresource}/HRMS Leave Entitlement?fields=["name"]
   `);
   dispatch({
     type: action_types.FILTER_ENTITLEMENT,

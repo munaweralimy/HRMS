@@ -51,7 +51,7 @@ export default (props) => {
           setValue(`${value.permission_name}-read`, value.read == 1 ? [value.read] : []);
           setValue(`${value.permission_name}-write`, value.write == 1 ? [value.write] : []);
           setValue(`${value.permission_name}-delete`, value.delete == 1 ? [value.delete] : []);
-          if (value.read == 1 && value.write == 1 && value.delete == 1) {
+          if ((value.read == 1 && value.write == 1 && value.delete == 1) || value.read == 1) {
             setValue(`${value.permission_name}`, [1]);
           } else {
             setValue(`${value.permission_name}`, []);
@@ -143,7 +143,10 @@ export default (props) => {
   };
   const onSingelCheckhandler = (screen) => {
     let allVals = getValues();
-    if (allVals[`${screen}-read`].length && allVals[`${screen}-write`].length && allVals[`${screen}-delete`].length) {
+    if (
+      (allVals[`${screen}-read`].length && allVals[`${screen}-write`].length && allVals[`${screen}-delete`].length) ||
+      allVals[`${screen}-read`].length
+    ) {
       setValue(screen, [1]);
     } else {
       setValue(screen, [0]);

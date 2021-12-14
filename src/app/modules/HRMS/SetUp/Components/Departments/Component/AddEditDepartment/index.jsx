@@ -29,7 +29,7 @@ export default (props) => {
     setLoad(true);
     const payload = {
       department_name: values?.department_name,
-      company: values.company?.value,
+      // company: values.company?.value,
       employee_name: values?.employee_name.value,
       employee_id: values?.employee_name.id,
       status: 'Active',
@@ -94,7 +94,7 @@ export default (props) => {
         value: departmentField.employee_name,
         id: departmentField.employee_id,
       });
-      setValue('company', { label: departmentField.company, value: departmentField.company });
+      // setValue('company', { label: departmentField.company, value: departmentField.company });
     } else {
       reset();
       setUserData([]);
