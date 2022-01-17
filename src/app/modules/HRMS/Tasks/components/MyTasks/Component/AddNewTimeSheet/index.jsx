@@ -6,8 +6,8 @@ import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { apiMethod } from '../../../../../../../../configs/constants';
 import axios from '../../../../../../../../services/axiosInterceptor';
-import { getProjectName } from '../../../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAllProjects } from '../../../../../../Application/ducks/actions';
 
 const {Title} = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -17,12 +17,8 @@ export default (props) => {
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
   const { control, handleSubmit, setValue } = useForm();
-  const projectName = useSelector(state => state.tasks.myProjectData);
+  const projectName = useSelector(state => state.global.projects);
   const { setAddVisible, id, updateApi, mode, data } = props;
-
-  useEffect(() => {
-    dispatch(getProjectName());
-  }, []);
 
   useEffect(() => {
     if(mode != 'add') {
@@ -48,7 +44,8 @@ export default (props) => {
       parenttype: "HRMS Tasks",
       status: "Pending",
       doctype: "HRMS Timesheet",
-      project: val?.projectName?.value,
+      name_of_project: val?.projectName?.value,
+      project: val?.projectName?.label,
       hours: val?.totalHours,
       date: val?.timesheetDate ? moment(val?.timesheetDate).format('YYYY-MM-DD'): '',
       tasks: val?.task,
