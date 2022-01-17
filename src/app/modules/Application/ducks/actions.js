@@ -300,12 +300,12 @@ export const updateMenu = (stat) => {
   };
 };
 
-export const getAllProjects = () => {
+export const getAllProjects = (search=null) => {
   return async (dispatch) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.setup.hrms_projects_pagination?page_number=1&limit=0`,
+      `${apiMethod}/hrms.tasks_api.get_projects_dropdown`,
     );
     dispatch({
       type: action_types.ALL_PROJECTS,

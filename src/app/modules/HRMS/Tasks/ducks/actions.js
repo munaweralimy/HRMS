@@ -63,7 +63,7 @@ export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby,
   };
 };
 
-export const getMyTasks = (id, page, limit, order, orderby, search = null, company) => {
+export const getMyTasks = (id, page, limit, order, orderby, search = null) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -73,7 +73,7 @@ export const getMyTasks = (id, page, limit, order, orderby, search = null, compa
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_my_task_list?company=${company}&employee_id=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_my_task_list?employee_id=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
       dispatch({
         type: action_types.MY_TASKS,
         data: message,

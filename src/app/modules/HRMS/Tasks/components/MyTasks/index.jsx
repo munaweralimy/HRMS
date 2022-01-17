@@ -105,9 +105,9 @@ export default (props) => {
   ];
 
   useEffect(() => {
-    if (Object.keys(projects).length > 0) {
+    if (projects.length > 0) {
       let temp = []
-      projects?.rows.map((x, i) => {
+      projects.map((x, i) => {
         if (i == 0) {
           temp.push({label: 'All', value: ''})
           temp.push({label: x.project_name, value: x.name})
