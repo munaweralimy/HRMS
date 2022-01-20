@@ -7,7 +7,10 @@ const initialState = {
   empDetails: {},
   tempData: [],
   hoursData: [],
-  warnLetter: []
+  warnLetter: [],
+  faculty: [],
+  program: [],
+  campus: []
 };
 export default (state = initialState, action) => {
   const { type, data } = action;
@@ -33,9 +36,13 @@ export default (state = initialState, action) => {
     case action_types.EMPTY_STAFF:
       return { ...state, empDetails: {} };
     case action_types.WARN_LETTERS:
-      console.log('---', data)
       return { ...state, warnLetter: data };
-      
+    case action_types.CONTRACT_FACULTY:
+      return { ...state, faculty: data };
+    case action_types.CONTRACT_PROGRAM:
+      return { ...state, program: data };
+    case action_types.CONTRACT_CAMPUS:
+      return { ...state, campus: data };
     default:
       return state;
   }
