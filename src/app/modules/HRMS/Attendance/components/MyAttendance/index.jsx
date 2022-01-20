@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from 'antd';
 import Search from '../Search/OverallSearch';
 import ListCard from '../../../../../molecules/ListCard';
@@ -70,56 +70,54 @@ const ListCol = [
 ];
 
 const statusList = [
-  {label: 'All', value: ''},
-  {label: 'Absent', value: 'Absent'},
-  {label: 'On Leave', value: 'On Leave'},
-  {label: 'Half Day', value: 'Half Day'},
-  {label: 'On Duty', value: 'On Duty'},
-  {label: 'Rest Day', value: 'Rest Day'},
-  {label: 'Holiday', value: 'Holiday'},
-  {label: 'Late Clock In', value: 'Late Clock In'},
-  {label: 'Early Clock Out', value: 'Early Clock Out'},
-  {label: 'Replacement Leave', value: 'Replacement Leave'},
-  {label: 'Late Clock Out', value: 'Late Clock Out'},
-]
+  { label: 'All', value: '' },
+  { label: 'Absent', value: 'Absent' },
+  { label: 'On Leave', value: 'On Leave' },
+  { label: 'Half Day', value: 'Half Day' },
+  { label: 'On Duty', value: 'On Duty' },
+  { label: 'Rest Day', value: 'Rest Day' },
+  { label: 'Holiday', value: 'Holiday' },
+  { label: 'Late Clock In', value: 'Late Clock In' },
+  { label: 'Early Clock Out', value: 'Early Clock Out' },
+  { label: 'Replacement Leave', value: 'Replacement Leave' },
+  { label: 'Late Clock Out', value: 'Late Clock Out' },
+];
 
 export default (props) => {
-
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [searching, setSearching] = useState(null)
+  const [searching, setSearching] = useState(null);
   const myAttendance = useSelector((state) => state.attendance.myAttendance);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
-  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
-  
+
   useEffect(() => {
-    dispatch(getMyAttendance(id, page, limit, '', '', null, company));
+    dispatch(getMyAttendance(id, page, limit, '', '', null));
   }, []);
 
   const onSearch = (search) => {
     setPage(1);
     if (search) {
       let searchVal = {};
-        searchVal = {
-          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
-          m_status: search?.status ? search?.status.value : '',
-        }
-        setSearching(searchVal);
-        dispatch(getMyAttendance(id, 1, limit, '', '', searchVal, company));
-      } else {
-        setSearching(null);
-        dispatch(getMyAttendance(id, 1, limit, '', '', null, company));
-      }
+      searchVal = {
+        date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+        m_status: search?.status ? search?.status.value : '',
+      };
+      setSearching(searchVal);
+      dispatch(getMyAttendance(id, 1, limit, '', '', searchVal));
+    } else {
+      setSearching(null);
+      dispatch(getMyAttendance(id, 1, limit, '', '', null));
+    }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
     setPage(pagination.current);
     setLimit(pagination.pageSize);
     if (sorter.order) {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searching, company));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searching));
     } else {
-      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', '', searching, company));
+      dispatch(getMyAttendance(id, pagination.current, pagination.pageSize, '', '', searching));
     }
   };
 

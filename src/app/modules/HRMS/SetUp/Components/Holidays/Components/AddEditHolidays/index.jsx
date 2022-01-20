@@ -16,13 +16,11 @@ export default (props) => {
   const { Title, Text } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   const onFinish = (values) => {
     setLoad(true);
     const payload = {
       holiday_name: values.holiday_name,
-      company: company,
       holiday_date: moment(values.holiday_date).format('YYYY-MM-DD'),
       note: values.note,
     };
@@ -113,12 +111,13 @@ export default (props) => {
                 </>
               ) : (
                 <>
-                {allowed([Roles.SETUP], 'delete') && 
-                  <Col span={12}>
-                    <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
-                      Delete
-                    </Button>
-                  </Col>}
+                  {allowed([Roles.SETUP], 'delete') && (
+                    <Col span={12}>
+                      <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
+                        Delete
+                      </Button>
+                    </Col>
+                  )}
                   <Col span={12}>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                       Save

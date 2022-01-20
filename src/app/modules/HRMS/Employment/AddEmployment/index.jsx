@@ -55,7 +55,7 @@ export default (props) => {
         })
       })
     }
-
+ 
     if (val.emergency_contact && val.emergency_contact.length > 0) {
       val.emergency_contact.map(x => {
         emergency.push({
@@ -190,6 +190,7 @@ export default (props) => {
       
 
       let empRole = [];
+      let programlisting = [];
       let workhours = [];
       let contactPDF = '';
 
@@ -212,6 +213,16 @@ export default (props) => {
           })
         })
       }
+
+      if (val?.program.length > 0) {
+        val.program.map(x => {
+          programlisting.push({
+            program: x.value,
+            program_name: x.label
+          })
+        })
+      }
+
       if (val.contract_attachment) {
           let modifiedName = uniquiFileName(val.contract_attachment?.file?.originFileObj.name)
           let res = await getSingleUpload(modifiedName, 'image',  val.contract_attachment?.file?.originFileObj, 'Employee', id);
@@ -226,6 +237,9 @@ export default (props) => {
         end_date: val.end_date ? val.end_date : "",
         staff_category: val?.staff_category ? val?.staff_category?.value : '',
         company: val?.company ? val?.company?.value : '',
+        select_campus: val?.campus ? val?.campus?.value : '',
+        select_faculty: val?.faculty ? val?.faculty?.value : '',
+        program_list: programlisting,
         team: val?.team ? val?.team?.value : '',
         job_title: val?.job_title ? val?.job_title?.value : '',
         position_level: val?.position_level ? val?.position_level?.value : '',

@@ -16,7 +16,7 @@ export default (props) => {
   const history = useHistory();
   const [activeKey, setActiveKey] = useState('pending');
   const staffData = useSelector(state => state.global.staffData);
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+  // const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   
   const onAction1 = (status, page, sort) => {
     dispatch(getStaffPerformance());

@@ -2,7 +2,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../../configs/constants';
 
-export const getOverallAttendance = (page, limit, order, orderby, company) => async (dispatch) => {
+export const getOverallAttendance = (page, limit, order, orderby) => async (dispatch) => {
   const {
     data: { message },
   } = await axios.get(
@@ -17,7 +17,7 @@ export const getOverallAttendance = (page, limit, order, orderby, company) => as
 };
 
 export const getOverallAttendanceList =
-  (page, limit, order, orderby, search = null, company) =>
+  (page, limit, order, orderby, search = null) =>
   async (dispatch) => {
     let ordering = '';
     if (order == 'ascend') {
@@ -38,7 +38,7 @@ export const getOverallAttendanceList =
     });
   };
 
-export const getTeamAttendance = (team, page, limit, order, orderby, company) => async (dispatch) => {
+export const getTeamAttendance = (team, page, limit, order, orderby) => async (dispatch) => {
   const {
     data: { message },
   } = await axios.get(
@@ -52,7 +52,7 @@ export const getTeamAttendance = (team, page, limit, order, orderby, company) =>
   });
 };
 export const getTeamAttendanceList =
-  (team, page, limit, order, orderby, search = null, company) =>
+  (team, page, limit, order, orderby, search = null) =>
   async (dispatch) => {
     let ordering = '';
     if (order == 'ascend') {
@@ -73,7 +73,7 @@ export const getTeamAttendanceList =
     });
   };
 export const getMyAttendance =
-  (employeeID, page, limit, order, orderby, search = null, company) =>
+  (employeeID, page, limit, order, orderby, search = null) =>
   async (dispatch) => {
     let ordering = '';
     if (order == 'ascend') {
@@ -95,7 +95,7 @@ export const getMyAttendance =
   };
 
 export const getEmpAttendance =
-  (employeeID, page, limit, order, orderby, search = null, company) =>
+  (employeeID, page, limit, order, orderby, search = null) =>
   async (dispatch) => {
     let ordering = '';
     if (order == 'ascend') {

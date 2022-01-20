@@ -15,7 +15,6 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
   const custodians = useSelector((state) => state.setup.employeeList);
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   const assetFields = [
     {
       name: 'assets_name',
@@ -54,7 +53,6 @@ export default (props) => {
       assets_id: values.assets_id,
       custodian: values.custodian.value,
       status: 'With Company',
-      company: company,
     };
 
     asset.assets_name.length == 0
@@ -140,12 +138,13 @@ export default (props) => {
                 </>
               ) : (
                 <>
-                {allowed([Roles.SETUP], 'delete') && 
-                  <Col span={12}>
-                    <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteNationality}>
-                      Delete
-                    </Button>
-                  </Col>}
+                  {allowed([Roles.SETUP], 'delete') && (
+                    <Col span={12}>
+                      <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteNationality}>
+                        Delete
+                      </Button>
+                    </Col>
+                  )}
                   <Col span={12}>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                       Save

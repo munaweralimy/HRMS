@@ -21,30 +21,30 @@ export default (props) => {
   const dataYour = useSelector((state) => state.hrmsrequests.requestListYourRequest);
   const dataArchive = useSelector((state) => state.hrmsrequests.requestListArchive);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+  // const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   
   const onAction1 = (status, page, sort, limit) => {
     if(allowed([Roles.REQUESTS], 'read')) {
-      dispatch(getRequestPending(page, sort,limit, '', company));
+      dispatch(getRequestPending(page, sort,limit, ''));
     } else {
-      dispatch(getRequestPending(page, sort,limit, id, company));
+      dispatch(getRequestPending(page, sort,limit, id));
     }
   }
 
   const onAction2 = (status, page, sort, limit) => {
     if(allowed([Roles.REQUESTS], 'read')) {
-      dispatch(getYourRequest(page, sort,limit,'', company));
+      dispatch(getYourRequest(page, sort,limit,''));
     } else {
-      dispatch(getYourRequest(page, sort,limit,id, company));
+      dispatch(getYourRequest(page, sort,limit,id));
     }
     
   }
 
   const onAction3 = (status, page, sort, limit) => {
     if(allowed([Roles.REQUESTS], 'read')) {
-      dispatch(getRequestArchive(page, sort,limit, '', company));
+      dispatch(getRequestArchive(page, sort,limit, ''));
     } else {
-      dispatch(getRequestArchive(page, sort,limit, id, company));
+      dispatch(getRequestArchive(page, sort,limit, id));
     }
       
   }

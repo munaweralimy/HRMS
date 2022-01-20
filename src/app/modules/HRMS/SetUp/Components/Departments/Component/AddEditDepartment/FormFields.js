@@ -26,18 +26,6 @@ const departmentFields = () => {
         id: value.name,
       })),
     },
-    // {
-    //   name: 'company',
-    //   label: 'Company',
-    //   req: true,
-    //   placeholder: 'Select company',
-    //   type: 'select',
-    //   twocol: false,
-    //   reqmessage: 'company required',
-    //   options: [
-    //     { label: 'Limkokwing University Creative Technology', value: 'Limkokwing University Creative Technology' },
-    //   ],
-    // },
   ];
 };
 export { departmentFields };

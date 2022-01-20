@@ -47,10 +47,10 @@ export default (props) => {
   const [viewJobOpenings, setViewJobOpenings] = useState(false);
   const [rowData, setRowData] = useState();
   const openJobs = useSelector((state) => state.advancement.jobopen);
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+  // const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
-    dispatch(getJobOpening(page, limit, '', '', company))
+    dispatch(getJobOpening(page, limit, '', ''))
   }, []);
 
   const updateApi = () => {
