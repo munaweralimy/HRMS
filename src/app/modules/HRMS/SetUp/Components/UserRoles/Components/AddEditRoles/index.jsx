@@ -22,7 +22,6 @@ export default (props) => {
   const { control, errors, setValue, reset, handleSubmit, getValues } = useForm();
   const employeeList = useSelector((state) => state.setup.employeeList);
   const [seachPermission, setSearchPermission] = useState('');
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
     if (roleData.name.length > 0) {
@@ -80,7 +79,6 @@ export default (props) => {
       role_name: values.role_name,
       grand_permissions: permissions,
       user_staff: userData.map((value) => ({ employee: value.name })),
-      company: company,
     };
     console.log({ payload });
     !roleData.name
