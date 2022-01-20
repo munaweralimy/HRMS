@@ -52,7 +52,7 @@ export default (props) => {
     props.setLoading(true);
     let url = `${apiMethod}/hrms.policy_api.delete_policy?name=${name}`;
     try {
-      const res = await axios.delete(url);
+      const res = await axios.post(url);
       props.setLoading(false);
       console.log('res', res)
       if (res.data.message.success == true) {

@@ -37,7 +37,7 @@ export const getTeamTasks = (task, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_team_task_list?team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=date` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_employee_team_list?team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=date` : ''}`);
       dispatch({
         type: action_types.TEAM_TASKS,
         data: message,
@@ -73,7 +73,7 @@ export const getMyTasks = (id, page, limit, order, orderby, search = null) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_my_task_list?employee_id=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_my_task_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
       dispatch({
         type: action_types.MY_TASKS,
         data: message,

@@ -18,7 +18,7 @@ export const getPolicyList = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_policy_list`);
+    } = await axios.get(`${apiMethod}/hrms.policy_api.get_policy_list`);
     dispatch({
       type: action_types.POLICY_LIST,
       data: message,
