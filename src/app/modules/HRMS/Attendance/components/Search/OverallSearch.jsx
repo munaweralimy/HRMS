@@ -43,16 +43,6 @@ export default (props) => {
           iProps={{ placeholder: 'Date', size: 'large' }}
           initValue=""
         />
-
-        <SelectField
-          fieldname="company"
-          label=""
-          class="mb-0 w-100"
-          initValue={props?.field1?.length > 0 ? props.field1[0] : ''}
-          control={control}
-          iProps={{ placeholder: 'Company' }}
-          selectOption={props?.field1}
-        />
         <SelectField
           fieldname="team"
           label=""
