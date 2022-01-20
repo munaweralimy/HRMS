@@ -49,8 +49,8 @@ import {allowed} from '../../../../../../../../../routing/config/utils';
 export default (props) => {
 
     const dispatch = useDispatch();
-    const { data, updateApi, id, setLoad, setVisible, mode, controlOut, errorsOut, setValueOut, resetOut } = props;
-    const { control: controlIn, errors: errorsIn, setValue: setValueIn, reset: resetIn, handleSubmit: handleSubmitIn } = useForm();
+    const { data, updateApi, id, setLoad, setVisible, mode, controlOut, errorsOut, setValueOut, resetOut, getValuesOut } = props;
+    const { control: controlIn, errors: errorsIn, setValue: setValueIn, getValues: getValuesIn, reset: resetIn, handleSubmit: handleSubmitIn } = useForm();
     const [formVisible, setFormVisible] = useState(false);
     const [recordData, setRecord] = useState(null);
     const [refresh, doRefresh] = useState(0);
@@ -83,6 +83,19 @@ export default (props) => {
           roletemp = null;
         }
 
+        
+        let progtemp = [];
+          if (record?.programs.length > 0) {
+          record?.programs.map(x => {
+            progtemp.push({
+              label: x.program_name,
+              value: x.program,
+            })
+          })
+        } else {
+          progtemp = null;
+        }
+
           let temps = [
             {
               field: 'name',
@@ -100,6 +113,18 @@ export default (props) => {
             {
               field: 'company',
               value: record?.company ? {label: record.company,value: record.company}: '' 
+            },
+            {
+              field: 'campus',
+              value: record?.campus ? {label: record.campus,value: record.campus}: '' 
+            },
+            {
+              field: 'faculty',
+              value: record?.faculty ? {label: record.faculty_name,value: record.faculty}: '' 
+            },
+            {
+              field: 'program',
+              value: progtemp
             },
             {
               field: 'employement_type',
@@ -213,6 +238,7 @@ export default (props) => {
     const onFinish = async (val) => {
       setLoad(true);
       let empRole = [];
+      let programlisting = [];
       let workhours = [];
       let contactPDF = '';
 
@@ -235,6 +261,16 @@ export default (props) => {
           })
         })
       }
+
+      if (val?.program.length > 0) {
+        val.program.map(x => {
+          programlisting.push({
+            program: x.value,
+            program_name: x.label
+          })
+        })
+      }
+
       if (val.contract_attachment) {
         if (val.contract_attachment.fileList[0].uid != '-1') {
           let modifiedName = uniquiFileName(val.contract_attachment?.file?.originFileObj.name)
@@ -253,6 +289,9 @@ export default (props) => {
         end_date: val.end_date ? val.end_date : "",
         staff_category: val?.staff_category?.value,
         company: val?.company?.value,
+        select_campus: val?.campus ? val?.campus?.value : '',
+        select_faculty: val?.faculty ? val?.faculty?.value : '',
+        program_list: programlisting,
         team: val?.team?.value,
         job_title: val?.job_title?.value,
         position_level: val?.position_level?.value,
@@ -273,6 +312,7 @@ export default (props) => {
       if (recordData != null) {
         getID = recordData[0]?.value;
       }
+
 
       contractApi(body, getID).then(res => {
         employApi({status: 'Active'}, id).then(ax => {
@@ -322,10 +362,10 @@ export default (props) => {
             <Col span={24}>
               {mode == 'edit' ?
               <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-                <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} setLoad={setLoad} updateApi={updateApi} />
+                <MainForm control={controlIn} errors={errorsIn} getValues={getValuesIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} setLoad={setLoad} updateApi={updateApi} />
               </Form>
               :
-              <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />}
+              <MainForm control={controlOut} errors={errorsOut}  getValues={getValuesOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />}
             </Col>}
         </Row>
 
