@@ -4,7 +4,7 @@ import FormGroup from '../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import {getRolesList} from '../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiresource } from '../../../../../configs/constants';
+import { apiMethod } from '../../../../../configs/constants';
 import axios from '../../../../../services/axiosInterceptor';
 import { uniquiFileName, getSingleUpload } from '../../../../../features/utility';
 import { LoadingOutlined } from "@ant-design/icons";
@@ -61,10 +61,10 @@ export default (props) => {
         console.log('hello', val);
         setLoad(true);
         let userRole = [{
-            parentfield: "policy_user_group",
-            parenttype: "HRMS Policy",
+            //parentfield: "policy_user_group",
+            //parenttype: "HRMS Policy",
             user_roles: val?.user_roles.label,
-            doctype: "HRMS Policy User Group"
+            //doctype: "HRMS Policy User Group"
         }]
         // if(val?.user_roles.length > 0){
         //     val.user_roles.map(resp => {
@@ -80,38 +80,41 @@ export default (props) => {
 
        
         const json = {
-            data: {
-                policy_title: val?.policy_title,
-                doctype: "HRMS Policy",
-            }
+            policy_list: [
+                {
+                    policy_title: val?.policy_title,
+                }
+            ]
         }
         console.log('json', json)
 
-        let url = `${apiresource}/HRMS Policy`;
+        let url = `${apiMethod}/hrms.policy_api.add_single_policy`;
         
         try {
             const resp = await axios.post(url, json);
+            console.log('resp', resp)
 
-            if (resp?.status == 200) {
-                const policyName = resp['data']?.data.name;
+            if (resp?.data?.status?.success == true) {
+                const policyName = resp['data']?.message?.name;
                 let policyAttatchment = [];
                 if (val?.attachment) {
                     let modifiedName = uniquiFileName(val.attachment?.file?.originFileObj.name)
                     let res = await getSingleUpload(modifiedName, 'pdf',  val.attachment?.file?.originFileObj, 'HRMS Policy', policyName);
                     policyAttatchment = res?.file_url;
                 }
-
                 const payLoad = {
-                    data: {
-                        policy_title: val?.policy_title,
-                        attachment: policyAttatchment,
-                        doctype: "HRMS Policy",
-                        name: policyName,
-                        policy_user_group: userRole
-                    }
+                    policy_list: [
+                        {
+                            policy_title: val?.policy_title,
+                            name: policyName,
+                            attachment: policyAttatchment,
+                            policy_status: 'View',
+                            policy_user_group: userRole
+                        }
+                    ]
                 }
 
-                let url2 = `${apiresource}/HRMS Policy/${policyName}`;
+                let url2 = `${apiMethod}/hrms.policy_api.add_single_policy`;
                 try {
                     await axios.put(url2, payLoad);
                     message.success('Policy Successfully Added');
@@ -128,6 +131,7 @@ export default (props) => {
         } catch(e) {
             const { response } = e;
             message.error(response?.data?.message);
+            setLoad(false);
         }
     };
 

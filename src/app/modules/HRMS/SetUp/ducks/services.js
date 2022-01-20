@@ -245,9 +245,9 @@ export const deleteWorkingHourTemp = (id) => {
 export const getWorkingHourTempDetail = (id) => {
   return axios.get(`${apiresource}/Work Hour Template/${id}`);
 };
-export const getDepartmentList = (id, company) => {
+export const getDepartmentList = (id) => {
   return axios.get(
-    `${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}&company=${company}`,
+    `${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}`,
   );
 };
 

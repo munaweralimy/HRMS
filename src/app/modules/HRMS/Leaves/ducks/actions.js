@@ -2,11 +2,11 @@ import axios from '../../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../../configs/constants';
 
-export const getOverallTasks = (page, limit, order, approverID, orderby, company) => {
+export const getOverallTasks = (page, limit, order, approverID, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_overall_leaves?company=${company}&page_number=${page}&limit=${limit}&approver_id=${approverID}${order ? `&order=${order}` : ''}&orderby=employee_id`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_overall_leaves?page_number=${page}&limit=${limit}&approver_id=${approverID}${order ? `&order=${order}` : ''}&orderby=employee_id`);
     dispatch({
       type: action_types.OVERALL_TASKS,
       data: message,
@@ -14,7 +14,7 @@ export const getOverallTasks = (page, limit, order, approverID, orderby, company
   };
 };
 
-export const getOverallTasksWithStatus = (status, page, limit, order, approverID, orderby, search = null, company) => {
+export const getOverallTasksWithStatus = (status, page, limit, order, approverID, orderby, search = null) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -24,7 +24,7 @@ export const getOverallTasksWithStatus = (status, page, limit, order, approverID
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_overall_leaves_with_status?company=${company}&status=${status}&approver_id=${approverID}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_overall_leaves_with_status?status=${status}&approver_id=${approverID}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
     dispatch({
       type: action_types.OVERALL_TASKS_WITH_STATUS,
       data: message,
@@ -44,11 +44,11 @@ export const getCarryForwardStatus = (id) => {
   };
 };
 
-export const getTeamTasks = (task, page, limit, order, orderby, company) => {
+export const getTeamTasks = (task, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list?company=${company}&team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list?team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
       dispatch({
         type: action_types.TEAM_LEAVES,
         data: message,
@@ -65,7 +65,7 @@ export const emptyAllLeaves = () => {
   }
 }
 
-export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby, search = null, company) => {
+export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby, search = null) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -75,7 +75,7 @@ export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby,
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list_with_status?company=${company}&team_name=${task}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_team_leaves_list_with_status?team_name=${task}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
     dispatch({
       type: action_types.TEAM_LEAVES_WITH_STATUS,
       data: message,
@@ -83,7 +83,7 @@ export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby,
   };
 };
 
-export const getMyLeaves = (id,status, page, limit, order, orderby, company) => {
+export const getMyLeaves = (id,status, page, limit, order, orderby) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -93,7 +93,7 @@ export const getMyLeaves = (id,status, page, limit, order, orderby, company) => 
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves_list_with_status?company=${company}&employee_id=${id}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves_list_with_status?employee_id=${id}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
       dispatch({
         type: action_types.MY_LEAVES,
         data: message,
@@ -101,11 +101,11 @@ export const getMyLeaves = (id,status, page, limit, order, orderby, company) => 
     };
 };
 
-export const getMyAvailableLeaves = (id, company) => {
+export const getMyAvailableLeaves = (id) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves?company=${company}&employee_id=${id}`);
+      } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_my_leaves?employee_id=${id}`);
       dispatch({
         type: action_types.MY_AVAILABLE_LEAVES,
         data: message,
@@ -113,11 +113,11 @@ export const getMyAvailableLeaves = (id, company) => {
     };
 };
 
-export const getLeaveStatisticList = (status, company) => {
+export const getLeaveStatisticList = (status) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_list?company=${company}&orderby=taken_employee_leaves&order=ASC&leave_type=${status}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_list?orderby=taken_employee_leaves&order=ASC&leave_type=${status}`);
     dispatch({
       type: action_types.STATISTIC_LIST,
       data: message,
@@ -125,11 +125,11 @@ export const getLeaveStatisticList = (status, company) => {
   };
 };
 
-export const getLeaveStatisticBar = (company) => {
+export const getLeaveStatisticBar = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_bar?company=${company}&leave_type=Annual Leave`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_statistics_bar?leave_type=Annual Leave`);
     dispatch({
       type: action_types.STATISTIC_BAR,
       data: message,
@@ -161,11 +161,11 @@ export const getLeaveApplicationDetail = (id,status) => {
   };
 };
 
-export const getLeaveType = (company) => {
+export const getLeaveType = () => {
   return async (dispatch) => {
     const {
       data: { data },
-    } = await axios.get(`${apiresource}/HRMS Leave Type?filters=[["company","=","${company}"]]&fields=["name","leave_type"]`);
+    } = await axios.get(`${apiresource}/HRMS Leave Type?fields=["name","leave_type"]`);
     dispatch({
       type: action_types.LEAVE_TYPE,
       data: data,
@@ -173,11 +173,11 @@ export const getLeaveType = (company) => {
   };
 };
 
-export const getLeaveData = (type,employeeID, company) => {
+export const getLeaveData = (type,employeeID) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_data?employee_id=${employeeID}&leave_type=${type}&company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_leaves_data?employee_id=${employeeID}&leave_type=${type}`);
     dispatch({
       type: action_types.LEAVE_DATA,
       data: message,
@@ -185,11 +185,11 @@ export const getLeaveData = (type,employeeID, company) => {
   };
 };
 
-export const getLeaveApprovers = (type,employeeID, company) => {
+export const getLeaveApprovers = (type,employeeID) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_leave_type_approvers?leave_type=${type}&company=${company}&employee_id=${employeeID}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_leave_type_approvers?leave_type=${type}&employee_id=${employeeID}`);
     dispatch({
       type: action_types.LEAVE_APPROVERS,
       data: message,
@@ -197,11 +197,11 @@ export const getLeaveApprovers = (type,employeeID, company) => {
   };
 };
 
-export const getHolidaysList = (company) => {
+export const getHolidaysList = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_holiday_list_and_criteria?company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.getting_holiday_list_and_criteria`);
     dispatch({
       type: action_types.HOLIDAYS_LIST,
       data: message,

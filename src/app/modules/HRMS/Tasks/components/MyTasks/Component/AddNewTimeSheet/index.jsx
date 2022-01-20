@@ -62,11 +62,11 @@ export default (props) => {
     try {
         const res = await axios.post(url, json);
         setLoad(false);
-        if(res.data.message.success == true) {
-          message.success(res.data.message.message);
+        if(res.data.status.success == true) {
+          message.success(res.data.status.message);
           setTimeout(() => {setAddVisible(false); updateApi()}, 1000)
         } else {
-          message.error(res.data.message.message);
+          message.error(res.data.status.message);
         }
         
     } catch(e) {

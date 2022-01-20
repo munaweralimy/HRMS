@@ -52,7 +52,7 @@ export default (props) => {
       sorter: true,
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => {}}>
+        <Button type="link" className="list-links c-gray" onClick={() => {}}>
           <CloseCircleFilled />
         </Button>
       ),
