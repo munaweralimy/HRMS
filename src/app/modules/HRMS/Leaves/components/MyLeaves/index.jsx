@@ -86,16 +86,16 @@ export default (props) => {
   
 
   useEffect(() => {
-    dispatch(getMyLeaves(userdetail?.name,'Pending', 1, 10, '', '', company));
-    dispatch(getMyAvailableLeaves(userdetail?.name, company));
-    dispatch(getCarryForwardStatus(userdetail?.name, company))
+    dispatch(getMyLeaves(userdetail?.name,'Pending', 1, 10, '', ''));
+    dispatch(getMyAvailableLeaves(userdetail?.name));
+    dispatch(getCarryForwardStatus(userdetail?.name))
   }, []);
 
 
   const updateTimesheet = (status, page, limit, sort, sortby) => {
-    dispatch(getMyLeaves(userdetail?.name, status, page, limit, sort, sortby, company));
-    dispatch(getCarryForwardStatus(userdetail?.name, company));
-    dispatch(getMyAvailableLeaves(userdetail?.name, company));
+    dispatch(getMyLeaves(userdetail?.name, status, page, limit, sort, sortby));
+    dispatch(getCarryForwardStatus(userdetail?.name));
+    dispatch(getMyAvailableLeaves(userdetail?.name));
   }
 
   const btnList = [
@@ -108,8 +108,8 @@ export default (props) => {
 
   const updateApi = () => {
     setRecord(null);
-    dispatch(getMyLeaves(userdetail.name,'Pending', 1, 10, '', '', company));
-    dispatch(getMyAvailableLeaves(userdetail?.name, company));
+    dispatch(getMyLeaves(userdetail.name,'Pending', 1, 10, '', ''));
+    dispatch(getMyAvailableLeaves(userdetail?.name));
   }
 
   const carryForward = async () => {
@@ -232,7 +232,7 @@ export default (props) => {
             {!rowDetails && !addVisible &&
               <LeaveApplication id={userdetail.name} updateApi={updateTimesheet} ListData={myAvailableLeaves?.availibility} data={myTaskData} />
             }
-            {addVisible && <ApplyLeave id={userdetail.name} fullName={userdetail.fullName} company={userdetail.company} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
+            {addVisible && <ApplyLeave id={userdetail.name} fullName={userdetail.fullName} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
           </TabPane>
 
           <TabPane key={'2'} tab='Availability'>

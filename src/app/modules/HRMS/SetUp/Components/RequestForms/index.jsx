@@ -38,7 +38,7 @@ export default (props) => {
       key: 'form_name',
       sorter: true,
       render: (text, record) => (
-        <Button type="link" className="list-links" onClick={() => onClickRow(record)}>
+        <Button type="link" className="list-links c-gray" onClick={() => onClickRow(record)}>
           {text}
         </Button>
       ),
@@ -63,7 +63,7 @@ export default (props) => {
       key: 'Action',
       align: 'center',
       render: (text, record) => (
-        allowed([Roles.SETUP], 'delete') ? <Button type="link" className="list-links" onClick={() => deleteRequest(record.form_name)}>
+        allowed([Roles.SETUP], 'delete') ? <Button type="link" className="list-links c-gray" onClick={() => deleteRequest(record.form_name)}>
           <CloseCircleFilled />
         </Button> : null
       ),

@@ -52,7 +52,7 @@ export default (props) => {
       key: 'Action',
       align: 'center',
       render: (text, record) => (
-        <Button type="link" className="list-links">
+        <Button type="link" className="list-links c-gray">
           <CloseCircleFilled />
         </Button>
       ),

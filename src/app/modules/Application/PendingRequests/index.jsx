@@ -8,10 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 export default (props) => {
     const dispatch = useDispatch();
     const pendingData = useSelector(state => state.global.pendingData);
-    const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+    //const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
     useEffect(() => {
-        dispatch(getPendingIssues(company));
+        dispatch(getPendingIssues());
     }, [])
 
     return (

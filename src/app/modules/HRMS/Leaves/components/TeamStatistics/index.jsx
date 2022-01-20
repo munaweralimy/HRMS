@@ -69,7 +69,7 @@ export default (props) => {
   }
 
   useEffect(() => {
-    dispatch(getLeaveStatisticBar(company));
+    dispatch(getLeaveStatisticBar());
   }, []);
 
   const onClickRow = (record) => {
@@ -79,7 +79,7 @@ export default (props) => {
   }
 
   function callback(key) {
-    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type, company));
+    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type));
   }
 
   const leavesPanelHeader = (item, index) => (

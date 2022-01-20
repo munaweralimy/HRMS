@@ -166,7 +166,6 @@ export default (props) => {
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
-  const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   let activeTab = ''
 
   useEffect(() => {
@@ -247,12 +246,12 @@ export default (props) => {
           company:  search?.company ? search?.company.value : '',
           team_name: search?.team ? search?.team.value : '',
         }
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal, company1))
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
       } else {
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, null, company1))
+        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, null))
       }
     } else {
-      dispatch(getOverallTasks(page, limit, sort, sortby, company1));
+      dispatch(getOverallTasks(page, limit, sort, sortby));
     }
   }
 
@@ -266,13 +265,13 @@ export default (props) => {
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
           project: search?.project ? search?.project.value : '',
         }
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal, company1))
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal))
       } else {
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null, company1))
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null))
       }
       
     } else {
-      dispatch(getTeamTasks(team, page, limit, sort, sortby, company1));
+      dispatch(getTeamTasks(team, page, limit, sort, sortby));
     }    
   }
 
