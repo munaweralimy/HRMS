@@ -111,10 +111,10 @@ export default (props) => {
       let url = `${apiMethod}/hrms.tasks_api.add_projects`;
       try {
         const res = await axios.post(url, json);
-        if (res.data.message.success == false) {
-          message.error(res.data.message.message);
+        if (res.data.status.success == false) {
+          message.error(res.data.status.message);
         } else {
-          message.success(res.data.message.message);
+          message.success(res.data.status.message);
           updateApi();
           reset();
         }

@@ -2,11 +2,11 @@ import axios from '../../../../services/axiosInterceptor';
 import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../configs/constants';
 
-export const getPendingIssues = (company) => {
+export const getPendingIssues = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.dashboard_api.pending_issues?company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.dashboard_api.pending_issues`);
     dispatch({
       type: action_types.PENDING_ISSUES,
       data: message,
@@ -14,11 +14,11 @@ export const getPendingIssues = (company) => {
   };
 };
 
-export const getPolicyList = (company) => {
+export const getPolicyList = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_policy_list?company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.api.get_policy_list`);
     dispatch({
       type: action_types.POLICY_LIST,
       data: message,
@@ -26,11 +26,11 @@ export const getPolicyList = (company) => {
   };
 };
 
-export const getTimesheetData = (company) => {
+export const getTimesheetData = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_current_month_timesheet?company=${company}`);
+    } = await axios.get(`${apiMethod}/hrms.api.get_current_month_timesheet`);
     dispatch({
       type: action_types.TIMESHEET_DATA,
       data: message,
@@ -50,12 +50,12 @@ export const getCheckInData = (id, date) => {
   };
 };
 
-export const getCalenderData = (sDate, eDate, company) => {
+export const getCalenderData = (sDate, eDate) => {
   return async (dispatch) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.leaves_api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}&company=${company}`,
+      `${apiMethod}/hrms.leaves_api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}`,
     );
     dispatch({
       type: action_types.CALENDER_DATA,
@@ -64,12 +64,12 @@ export const getCalenderData = (sDate, eDate, company) => {
   };
 };
 
-export const getStaffPerformance = (company) => {
+export const getStaffPerformance = () => {
   return async (dispatch) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.dashboard_api.staff_performance?company=${company}&order=ASC&orderby=employee_id`,
+      `${apiMethod}/hrms.dashboard_api.staff_performance?order=ASC&orderby=employee_id`,
     );
     dispatch({
       type: action_types.STAFF_DATA,
@@ -300,12 +300,12 @@ export const updateMenu = (stat) => {
   };
 };
 
-export const getAllProjects = () => {
+export const getAllProjects = (search=null) => {
   return async (dispatch) => {
     const {
       data: { message },
     } = await axios.get(
-      `${apiMethod}/hrms.setup.hrms_projects_pagination?page_number=1&limit=0`,
+      `${apiMethod}/hrms.tasks_api.get_projects_dropdown`,
     );
     dispatch({
       type: action_types.ALL_PROJECTS,

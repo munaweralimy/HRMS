@@ -1,28 +1,28 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col, message } from 'antd';
 import { useTranslate } from 'Translate';
 import PolicyCard from '../../../atoms/HRMS/PolicyCard';
 import HeadingChip from '../../../molecules/HeadingChip';
 import { Popup } from '../../../atoms/Popup';
 import AddPolicy from './AddPolicy';
-import {getPolicyList} from './ducks/actions';
+import { getPolicyList } from './ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axios from '../../../../services/axiosInterceptor';
-import { apiresource } from '../../../../configs/constants';
+import { apiMethod } from '../../../../configs/constants';
 import Roles from '../../../../routing/config/Roles';
 import { allowed } from '../../../../routing/config/utils';
+import { baseUrl } from '../../../../configs/constants';
 
 export default (props) => {
 
   const il8n = useTranslate();
   const { t } = il8n;
-  const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   const dispatch = useDispatch();
   const policyListData = useSelector((state) => state.policy.policyListData);
   const [visible, setVisible] = useState(false);
-  const callList = () => dispatch(getPolicyList(company));
-  
+  const callList = () => dispatch(getPolicyList());
+
   const btnList = [
     {
       text: '+ New Policy',
@@ -40,9 +40,9 @@ export default (props) => {
     visibility: visible,
     class: 'black-modal',
     content: <AddPolicy
-        title='Add New Policy'
-        onClose={() => setVisible(false)}
-        onUpdate={callList}
+      title='Add New Policy'
+      onClose={() => setVisible(false)}
+      onUpdate={callList}
     />,
     width: 536,
     onCancel: () => setVisible(false),
@@ -50,12 +50,17 @@ export default (props) => {
 
   const onDelete = async (name) => {
     props.setLoading(true);
-    let url = `${apiresource}/HRMS Policy/${name}`;
+    let url = `${apiMethod}/hrms.policy_api.delete_policy?name=${name}`;
     try {
-      await axios.delete(url);
-      message.success('Policy Successfully Deleted');
-      dispatch(getPolicyList(company));
+      const res = await axios.delete(url);
       props.setLoading(false);
+      console.log('res', res)
+      if (res.data.message.success == true) {
+        message.success(res.data.message.message);
+        dispatch(getPolicyList());
+      } else {
+        message.error(res.data.message.message);
+      }
     } catch (e) {
       const { response } = e;
       message.error(e);
@@ -65,24 +70,30 @@ export default (props) => {
 
   const onView = async (data) => {
     const attachment = data?.attachment;
-    attachment && window.open(`http://cms2dev.limkokwing.net${attachment}`, "_blank");
+    attachment && window.open(`${baseUrl}${attachment}`, "_blank");
 
     const json = {
-        data: {
+      policy_list: [
+        {
+          policy_title: data?.policy_title,
           name: data?.name,
-          policy_status: "Viewed"
+          attachment: attachment,
+          policy_status: 'Viewed',
+          policy_user_group: data?.roles
         }
+      ]
     }
-    console.log('json', json)
 
-    let url = `${apiresource}/HRMS Policy/${data?.name}`;
-    
+    console.log('json', data)
+
+    let url = `${apiMethod}/hrms.policy_api.add_single_policy`;
+
     try {
-        await axios.put(url, json);
-        dispatch(getPolicyList(company));
-    } catch(e) {
-        const { response } = e;
-        message.error(response?.data?.message);
+      await axios.put(url, json);
+      dispatch(getPolicyList());
+    } catch (e) {
+      const { response } = e;
+      message.error(response?.data?.message);
     }
   }
 
@@ -98,7 +109,7 @@ export default (props) => {
               <PolicyCard data={resp} onDelete={onDelete} onView={onView} />
             </Col>
           </Fragment>
-        ))} 
+        ))}
       </Row>
       <Popup {...popup} />
     </>

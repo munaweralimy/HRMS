@@ -60,14 +60,18 @@ export function allowed(permission, str = '') {
         return true;
     } else {
         let bol = false;
-        Object.entries(permit2[0]).forEach(([key, val]) => {
-            permission.map(y => {
-                if (key === y && val[str] === 1) {
-                    bol = true;
-                }
+        console.log('chekcing', permit2)
+        permit2.map(x => {
+            Object.entries(x).forEach(([key, val]) => {
+                permission.map(y => {
+                    if (key === y && val[str] === 1) {
+                        bol = true;
+                    }
+                })
+                
             })
-            
         })
+        
         return bol;
     }
     

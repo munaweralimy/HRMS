@@ -18,7 +18,7 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const { control, handleSubmit, setValue } = useForm();
   const [forming, setForming] = useState([]);
-  const { setAddVisible, id, updateApi, fullName, company } = props;
+  const { setAddVisible, id, updateApi, fullName } = props;
   const leaveTypeData = useSelector(state => state.leaves.leaveTypeData);
   const leaveInfoData = useSelector(state => state.leaves.leaveInfoData);
   const leaveApproversData = useSelector(state => state.leaves.leaveApproversData);
@@ -27,14 +27,14 @@ export default (props) => {
   console.log('leaveApproversData', leaveApproversData)
 
   useEffect(() => {
-    dispatch(getLeaveType(company));
-    dispatch(getHolidaysList(company))
+    dispatch(getLeaveType());
+    dispatch(getHolidaysList())
   }, []);
 
 
   const onLeaveChange = (e) => {
-    dispatch(getLeaveData(e.label, id, company));
-    dispatch(getLeaveApprovers(e.label, id, company));
+    dispatch(getLeaveData(e.label, id));
+    dispatch(getLeaveApprovers(e.label, id));
   }
 
   const onFinish = async (val) => {
@@ -90,7 +90,6 @@ export default (props) => {
       role: '',
       job_title: '',
       leave_type_name: val?.leaveType.value,
-      company: company,
       leave_period: val?.leavePeriod.value,
       start_date: val?.leaveStart ? moment(val?.leaveStart).format('YYYY-MM-DD') : '',
       end_date: val?.leaveEnd ? moment(val?.leaveEnd).format('YYYY-MM-DD') : '',

@@ -33,7 +33,7 @@ function getDateData(data, cDate) {
   let sDate = null;
   let eDate = null;
   let array = [];
-  if (data) {
+  if (data && data.length) {
     data?.map(resp => {
       sDate = moment(resp?.start_date).format('YYYY-MM-DD');
       eDate = moment(resp?.end_date).format('YYYY-MM-DD');
@@ -82,12 +82,11 @@ export default (props) => {
   const [visible, setVisible] = useState(false);
   const [popupData, setPopupData] = useState(null);
   const calenderData = useSelector(state => state.global.calenderData);
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   let startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
   let endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
 
   useEffect(() => {
-    dispatch(getCalenderData(startOfMonth,endOfMonth,company));
+    dispatch(getCalenderData(startOfMonth,endOfMonth));
   }, []);
 
   const popup = {
@@ -125,7 +124,7 @@ export default (props) => {
   const onPanelChange = (value) => {
     startOfMonth = moment(value).startOf('month').format('YYYY-MM-DD');
     endOfMonth   = moment(value).endOf('month').format('YYYY-MM-DD');
-    dispatch(getCalenderData(startOfMonth,endOfMonth,company))
+    dispatch(getCalenderData(startOfMonth,endOfMonth))
   }
 
   const customHeader = ({value, type, onChange, onTypeChange}) => {
