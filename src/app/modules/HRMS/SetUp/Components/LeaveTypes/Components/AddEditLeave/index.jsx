@@ -89,7 +89,6 @@ export default (props) => {
   const dispatch = useDispatch();
   const singleLeaveValues = useSelector((state) => state.setup.singleLeave);
   const disabled = useSelector((state) => state.setup.selectedLeave);
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -155,7 +154,6 @@ export default (props) => {
     const payload = {
       leave_type: values?.leave_type.value,
       contract_type: values?.contract_type.label,
-      company: company,
       gender: values?.gender.label,
       marital_status: values?.marital_status.label,
       add_leave_statistics: values?.add_leave_statistics,
@@ -338,12 +336,13 @@ export default (props) => {
             </>
           ) : (
             <>
-            {allowed([Roles.SETUP], 'delete') && 
-              <Col span={12}>
-                <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteEducationField}>
-                  Delete
-                </Button>
-              </Col>}
+              {allowed([Roles.SETUP], 'delete') && (
+                <Col span={12}>
+                  <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteEducationField}>
+                    Delete
+                  </Button>
+                </Col>
+              )}
               <Col span={12}>
                 <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                   Save

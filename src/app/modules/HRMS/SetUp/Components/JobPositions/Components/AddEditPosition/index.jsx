@@ -20,7 +20,6 @@ export default (props) => {
   const { control, errors, setValue, watch, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
   const employeeList = useSelector((state) => state.setup.employeeList);
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   const skillSet = [
     { label: 'Work Quality', fieldname: 'work_quality', updateVal: watch('work_quality', 1) },
@@ -63,7 +62,6 @@ export default (props) => {
   const onFinish = async (val) => {
     setLoad(true);
     const payload = {
-      company: company,
       job_position_name: val.job_position_name,
       work_quality: val.work_quality,
       work_speed: val.work_speed,

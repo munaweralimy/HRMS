@@ -18,7 +18,6 @@ import Roles from '../../../../routing/config/Roles';
 import { allowed } from '../../../../routing/config/utils';
 import { getCompany, getTeams, getTeamsDetail } from '../../Application/ducks/actions';
 
-
 const ListColOverall = [
   {
     title: 'Date In',
@@ -167,18 +166,18 @@ const ListColTeams = [
 ];
 
 const statusList = [
-  {label: 'All', value: ''},
-  {label: 'Absent', value: 'Absent'},
-  {label: 'On Leave', value: 'On Leave'},
-  {label: 'Half Day', value: 'Half Day'},
-  {label: 'On Duty', value: 'On Duty'},
-  {label: 'Rest Day', value: 'Rest Day'},
-  {label: 'Holiday', value: 'Holiday'},
-  {label: 'Late Clock In', value: 'Late Clock In'},
-  {label: 'Early Clock Out', value: 'Early Clock Out'},
-  {label: 'Replacement Leave', value: 'Replacement Leave'},
-  {label: 'Late Clock Out', value: 'Late Clock Out'},
-]
+  { label: 'All', value: '' },
+  { label: 'Absent', value: 'Absent' },
+  { label: 'On Leave', value: 'On Leave' },
+  { label: 'Half Day', value: 'Half Day' },
+  { label: 'On Duty', value: 'On Duty' },
+  { label: 'Rest Day', value: 'Rest Day' },
+  { label: 'Holiday', value: 'Holiday' },
+  { label: 'Late Clock In', value: 'Late Clock In' },
+  { label: 'Early Clock Out', value: 'Early Clock Out' },
+  { label: 'Replacement Leave', value: 'Replacement Leave' },
+  { label: 'Late Clock Out', value: 'Late Clock Out' },
+];
 
 export default (props) => {
   const dispatch = useDispatch();
@@ -189,11 +188,10 @@ export default (props) => {
   const overallAttendanceDataList = useSelector((state) => state.attendance.overallAttendanceList);
   const teamAttendance = useSelector((state) => state.attendance.teamAttendance);
   const teamAttendanceList = useSelector((state) => state.attendance.teamAttendanceList);
-  
+
   const teamsDetailData = useSelector((state) => state.global.teamsDetailData);
-  const company = useSelector(state => state.global.companies);
-  const team = useSelector(state => state.global.teams);
-  const [allCompany, setAllCompany] = useState([]);
+  const company = useSelector((state) => state.global.companies);
+  const team = useSelector((state) => state.global.teams);
   const [allTeam, setAllTeam] = useState([]);
   const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
@@ -211,33 +209,18 @@ export default (props) => {
   useEffect(() => {
     dispatch(getTeamsDetail(id));
     dispatch(getCompany());
-    dispatch(getTeams())
+    dispatch(getTeams());
   }, []);
 
   useEffect(() => {
-    if (Object.keys(company).length > 0) {
-      let temp = []
-      company.map((x, i) => {
-        if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.name, value: x.name})
-        } else {
-          temp.push({label: x.name, value: x.name})
-        }
-      });
-      setAllCompany(temp);
-    }
-  }, [company]);
-
-  useEffect(() => {
     if (Object.keys(team).length > 0) {
-      let temp = []
+      let temp = [];
       team.map((x, i) => {
         if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.team_name, value: x.team_name})
+          temp.push({ label: 'All', value: '' });
+          temp.push({ label: x.team_name, value: x.team_name });
         } else {
-          temp.push({label: x.team_name, value: x.team_name})
+          temp.push({ label: x.team_name, value: x.team_name });
         }
       });
       setAllTeam(temp);
@@ -248,18 +231,18 @@ export default (props) => {
     if (type == 'list') {
       if (search) {
         let searchVal = {};
-          searchVal = {
-            name: search?.id ? search?.id : '',
-            employee_name: search?.name ? search?.name : '',
-            attendance_date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
-            company:  search?.company ? search?.company.value : '',
-            team: search?.team ? search?.team.value : '',
-            m_status: search?.status ? search?.status.value : '',
-          }
-          dispatch(getOverallAttendanceList(page, limit, sort, sortby, searchVal, company1));
-        } else {
-          dispatch(getOverallAttendanceList(page, limit, sort, sortby, null, company1));
-        }
+        searchVal = {
+          name: search?.id ? search?.id : '',
+          employee_name: search?.name ? search?.name : '',
+          attendance_date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+          company: search?.company ? search?.company.value : '',
+          team: search?.team ? search?.team.value : '',
+          m_status: search?.status ? search?.status.value : '',
+        };
+        dispatch(getOverallAttendanceList(page, limit, sort, sortby, searchVal, company1));
+      } else {
+        dispatch(getOverallAttendanceList(page, limit, sort, sortby, null, company1));
+      }
     } else {
       dispatch(getOverallAttendance(page, limit, sort, sortby, company1));
     }
@@ -274,12 +257,11 @@ export default (props) => {
           employee_name: search?.name ? search?.name : '',
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
           m_status: search?.status ? search?.status.value : '',
-        }
+        };
         dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, searchVal, company1));
       } else {
         dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, null, company1));
       }
-      
     } else {
       dispatch(getTeamAttendance(team, page, limit, sort, sortby, company1));
     }
@@ -303,9 +285,8 @@ export default (props) => {
         statusKey: 'status',
         updateApi: onOverallAction,
         searchDropdowns: {
-          field1: allCompany,
           field2: allTeam,
-          field3: statusList
+          field3: statusList,
         },
       },
     },
@@ -326,7 +307,7 @@ export default (props) => {
         updateApi: onTeamAction,
         teamDrop: teamsDetailData,
         searchDropdowns: {
-          field1: statusList
+          field1: statusList,
         },
       },
       Comp: MultiView,
@@ -338,7 +319,7 @@ export default (props) => {
       Comp: MyAttendance,
     },
   ];
- 
+
   return (
     <Row gutter={[20, 30]}>
       <Col span={24}>

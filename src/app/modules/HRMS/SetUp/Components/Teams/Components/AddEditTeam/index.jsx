@@ -44,7 +44,6 @@ export default (props) => {
     console.log({ teamData });
     if (Object.entries(teamData).length > 0) {
       setValue('team_name', teamData.team_name);
-      setValue('company', { label: teamData.company, value: teamData.company });
       setValue('team_leader', { label: teamData.team_leader_name, value: teamData.team_leader_name });
       setValue('department', { label: teamData.department, value: teamData.department });
     }
@@ -55,7 +54,6 @@ export default (props) => {
     const payload = {
       team_name: values.team_name,
       team_leader: values.team_leader.value,
-      // company: values.company.value,
       user_staff: userData.map((value) => ({ employee: value.name })),
       department: values.department.value,
     };

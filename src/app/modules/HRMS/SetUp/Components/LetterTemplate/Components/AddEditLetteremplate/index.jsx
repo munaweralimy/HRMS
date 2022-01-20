@@ -14,7 +14,6 @@ import { InputField } from '../../../../../../../atoms/FormElement';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   const { title, onClose, templateData } = props;
   const { Title, Text } = Typography;
   const [load, setLoad] = useState(false);
@@ -100,7 +99,6 @@ export default (props) => {
       template_name: val?.template_name,
       letter_head: letter_head?.file_url ? letter_head?.file_url : val.header,
       letter_footer: letter_footer?.file_url ? letter_footer?.file_url : val.footer,
-      company: company,
     };
     templateData?.name.length == 0
       ? addSingleLetterTemp(payload).then((response) => {
