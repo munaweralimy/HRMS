@@ -3,7 +3,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod, apiresource } from '../../../../../configs/constants';
 
 
-export const getJobOpening = (page, limit, order, orderby, company) => {
+export const getJobOpening = (page, limit, order, orderby) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -13,7 +13,7 @@ export const getJobOpening = (page, limit, order, orderby, company) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_job_opening_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}${company ? `company=${company}` : ''}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_job_opening_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
       dispatch({
         type: action_types.JOB_OPENING,
         data: message,

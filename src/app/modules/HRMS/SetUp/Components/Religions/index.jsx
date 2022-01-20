@@ -110,7 +110,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Teams" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
+          <HeadingChip title="Religions" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard
