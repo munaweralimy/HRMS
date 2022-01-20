@@ -3,11 +3,11 @@ import * as action_types from './constants';
 import { apiresource, apiMethod } from '../../../../../configs/constants';
 
 
-export const getOverallTasks = (page, limit, order, orderby, company) => {
+export const getOverallTasks = (page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_overall_task_list?company=${company}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=date` : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_overall_task_list?page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=date` : ''}`);
     dispatch({
       type: action_types.OVERALL_TASKS,
       data: message,
@@ -15,7 +15,7 @@ export const getOverallTasks = (page, limit, order, orderby, company) => {
   };
 };
 
-export const getOverallTasksWithStatus = (status, page, limit, order, orderby, search = null, company) => {
+export const getOverallTasksWithStatus = (status, page, limit, order, orderby, search = null) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -25,7 +25,7 @@ export const getOverallTasksWithStatus = (status, page, limit, order, orderby, s
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_overall_task_list_with_status?company=${company}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_overall_task_list_with_status?status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
     dispatch({
       type: action_types.OVERALL_TASKS_WITH_STATUS,
       data: message,
@@ -33,11 +33,11 @@ export const getOverallTasksWithStatus = (status, page, limit, order, orderby, s
   };
 };
 
-export const getTeamTasks = (task, page, limit, order, orderby, company) => {
+export const getTeamTasks = (task, page, limit, order, orderby) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_team_task_list?company=${company}&team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=date` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_team_task_list?team_name=${task}&page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=date` : ''}`);
       dispatch({
         type: action_types.TEAM_TASKS,
         data: message,
@@ -45,7 +45,7 @@ export const getTeamTasks = (task, page, limit, order, orderby, company) => {
     };
 };
 
-export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby, search = null, company) => {
+export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby, search = null) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -55,7 +55,7 @@ export const getTeamTasksWithStatus = (task,status, page, limit, order, orderby,
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_team_task_list_with_status?company=${company}&team_name=${task}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_team_task_list_with_status?team_name=${task}&status=${status}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
     dispatch({
       type: action_types.TEAM_TASKS_WITH_STATUS,
       data: message,

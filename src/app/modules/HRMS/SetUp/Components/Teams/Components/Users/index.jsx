@@ -19,7 +19,7 @@ const Users = (props) => {
 
   useEffect(() => {
     if (department?.bool) {
-      getDepartmentList(department.deptName, company).then((response) => {
+      getDepartmentList(department.deptName).then((response) => {
         let data = response?.data?.message;
         setDepartmentData(data);
       });
