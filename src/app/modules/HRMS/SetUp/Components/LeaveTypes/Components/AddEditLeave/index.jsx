@@ -114,7 +114,7 @@ export default (props) => {
   useEffect(() => {
     if (Object.entries(singleLeaveValues).length > 0) {
       setLoad(true);
-      setValue('leave_type', { label: singleLeaveValues?.leave_type, value: singleLeaveValues?.leave_type });
+      setValue('leave_type', singleLeaveValues?.leave_type);
       setValue('contract_type', { label: singleLeaveValues?.contract_type, value: singleLeaveValues?.contract_type });
       setValue('gender', { label: singleLeaveValues?.gender, value: singleLeaveValues?.gender });
       setValue('marital_status', {
@@ -152,7 +152,7 @@ export default (props) => {
   const onFinish = (values) => {
     setLoad(true);
     const payload = {
-      leave_type: values?.leave_type.value,
+      leave_type: values?.leave_type,
       contract_type: values?.contract_type.label,
       gender: values?.gender.label,
       marital_status: values?.marital_status.label,
@@ -170,24 +170,34 @@ export default (props) => {
       ),
     };
     leaveType.leave_type.length == 0
-      ? createLeave(payload).then((response) => {
-          if (response.data.message.success == true) {
-            message.success(response.data.message.message);
-          } else {
-            message.error(response.data.message.message);
-          }
-          setLoad(false);
-          onClose();
-        })
-      : updateSingleLeave(leaveType.name, payload).then((response) => {
-          if (response.data.message.success == true) {
-            message.success(response.data.message.message);
-          } else {
-            message.error(response.data.message.message);
-          }
-          setLoad(false);
-          onClose();
-        });
+      ? createLeave(payload)
+          .then((response) => {
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
+            setLoad(false);
+            onClose();
+          })
+          .catch((error) => {
+            message.error('something went wrong');
+            setLoad(false);
+          })
+      : updateSingleLeave(leaveType.name, payload)
+          .then((response) => {
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
+            setLoad(false);
+            onClose();
+          })
+          .catch((error) => {
+            message.error('something went wrong');
+            setLoad(false);
+          });
   };
   const onDeleteEducationField = () => {
     setLoad(true);

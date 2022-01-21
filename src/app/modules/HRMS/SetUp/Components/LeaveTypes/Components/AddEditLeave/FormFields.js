@@ -24,10 +24,10 @@ const leaveFields = () => {
       label: 'Leave Type Name',
       req: true,
       placeholder: 'Type leave name',
-      type: 'select',
+      type: 'input',
       twocol: false,
       reqmessage: 'Please enter name',
-      options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
+      // options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
     },
     {
       title: 'Avaliabale for the following',

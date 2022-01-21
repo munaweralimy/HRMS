@@ -452,11 +452,11 @@ export const getUserList =
 
 export const getSkillList = () => async (dispatch) => {
   const {
-    data: { data },
+    data: { message },
   } = await axios.get(`${apiMethod}/hrms.setup.get_hrms_skills_dropdown`);
   dispatch({
     type: action_types.SKILLS_LIST,
-    data: data,
+    data: message,
   });
 };
 export const getAllApprovers = (company) => async (dispatch) => {
@@ -526,11 +526,11 @@ export const getAllDepartmentList = (company) => async (dispatch) => {
 
 export const getALlLetterTemp = () => async (dispatch) => {
   const {
-    data: { data },
-  } = await axios.get(`${apiresource}/Letter Template`);
+    data: { message },
+  } = await axios.get(`${apiMethod}/hrms.setup.get_hrms_letter_template_dropdown`);
   dispatch({
     type: action_types.LETTER_TEMP,
-    data: data,
+    data: message,
   });
 };
 
