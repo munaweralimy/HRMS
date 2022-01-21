@@ -60,7 +60,6 @@ export function allowed(permission, str = '') {
         return true;
     } else {
         let bol = false;
-        console.log('chekcing', permit2)
         permit2.map(x => {
             Object.entries(x).forEach(([key, val]) => {
                 permission.map(y => {

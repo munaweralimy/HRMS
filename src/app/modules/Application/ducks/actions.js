@@ -189,11 +189,11 @@ export const getProgName = () => {
 export const getInstitution = () => {
   return async (dispatch) => {
     const {
-      data: { data },
-    } = await axios.get(`${apiresource}/Institutions`);
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_institutions`);
     dispatch({
       type: action_types.INTITUTION_LIST,
-      data: data,
+      data: message,
     });
   };
 };

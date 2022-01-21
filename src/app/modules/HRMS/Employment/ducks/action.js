@@ -145,4 +145,40 @@ export const getTeams = (page, limit, order, orderby, search = null) => {
       });
     };
   };
+
+  export const getEmployFaculty = (company) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/aqa.api.get_faculty`, {params: {"company": company}});
+      dispatch({
+        type: action_types.CONTRACT_FACULTY,
+        data: message,
+      });
+    };
+  };
+
+  export const getEmployProgram = (company, faculty) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/aqa.api.get_program`, {params: {"company": company, "faculty": faculty}});
+      dispatch({
+        type: action_types.CONTRACT_PROGRAM,
+        data: message,
+      });
+    };
+  };
+
+  export const getEmployCampus = (company) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/Campus`, {params: { "company": company }});
+      dispatch({
+        type: action_types.CONTRACT_CAMPUS,
+        data: message,
+      });
+    };
+  };
   
