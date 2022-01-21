@@ -20,7 +20,7 @@ const jobFields = () => {
       req: true,
       reqMessage: 'skills required',
       twocol: false,
-      options: skills.map((value) => ({ label: value.name, value: value.name })),
+      options: skills?.map((value) => ({ label: value.name, value: value.name })),
     },
   ];
 };

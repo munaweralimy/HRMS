@@ -420,11 +420,11 @@ export const getEmployeeList = (companyName) => async (dispatch) => {
 
 export const getLeaveList = (company) => async (dispatch) => {
   const {
-    data: { data },
-  } = await axios.get(`${apiresource}/HRMS Leave Type?fields=["name","leave_type"]`);
+    data: { message },
+  } = await axios.get(`${apiMethod}/hrms.setup.get_hrms_leave_type_dropdown`);
   dispatch({
     type: action_types.LEAVE_TYPE,
-    data: data,
+    data: message,
   });
 };
 
@@ -461,11 +461,11 @@ export const getSkillList = () => async (dispatch) => {
 };
 export const getAllApprovers = (company) => async (dispatch) => {
   const {
-    data: { data },
+    data: { message },
   } = await axios.get(`${apiMethod}/hrms.setup.get_hrms_approval_dropdown`);
   dispatch({
     type: action_types.ALL_APPROVERS,
-    data: data,
+    data: message,
   });
 };
 export const leaveTypeSelect = (data) => (dispach) => {
@@ -506,21 +506,21 @@ export const showWarningLetter = (data) => (dispatch) => {
 
 export const getTempList = () => async (dispatch) => {
   const {
-    data: { data },
+    data: { message },
   } = await axios.get(`${apiMethod}/hrms.setup.get_hrms_letter_template_dropdown`);
   dispatch({
     type: action_types.TEMP_LIST,
-    data: data,
+    data: message,
   });
 };
 
 export const getAllDepartmentList = (company) => async (dispatch) => {
   const {
-    data: { data },
+    data: { message },
   } = await axios.get(`${apiMethod}/hrms.setup.get_hrms_department_dropdown`);
   dispatch({
     type: action_types.GET_DEAPRTMENTS,
-    data: data,
+    data: message,
   });
 };
 
@@ -545,12 +545,12 @@ export const getSpecificEmployee = (url, id, company) => async (dispatch) => {
 };
 export const filterLeaveType = (company) => async (dispatch) => {
   const {
-    data: { data },
+    data: { message },
   } = await axios.get(`${apiMethod}/hrms.setup.get_hrms_leave_type_dropdown
   `);
   dispatch({
     type: action_types.FILTER_LEAVE_TYPE,
-    data: data,
+    data: message,
   });
 };
 export const filterLeaveEntitlementName = (company) => async (dispatch) => {
