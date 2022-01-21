@@ -1,107 +1,30 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Space, Button, Row, Col, Typography, Form, Radio, message, Spin } from 'antd';
-import { useForm, useFieldArray, useWatch, Controller } from 'react-hook-form';
+import { Button, Row, Col, Typography, Form, Radio, message, Spin } from 'antd';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { leaveFields } from './FormFields';
 import { InputRadio } from '../../../../../../../atoms/FormElement';
 import { createLeave, updateSingleLeave, deleteSingleLeave } from '../../../../ducks/services';
-import { getSingleLeave, leaveTypeSelect } from '../../../../ducks/actions';
+import { getSingleLeave } from '../../../../ducks/actions';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { SelectField } from '../../../../../../../atoms/FormElement';
-import Select from 'react-select';
 import { LoadingOutlined } from '@ant-design/icons';
 import Roles from '../../../../../../../../routing/config/Roles';
 import { allowed } from '../../../../../../../../routing/config/utils';
 const antIcon = <LoadingOutlined spin />;
 
-const ConditionalInput = (props) => {
-  const { control, index, field } = props;
-  const approverList = useSelector((state) => state.setup.allApprovers);
-
-  const fieldVales = useWatch({
-    name: 'approvers',
-    control,
-  });
-  return (
-    <Col span={24}>
-      <Controller
-        name={`approvers.${index}.approver`}
-        control={control}
-        defaultValue={
-          props.field.approver
-            ? {
-                label: props.field.approver.value,
-                value: props.field.approver.value,
-                id: props.field.approver.approver_id,
-              }
-            : ''
-        }
-        render={({ onBlur, onChange, value }) => {
-          if (fieldVales?.[index]?.approver_level?.value === 'Individual') {
-            return (
-              <Select
-                value={value}
-                className="customSelect"
-                styles={{
-                  control: (val) => ({ ...val, minHeight: 32 }),
-                  valueContainer: (vcontain) => ({
-                    ...vcontain,
-                    padding: '5px 15px',
-                    textTransform: 'capitalize',
-                  }),
-                  dropdownIndicator: (icontain) => ({ ...icontain, padding: 5 }),
-                  indicatorSeparator: (icontain) => ({
-                    ...icontain,
-                    backgroundColor: '#000',
-                  }),
-                  option: (vcontain, state) => ({
-                    ...vcontain,
-                    textTransform: 'capitalize',
-                    color: '#BEBEBE',
-                    backgroundColor: state.isFocused ? '#0077B6' : '#171717',
-                  }),
-                }}
-                onChange={(e) => {
-                  onChange(e);
-                }}
-                options={approverList.map((value) => ({
-                  label: value.approver_name,
-                  value: value.approver_name,
-                  id: value.approver_id,
-                }))}
-                {...props.field}
-              />
-            );
-          } else {
-            return <></>;
-          }
-        }}
-      />
-    </Col>
-  );
-};
-
 export default (props) => {
-  const { title, onClose, onUpdate, leaveType } = props;
+  const { title, onClose, leaveType } = props;
   const { Title, Text } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, reset, setValue, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const singleLeaveValues = useSelector((state) => state.setup.singleLeave);
-  const disabled = useSelector((state) => state.setup.selectedLeave);
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'approvers',
   });
-
-  const value = useWatch({
-    name: 'approvers',
-    control,
-  });
-  const initQ = {
-    approver_level: '',
-  };
 
   useEffect(() => {
     if (leaveType.name.length > 0) {
@@ -122,27 +45,7 @@ export default (props) => {
         value: singleLeaveValues?.marital_status,
       });
       setValue('add_leave_statistics', singleLeaveValues?.add_leave_statistics);
-
-      let approvers = singleLeaveValues?.approvers.map((value) =>
-        value.approver_level === 'Individual'
-          ? {
-              approver_level: 'Individual',
-              approver: { label: value.approver, value: value.approver, approver_id: value.approver_id },
-            }
-          : { approver_level: value.approver_level },
-      );
-      setValue('approvers', approvers);
-      let diableApprover = { manager: false, supervisor: false, teamLead: false };
-      approvers.map((value) => {
-        if (value.approver_level === 'Manager') {
-          diableApprover.manager = true;
-        } else if (value.approver_level === 'Supervisor') {
-          diableApprover.supervisor = true;
-        } else if (value.approver_level === 'Team Lead') {
-          diableApprover.teamLead = true;
-        }
-      });
-      dispatch(leaveTypeSelect(diableApprover));
+      setValue('approvers', singleLeaveValues?.approvers);
       setLoad(false);
     } else {
       reset();
@@ -158,16 +61,10 @@ export default (props) => {
       marital_status: values?.marital_status.label,
       add_leave_statistics: values?.add_leave_statistics,
       doctype: 'HRMS Leave Type',
-      approvers: values?.approvers.map((value) =>
-        value.approver_level.label === 'Individual'
-          ? {
-              approver_level: value.approver_level.value,
-              approver: value.approver.value,
-              approver_id: value.approver.id,
-              doctype: 'HRMS Leave Type Approvers',
-            }
-          : { approver_level: value.approver_level.value, doctype: 'HRMS Leave Type Approvers' },
-      ),
+      approvers: values?.approvers.map((value) => ({
+        approver_level: value.approver_level.value,
+        doctype: 'HRMS Leave Type Approvers',
+      })),
     };
     leaveType.leave_type.length == 0
       ? createLeave(payload)
@@ -212,20 +109,6 @@ export default (props) => {
     });
   };
 
-  const onRemoveSelect = (index) => {
-    if (value[index].approver_level.value == 'Manager') {
-      let ableManager = { ...disabled, manager: false };
-      dispatch(leaveTypeSelect(ableManager));
-    } else if (value[index].approver_level.value == 'Team Lead') {
-      let ableManager = { ...disabled, teamLead: false };
-      dispatch(leaveTypeSelect(ableManager));
-    } else if (value[index].approver_level.value == 'Supervisor') {
-      let ableManager = { ...disabled, supervisor: false };
-      dispatch(leaveTypeSelect(ableManager));
-    }
-    remove(index);
-  };
-
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
       <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
@@ -246,65 +129,52 @@ export default (props) => {
                   </Title>
                 </Col>
               )}
-              {item.type == 'array' ? (
-                <Col span={24}>
-                  <Space size={15} direction="vertical" className="w-100">
-                    {fields.map((elem, index) => {
-                      return (
-                        <Row gutter={[24, 8]}>
-                          {item.child.map((x, i) => (
-                            <Fragment key={i}>
-                              {x?.subheader && (
-                                <Col span={24}>
-                                  <Row gutter={24} justify="space-between">
-                                    <Col>
-                                      <Text className="mb-0 c-gray">{`${x.subheader} ${index + 1}`}</Text>
-                                    </Col>
-
-                                    <Col>
-                                      <Button
-                                        type="link"
-                                        htmlType="button"
-                                        className="p-0 h-auto c-gray-linkbtn"
-                                        onClick={() => onRemoveSelect(index)}
-                                      >
-                                        Remove
-                                      </Button>
-                                    </Col>
-                                  </Row>
-                                </Col>
-                              )}
-                              <FormGroup
-                                elem={elem}
-                                index={index}
-                                parent={item}
-                                item={x}
-                                control={control}
-                                errors={errors}
-                              />
-                              <ConditionalInput control={control} errors={errors} index={index} field={elem} />
-                            </Fragment>
-                          ))}
-                        </Row>
-                      );
-                    })}
-
-                    <Button
-                      htmlType="button"
-                      type="dashed"
-                      size="large"
-                      className="w-100"
-                      onClick={() => append(initQ)}
-                    >
-                      + Add approver level
-                    </Button>
-                  </Space>
-                </Col>
-              ) : (
-                <FormGroup item={item} control={control} errors={errors} />
-              )}
+              <FormGroup item={item} control={control} errors={errors} />
             </Fragment>
           ))}
+          <Col span={24}>
+            <Title level={5} className="mb-0">
+              Approvers
+            </Title>
+          </Col>
+          {fields.map((item, index) => (
+            <Fragment key={item.id}>
+              <Col span={24}>
+                <Row gutter={[10, 10]}>
+                  <Col span={24}>
+                    <SelectField
+                      fieldname={`approvers[${index}].approver_level`}
+                      label={'Approvers'}
+                      control={control}
+                      class={`mb-0`}
+                      iProps={{ placeholder: 'Please select' }}
+                      initValue={
+                        item?.approver_level ? { label: item?.approver_level, value: item?.approver_level } : ''
+                      }
+                      selectOption={[
+                        { label: 'Manager', value: 'Manager' },
+                        { label: 'Team Lead', value: 'Team Lead' },
+                        { label: 'Supervisor', value: 'Supervisor' },
+                      ]}
+                    />
+                    <Button
+                      type="link"
+                      htmlType="button"
+                      className="p-0 h-auto c-gray-linkbtn right-fixed smallFont12"
+                      onClick={() => remove(index)}
+                    >
+                      Remove
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Fragment>
+          ))}
+          <Col span={24}>
+            <Button htmlType="button" type="dashed" size="large" className="w-100" onClick={() => append(initQ)}>
+              + Add Approver
+            </Button>
+          </Col>
           <Col span={24}>
             <Row gutter={[24, 4]} justify="start">
               <Col span={24}>

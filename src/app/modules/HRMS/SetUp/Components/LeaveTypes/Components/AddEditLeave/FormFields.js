@@ -71,29 +71,6 @@ const leaveFields = () => {
         { label: 'All', value: 'All' },
       ],
     },
-    {
-      type: 'array',
-      name: 'approvers',
-      title: 'Approver',
-      twocol: false,
-      child: [
-        {
-          type: 'select',
-          onChange: onSelectChange,
-          subheader: 'Approver',
-          name: 'approver_level',
-          req: false,
-          placeholder: 'Please Select',
-          twocol: false,
-          options: [
-            { label: 'Individual', value: 'Individual' },
-            { label: 'Manager', value: 'Manager', isDisabled: disabled.manager },
-            { label: 'Team Lead', value: 'Team Lead', isDisabled: disabled.teamLead },
-            { label: 'Supervisor', value: 'Supervisor', isDisabled: disabled.supervisor },
-          ],
-        },
-      ],
-    },
   ];
 };
 export { leaveFields };
