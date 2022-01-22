@@ -11,6 +11,7 @@ import {
 } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
 import { InputField } from '../../../../../../../atoms/FormElement';
+import { baseUrl } from '../../../../../../../../configs/constants';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
@@ -236,7 +237,7 @@ export default (props) => {
                     <img
                       src={
                         header?.imageUrlHeader.length < 100
-                          ? `http://cms2dev.limkokwing.net${header.imageUrlHeader}`
+                          ? `${baseUrl}${header.imageUrlHeader}`
                           : header.imageUrlHeader
                       }
                       alt={<PlusCircleFilled />}
@@ -287,7 +288,7 @@ export default (props) => {
                     <img
                       src={
                         header?.imageUrlFooter.length < 100
-                          ? `http://cms2dev.limkokwing.net${header.imageUrlFooter}`
+                          ? `${baseUrl}${header.imageUrlFooter}`
                           : header.imageUrlFooter
                       }
                       alt={<PlusCircleFilled />}

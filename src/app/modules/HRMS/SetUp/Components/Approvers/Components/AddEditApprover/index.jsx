@@ -3,7 +3,7 @@ import { Button, Row, Col, Typography, Form, message, Upload, Select, Spin } fro
 import { useForm, Controller } from 'react-hook-form';
 import { uniquiFileName, getSingleUpload, getFileName } from '../../../../../../../../features/utility';
 import { InputField } from '../../../../../../../atoms/FormElement';
-import { apiMethod } from '../../../../../../../../configs/constants';
+import { apiMethod, baseUrl } from '../../../../../../../../configs/constants';
 import axios from '../../../../../../../../services/axiosInterceptor';
 import { addSingleApprover, updateApprover, deleteApprover, getApproverDetail } from '../../../../ducks/services';
 import { PlusCircleFilled } from '@ant-design/icons';
@@ -259,7 +259,7 @@ export default (props) => {
                           <img
                             src={
                               image?.imageUrl.length < 100
-                                ? `http://cms2dev.limkokwing.net${image.imageUrl}`
+                                ? `${baseUrl}${image.imageUrl}`
                                 : image.imageUrl
                             }
                             alt={<PlusCircleFilled />}

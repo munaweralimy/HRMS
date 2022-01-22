@@ -7,10 +7,11 @@ import { useDispatch } from 'react-redux';
 import { getWHTemplateList } from '../../../../../ducks/action';
 import { getFileName, uniquiFileName, getSingleUpload } from '../../../../../../../../../features/utility';
 import moment from 'moment';
-import { contractApi, employApi } from '../../../../../ducks/services';
+import { contractApi, employApi, leaveApi } from '../../../../../ducks/services';
 import MainForm from './MainForm';
 import Roles from '../../../../../../../../../routing/config/Roles';
 import {allowed} from '../../../../../../../../../routing/config/utils';
+import { baseUrl } from '../../../../../../../../../configs/constants';
 
   const colName = [
     {
@@ -21,8 +22,8 @@ import {allowed} from '../../../../../../../../../routing/config/utils';
     },
     {
       title: 'Job Title',
-      dataIndex: 'job_title',
-      key: 'job_title',
+      dataIndex: 'job_title_name',
+      key: 'job_title_name',
       sorter: true,
     },
     {
@@ -76,7 +77,7 @@ export default (props) => {
           record?.employee_role.map(x => {
             roletemp.push({
               label: x.role_name,
-              value: x.role_name,
+              value: x.role,
             })
           })
         } else {
@@ -85,7 +86,7 @@ export default (props) => {
 
         
         let progtemp = [];
-          if (record?.programs.length > 0) {
+          if (record?.programs && record?.programs.length > 0) {
           record?.programs.map(x => {
             progtemp.push({
               label: x.program_name,
@@ -93,7 +94,7 @@ export default (props) => {
             })
           })
         } else {
-          progtemp = null;
+          progtemp = [];
         }
 
           let temps = [
@@ -112,11 +113,11 @@ export default (props) => {
             },
             {
               field: 'company',
-              value: record?.company ? {label: record.company,value: record.company}: '' 
+              value: record?.company 
             },
             {
               field: 'campus',
-              value: record?.campus ? {label: record.campus,value: record.campus}: '' 
+              value: record?.campus ? {label: record.campus_name,value: record.campus}: '' 
             },
             {
               field: 'faculty',
@@ -132,7 +133,7 @@ export default (props) => {
             },
             {
               field: 'contract_attachment',
-              value: record?.contract_attachment ? {fileList: [{uid: '-1', name: getFileName(record?.contract_attachment), status: 'done', url: `http://cms2dev.limkokwing.net${record?.contract_attachment}`}]} : '', 
+              value: record?.contract_attachment ? {fileList: [{uid: '-1', name: getFileName(record?.contract_attachment), status: 'done', url: `${baseUrl}${record?.contract_attachment}`}]} : '', 
             },
             
 
@@ -142,7 +143,7 @@ export default (props) => {
             },
             {
               field: 'job_title',
-              value: record?.job_title ? {label: record.job_title,value: record.job_title}: '' 
+              value: record?.job_title ? {label: record.job_title_name,value: record.job_title}: '' 
             },
             {
               field: 'position_level',
@@ -154,7 +155,7 @@ export default (props) => {
             },
             {
               field: 'supervisor',
-              value: record.supervisor ? {label: record.supervisor,value: record.supervisor}: '' 
+              value: record.supervisor ? {label: record.supervisor,value: record.supervisor_id}: '' 
             },
             {
               field: 'alternate_saturdays',
@@ -170,7 +171,7 @@ export default (props) => {
             },
             {
               field: 'work_hour_template',
-              value: record.work_hour_template ? {label: record.work_hour_template,value: record.work_hour_template}: '' 
+              value: record.work_hour_template ? {label: record.work_hour_template_name,value: record.work_hour_template}: '' 
             },
             {
               field: 'start_date',
@@ -257,12 +258,13 @@ export default (props) => {
       if (val.employee_role.length > 0) {
         val.employee_role.map(x => {
           empRole.push({
-            role_name: x.value
+            role: x.value,
+            role_name: x.label
           })
         })
       }
 
-      if (val?.program.length > 0) {
+      if (val?.program && val?.program.length > 0) {
         val.program.map(x => {
           programlisting.push({
             program: x.value,
@@ -288,16 +290,16 @@ export default (props) => {
         start_date: val.start_date ? val.start_date : '',
         end_date: val.end_date ? val.end_date : "",
         staff_category: val?.staff_category?.value,
-        company: val?.company?.value,
+        company: val?.company,
         select_campus: val?.campus ? val?.campus?.value : '',
         select_faculty: val?.faculty ? val?.faculty?.value : '',
         program_list: programlisting,
         team: val?.team?.value,
         job_title: val?.job_title?.value,
         position_level: val?.position_level?.value,
-        supervisor: val?.supervisor?.value,
+        supervisor_id: val?.supervisor?.value,
         employee_role: empRole,
-        contract_attachment: contactPDF ? contactPDF.replace('http://cms2dev.limkokwing.net', '') : '',
+        contract_attachment: contactPDF ? contactPDF.replace(`${baseUrl}`, '') : '',
         work_hour_template: val?.work_hour_template?.value != 'Custom Template' ? val?.work_hour_template?.value : '',    
         custom_work_hour_template: val?.work_hour_template?.value == 'Custom Template' ? 1 : 0,
         alternate_saturdays: val.alternate_saturdays ==  true ? 1 : 0,
@@ -316,6 +318,7 @@ export default (props) => {
 
       contractApi(body, getID).then(res => {
         employApi({status: 'Active'}, id).then(ax => {
+          leaveApi(id)
           setLoad(false);
           message.success('Details Successfully Saved')
           setFormVisible(false);

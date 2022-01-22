@@ -152,7 +152,7 @@ export default (props) => {
             class={`mb-0`}
             iProps={{ placeholder: 'Please select' }}
             initValue={''}
-            selectOption={position?.map(x => ({label: x.name, value: x.name}))}
+            selectOption={position?.map(x => ({label: x.role_name, value: x.name}))}
             rules={{ required: 'Required' }}
             validate={errors.sender && 'error'}
             validMessage={errors.sender && errors.sender.message}

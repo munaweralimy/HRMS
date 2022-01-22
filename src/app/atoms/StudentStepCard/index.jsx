@@ -2,6 +2,7 @@ import React from "react";
 import { Row, Col, Card, Typography, Space, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import StepsIcons from "../StepsIcons";
+import { baseUrl } from "../../../configs/constants";
 
 const { Text, Title } = Typography;
 
@@ -18,7 +19,7 @@ export default (props) => {
                     <Row gutter={[20,30]}>
                         <Col span={24}>
                             <Space size={20} className='w-100'>
-                                <Avatar size={70} icon={data.user_image ? `http://cms2dev.limkokwing.net${data.user_image}` : ''} />
+                                <Avatar size={70} icon={data.user_image ? `${baseUrl}${data.user_image}` : ''} />
                                 <Space direction='vertical' className='w-100' size={5}>
                                     <Title level={4} className="mb-0 font-500">{data.applicant_name}</Title>
                                     <Text className='c-gray'>{data.name}</Text>

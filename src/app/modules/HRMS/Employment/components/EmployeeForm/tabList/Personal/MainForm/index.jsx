@@ -214,7 +214,7 @@ export default (props) => {
       name: 'race',
       twocol: true,
       placeholder: 'Please select',
-      options: raceList?.map((x) => ({ label: x.name, value: x.name })),
+      options: raceList?.map((x) => ({ label: x.name1, value: x.name })),
       req: false,
     },
     {
@@ -223,7 +223,7 @@ export default (props) => {
       name: 'religious',
       placeholder: 'Please select',
       twocol: true,
-      options: religionList?.map((x) => ({ label: x.name, value: x.name })),
+      options: religionList?.map((x) => ({ label: x.name1, value: x.name })),
       req: false,
     },
     {
@@ -463,7 +463,7 @@ export default (props) => {
       name: 'spouse_race',
       twocol: true,
       placeholder: 'Please select',
-      options: raceList?.map((x) => ({ label: x.name, value: x.name })),
+      options: raceList?.map((x) => ({ label: x.name1, value: x.name })),
       req: false,
     },
     {
@@ -472,7 +472,7 @@ export default (props) => {
       name: 'spouse_religious',
       twocol: true,
       placeholder: 'Please select',
-      options: religionList?.map((x) => ({ label: x.name, value: x.name })),
+      options: religionList?.map((x) => ({ label: x.name1, value: x.name })),
       req: false,
     },
     {
@@ -670,7 +670,7 @@ export default (props) => {
           name: 'school_univ',
           label: 'Institution',
           req: false,
-          options: instituteList?.map((x) => ({ label: x.name, value: x.name })),
+          options: instituteList?.map((x) => ({ label: x.institution, value: x.name })),
           colWidth: '1 0 100%',
           placeholder: 'Please Select',
           twocol: false,
@@ -679,7 +679,7 @@ export default (props) => {
           type: 'select',
           name: 'fields',
           label: 'Field',
-          options: educationList.map((x) => ({ label: x.name, value: x.name })),
+          options: educationList.map((x) => ({ label: x.education_field, value: x.name })),
           req: false,
           colWidth: '1 0 100%',
           placeholder: 'Please Select',

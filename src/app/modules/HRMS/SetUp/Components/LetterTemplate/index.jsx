@@ -9,6 +9,7 @@ import AddEditLetterTemplate from './Components/AddEditLetteremplate';
 import Search from './Components/Search';
 import { allowed } from '../../../../../../routing/config/utils';
 import Roles from '../../../../../../routing/config/Roles';
+import { baseUrl } from '../../../../../../configs/constants';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -106,7 +107,7 @@ export default (props) => {
                           preview={false}
                           width={310}
                           height={110}
-                          src={`http://cms2dev.limkokwing.net${value.letter_head}`}
+                          src={`${baseUrl}${value.letter_head}`}
                         />
                       }
                     >

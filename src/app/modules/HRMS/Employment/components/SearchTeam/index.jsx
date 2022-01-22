@@ -19,11 +19,11 @@ export default (props) => {
       </Title>
       <Form onFinish={handleSubmit(onSubmit)} layout="inline" className="w-100 inline-form">
         <InputField
-          fieldname="company"
+          fieldname="team"
           class="mb-0"
           label=""
           control={control}
-          iProps={{ placeholder: 'Company', size: 'large' }}
+          iProps={{ placeholder: 'Team Name', size: 'large' }}
           initValue=""
         />
         <Button size="large" type="primary" htmlType="submit">
