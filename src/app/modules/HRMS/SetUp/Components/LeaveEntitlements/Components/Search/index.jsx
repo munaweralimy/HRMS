@@ -37,7 +37,7 @@ export default (props) => {
           initValue=""
           control={control}
           iProps={{ placeholder: 'Leave Type' }}
-          selectOption={filterLeaveName.map((value) => ({ label: value.leave_type, value: value.leave_type }))}
+          selectOption={filterLeaveName?.map((value) => ({ label: value.leave_type, value: value.leave_type }))}
         />
         <SelectField
           fieldname="leave_entitlement_name"
@@ -46,7 +46,7 @@ export default (props) => {
           initValue=""
           control={control}
           iProps={{ placeholder: 'Entitlement Name' }}
-          selectOption={filterLeaveEntitlemnt.map((value) => ({ label: value.name, value: value.name }))}
+          selectOption={filterLeaveEntitlemnt?.map((value) => ({ label: value.name, value: value.name }))}
         />
         <InputField
           fieldname="entitlement_days"

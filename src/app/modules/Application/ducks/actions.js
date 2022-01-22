@@ -18,7 +18,7 @@ export const getPolicyList = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.get_policy_list`);
+    } = await axios.get(`${apiMethod}/hrms.policy_api.get_policy_list`);
     dispatch({
       type: action_types.POLICY_LIST,
       data: message,
@@ -54,9 +54,7 @@ export const getCalenderData = (sDate, eDate) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(
-      `${apiMethod}/hrms.leaves_api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}`,
-    );
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}`);
     dispatch({
       type: action_types.CALENDER_DATA,
       data: message,
@@ -68,9 +66,7 @@ export const getStaffPerformance = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(
-      `${apiMethod}/hrms.dashboard_api.staff_performance?order=ASC&orderby=employee_id`,
-    );
+    } = await axios.get(`${apiMethod}/hrms.dashboard_api.staff_performance?order=ASC&orderby=employee_id`);
     dispatch({
       type: action_types.STAFF_DATA,
       data: message,
@@ -212,6 +208,18 @@ export const getTeams = () => {
   };
 };
 
+export const getTeams2 = () => {
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_team_names`);
+    dispatch({
+      type: action_types.TEAM_LISTING2,
+      data: message,
+    });
+  };
+};
+
 
 export const getRoles = () => {
   return async (dispatch) => {
@@ -305,13 +313,11 @@ export const updateMenu = (stat) => {
   };
 };
 
-export const getAllProjects = (search=null) => {
+export const getAllProjects = (search = null) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(
-      `${apiMethod}/hrms.tasks_api.get_projects_dropdown`,
-    );
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_projects_dropdown`);
     dispatch({
       type: action_types.ALL_PROJECTS,
       data: message,

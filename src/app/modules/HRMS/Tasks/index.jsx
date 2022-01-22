@@ -5,7 +5,7 @@ import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, emptyOverall } from './ducks/actions';
-import { getCompany, getTeams, getTeamsDetail, getAllProjects } from '../../Application/ducks/actions';
+import { getCompany, getTeams2, getTeamsDetail, getAllProjects } from '../../Application/ducks/actions';
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
 import MyTasks from './components/MyTasks';
@@ -161,18 +161,19 @@ export default (props) => {
   const teamsDetailData = useSelector(state => state.global.teamsDetailData);
   const projects = useSelector(state => state.global.projects);
   const company = useSelector(state => state.global.companies);
-  const team = useSelector(state => state.global.teams);
+  const team = useSelector(state => state.global.teams2);
   const [allProj, setAllProj] = useState([]);
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   let activeTab = ''
+  console.log('teamsDetailData', team)
 
   useEffect(() => {
     allowed([Roles.TASK_TEAMS], 'read') && dispatch(getTeamsDetail(id));
     dispatch(getAllProjects());
     dispatch(getCompany());
-    dispatch(getTeams())
+    dispatch(getTeams2())
   }, []);
 
   useEffect(() => {
@@ -320,7 +321,7 @@ export default (props) => {
           field1: allProj
         },
         statusKey:'status',
-        teamDrop: teamsDetailData
+        teamDrop: team
       },
       Comp: MultiView,
     },

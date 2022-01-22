@@ -73,7 +73,7 @@ export const getMyTasks = (id, page, limit, order, orderby, search = null) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_my_task_list?employee_id=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_my_task_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&filters=' + JSON.stringify(search) : ''}`);
       dispatch({
         type: action_types.MY_TASKS,
         data: message,

@@ -25,6 +25,7 @@ const initialState = {
     companies: [],
     jobslist: [],
     teams: [],
+    teams2: [],
     roles: [],
     staff: [],
     menu: false,
@@ -84,6 +85,10 @@ export default (state = initialState, action) => {
             return { ...state, jobslist: data };
         case action_types.TEAM_LISTING:
             return { ...state, teams: data };
+
+        case action_types.TEAM_LISTING2:
+            return { ...state, teams2: data };
+
         case action_types.ROLE_LIST:
             return { ...state, roles: data };
         case action_types.SUPERVISOR_LIST:

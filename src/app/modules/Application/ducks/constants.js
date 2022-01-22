@@ -20,6 +20,7 @@ export const MENU_STAT = "MENU_STAT";
 export const INTITUTION_LIST = "INTITUTION_LIST";
 export const EDUCATION_TYPE = "EDUCATION_TYPE";
 export const TEAM_LISTING = "TEAM_LISTING";
+export const TEAM_LISTING2 = "TEAM_LISTING2";
 export const ROLE_LIST = "ROLE_LIST";
 export const JOBS_LIST = "JOBS_LIST";
 export const COMPANY_LIST = "COMPANY_LIST";
