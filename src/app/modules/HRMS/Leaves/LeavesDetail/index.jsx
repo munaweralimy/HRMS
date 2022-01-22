@@ -193,7 +193,7 @@ export default (props) => {
           <Col span={24}>
         <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
             <TabPane tab="Leave Application" key="1">
-                <LeaveApplication id={id} updateApi={updateStatus} progressData={singleLeaveDetail?.availibility} data={applicationLeaveData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
+                <LeaveApplication id={id} updateApi={updateStatus} progressData={singleLeaveDetail?.summary} data={applicationLeaveData} tabSelected={location?.state?.tab == 'Missed' ? 'Issues' : location?.state?.tab} />
             </TabPane>
             <TabPane tab="Summary" key="2">
                 <LeaveSummary title="Leave Statistics" id={id} data={singleLeaveDetail?.summary} />

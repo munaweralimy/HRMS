@@ -10,7 +10,7 @@ import MyLeaves from './components/MyLeaves';
 import moment from 'moment';
 import Roles from '../../../../routing/config/Roles';
 import {allowed} from '../../../../routing/config/utils';
-import { getCompany, getTeams, getTeamsDetail } from '../../Application/ducks/actions';
+import { getCompany, getTeams2, getTeamsDetail } from '../../Application/ducks/actions';
 import TeamStatistics from './components/TeamStatistics';
 import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 
@@ -193,11 +193,11 @@ export default (props) => {
   const teamsDetailData = useSelector(state => state.global.teamsDetailData);
   const employeeId = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   const company = useSelector(state => state.global.companies);
-  const team = useSelector(state => state.global.teams);
+  const team = useSelector(state => state.global.teams2);
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
   const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
-
+  
   let activeTab = ''
 
   if (allowed([Roles.LEAVES])) {
@@ -211,7 +211,7 @@ export default (props) => {
   useEffect(() => {
     dispatch(getTeamsDetail(employeeId));
     dispatch(getCompany());
-    dispatch(getTeams())
+    dispatch(getTeams2())
     return () => dispatch(emptyAllLeaves())
   }, []);
 
@@ -330,7 +330,7 @@ export default (props) => {
         addon: 'Leave Application',
         statusKey: 'application_status',
         extraComp1: <LeaveCalendar />,
-        teamDrop: teamsDetailData
+        teamDrop: team
       },
       Comp: MultiView,
     },

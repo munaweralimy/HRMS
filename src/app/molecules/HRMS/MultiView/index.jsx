@@ -47,10 +47,12 @@ export default (props) => {
     updateApi(filterVal, page, limit, '', '', view, null, teamSelected);
   }, []);
 
+  console.log('teamDrop', teamDrop)
+
   useEffect(() => {
     if (teamDrop) {
-      setTeamSelected(teamDrop[0]?.team_name);
-      updateApi(filterVal, page, limit, '', '', view, null, teamDrop[0]?.team_name);
+      setTeamSelected(teamDrop?.team_name);
+      updateApi(filterVal, page, limit, '', '', view, null, teamDrop?.team_name);
     }
   }, [teamDrop]);
 

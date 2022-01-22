@@ -164,11 +164,11 @@ export const getLeaveApplicationDetail = (id,status) => {
 export const getLeaveType = () => {
   return async (dispatch) => {
     const {
-      data: { data },
-    } = await axios.get(`${apiresource}/HRMS Leave Type?fields=["name","leave_type"]`);
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_leaves_types_names`);
     dispatch({
       type: action_types.LEAVE_TYPE,
-      data: data,
+      data: message,
     });
   };
 };
