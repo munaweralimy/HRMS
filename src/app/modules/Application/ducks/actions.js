@@ -54,9 +54,7 @@ export const getCalenderData = (sDate, eDate) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(
-      `${apiMethod}/hrms.leaves_api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}`,
-    );
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.approved_leaves_calender?start_date=${sDate}&end_date=${eDate}`);
     dispatch({
       type: action_types.CALENDER_DATA,
       data: message,
@@ -68,9 +66,7 @@ export const getStaffPerformance = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(
-      `${apiMethod}/hrms.dashboard_api.staff_performance?order=ASC&orderby=employee_id`,
-    );
+    } = await axios.get(`${apiMethod}/hrms.dashboard_api.staff_performance?order=ASC&orderby=employee_id`);
     dispatch({
       type: action_types.STAFF_DATA,
       data: message,
@@ -201,11 +197,11 @@ export const getInstitution = () => {
 export const getTeams = () => {
   return async (dispatch) => {
     const {
-      data: { data },
-    } = await axios.get(`${apiresource}/HRMS Teams?fields=["name","team_name"]`);
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.setup.get_team_list_for_hrms_dpt`);
     dispatch({
       type: action_types.TEAM_LISTING,
-      data: data,
+      data: message,
     });
   };
 };
@@ -300,13 +296,11 @@ export const updateMenu = (stat) => {
   };
 };
 
-export const getAllProjects = (search=null) => {
+export const getAllProjects = (search = null) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(
-      `${apiMethod}/hrms.tasks_api.get_projects_dropdown`,
-    );
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_projects_dropdown`);
     dispatch({
       type: action_types.ALL_PROJECTS,
       data: message,

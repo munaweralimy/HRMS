@@ -15,6 +15,7 @@ import ListCard from '../../../molecules/ListCard';
 import { DownloadIcon } from '../../../atoms/CustomIcons';
 import { allowed } from '../../../../routing/config/utils';
 import Roles from '../../../../routing/config/Roles';
+import { baseUrl } from '../../../../configs/constants';
 
 const ListData = [
   {
@@ -58,7 +59,7 @@ export default (props) => {
   const dispatch = useDispatch();
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const commentsApi = useSelector((state) => state.global.comments);
-  const data = useSelector(state => state.advancement.advData);
+  const data = useSelector((state) => state.advancement.advData);
 
   const ListCol = [
     {
@@ -114,7 +115,7 @@ export default (props) => {
   const sideData = [
     {
       type: 'image',
-      url: `http://cms2dev.limkokwing.net${data?.image}`,
+      url: `${baseUrl}${data?.image}`,
       size: 120,
       highlight: true,
     },
@@ -161,10 +162,11 @@ export default (props) => {
       title: 'Issue Warning Letter',
       type: 'button',
       class: 'black-btn',
-      action: () => history.push({
-        pathname: `/employment/${id}`,
-        state: { tab: "2", param: 'warn' }
-      })
+      action: () =>
+        history.push({
+          pathname: `/employment/${id}`,
+          state: { tab: '2', param: 'warn' },
+        }),
     },
   ];
 
@@ -190,9 +192,17 @@ export default (props) => {
         <div className="twocol-3070">
           <div className="side-detail">
             {isHDScreen ? (
-              <SideDetails data={sideData} type="button" bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null} />
+              <SideDetails
+                data={sideData}
+                type="button"
+                bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null}
+              />
             ) : (
-              <SideDetailResponsive data={sideData} type="button" bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null} />
+              <SideDetailResponsive
+                data={sideData}
+                type="button"
+                bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null}
+              />
             )}
           </div>
           <div className="side-form">

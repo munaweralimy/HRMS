@@ -57,14 +57,12 @@ export default ({ data, updateApi }) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [load, setLoad] = useState(false);
-  const companies = useSelector((state) => state.global.companies);
   const jobslist = useSelector((state) => state.global.jobslist);
   const applicantList = useSelector((state) => state.advancement.applicantlist);
   const { control, errors, reset, setValue, handleSubmit } = useForm();
 
   useEffect(() => {
     dispatch(getJobs());
-    dispatch(getCompany());
     return () => dispatch(emptyApplicant());
   }, []);
 
@@ -87,22 +85,21 @@ export default ({ data, updateApi }) => {
       reqmessage: 'Select Jobs',
       twocol: true,
     },
-    {
-      type: 'select',
-      label: 'Company',
-      name: 'company',
-      options: companies?.map((x) => ({ label: x.name, value: x.name })),
-      req: true,
-      reqmessage: 'Select Jobs',
-      twocol: true,
-    },
+    // {
+    //   type: 'select',
+    //   label: 'Company',
+    //   name: 'company',
+    //   options: companies?.map((x) => ({ label: x.name, value: x.name })),
+    //   req: true,
+    //   reqmessage: 'Select Jobs',
+    //   twocol: true,
+    // },
   ];
 
   const onFinish = async (val) => {
     setLoad(true);
     let body = {
       job_title: val.job_title.label,
-      company: val.company.label,
     };
     let url = `${apiresource}/HRMS Job Openings`;
     try {
@@ -176,24 +173,26 @@ export default ({ data, updateApi }) => {
             <>
               <Col span={24}>
                 <Row gutter={24} justify="end">
-                {allowed([Roles.ADVANCEMENT], 'delete') && 
-                  <Col>
-                    <Button
-                      size="large"
-                      type="primary"
-                      htmlType="button"
-                      className="red-btn"
-                      onClick={() => onDelete(data.job_title)}
-                    >
-                      Delete Job Openinges
-                    </Button>
-                  </Col>}
-                  {allowed([Roles.ADVANCEMENT], 'write') && 
-                  <Col>
-                    <Button size="large" type="primary" htmlType="submit" className="green-btn">
-                      Save Changes
-                    </Button>
-                  </Col>}
+                  {allowed([Roles.ADVANCEMENT], 'delete') && (
+                    <Col>
+                      <Button
+                        size="large"
+                        type="primary"
+                        htmlType="button"
+                        className="red-btn"
+                        onClick={() => onDelete(data.job_title)}
+                      >
+                        Delete Job Openinges
+                      </Button>
+                    </Col>
+                  )}
+                  {allowed([Roles.ADVANCEMENT], 'write') && (
+                    <Col>
+                      <Button size="large" type="primary" htmlType="submit" className="green-btn">
+                        Save Changes
+                      </Button>
+                    </Col>
+                  )}
                 </Row>
               </Col>
               <Col span={24}>
