@@ -31,7 +31,7 @@ const leaveEntitlementLeaves = () => {
       placeholder: 'Select leave type',
       req: true,
       reqmessage: 'Leave Type required',
-      options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
+      options: leaveList?.map((value) => ({ label: value.leave_type, value: value.leave_type })),
       onChange: onChnageLeaveType,
     },
     {

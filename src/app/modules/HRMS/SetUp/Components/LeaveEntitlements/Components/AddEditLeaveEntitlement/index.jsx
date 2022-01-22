@@ -225,7 +225,7 @@ export default (props) => {
       setValue('apply_before_current_date', leaveEtitlement.apply_before_current_date == 'Yes' ? [1] : []);
       setValue('carries_forward', leaveEtitlement.carries_forward == 'Yes' ? [1] : []);
       setValue('is_prorate', leaveEtitlement.is_prorate == 'Yes' ? [1] : []);
-      setValue('carry_forward_days', leaveEtitlement.carry_forward_days);
+      setValue('carry_forward_days', leaveEtitlement.carry_forward_day);
     } else {
       reset();
     }

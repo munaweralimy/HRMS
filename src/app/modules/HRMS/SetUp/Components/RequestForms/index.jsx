@@ -62,11 +62,12 @@ export default (props) => {
       dataIndex: 'Action',
       key: 'Action',
       align: 'center',
-      render: (text, record) => (
-        allowed([Roles.SETUP], 'delete') ? <Button type="link" className="list-links c-gray" onClick={() => deleteRequest(record.form_name)}>
-          <CloseCircleFilled />
-        </Button> : null
-      ),
+      render: (text, record) =>
+        allowed([Roles.SETUP], 'delete') ? (
+          <Button type="link" className="list-links c-gray" onClick={() => deleteRequest(record.form_name)}>
+            <CloseCircleFilled />
+          </Button>
+        ) : null,
     },
   ];
 
@@ -127,7 +128,7 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        request_form: value?.request_form ? value?.request_form : '',
+        name: value?.request_form ? value?.request_form : '',
       };
       setSearchVal(searchVal);
       setPage(1);

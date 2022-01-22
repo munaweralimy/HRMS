@@ -38,15 +38,6 @@ export default (props) => {
         Search Criteria:
       </Title>
       <Form onFinish={handleSubmit(onSubmit)} layout="inline" className="w-100 inline-form">
-        <SelectField
-          fieldname="company_name"
-          label=""
-          class="mb-0 w-100"
-          initValue=""
-          control={control}
-          iProps={{ placeholder: 'Select company' }}
-          selectOption={allCompany}
-        />
         <InputField
           fieldname="template_name"
           class="mb-0 w-100"
