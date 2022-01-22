@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Space, Image, Typography, Divider } from 'antd';
 import { getSingleWarningLetter, getLetterTempDetail } from '../../../../ducks/services';
 import moment from 'moment';
+import { baseUrl } from '../../../../../../../../configs/constants';
 const PreviewWarningLetter = (props) => {
   const { letterID } = props;
   const { Title, Text } = Typography;
@@ -23,7 +24,7 @@ const PreviewWarningLetter = (props) => {
   return (
     <Row gutter={[24, 50]}>
       <Col span={24}>
-        <Image preview={false} width="100%" height={110} src={`http://cms2dev.limkokwing.net${letterImages.header}`} />
+        <Image preview={false} width="100%" height={110} src={`${baseUrl}${letterImages.header}`} />
       </Col>
       <Col span={[24, 10]}>
         <Row gutter={[24, 10]}>
@@ -50,7 +51,7 @@ const PreviewWarningLetter = (props) => {
                 preview={false}
                 width="100%"
                 height={110}
-                src={`http://cms2dev.limkokwing.net${letterImages.signature}`}
+                src={`${baseUrl}${letterImages.signature}`}
               />
             </Col>
             <Col span={24}>
@@ -77,7 +78,7 @@ const PreviewWarningLetter = (props) => {
         <Divider className="m-0" style={{ background: 'black' }} />
       </Col>
       <Col span={24}>
-        <Image preview={false} width="100%" height={110} src={`http://cms2dev.limkokwing.net${letterImages.footer}`} />
+        <Image preview={false} width="100%" height={110} src={`${baseUrl}${letterImages.footer}`} />
       </Col>
     </Row>
   );

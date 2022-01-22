@@ -4,6 +4,7 @@ import FigureChips from '../../atoms/FigureChips';
 import { Link } from 'react-router-dom';
 import PolicyIcon from '../../../assets/img/policy-icon.svg';
 import moment from 'moment';
+import { baseUrl } from '../../../configs/constants';
 
 const { Title, Text } = Typography;
 
@@ -12,7 +13,7 @@ export default (props) => {
     const onView = (item) => {
         const attachment = item?.attachment;
         console.log('data', item)
-        attachment && window.open(`http://cms2dev.limkokwing.net${attachment}`, "_blank");
+        attachment && window.open(`${baseUrl}${attachment}`, "_blank");
     }
     return (
         <Card bordered={false} className="uni-card dashboard-card main-card-hover">

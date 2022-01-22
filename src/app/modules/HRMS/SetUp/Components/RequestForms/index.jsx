@@ -72,7 +72,7 @@ export default (props) => {
 
   const btnList = [
     {
-      text: '+ New Team',
+      text: '+ New Request Forms',
       classes: 'green-btn',
       action: () => {
         setVisible(true);
@@ -149,7 +149,7 @@ export default (props) => {
     <>
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          <HeadingChip title="Request Form" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
+          <HeadingChip title="Request Forms" btnList={allowed([Roles.SETUP], 'write') ? btnList : null} />
         </Col>
         <Col span={24}>
           <ListCard

@@ -4,6 +4,7 @@ import {getTeamUpdates, getForYouUpdates } from './ducks/actions';
 import moment from 'moment';
 import { useHistory } from "react-router";
 import {useSelector, useDispatch} from 'react-redux';
+import { baseUrl } from '../../../configs/constants';
 const defaultImage =
   "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
 
@@ -60,7 +61,7 @@ const defaultImage =
                 //const content = res?.comment ? `Commented in ${res?.docname} ${res.doctype}` : `Updated in ${res?.docname} ${res.doctype}`;
                 const content = res?.result_message;
                 const author = ava?.length ? ava[0].full_name : ''
-                const avatar = ava?.length ? ava[0].user_image ? `http://cms2dev.limkokwing.net${ava[0].user_image}` : defaultImage : defaultImage;
+                const avatar = ava?.length ? ava[0].user_image ? `${baseUrl}${ava[0].user_image}` : defaultImage : defaultImage;
                 const link = res?.link;
                 const stage = res?.application_status;
                 let stageLink = ''
@@ -135,7 +136,7 @@ const defaultImage =
                 const action = res?.comment ? [res?.comment] : '';
                 const content = res?.comment ? `Commented in ${res?.docname} ${res.doctype}` : `Updated in ${res?.docname} ${res.doctype}`;
                 const author = ava?.length ? ava[0].full_name : ''
-                const avatar = ava?.length ? ava[0].user_image ? `http://cms2dev.limkokwing.net${ava[0].user_image}` : defaultImage : defaultImage;
+                const avatar = ava?.length ? ava[0].user_image ? `${baseUrl}${ava[0].user_image}` : defaultImage : defaultImage;
                 const link = res?.link;
                 const stage = res?.application_status;
                 let stageLink = ''

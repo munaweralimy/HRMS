@@ -10,6 +10,7 @@ import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
 import { allowed } from '../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../routing/config/Roles';
+import { baseUrl } from '../../../../../../../configs/constants';
 const antIcon = <LoadingOutlined spin />;
 
 const AddAllowences = (props) => {
@@ -34,7 +35,7 @@ const AddAllowences = (props) => {
             uid: '-1',
             name: getFileName(selectedAllowance?.document),
             status: 'done',
-            url: `http://cms2dev.limkokwing.net${selectedAllowance.document}`,
+            url: `${baseUrl}${selectedAllowance.document}`,
           },
         ],
       });

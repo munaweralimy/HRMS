@@ -42,7 +42,7 @@ export const getTeams = (page, limit, order, orderby, search = null) => {
       return async (dispatch) => {
         const {
           data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&company=' + search : ''}`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&team=' + search : ''}`);
         dispatch({
           type: action_types.TEAM_LIST,
           data: message,
@@ -113,11 +113,11 @@ export const getTeams = (page, limit, order, orderby, search = null) => {
   export const getWHTemplateList = () => {
     return async (dispatch) => {
       const {
-        data: { data },
-      } = await axios.get(`${apiresource}/Work Hour Template?fields=["name","template_name"]`);
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "Work Hour Template"}});
       dispatch({
         type: action_types.TEMPLATE_LIST,
-        data: data,
+        data: message,
       });
     };
   };

@@ -96,9 +96,6 @@ export const getModules = () => {
     return async(dispatch) => {
         const {
             data: { data },
-            // http://cms2dev.limkokwing.net/api/resource/AQA Module?filters=[["status","=","Active"]]&fields=["name","module_code","module_name","type","credit","hours","module_fee","fee_currency"]
-
- 
         } = await axios.get(`${apiresource}/AQA Module?filters=[["status","=","Active"]]&fields=["*"]`);
         dispatch({
             type: action_types.ALL_MODULES,

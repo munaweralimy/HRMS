@@ -15,6 +15,7 @@ import ListCard from '../../../molecules/ListCard';
 import { DownloadIcon } from '../../../atoms/CustomIcons';
 import { allowed } from '../../../../routing/config/utils';
 import Roles from '../../../../routing/config/Roles';
+import { baseUrl } from '../../../../configs/constants';
 
 const ListData = [
   {
@@ -114,7 +115,7 @@ export default (props) => {
   const sideData = [
     {
       type: 'image',
-      url: `http://cms2dev.limkokwing.net${data?.image}`,
+      url: `${baseUrl}${data?.image}`,
       size: 120,
       highlight: true,
     },

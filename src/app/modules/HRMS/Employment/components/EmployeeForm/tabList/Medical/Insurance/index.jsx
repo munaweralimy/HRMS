@@ -8,6 +8,7 @@ import { insuranceApi } from '../../../../../ducks/services';
 import { uniquiFileName, getSingleUpload, getFileName } from '../../../../../../../../../features/utility';
 import { allowed } from '../../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../../routing/config/Roles';
+import { baseUrl } from '../../../../../../../../../configs/constants';
 
 const colName = [
   {
@@ -140,7 +141,7 @@ export default (props) => {
             },
             {
               field: 'upload_document',
-              value: record?.upload_document ? {fileList: [{uid: '-1', name: getFileName(record?.upload_document), status: 'done', url: `http://cms2dev.limkokwing.net${record.upload_document}`}]} : ''
+              value: record?.upload_document ? {fileList: [{uid: '-1', name: getFileName(record?.upload_document), status: 'done', url: `${baseUrl}${record.upload_document}`}]} : ''
             },
           ]);
           setVisible(false);
@@ -205,7 +206,7 @@ export default (props) => {
           insurance_type: val?.insurance_type.value,
           expiration_date: val?.expiration_date,
           insurance_no: val.insurance_no,
-          upload_document: contactPDF ? contactPDF.replace('http://cms2dev.limkokwing.net', '') : '',
+          upload_document: contactPDF ? contactPDF.replace(`${baseUrl}`, '') : '',
           description: val.description,
           status:"Active"
         }
@@ -216,7 +217,7 @@ export default (props) => {
               insurance_type: val?.insurance_type.value,
               expiration_date: val?.expiration_date,
               insurance_no: val.insurance_no,
-              upload_document: contactPDF ? contactPDF.replace('http://cms2dev.limkokwing.net', '') : '',
+              upload_document: contactPDF ? contactPDF.replace(`${baseUrl}`, '') : '',
               description: val.description,
               status:"Active"
           }
