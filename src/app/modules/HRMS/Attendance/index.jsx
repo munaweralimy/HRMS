@@ -166,7 +166,7 @@ const ListColTeams = [
 ];
 
 const statusList = [
-  { label: 'All', value: '' },
+  { label: 'All Status', value: '' },
   { label: 'Absent', value: 'Absent' },
   { label: 'On Leave', value: 'On Leave' },
   { label: 'Half Day', value: 'Half Day' },
@@ -217,10 +217,10 @@ export default (props) => {
       let temp = [];
       team.map((x, i) => {
         if (i == 0) {
-          temp.push({ label: 'All', value: '' });
-          temp.push({ label: x.team_name, value: x.team_name });
+          temp.push({ label: 'All Teams', value: '' });
+          temp.push({ label: x.employee_name, value: x.employee_name });
         } else {
-          temp.push({ label: x.team_name, value: x.team_name });
+          temp.push({ label: x.employee_name, value: x.employee_name });
         }
       });
       setAllTeam(temp);

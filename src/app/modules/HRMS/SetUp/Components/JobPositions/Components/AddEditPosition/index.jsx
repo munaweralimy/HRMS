@@ -52,7 +52,7 @@ export default (props) => {
       setValue('job_position_name', teamData.job_position_name);
       setValue(
         'skills',
-        teamData.skills.map((value) => ({ label: value.skill_name, value: value.skill_name })),
+        teamData.skills.map((value) => ({ label: value.skill, value: value.skill_name })),
       );
       setValue('team_leader', { label: teamData.team_leader_name, value: teamData.team_leader_name });
       skillSet.map((value) => setValue(value.fieldname, teamData[value.fieldname]));

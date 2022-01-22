@@ -24,10 +24,10 @@ const leaveFields = () => {
       label: 'Leave Type Name',
       req: true,
       placeholder: 'Type leave name',
-      type: 'select',
+      type: 'input',
       twocol: false,
       reqmessage: 'Please enter name',
-      options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
+      // options: leaveList.map((value) => ({ label: value.leave_type, value: value.leave_type })),
     },
     {
       title: 'Avaliabale for the following',
@@ -69,29 +69,6 @@ const leaveFields = () => {
         { label: 'Married', value: 'Married' },
         { label: 'Single', value: 'Single' },
         { label: 'All', value: 'All' },
-      ],
-    },
-    {
-      type: 'array',
-      name: 'approvers',
-      title: 'Approver',
-      twocol: false,
-      child: [
-        {
-          type: 'select',
-          onChange: onSelectChange,
-          subheader: 'Approver',
-          name: 'approver_level',
-          req: false,
-          placeholder: 'Please Select',
-          twocol: false,
-          options: [
-            { label: 'Individual', value: 'Individual' },
-            { label: 'Manager', value: 'Manager', isDisabled: disabled.manager },
-            { label: 'Team Lead', value: 'Team Lead', isDisabled: disabled.teamLead },
-            { label: 'Supervisor', value: 'Supervisor', isDisabled: disabled.supervisor },
-          ],
-        },
       ],
     },
   ];
