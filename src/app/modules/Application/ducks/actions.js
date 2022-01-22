@@ -201,11 +201,11 @@ export const getInstitution = () => {
 export const getTeams = () => {
   return async (dispatch) => {
     const {
-      data: { data },
-    } = await axios.get(`${apiresource}/HRMS Teams?fields=["name","team_name"]`);
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_team_names`);
     dispatch({
       type: action_types.TEAM_LISTING,
-      data: data,
+      data: message,
     });
   };
 };

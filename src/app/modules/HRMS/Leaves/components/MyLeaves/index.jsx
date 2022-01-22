@@ -80,7 +80,7 @@ export default (props) => {
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const [load, setLoad] = useState(false);
   // const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
- 
+ console.log('myAvailableLeaves', myAvailableLeaves)
   
   const userdetail = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
   
@@ -230,7 +230,7 @@ export default (props) => {
         <Tabs activeKey={activeKey} type="card" className='custom-tabs' onChange={(e) => setActiveKey(e)}>
           <TabPane key={'1'} tab='Leave Application'>
             {!rowDetails && !addVisible &&
-              <LeaveApplication id={userdetail.name} updateApi={updateTimesheet} ListData={myAvailableLeaves?.availibility} data={myTaskData} />
+              <LeaveApplication id={userdetail.name} updateApi={updateTimesheet} ListData={myAvailableLeaves?.summary} data={myTaskData} />
             }
             {addVisible && <ApplyLeave id={userdetail.name} fullName={userdetail.fullName} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
           </TabPane>

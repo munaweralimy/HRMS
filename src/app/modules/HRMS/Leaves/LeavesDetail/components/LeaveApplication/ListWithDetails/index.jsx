@@ -15,16 +15,13 @@ export default ({ details, updateApi, progressData }) => {
   const annualLeaves = progressData?.find(element => element?.leave_type === 'Annual Leave')
   const replacementLeaves = progressData?.find(element => element?.leave_type === 'Replacement Leave')
 
-  const pendingAnnual = annualLeaves?.available_leaves;
-  const approvedAnnual = annualLeaves?.taken_leaves;
-  const totalAnnual = pendingAnnual + approvedAnnual;
-  const percentageAnnual = pendingAnnual / totalAnnual * 100;
+  const pendingAnnual = annualLeaves?.employee_remaining;
+  const approvedAnnual = annualLeaves?.employee_entitlement;
+  const percentageAnnual = pendingAnnual/approvedAnnual *100;
 
-
-  const pendingReplacement = replacementLeaves?.available_leaves;
-  const approvedReplacement = replacementLeaves?.taken_leaves;
-  const totalReplacement = pendingReplacement + approvedReplacement;
-  const percentageReplacement = pendingReplacement / totalReplacement * 100;
+  const pendingReplacement = replacementLeaves?.employee_remaining;
+  const approvedReplacement = replacementLeaves?.employee_entitlement;
+  const percentageReplacement = pendingReplacement/approvedReplacement *100;
 
   const btnList = [
     {
@@ -135,7 +132,7 @@ export default ({ details, updateApi, progressData }) => {
                     className='c-progress'
                     width={200}
                     percent={percentageReplacement}
-                    format={() => <><div className="percent-text">{approvedReplacement}</div> <div className="percent-numb">Replacement Leaves</div></>}
+                    format={() => <><div className="percent-text">{pendingReplacement}</div> <div className="percent-numb">Replacement Leaves</div></>}
                   />
                 </Card>
               </Col>

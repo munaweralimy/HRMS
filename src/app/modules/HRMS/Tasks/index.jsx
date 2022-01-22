@@ -167,6 +167,7 @@ export default (props) => {
   const [allTeam, setAllTeam] = useState([]);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   let activeTab = ''
+  console.log('teamsDetailData', team)
 
   useEffect(() => {
     allowed([Roles.TASK_TEAMS], 'read') && dispatch(getTeamsDetail(id));
@@ -320,7 +321,7 @@ export default (props) => {
           field1: allProj
         },
         statusKey:'status',
-        teamDrop: teamsDetailData
+        teamDrop: team
       },
       Comp: MultiView,
     },

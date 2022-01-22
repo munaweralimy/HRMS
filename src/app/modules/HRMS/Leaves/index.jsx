@@ -197,7 +197,7 @@ export default (props) => {
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
   const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
-
+  
   let activeTab = ''
 
   if (allowed([Roles.LEAVES])) {
@@ -330,7 +330,7 @@ export default (props) => {
         addon: 'Leave Application',
         statusKey: 'application_status',
         extraComp1: <LeaveCalendar />,
-        teamDrop: teamsDetailData
+        teamDrop: team
       },
       Comp: MultiView,
     },
