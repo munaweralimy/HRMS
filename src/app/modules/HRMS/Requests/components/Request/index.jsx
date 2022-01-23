@@ -169,7 +169,7 @@ export default (props) => {
         } else if(category == 'Warning Letter Approval') {
           const wbody = {
             employee_id: form_fields.find(fx => fx.field_label == 'Staff ID').field_value,
-            warning_letter: form_fields.find(fx => fx.field_label == 'Warning Letter').field_value,
+            warning_letter: form_fields.find(fx => fx.field_label == 'Warning Letter ID').field_value,
             status:"Active"
           }
           if (status === 'Approve')  {
@@ -236,13 +236,13 @@ export default (props) => {
   const sendWarn = (field) => {
     setLoad(true);
     let ids = field.find(x => x.field_label == 'Staff ID');
-    let letter = field.find(x => x.field_label == 'Warning Letter Type');
+    let letter = field.find(x => x.field_label == 'Warning Letter ID');
     const body = {
         employee_id: ids?.field_value,
         show_cause: letter?.field_value
     }
     sendShowCause(body).then(rest => {
-
+      setLoad(false);
     }).catch(e => {
         setLoad(false);
         message.error("Something went worng");

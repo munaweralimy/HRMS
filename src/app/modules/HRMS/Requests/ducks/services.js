@@ -15,7 +15,7 @@ export const updateRequest = (id, body) => {
 
 
 export const getRequest = (name) => {
-    return axios.get(`${apiresource}/HRMS Form Listing/${name}`);
+    return axios.get(`${apiMethod}/hrms.api.get_for_request_warning?request=${name}`);
 };
 
 export const getApproverLead = (id) => {
