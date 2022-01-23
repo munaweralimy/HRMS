@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Card, Space, Typography, List, Avatar} from 'antd';
 import FigureChips from '../../atoms/FigureChips';
 import { Link } from 'react-router-dom';
+import { baseUrl } from '../../../configs/constants';
 
 
 const { Title, Text } = Typography;
@@ -34,7 +35,7 @@ export default (props) => {
                         to={innerlink != '' && '/' + innerlink + '/' + item.employee_id}
                         >
                             <Space size={17} className='w-100'>
-                                <Avatar size={40} src={item?.image && `http://cms2dev.limkokwing.net${item?.image}`} />
+                                <Avatar size={40} src={item?.image && `${baseUrl}${item?.image}`} />
                                 <Space size={0} direction='vertical'>
                                     {reverse ? 
                                     <>

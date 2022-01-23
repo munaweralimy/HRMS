@@ -10,7 +10,6 @@ import Activations from '../Activations';
 import { allowed } from '../../../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../../../routing/config/Roles';
 import { getEmployCampus, getEmployFaculty, getEmployProgram } from '../../../../../../ducks/action';
-import { getInstitution } from '../../../../../../../../Application/ducks/actions';
 
   const custom = [
     {
@@ -96,10 +95,7 @@ export default (props) => {
     const roleList = useSelector(state => state.global.roles);
     const staffList = useSelector(state => state.global.staff);
     const templates = useSelector(state => state.employment.tempData);
-
-    useEffect(() => {
-      dispatch(getInstitution())
-    }, []);
+    const companyName = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
     useEffect(() => {
       if(templates) {
@@ -133,6 +129,9 @@ export default (props) => {
       if (recordData && recordData.length > 0) {
         let a = recordData.find(x => x.field == 'staff_category');
         onCategoryChange(a?.value, recordData);
+      } else {
+        setValue('company', companyName);
+        onCompanyChange(companyName);
       }
     }, [recordData]);
 
@@ -146,7 +145,7 @@ export default (props) => {
           setNoedit(true);
         }
         try {
-          const res = await axios.get(`${apiMethod}/hrms.api.get_work_hours_temp_data?tempid=${e.label}`);
+          const res = await axios.get(`${apiMethod}/hrms.api.get_work_hours_temp_data?tempid=${e.value}`);
           let temp = [];
           remove();
           res?.data?.message.map((x, i) => {
@@ -168,12 +167,10 @@ export default (props) => {
     }
 
     const onCompanyChange = (e, ac) => {
-      if (academicEnable || ac) {
         // dispatch(getEmployCampus(e.label))
         setValue('faculty', "")
         setValue('program', null)
-        dispatch(getEmployFaculty(e.label))
-      }
+        dispatch(getEmployFaculty(e))
     }
 
     const onFacultyChange = (e) => {
@@ -269,13 +266,14 @@ export default (props) => {
         reqmessage: 'Please state'
       },
       {
-        type: 'select',
+        type: 'input',
         name: 'company',
         label: 'Company',
-        placeholder: 'Please Select',
+        placeholder: 'Please state',
         twocol: true,
+        static: true,
         onChange: onCompanyChange,
-        options: companyList.map(x => ({label: x.name, value: x.name})),
+        // options: companyList.map(x => ({label: x.name, value: x.name})),
         req: true,
         reqmessage: 'Please state'
       },
@@ -286,7 +284,7 @@ export default (props) => {
         placeholder: 'Please Select',
         hidden: !academicEnable,
         twocol: true,
-        options: campusList.map(x => ({label: x.institution, value: x.institution})),
+        options: campusList.map(x => ({label: x.institution, value: x.name})),
         req: false,
         reqmessage: 'Please state'
       },
@@ -330,7 +328,7 @@ export default (props) => {
         label: 'Job Title',
         placeholder: 'Please Select',
         twocol: true,
-        options: jobList.map(x => ({label: x.name, value: x.name})),
+        options: jobList.map(x => ({label: x.job_position_name, value: x.name})),
         req: true,
         reqmessage: 'Please state'
       },
@@ -348,7 +346,7 @@ export default (props) => {
         label: 'Supervisor',
         placeholder: 'Please Select',
         twocol: false,
-        options: staffList.map(x => ({label: x.employee_name, value: x.employee_name})),
+        options: staffList.map(x => ({label: x.employee_name, value: x.name})),
       },
       {
         type: 'select',
@@ -359,7 +357,7 @@ export default (props) => {
         twocol: false,
         req: true,
         reqmessage: 'Please select role',
-        options: roleList.map(x => ({label: x.name, value: x.name})),
+        options: roleList.map(x => ({label: x.role_name, value: x.name})),
       },
       {
         type: 'upload',

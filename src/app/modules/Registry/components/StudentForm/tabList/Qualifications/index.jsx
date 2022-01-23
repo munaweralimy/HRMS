@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import FormGroup from '../../../../../../molecules/FormGroup';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { getFileName } from '../../../../../../../features/utility';
+import { baseUrl } from '../../../../../../../configs/constants';
 
 const { Title } = Typography;
 const _ = require('lodash');
@@ -197,7 +198,7 @@ export default (props) => {
             uid: '-1',
             name: getFileName(qdata.certificate),
             status: 'done',
-            url: `http://cms2dev.limkokwing.net${qdata.certificate}`,
+            url: `${baseUrl}${qdata.certificate}`,
           },
         ],
       });

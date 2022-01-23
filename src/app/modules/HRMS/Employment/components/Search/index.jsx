@@ -35,31 +35,22 @@ export default (props) => {
           initValue=""
         />
         <SelectField
-          fieldname="company"
+          fieldname="team"
           label=""
           class="mb-0 w-100"
           initValue={props?.field1?.length > 0 ? props.field1[0] : ''}
           control={control}
-          iProps={{ placeholder: 'company' }}
-          selectOption={props.field1}
-        />
-        <SelectField
-          fieldname="team"
-          label=""
-          class="mb-0 w-100"
-          initValue={props?.field2?.length > 0 ? props.field2[0] : ''}
-          control={control}
           iProps={{ placeholder: 'Team' }}
-          selectOption={props.field2}
+          selectOption={props.field1}
         />
         <SelectField
           fieldname="contract"
           label=""
           class="mb-0 w-100"
-          initValue={props?.field3?.length > 0 ? props.field3[0] : ''}
+          initValue={props?.field2?.length > 0 ? props.field2[0] : ''}
           control={control}
           iProps={{ placeholder: 'Contract Type' }}
-          selectOption={props.field3}
+          selectOption={props.field2}
         />
         <Button size="large" type="primary" htmlType="submit">
           Search

@@ -170,7 +170,7 @@ export const addRequest = (body, id) => {
   if (id) {
     return axios.put(`${apiresource}/HRMS Form Listing/${id}`, body);
   } else {
-    return axios.post(`${apiresource}/HRMS Form Listing`, body);
+    return axios.post(`${apiMethod}/hrms.setup.add_form_listing`, body);
   }
 };
 export const delRequest = (id) => {

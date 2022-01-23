@@ -44,3 +44,11 @@ export const contractApi = (payload, id) => {
     return axios.post(`${apiresource}/Contract`, payload);
   }
 };
+
+export const leaveApi = (id) => {
+    return axios.get(`${apiMethod}/hrms.leaves_api.creating_employees_leaves_data?employee=${id}`);
+};
+
+export const employDraftApi = (body) => {
+  return axios.post(`${apiMethod}/hrms.api.add_employee_draft`, body);
+};

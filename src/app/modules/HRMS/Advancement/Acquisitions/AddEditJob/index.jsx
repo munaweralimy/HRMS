@@ -3,7 +3,7 @@ import { Row, Col, Form, Button, Typography, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
 import FormGroup from '../../../../../molecules/FormGroup';
 import ListCard from '../../../../../molecules/ListCard';
-import { getJobs, getCompany } from '../../../../Application/ducks/actions';
+import { getJobs, getCompany, getJobsAdc } from '../../../../Application/ducks/actions';
 import { getSuitableApplicants, emptyApplicant } from '../../dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -57,12 +57,12 @@ export default ({ data, updateApi }) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [load, setLoad] = useState(false);
-  const jobslist = useSelector((state) => state.global.jobslist);
+  const jobslist = useSelector((state) => state.global.jobListAdv);
   const applicantList = useSelector((state) => state.advancement.applicantlist);
   const { control, errors, reset, setValue, handleSubmit } = useForm();
 
   useEffect(() => {
-    dispatch(getJobs());
+    dispatch(getJobsAdc());
     return () => dispatch(emptyApplicant());
   }, []);
 
