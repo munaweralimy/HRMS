@@ -2,7 +2,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod, apiresource } from '../../../../../configs/constants';
 
 export const createRequest = (body) => {
-    return axios.post(`${apiresource}/HRMS Form Request`, body);
+    return axios.post(`${apiMethod}/hrms.setup.add_hrms_form_request`, body);
 };
 
 export const cancelRequest = (id) => {

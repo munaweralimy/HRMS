@@ -78,7 +78,7 @@ export default (props) => {
             <Col span={24}>
                 <Row gutter={[20,20]} className='justify-right'>
                 {activeTab == 'pending' && <ApproveRejectButton data={item} currentID={id} onAction={(status, item, remarks, pos, ind) => onApproveReject(status, item, remarks, pos, ind, getValues())} />}
-                {/* {activeTab =='archive' && revertBtn(item.approvers, item?.name)} */}
+                {activeTab =='archive' && revertBtn(item.approvers, item?.name)}
                 {activeTab =='archive' && item.category == 'Show Cause Letter' && 
                 <Col>
                     <Button type='primary' htmlType='button' size='large' className='red-btn' onClick={() => sendWarn(item?.form_fields)}>Send Warning</Button>

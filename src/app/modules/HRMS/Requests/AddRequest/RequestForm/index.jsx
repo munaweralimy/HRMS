@@ -99,7 +99,7 @@ export default (props) => {
       </Space>
       </div>
     }
-    
+
     return (
     <Card bordered={false} className="uni-card h-auto">
         <Row gutter={[30, 20]}>
@@ -171,8 +171,7 @@ export default (props) => {
                         rules={{required: 'Please state'}}
                         validate={errors['Staff ID'] && 'error'}
                     />
-                    {forming.category == 'Show Cause Letter' &&
-                    <>
+                    
                     <InputField 
                         fieldname={'Request For'}
                         label={'Request For'}
@@ -181,6 +180,8 @@ export default (props) => {
                         iProps={{ placeholder: 'please state' }}
                         initValue={dvalue ? dvalue.name : ''}
                     />
+                    {forming.category == 'Show Cause Letter' &&
+                    <>
                     <InputField 
                         fieldname={'Request For Team'}
                         label={'Request For Team'}

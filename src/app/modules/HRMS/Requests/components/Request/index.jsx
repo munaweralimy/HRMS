@@ -72,7 +72,7 @@ export default (props) => {
       approvers: req,
     };
 
-    updateRequest(payload, name)
+    updateRequest(name, payload)
       .then((response) => {
           message.success('Request Successfully Revert');
           updateReqApi();
@@ -259,7 +259,7 @@ export default (props) => {
             expandIcon={({isActive}) => panelRight(isActive)}
             expandIconPosition='right'>
               {value && value.map(item => (
-                <Panel className='ch-black' header={panelHeader(item?.approvers, item?.form_name, item?.status)} key={item?.name}>
+                <Panel className='ch-black' header={panelHeader(item?.approvers, item?.form_label, item?.status)} key={item?.name}>
                   <RequestPanel id={id} sendWarn={sendWarn} item={item} activeTab={activeTab} onApproveReject={onApproveReject} onRevert={onRevert} onCancel={onCancel} load={load} />
                 </Panel>
                 ))}
