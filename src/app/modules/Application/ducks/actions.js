@@ -269,11 +269,11 @@ export const getStaffs = () => {
 export const getJobs = () => {
   return async (dispatch) => {
     const {
-      data: { data },
-    } = await axios.get(`${apiresource}/Job Position`);
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.advancement_api.get_job_position_dropdown`);
     dispatch({
       type: action_types.JOBS_LIST,
-      data: data,
+      data: message,
     });
   };
 };

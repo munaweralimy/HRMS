@@ -8,7 +8,7 @@ import { getSuitableApplicants, emptyApplicant } from '../../dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import axios from '../../../../../../services/axiosInterceptor';
-import { apiresource } from '../../../../../../configs/constants';
+import { apiMethod, apiresource } from '../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 import { allowed } from '../../../../../../routing/config/utils';
 import Roles from '../../../../../../routing/config/Roles';
@@ -80,28 +80,19 @@ export default ({ data, updateApi }) => {
       label: 'Job Title',
       name: 'job_title',
       placeholder: 'Select Job',
-      options: jobslist?.map((x) => ({ label: x.name, value: x.name })),
+      options: jobslist?.map((x) => ({ label: x.job_position_name, value: x.name })),
       req: true,
       reqmessage: 'Select Jobs',
       twocol: true,
     },
-    // {
-    //   type: 'select',
-    //   label: 'Company',
-    //   name: 'company',
-    //   options: companies?.map((x) => ({ label: x.name, value: x.name })),
-    //   req: true,
-    //   reqmessage: 'Select Jobs',
-    //   twocol: true,
-    // },
   ];
 
   const onFinish = async (val) => {
     setLoad(true);
     let body = {
-      job_title: val.job_title.label,
+      job_title: val.job_title.value,
     };
-    let url = `${apiresource}/HRMS Job Openings`;
+    let url = `${apiMethod}/hrms.advancement_api.update_create_hrms_job_opening`;
     try {
       if (data?.job_title) {
         await axios.post(`url/${data.job_title}`, body);
@@ -161,7 +152,7 @@ export default ({ data, updateApi }) => {
         <Row gutter={[20, 30]} align="bottom">
           <Col span={24}>
             <Title level={4} className="mb-0">
-              {`${data ? data.job_title + ' Position' : 'Add New Job Opening'} `}
+              {`${data ? data.job_position_name + ' Position' : 'Add New Job Opening'} `}
             </Title>
           </Col>
           {addeditJobs.map((item, index) => (
@@ -186,13 +177,13 @@ export default ({ data, updateApi }) => {
                       </Button>
                     </Col>
                   )}
-                  {allowed([Roles.ADVANCEMENT], 'write') && (
+                  {/* {allowed([Roles.ADVANCEMENT], 'write') && (
                     <Col>
                       <Button size="large" type="primary" htmlType="submit" className="green-btn">
                         Save Changes
                       </Button>
                     </Col>
-                  )}
+                  )} */}
                 </Row>
               </Col>
               <Col span={24}>

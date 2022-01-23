@@ -43,7 +43,7 @@ const addNewTeamFields = () => {
       placeholder: 'Select department',
       req: true,
       reqmessage: 'department required',
-      options: departmentList?.map((value) => ({ label: value.name, value: value.name })),
+      options: departmentList?.map((value) => ({ label: value.department_name, value: value.name })),
     },
   ];
 };
