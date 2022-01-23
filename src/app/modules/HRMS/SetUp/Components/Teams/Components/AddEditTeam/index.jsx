@@ -20,7 +20,7 @@ export default (props) => {
   const { control, errors, setValue, reset, handleSubmit } = useForm();
   const [load, setLoad] = useState(false);
   const employeeList = useSelector((state) => state.setup.employeeList);
-
+  console.log({ employeeList });
   useEffect(() => {
     if (team.name.length > 0) {
       setLoad(true);

@@ -34,9 +34,8 @@ const AddUser = (props) => {
   };
 
   const onSearchUserHnadler = () => {
-    console.log('hello');
     if (onSearhUser.length) {
-      setAllUsers(allUsers.filter((value) => value.employee_name.includes(onSearhUser)));
+      setAllUsers(allUsers.filter((value) => value.employee_name.toLowerCase().includes(onSearhUser.toLowerCase())));
     } else {
       setOnSearchUser('');
       setAllUsers(
@@ -49,18 +48,13 @@ const AddUser = (props) => {
 
   useEffect(() => {
     if (userData.length) {
-      console.log({ userData }, { allUsers });
       setAllUsers(
         allListing.filter(
           (value) => !userData.find((val) => val.employee_name === value.employee_name && val.name === value.name),
         ),
       );
-    }
+    } else setAllUsers(allListing);
   }, [userData]);
-
-  useEffect(() => {
-    setAllUsers(allListing);
-  }, [allListing]);
 
   return (
     <Card bordered={false} className="uni-card b-black">
