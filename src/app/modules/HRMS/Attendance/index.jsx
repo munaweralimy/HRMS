@@ -190,7 +190,6 @@ export default (props) => {
   const teamAttendanceList = useSelector((state) => state.attendance.teamAttendanceList);
 
   const teamsDetailData = useSelector((state) => state.global.teamsDetailData);
-  const company = useSelector((state) => state.global.companies);
   const team = useSelector((state) => state.global.teams);
   const [allTeam, setAllTeam] = useState([]);
   const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;

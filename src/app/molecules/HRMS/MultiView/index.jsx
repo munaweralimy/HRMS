@@ -33,7 +33,7 @@ export default (props) => {
     topbtn,
     teamDrop,
     extraComp1,
-    extraComp2
+    extraComp2,
   } = iProps;
   const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
   const [page, setPage] = useState(1);
@@ -47,12 +47,12 @@ export default (props) => {
     updateApi(filterVal, page, limit, '', '', view, null, teamSelected);
   }, []);
 
-  console.log('teamDrop', teamDrop)
+  console.log('teamDrop', teamDrop);
 
   useEffect(() => {
     if (teamDrop) {
-      setTeamSelected(teamDrop?.team_name);
-      updateApi(filterVal, page, limit, '', '', view, null, teamDrop?.team_name);
+      setTeamSelected(teamDrop[0]?.team_name);
+      updateApi(filterVal, page, limit, '', '', view, null, teamDrop[0]?.team_name);
     }
   }, [teamDrop]);
 
@@ -169,71 +169,71 @@ export default (props) => {
 
   return (
     <>
-    <SwitchView />
-    <Row gutter={[20,30]}>
-      <Col span={24}>
-      {teamDrop && teamDrop.length > 0 &&
-      (<Select 
-        className="customSelect"
-        value={teamSelected}
-        onChange={onTeamChange}
-        className='mb-1'
-        size='large'
-        style={{width: 200}}
-        >
-          {teamDrop?.map((item, ind) => (
-            <Fragment key={ind}>
-              <Option value={item?.team_name}>{item?.team_name}</Option>
-            </Fragment>
-          ))}
-        </Select>
-      )}
-      {view == 'list' ? (
-        <ListCard
-          classes="clickRow"
-          onRow={onClickRow}
-          filters={filters && filters}
-          Search={Search && Search}
-          onSearch={Search && onSearch}
-          filterValue={filterVal}
-          onFilter={onFilter}
-          ListCol={listCol}
-          ListData={listdata}
-          onChange={onTableChange}
-          {...searchDropdowns}
-          pagination={{
-            total: listcount,
-            current: page,
-            pageSize: limit,
-          }}
-        />
-      ) : (
-        <>
-          <div className="flexibleRow">
-            {carddata.map((item, index) => (
-              <Fragment key={index}>
-                <div className="requestPanel">
-                  <MainStatusCard data={item} link={link} addon={addon || item[addonkey]} statusKey={statusKey} />
-                </div>
-              </Fragment>
-            ))}
-          </div>
-          <div className="w-100 text-right mt-2">
-            <Pagination
-              pageSize={6}
-              current={page}
-              hideOnSinglePage={true}
-              showSizeChanger={false}
-              onChange={onPageChange}
-              total={cardcount}
+      <SwitchView />
+      <Row gutter={[20, 30]}>
+        <Col span={24}>
+          {teamDrop && teamDrop.length > 0 && (
+            <Select
+              className="customSelect"
+              value={teamSelected}
+              onChange={onTeamChange}
+              className="mb-1"
+              size="large"
+              style={{ width: 200 }}
+            >
+              {teamDrop?.map((item, ind) => (
+                <Fragment key={ind}>
+                  <Option value={item?.team_name}>{item?.team_name}</Option>
+                </Fragment>
+              ))}
+            </Select>
+          )}
+          {view == 'list' ? (
+            <ListCard
+              classes="clickRow"
+              onRow={onClickRow}
+              filters={filters && filters}
+              Search={Search && Search}
+              onSearch={Search && onSearch}
+              filterValue={filterVal}
+              onFilter={onFilter}
+              ListCol={listCol}
+              ListData={listdata}
+              onChange={onTableChange}
+              {...searchDropdowns}
+              pagination={{
+                total: listcount,
+                current: page,
+                pageSize: limit,
+              }}
             />
-          </div>
-        </>
-      )}
-    </Col>
-    {extraComp1 && <Col span={24}>{extraComp1}</Col>}
-    {extraComp2 && <Col span={24}>{extraComp2}</Col>}
-    </Row>
+          ) : (
+            <>
+              <div className="flexibleRow">
+                {carddata.map((item, index) => (
+                  <Fragment key={index}>
+                    <div className="requestPanel">
+                      <MainStatusCard data={item} link={link} addon={addon || item[addonkey]} statusKey={statusKey} />
+                    </div>
+                  </Fragment>
+                ))}
+              </div>
+              <div className="w-100 text-right mt-2">
+                <Pagination
+                  pageSize={6}
+                  current={page}
+                  hideOnSinglePage={true}
+                  showSizeChanger={false}
+                  onChange={onPageChange}
+                  total={cardcount}
+                />
+              </div>
+            </>
+          )}
+        </Col>
+        {extraComp1 && <Col span={24}>{extraComp1}</Col>}
+        {extraComp2 && <Col span={24}>{extraComp2}</Col>}
+      </Row>
     </>
   );
 };
