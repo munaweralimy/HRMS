@@ -85,7 +85,7 @@ export const getTeamsDetail = (employeeid) => {
     });
   };
 };
- 
+
 export const getCountry = () => {
   return async (dispatch) => {
     const {
@@ -98,13 +98,11 @@ export const getCountry = () => {
   };
 };
 
-
-
 export const getRace = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "Race"}});
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, { params: { doctype: 'Race' } });
     dispatch({
       type: action_types.RACE,
       data: message,
@@ -128,7 +126,7 @@ export const getReligion = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "Religion"}});
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, { params: { doctype: 'Religion' } });
     dispatch({
       type: action_types.RELIGION,
       data: message,
@@ -200,7 +198,7 @@ export const getTeams = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "HRMS Teams"}});
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, { params: { doctype: 'HRMS Teams' } });
     dispatch({
       type: action_types.TEAM_LISTING,
       data: message,
@@ -220,12 +218,11 @@ export const getTeams2 = () => {
   };
 };
 
-
 export const getRoles = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "User Roles"}});
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, { params: { doctype: 'User Roles' } });
     dispatch({
       type: action_types.ROLE_LIST,
       data: message,
@@ -237,7 +234,7 @@ export const getEducationType = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "HRMS Education Field"}});
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, { params: { doctype: 'HRMS Education Field' } });
     dispatch({
       type: action_types.EDUCATION_TYPE,
       data: message,
@@ -257,13 +254,11 @@ export const getCompany = () => {
   };
 };
 
-
-
 export const getStaffs = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "Employee"}});
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, { params: { doctype: 'Employee' } });
     dispatch({
       type: action_types.SUPERVISOR_LIST,
       data: message,
@@ -275,7 +270,7 @@ export const getJobs = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "Job Position"}});
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, { params: { doctype: 'Job Position' } });
     dispatch({
       type: action_types.JOBS_LIST,
       data: message,
@@ -283,16 +278,17 @@ export const getJobs = () => {
   };
 };
 
-export const getJobsAdc=()=>{
+export const getJobsAdc = () => {
   return async (dispatch) => {
     const {
-      data: { message }= await axios.get(`${apiMethod}/hrms.advancement_api.get_job_position_dropdown`)}
-      dispatch({
-        type: action_types.JOBS_LIST_ADV,
-        data: message,
-      });
-    };
-}
+      data: { message },
+    } = await axios.get(`${apiMethod}/hrms.advancement_api.get_job_position_dropdown`);
+    dispatch({
+      type: action_types.JOBS_LIST_ADV,
+      data: message,
+    });
+  };
+};
 
 export const getComments = (doctype, id) => {
   return async (dispatch) => {
