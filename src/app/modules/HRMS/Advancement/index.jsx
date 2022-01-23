@@ -7,7 +7,7 @@ import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import Search from './components/Search';
 import { getOverallFit, getOverallFitCard } from './dcuks/action';
-import {allowed} from '../../../../routing/config/utils';
+import { allowed } from '../../../../routing/config/utils';
 import Roles from '../../../../routing/config/Roles';
 import { getCompany, getTeams } from '../../Application/ducks/actions';
 
@@ -54,7 +54,9 @@ const colName = [
     key: 'index_ratio',
     align: 'center',
     sorter: true,
-    render: text => <span className={`${Number(text) > 65 ? 'c-success' : Number(text) > 35 ? 'c-pending' : 'c-error'}`}>{text}</span>
+    render: (text) => (
+      <span className={`${Number(text) > 65 ? 'c-success' : Number(text) > 35 ? 'c-pending' : 'c-error'}`}>{text}</span>
+    ),
   },
 ];
 
@@ -71,31 +73,30 @@ const filters = [
 ];
 
 export default (props) => {
-
   const dispatch = useDispatch();
   const il8n = useTranslate();
   const { t } = il8n;
-  const data = useSelector(state => state.advancement.fitindexcard);
-  const datalist = useSelector(state => state.advancement.fitindexlist);
-  const company = useSelector(state => state.global.companies);
-  const team = useSelector(state => state.global.teams);
+  const data = useSelector((state) => state.advancement.fitindexcard);
+  const datalist = useSelector((state) => state.advancement.fitindexlist);
+  const company = useSelector((state) => state.global.companies);
+  const team = useSelector((state) => state.global.teams);
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
 
   useEffect(() => {
     dispatch(getCompany());
-    dispatch(getTeams())
+    dispatch(getTeams());
   }, []);
-  
+
   useEffect(() => {
     if (Object.keys(company).length > 0) {
-      let temp = []
+      let temp = [];
       company.map((x, i) => {
         if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.name, value: x.name})
+          temp.push({ label: 'All', value: '' });
+          temp.push({ label: x.name, value: x.name });
         } else {
-          temp.push({label: x.name, value: x.name})
+          temp.push({ label: x.name, value: x.name });
         }
       });
       setAllCompany(temp);
@@ -104,13 +105,13 @@ export default (props) => {
 
   useEffect(() => {
     if (Object.keys(team).length > 0) {
-      let temp = []
+      let temp = [];
       team.map((x, i) => {
         if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.team_name, value: x.team_name})
+          temp.push({ label: 'All Teams', value: '' });
+          temp.push({ label: x.employee_name, value: x.employee_name });
         } else {
-          temp.push({label: x.team_name, value: x.team_name})
+          temp.push({ label: x.employee_name, value: x.employee_name });
         }
       });
       setAllTeam(temp);
@@ -121,21 +122,20 @@ export default (props) => {
     if (type == 'list') {
       if (search) {
         let searchVal = {};
-          searchVal = {
-            employee_name: search?.name ? search?.name : '',
-            company:  search?.company ? search?.company.value : '',
-            team: search?.team ? search?.team.value : '',
-            contract_type: search?.contract ? search?.contract.value : '',
-          }
-          dispatch(getOverallFit(filter, page, limit, sort, sortby, searchVal))
-        } else {
-          dispatch(getOverallFit(filter, page, limit, sort, sortby, null))
-        }
-      
+        searchVal = {
+          employee_name: search?.name ? search?.name : '',
+          company: search?.company ? search?.company.value : '',
+          team: search?.team ? search?.team.value : '',
+          contract_type: search?.contract ? search?.contract.value : '',
+        };
+        dispatch(getOverallFit(filter, page, limit, sort, sortby, searchVal));
+      } else {
+        dispatch(getOverallFit(filter, page, limit, sort, sortby, null));
+      }
     } else {
       dispatch(getOverallFitCard(page, limit, sort, sortby));
     }
-  }
+  };
 
   const tabs = [
     {
@@ -157,9 +157,14 @@ export default (props) => {
         searchDropdowns: {
           field1: allCompany,
           field2: allTeam,
-          field3: [{label:'All', value: ''},{label:'Permanent', value: 'Permanent'},{label:'Contract', value: 'Contract'},{label:'Probation', value: 'Probation'},],
+          field3: [
+            { label: 'All', value: '' },
+            { label: 'Permanent', value: 'Permanent' },
+            { label: 'Contract', value: 'Contract' },
+            { label: 'Probation', value: 'Probation' },
+          ],
         },
-        statusKey:'index_status'
+        statusKey: 'index_status',
       },
     },
   ];
@@ -169,10 +174,11 @@ export default (props) => {
       <Col span={24}>
         <CardListSwitchLayout tabs={tabs} active={tabs[0].key} />
       </Col>
-      {allowed([Roles.ADVANCEMENT], 'read') && 
-      <Col span={24}>
-        <Acquisitions />
-      </Col>}
+      {allowed([Roles.ADVANCEMENT], 'read') && (
+        <Col span={24}>
+          <Acquisitions />
+        </Col>
+      )}
     </Row>
   );
 };
