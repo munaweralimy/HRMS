@@ -30,7 +30,7 @@ const PreviewWarningLetter = (props) => {
         <Row gutter={[24, 10]}>
           <Col span={24}>
             <Title level={4} className="mb-0 font-500" style={{ color: 'black' }}>
-              {letterContent.title}
+              {letterContent.writing_letter_name}
             </Title>
           </Col>
           <Col span={24}>
@@ -47,12 +47,7 @@ const PreviewWarningLetter = (props) => {
         <Col span={24}>
           <Row gutter={24} justify="start" align="middle">
             <Col>
-              <Image
-                preview={false}
-                width="100%"
-                height={110}
-                src={`${baseUrl}${letterImages.signature}`}
-              />
+              <Image preview={false} width="100%" height={110} src={`${baseUrl}${letterImages.signature}`} />
             </Col>
             <Col span={24}>
               <Title level={5} className="mb-0 font-500" style={{ color: 'black' }}>
@@ -62,7 +57,7 @@ const PreviewWarningLetter = (props) => {
             {/* <Col></Col> */}
             <Col span={24}>
               <Text className="mb-0" style={{ color: 'black' }}>
-                LimkokWing University Creative Technology.
+                {JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company}
               </Text>
             </Col>
             <Col span={24}>
