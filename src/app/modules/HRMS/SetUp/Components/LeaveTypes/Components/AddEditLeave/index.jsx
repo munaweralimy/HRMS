@@ -12,7 +12,9 @@ import { LoadingOutlined } from '@ant-design/icons';
 import Roles from '../../../../../../../../routing/config/Roles';
 import { allowed } from '../../../../../../../../routing/config/utils';
 const antIcon = <LoadingOutlined spin />;
-
+const initQ = {
+  approver_level: '',
+};
 export default (props) => {
   const { title, onClose, leaveType } = props;
   const { Title, Text } = Typography;
@@ -61,7 +63,7 @@ export default (props) => {
       marital_status: values?.marital_status.label,
       add_leave_statistics: values?.add_leave_statistics,
       doctype: 'HRMS Leave Type',
-      approvers: values?.approvers.map((value) => ({
+      approvers: values?.approvers?.map((value) => ({
         approver_level: value.approver_level.value,
         doctype: 'HRMS Leave Type Approvers',
       })),

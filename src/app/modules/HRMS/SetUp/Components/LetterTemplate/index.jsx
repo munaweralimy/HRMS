@@ -102,16 +102,9 @@ export default (props) => {
                       className="mini-card b-dark-gray"
                       bordered={false}
                       onClick={() => onCardHandler({ name: value.name, template_name: value.template_name })}
-                      cover={
-                        <Image
-                          preview={false}
-                          width={310}
-                          height={110}
-                          src={`${baseUrl}${value.letter_head}`}
-                        />
-                      }
+                      cover={<Image preview={false} width={310} height={110} src={`${baseUrl}${value.letter_head}`} />}
                     >
-                      <Card.Meta title={value.name} />
+                      <Card.Meta title={value.template_name} />
                     </Card>
                   </Col>
                 ))
