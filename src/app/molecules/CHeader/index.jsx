@@ -9,6 +9,7 @@ import { SearchIcon, ChangePasswordIcon, UserIcon, LogOutIcon } from '../../atom
 import LanguageSwitcher from '../../molecules/LanguageSwitcher';
 import { Popup } from '../../atoms/Popup';
 import PopupPassword from '../../modules/Application/component/PopupPassword';
+import { baseUrl } from '../../../configs/constants';
 
 const { Text } = Typography;
 export default (props) => {
@@ -87,7 +88,7 @@ export default (props) => {
                 <Avatar
                   className="userImage"
                   size={60}
-                  src={userProfile ? `http://cms2dev.limkokwing.net${userProfile}` : userImage}
+                  src={userProfile ? `${baseUrl}${userProfile}` : userImage}
                 />
               </Space>
             </Dropdown>

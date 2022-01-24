@@ -3,7 +3,7 @@ import { getAllAssets } from '../../ducks/services';
 const addAsset = () => {
   const [assetList, setAssetList] = useState([]);
   useEffect(() => {
-    getAllAssets().then((response) => setAssetList(response?.data?.data));
+    getAllAssets().then((response) => setAssetList(response?.data.message));
   }, []);
   return [
     {
@@ -14,7 +14,7 @@ const addAsset = () => {
       req: true,
       reqmessage: 'Asset Number required',
       twocol: false,
-      options: assetList.map((value) => ({ label: value.name, value: value.name })),
+      options: assetList?.map((value) => ({ label: value.assets_id, value: value.name })),
     },
     {
       type: 'date',

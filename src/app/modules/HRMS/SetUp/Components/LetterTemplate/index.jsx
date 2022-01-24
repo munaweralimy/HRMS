@@ -9,6 +9,7 @@ import AddEditLetterTemplate from './Components/AddEditLetteremplate';
 import Search from './Components/Search';
 import { allowed } from '../../../../../../routing/config/utils';
 import Roles from '../../../../../../routing/config/Roles';
+import { baseUrl } from '../../../../../../configs/constants';
 
 export default (props) => {
   const [visible, setVisible] = useState(false);
@@ -101,16 +102,9 @@ export default (props) => {
                       className="mini-card b-dark-gray"
                       bordered={false}
                       onClick={() => onCardHandler({ name: value.name, template_name: value.template_name })}
-                      cover={
-                        <Image
-                          preview={false}
-                          width={310}
-                          height={110}
-                          src={`http://cms2dev.limkokwing.net${value.letter_head}`}
-                        />
-                      }
+                      cover={<Image preview={false} width={310} height={110} src={`${baseUrl}${value.letter_head}`} />}
                     >
-                      <Card.Meta title={value.name} />
+                      <Card.Meta title={value.template_name} />
                     </Card>
                   </Col>
                 ))

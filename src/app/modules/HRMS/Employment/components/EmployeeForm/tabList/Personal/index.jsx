@@ -7,6 +7,7 @@ import moment from 'moment';
 import MainForm from './MainForm';
 import { getFileName, uniquiFileName, getSingleUpload} from '../../../../../../../../features/utility';
 import { employApi } from '../../../../ducks/services';
+import { baseUrl } from '../../../../../../../../configs/constants';
 
 export default (props) => {
 
@@ -30,15 +31,15 @@ export default (props) => {
       console.log('checking', data)
       setValueIn('salutation', data?.salutation ? {label: data?.salutation, value: data?.salutation}: '');
       setValueIn('first_name', data?.first_name);
-      setValueIn('image', data?.image ? {fileList: [{uid: '-1', name: getFileName(data?.image), status: 'done', url: `http://cms2dev.limkokwing.net${data?.image}`}]} : '');
+      setValueIn('image', data?.image ? {fileList: [{uid: '-1', name: getFileName(data?.image), status: 'done', url: `${baseUrl}${data?.image}`}]} : '');
       setValueIn('gender', data?.gender ? {label: data?.gender, value: data?.gender} : '');
       setValueIn('marital_status', data?.marital_status ? {label: data?.marital_status, value: data?.marital_status} : '');
       setValueIn('nationality', data?.nationality ? {label: data?.nationality, value: data?.nationality} : '');
       setValueIn('identification_type', data?.identification_type ? {label: data?.identification_type, value: data?.identification_type} : '');
       setValueIn('identification_no', data?.identification_no);
       setValueIn('date_of_birth', data?.date_of_birth ? moment(data?.date_of_birth, 'YYYY MM DD') : '');
-      setValueIn('race', data?.race ? {label: data?.race, value: data?.race} : '');
-      setValueIn('religious', data?.religious ? {label: data?.religious, value: data?.religious} : '');
+      setValueIn('race', data?.race ? {label: data?.race_name, value: data?.race} : '');
+      setValueIn('religious', data?.religious ? {label: data?.religion_name, value: data?.religious} : '');
       
       if (data?.current_permanent_address && data?.current_permanent_address.length > 0) {
         if (data?.current_permanent_address[0]?.current_address == 1) {
@@ -65,8 +66,8 @@ export default (props) => {
       setValueIn('spouse_identification_type', data?.spouse_identification_type ? {label: data?.spouse_identification_type, value: data?.spouse_identification_type} : '');
       setValueIn('spouse_identification_no', data?.spouse_identification_no);
       setValueIn('spouse_dob', data?.spouse_dob ? moment(data?.spouse_dob, 'YYYY MM DD') : '');
-      setValueIn('spouse_race', data?.spouse_race ? {label: data?.spouse_race, value: data?.spouse_race} : '');
-      setValueIn('spouse_religious', data?.spouse_religious ? {label: data?.spouse_religious, value: data?.spouse_religious} : '');
+      setValueIn('spouse_race', data?.spouse_race ? {label: data?.spouse_race_name, value: data?.spouse_race} : '');
+      setValueIn('spouse_religious', data?.spouse_religious ? {label: data?.religion_name, value: data?.spouse_religious} : '');
       setValueIn('spouse_employee_name', data?.spouse_employee_name);
       setValueIn('spouse_employee_email', data?.spouse_employee_email);
       setValueIn('spouse_phone_no', data?.spouse_phone_no);
@@ -152,7 +153,7 @@ export default (props) => {
           level: x.level?.value,
           school_univ: x.school_univ?.value,
           to_date: x.to_date,
-          transcript: url ? url.replace('http://cms2dev.limkokwing.net', '') : '',
+          transcript: url ? url.replace(`${baseUrl}`, '') : '',
         })
       }));
     }
@@ -173,7 +174,7 @@ export default (props) => {
     const body = {
       salutation: val.salutation?.value,
       first_name: val.first_name,
-      image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",
+      image: profileImg ? profileImg.replace(`${baseUrl}`, "") : "",
       gender: val.gender ? val.gender.value : '',
       marital_status: val.marital_status?.value,
       nationality: val.nationality?.value,

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import ListFormComp from '../../../../../../../../../molecules/HRMS/ListFormComp';
 import { useFieldArray } from 'react-hook-form';
 import { etypeList, ctypeList, staffCategory, positionList, workType, timelap, alternateSat } from '../../../../../../../../../../configs/constantData';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from '../../../../../../../../../../services/axiosInterceptor';
 import { apiMethod } from '../../../../../../../../../../configs/constants';
 import moment from 'moment';
 import Activations from '../Activations';
 import { allowed } from '../../../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../../../routing/config/Roles';
+import { getEmployCampus, getEmployFaculty, getEmployProgram } from '../../../../../../ducks/action';
 
   const custom = [
     {
@@ -80,16 +81,21 @@ import Roles from '../../../../../../../../../../routing/config/Roles';
 
 export default (props) => {
 
-    const { control, errors, setValue, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh, id, setLoad, updateApi } = props;
+    const { control, errors, setValue, getValues, reset, mode, setVisible, recordData, setRecord, setFormVisible, refresh, id, setLoad, updateApi } = props;
     const [noEdit, setNoedit] = useState(true);
     const [templateList, setTemplateList] = useState([]);
-    
+    const [academicEnable, setAcademicEnable] = useState(false);
+    const dispatch = useDispatch()
     const jobList = useSelector(state => state.global.jobslist);
     const companyList = useSelector(state => state.global.companies);
+    const facultyList = useSelector(state => state.employment.faculty);
+    const programList = useSelector(state => state.employment.program);
+    const campusList = useSelector(state => state.global.institutions);
     const teamList = useSelector(state => state.global.teams);
     const roleList = useSelector(state => state.global.roles);
     const staffList = useSelector(state => state.global.staff);
     const templates = useSelector(state => state.employment.tempData);
+    const companyName = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
     useEffect(() => {
       if(templates) {
@@ -117,7 +123,15 @@ export default (props) => {
     useEffect(() => {
       if (recordData && recordData[16]?.value == 1) {
         setValue('work_hour_template', {label: 'Custom Template', value: 'Custom Template'});
+        onWHChnage({label: 'Custom Template', value: 'Custom Template'});
         setValue('work_hour_template_detail', recordData[17].value);
+      }
+      if (recordData && recordData.length > 0) {
+        let a = recordData.find(x => x.field == 'staff_category');
+        onCategoryChange(a?.value, recordData);
+      } else {
+        setValue('company', companyName);
+        onCompanyChange(companyName);
       }
     }, [recordData]);
 
@@ -131,7 +145,7 @@ export default (props) => {
           setNoedit(true);
         }
         try {
-          const res = await axios.get(`${apiMethod}/hrms.api.get_work_hours_temp_data?tempid=${e.label}`);
+          const res = await axios.get(`${apiMethod}/hrms.api.get_work_hours_temp_data?tempid=${e.value}`);
           let temp = [];
           remove();
           res?.data?.message.map((x, i) => {
@@ -151,6 +165,42 @@ export default (props) => {
         }
       }
     }
+
+    const onCompanyChange = (e, ac) => {
+        // dispatch(getEmployCampus(e.label))
+        setValue('faculty', "")
+        setValue('program', null)
+        dispatch(getEmployFaculty(e))
+    }
+
+    const onFacultyChange = (e) => {
+        setValue('program', null)
+      dispatch(getEmployProgram(getValues('company').value, e.value))
+    }
+
+    const onCategoryChange = (e, a) => {
+      if (e.label == 'Academic') {
+        setAcademicEnable(true);
+        if (a) {
+          if (a.find(x => x.field == 'company').value) {
+            onCompanyChange(a.find(x => x.field == 'company').value, true)
+          }
+          if (a.find(x => x.field == 'faculty').value) {
+            onFacultyChange(a.find(x => x.field == 'faculty').value)
+          }
+          setValue('faculty', a.find(x => x.field == 'faculty').value)
+          setValue('program', a.find(x => x.field == 'program').value)
+          setValue('campus', a.find(x => x.field == 'campus').value)
+        }
+      } else {
+        setValue('faculty', "")
+        setValue('program', null)
+        setValue('campus', "")
+        setAcademicEnable(false)
+      }
+    }
+
+    
 
     const contractDetails = [
       {
@@ -201,6 +251,7 @@ export default (props) => {
         req: false,
         reqmessage: 'Please state'
       },
+
       // employment details
       {
         subheader: 'Employment Details',
@@ -209,18 +260,56 @@ export default (props) => {
         label: 'Staff Category',
         placeholder: 'Please Select',
         twocol: false,
+        onChange: onCategoryChange,
         options: staffCategory,
         req: true,
         reqmessage: 'Please state'
       },
       {
-        type: 'select',
+        type: 'input',
         name: 'company',
         label: 'Company',
+        placeholder: 'Please state',
+        twocol: true,
+        static: true,
+        onChange: onCompanyChange,
+        // options: companyList.map(x => ({label: x.name, value: x.name})),
+        req: true,
+        reqmessage: 'Please state'
+      },
+      {
+        type: 'select',
+        name: 'campus',
+        label: 'Campus',
+        placeholder: 'Please Select',
+        hidden: !academicEnable,
+        twocol: true,
+        options: campusList.map(x => ({label: x.institution, value: x.name})),
+        req: false,
+        reqmessage: 'Please state'
+      },
+      {
+        type: 'select',
+        name: 'faculty',
+        label: 'Select Company to Select Faculty',
         placeholder: 'Please Select',
         twocol: true,
-        options: companyList.map(x => ({label: x.name, value: x.name})),
-        req: true,
+        hidden: !academicEnable,
+        onChange: onFacultyChange,
+        options: facultyList.map(x => ({label: x.faculty_name, value: x.name})),
+        req: academicEnable,
+        reqmessage: 'Please state'
+      },
+      {
+        type: 'select',
+        name: 'program',
+        label: 'Select Faculty to Select Programme',
+        placeholder: 'Please Select',
+        twocol: true,
+        multiple: true,
+        hidden: !academicEnable,
+        options: programList.map(x => ({label: x.program_name, value: x.name})),
+        req: academicEnable,
         reqmessage: 'Please state'
       },
       {
@@ -239,7 +328,7 @@ export default (props) => {
         label: 'Job Title',
         placeholder: 'Please Select',
         twocol: true,
-        options: jobList.map(x => ({label: x.name, value: x.name})),
+        options: jobList.map(x => ({label: x.job_position_name, value: x.name})),
         req: true,
         reqmessage: 'Please state'
       },
@@ -257,7 +346,7 @@ export default (props) => {
         label: 'Supervisor',
         placeholder: 'Please Select',
         twocol: false,
-        options: staffList.map(x => ({label: x.employee_name, value: x.employee_name})),
+        options: staffList.map(x => ({label: x.employee_name, value: x.name})),
       },
       {
         type: 'select',
@@ -268,7 +357,7 @@ export default (props) => {
         twocol: false,
         req: true,
         reqmessage: 'Please select role',
-        options: roleList.map(x => ({label: x.name, value: x.name})),
+        options: roleList.map(x => ({label: x.role_name, value: x.name})),
       },
       {
         type: 'upload',

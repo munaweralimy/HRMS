@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Typography, Anchor, Button, Space } from 'antd';
 import { DownloadIcon } from '../../atoms/CustomIcons';
 import { getFileName } from '../../../features/utility';
+import { baseUrl } from '../../../configs/constants';
 
 const { Text, Title } = Typography;
 const { Link } = Anchor;
@@ -39,7 +40,7 @@ export default (props) => {
                 </Text>
                 {item?.url && (
                   <Anchor affix={false}>
-                    <Link target="_blank" href={`http://cms2dev.limkokwing.net${item?.url}`} title={<DownloadIcon />} />
+                    <Link target="_blank" href={`${baseUrl}${item?.url}`} title={<DownloadIcon />} />
                   </Anchor>
                 )}
               </Card>

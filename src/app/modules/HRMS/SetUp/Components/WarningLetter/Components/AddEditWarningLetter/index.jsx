@@ -112,7 +112,7 @@ export default (props) => {
       getWarningLetterDetail(letterData.name).then((response) => {
         let data = response?.data?.data;
         setValue('writing_letter_name', data.writing_letter_name);
-        setValue('letter_template', { label: data.letter_template, value: data.letter_template });
+        setValue('letter_template', { label: data.letter_template, value: data.name });
         setValue('signiture', data.signiture === 1 ? [1] : [0]);
         setValue('signee', { label: data.signee, value: data.signee });
         setValue('detail', data.detail);

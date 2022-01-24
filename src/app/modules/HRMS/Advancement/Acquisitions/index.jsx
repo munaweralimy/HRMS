@@ -13,8 +13,8 @@ import Roles from '../../../../../routing/config/Roles';
 const colName = [
   {
     title: 'Job Title',
-    dataIndex: 'job_title',
-    key: 'job_title',
+    dataIndex: 'job_position_name',
+    key: 'job_position_name',
     sorter: true,
   },
   {
@@ -28,7 +28,7 @@ const colName = [
     dataIndex: 'date_open',
     key: 'date_open',
     sorter: true,
-    render: (text) => moment(text).format('Do MMMM YYYY')
+    render: (text) => moment(text).format('Do MMMM YYYY'),
   },
   {
     title: 'Suitable Application',
@@ -40,24 +40,23 @@ const colName = [
 ];
 
 export default (props) => {
-
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [viewJobOpenings, setViewJobOpenings] = useState(false);
   const [rowData, setRowData] = useState();
   const openJobs = useSelector((state) => state.advancement.jobopen);
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+  // const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
-    dispatch(getJobOpening(page, limit, '', '', company))
+    dispatch(getJobOpening(page, limit, '', ''));
   }, []);
 
   const updateApi = () => {
     setRowData('');
     setViewJobOpenings(false);
     dispatch(getJobOpening(1, limit, '', ''));
-  }
+  };
 
   const onClickRow = (record) => {
     return {
@@ -79,9 +78,9 @@ export default (props) => {
     if (sorter.order) {
       dispatch(getJobOpening(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey));
     } else {
-        dispatch(getJobOpening(pagination.current, pagination.pageSize, '', ''));
+      dispatch(getJobOpening(pagination.current, pagination.pageSize, '', ''));
     }
-  }
+  };
 
   const btnList = [
     {
@@ -92,45 +91,46 @@ export default (props) => {
   ];
 
   return (
-    <Row gutter={[20,30]}>
+    <Row gutter={[20, 30]}>
       <Col span={24}>
         <HeadingChip title={'Acquisitions'} btnList={allowed([Roles.ADVANCEMENT], 'write') ? btnList : null} />
       </Col>
       <Col span={24}>
-      {viewJobOpenings ? (
-      <Card bordered={false} className="uni-card h-auto">
-        <Row gutter={[20, 20]} align="bottom">
-          <Col span={24}>
-            <Button
-              type="link"
-              htmlType="button"
-              className="p-0 c-gray-linkbtn"
-              icon={<LeftOutlined />}
-              onClick={onGoBack}
-            >
-              Job Openings
-            </Button>
-          </Col>
-          <Col span={24}>
-            <AddEditJob data={rowData} updateApi={updateApi} />
-          </Col>
-        </Row>
-      </Card>
-    ) : (
-      <ListCard 
-      title="Job Openings"
-      classes='clickRow'
-      onRow={onClickRow}
-      ListCol={colName}
-      ListData={openJobs?.rows}
-      onChange={onTableChange}
-      pagination={{
-        total: openJobs?.count,
-        current: page,
-        pageSize: limit
-      }}
-      />)}
+        {viewJobOpenings ? (
+          <Card bordered={false} className="uni-card h-auto">
+            <Row gutter={[20, 20]} align="bottom">
+              <Col span={24}>
+                <Button
+                  type="link"
+                  htmlType="button"
+                  className="p-0 c-gray-linkbtn"
+                  icon={<LeftOutlined />}
+                  onClick={onGoBack}
+                >
+                  Job Openings
+                </Button>
+              </Col>
+              <Col span={24}>
+                <AddEditJob data={rowData} updateApi={updateApi} />
+              </Col>
+            </Row>
+          </Card>
+        ) : (
+          <ListCard
+            title="Job Openings"
+            classes="clickRow"
+            onRow={onClickRow}
+            ListCol={colName}
+            ListData={openJobs?.rows}
+            onChange={onTableChange}
+            pagination={{
+              total: openJobs?.count,
+              current: page,
+              pageSize: limit,
+            }}
+          />
+        )}
       </Col>
     </Row>
-  )
-}
+  );
+};

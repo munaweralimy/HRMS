@@ -42,7 +42,7 @@ export const getTeams = (page, limit, order, orderby, search = null) => {
       return async (dispatch) => {
         const {
           data: { message },
-        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&company=' + search : ''}`);
+        } = await axios.get(`${apiMethod}/hrms.api.get_team_list?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}${search ? '&team=' + search : ''}`);
         dispatch({
           type: action_types.TEAM_LIST,
           data: message,
@@ -113,11 +113,11 @@ export const getTeams = (page, limit, order, orderby, search = null) => {
   export const getWHTemplateList = () => {
     return async (dispatch) => {
       const {
-        data: { data },
-      } = await axios.get(`${apiresource}/Work Hour Template?fields=["name","template_name"]`);
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.tasks_api.get_dropdowns`, {params: {"doctype" : "Work Hour Template"}});
       dispatch({
         type: action_types.TEMPLATE_LIST,
-        data: data,
+        data: message,
       });
     };
   };
@@ -142,6 +142,42 @@ export const getTeams = (page, limit, order, orderby, search = null) => {
       dispatch({
         type: action_types.WARN_LETTERS,
         data: data,
+      });
+    };
+  };
+
+  export const getEmployFaculty = (company) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/aqa.api.get_faculty`, {params: {"company": company}});
+      dispatch({
+        type: action_types.CONTRACT_FACULTY,
+        data: message,
+      });
+    };
+  };
+
+  export const getEmployProgram = (company, faculty) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/aqa.api.get_program`, {params: {"company": company, "faculty": faculty}});
+      dispatch({
+        type: action_types.CONTRACT_PROGRAM,
+        data: message,
+      });
+    };
+  };
+
+  export const getEmployCampus = (company) => {
+    return async (dispatch) => {
+      const {
+        data: { message },
+      } = await axios.get(`${apiMethod}/Campus`, {params: { "company": company }});
+      dispatch({
+        type: action_types.CONTRACT_CAMPUS,
+        data: message,
       });
     };
   };

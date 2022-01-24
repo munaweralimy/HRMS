@@ -137,7 +137,7 @@ export default (props) => {
                 label="Staff Self Assessment"
                 control={control}
                 initValue={item.self_staff_assessment ? item.self_staff_assessment : 0}
-                iProps={{ disabled: !allowed([Roles.ADVANCEMENT]),character: ({ index }) => RatingStars[index + 1] }}
+                iProps={{ disabled: !allowed([Roles.ADVANCEMENT]), character: ({ index }) => RatingStars[index + 1] }}
               />
             </Col>
           </Row>

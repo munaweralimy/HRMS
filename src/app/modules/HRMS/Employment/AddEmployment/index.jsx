@@ -12,7 +12,8 @@ import { useForm } from 'react-hook-form';
 import { BreakingPoint } from '../../../../../configs/constantData';
 import PlaceHolderImage from '../../../../../assets/img/scholarship-icon.svg';
 import { getSingleUpload, uniquiFileName } from '../../../../../features/utility';
-import { employApi, employAddApi, contractApi } from '../ducks/services';
+import { employApi, employAddApi, contractApi, leaveApi, employDraftApi } from '../ducks/services';
+import { baseUrl } from '../../../../../configs/constants';
 
 const { Title } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -55,7 +56,7 @@ export default (props) => {
         })
       })
     }
-
+ 
     if (val.emergency_contact && val.emergency_contact.length > 0) {
       val.emergency_contact.map(x => {
         emergency.push({
@@ -153,13 +154,19 @@ export default (props) => {
         weight: val.weight,
         health_details: val.health_details
     }
-    if (typeof(vstatus) == 'string') {
-      body["status"] = vstatus
-    }
     console.log('checking', body)
+    if (typeof(vstatus) == 'string') {
+      body["status"] = vstatus;
+      await employDraftApi(body).then((res) => {
+        setLoad(false);
+        message.success('Details Successfully Saved')
+        setTimeout(() =>  history.push('/employment'),2000)
+      })
+    } else {
     await employAddApi(body).then(async (res) => {
       console.log('res', res);
-      let id = res.data.data.name;      
+      let id = res.data.data.name;
+      
       if (val.image) {
           let modifiedName = uniquiFileName(val.image?.file?.originFileObj.name)
           let res   = await getSingleUpload(modifiedName, 'image',  val.image?.file?.originFileObj, 'Employee', id);
@@ -183,13 +190,14 @@ export default (props) => {
             level: x.level ? x.level?.value : '',
             school_univ: x.school_univ ? x.school_univ?.value : '',
             to_date: x.to_date,
-            transcript: url ? url.replace('http://cms2dev.limkokwing.net', '') : '',
+            transcript: url ? url.replace(`${baseUrl}`, '') : '',
           })
         }));
       }
       
 
       let empRole = [];
+      let programlisting = [];
       let workhours = [];
       let contactPDF = '';
 
@@ -208,10 +216,21 @@ export default (props) => {
       if (val.employee_role.length > 0) {
         val.employee_role.map(x => {
           empRole.push({
-            role_name: x.value
+            role: x.value,
+            role_name: x.label
           })
         })
       }
+
+      if (val?.program && val?.program.length > 0) {
+        val.program.map(x => {
+          programlisting.push({
+            program: x.value,
+            program_name: x.label
+          })
+        })
+      }
+
       if (val.contract_attachment) {
           let modifiedName = uniquiFileName(val.contract_attachment?.file?.originFileObj.name)
           let res = await getSingleUpload(modifiedName, 'image',  val.contract_attachment?.file?.originFileObj, 'Employee', id);
@@ -225,11 +244,14 @@ export default (props) => {
         start_date: val.start_date ? val.start_date : '',
         end_date: val.end_date ? val.end_date : "",
         staff_category: val?.staff_category ? val?.staff_category?.value : '',
-        company: val?.company ? val?.company?.value : '',
+        company: val?.company,
+        select_campus: val?.campus ? val?.campus?.value : '',
+        select_faculty: val?.faculty ? val?.faculty?.value : '',
+        program_list: programlisting,
         team: val?.team ? val?.team?.value : '',
         job_title: val?.job_title ? val?.job_title?.value : '',
         position_level: val?.position_level ? val?.position_level?.value : '',
-        supervisor: val?.supervisor ? val?.supervisor?.value : '',
+        supervisor_id: val?.supervisor ? val?.supervisor?.value : '',
         employee_role: empRole,
         contract_attachment: contactPDF,
         work_hour_template: val?.work_hour_template?.value != 'Custom Template' ? val?.work_hour_template?.value : '',    
@@ -246,11 +268,12 @@ export default (props) => {
           message.success('Details Successfully Saved')
           setTimeout(() =>  history.push('/employment'),2000);
           let body2 = {
-            image: profileImg ? profileImg.replace('http://cms2dev.limkokwing.net', "") : "",
+            image: profileImg ? profileImg.replace(`${baseUrl}`, "") : "",
             education: educate,
             status: 'Active'
           }
           employApi(body2, id);
+          leaveApi(id);
         }).catch(e => {
           console.log(e);
           setLoad(false);
@@ -267,6 +290,7 @@ export default (props) => {
       setLoad(false);
       message.error(e);
     })
+  }
 
   }
 

@@ -5,6 +5,7 @@ import FormGroup from '../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
 import { getFileName } from '../../../../../../../features/utility';
+import { baseUrl } from '../../../../../../../configs/constants';
 
 const {Title} = Typography;
 const _ = require("lodash");
@@ -321,8 +322,8 @@ export default (props) => {
             setValue('permanent_country', {label: data.permanent_country, value: data.permanent_country });
             setValue('permanent_state', data.permanent_state);
             
-            setValue('passport_background', {fileList: [{uid: '-1', name: getFileName(data?.passport_background), status: 'done', url: `http://cms2dev.limkokwing.net${data.passport_background}`}]});
-            setValue('ic_scanned', {fileList: [{uid: '-1', name: getFileName(data?.ic_scanned), status: 'done', url: `http://cms2dev.limkokwing.net${data.ic_scanned}`}]});
+            setValue('passport_background', {fileList: [{uid: '-1', name: getFileName(data?.passport_background), status: 'done', url: `${baseUrl}${data.passport_background}`}]});
+            setValue('ic_scanned', {fileList: [{uid: '-1', name: getFileName(data?.ic_scanned), status: 'done', url: `${baseUrl}${data.ic_scanned}`}]});
 
             setValue('emergency_contact_name', data.emergency_contact_name);
             setValue('emergency_contact_number', data.emergency_contact_number);

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { InputField } from '../../atoms/FormElement';
 import { ChatUpdateIcon } from '../../atoms/CustomIcons';
 import axios from '../../../services/axiosInterceptor';
-import { apiresource } from '../../../configs/constants';
+import { apiresource, baseUrl } from '../../../configs/constants';
 import moment from 'moment';
 
 const {Title, Text} = Typography;
@@ -57,7 +57,7 @@ export default (props) => {
             action = res.data?.comment;
             content = `Commented on ${res.reference_name} ${res.doctype}`;
             author = res.data?.comment_modified_data[0]?.full_name || res.data?.comment_modified_data[0]?.email || '';
-            avatar = ava.length ? ava[0].user_image ? `http://cms2dev.limkokwing.net${ava[0].user_image}` : defaultImage : defaultImage;
+            avatar = ava.length ? ava[0].user_image ? `${baseUrl}${ava[0].user_image}` : defaultImage : defaultImage;
             } else {
                 action = ``;
                 content = `Updated in ${res.doc_name} ${res.doctype}`;

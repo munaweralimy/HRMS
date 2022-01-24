@@ -3,6 +3,7 @@ import { Row, Col, Typography, Space, Avatar, Collapse } from 'antd';
 import ListCard from "../../../../../molecules/ListCard";
 import { useSelector, useDispatch } from "react-redux";
 import { getLeaveStatisticList, getLeaveStatisticBar } from "../../ducks/actions";
+import { baseUrl } from "../../../../../../configs/constants";
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -69,7 +70,7 @@ export default (props) => {
   }
 
   useEffect(() => {
-    dispatch(getLeaveStatisticBar(company));
+    dispatch(getLeaveStatisticBar());
   }, []);
 
   const onClickRow = (record) => {
@@ -79,7 +80,7 @@ export default (props) => {
   }
 
   function callback(key) {
-    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type, company));
+    dispatch(getLeaveStatisticList(leaveStatisticsBar[key]?.leave_type));
   }
 
   const leavesPanelHeader = (item, index) => (
@@ -99,7 +100,7 @@ export default (props) => {
               {item?.employee_list?.length > 0 && item?.employee_list?.map((list, ind) => (
                 <Fragment key={ind}>
                   <Space direction="vertical" align="center" style={{ margin: '0 10px' }}>
-                    <Avatar src={list?.image ? `http://cms2dev.limkokwing.net${list?.image}` : ''} size={70} />
+                    <Avatar src={list?.image ? `${baseUrl}${list?.image}` : ''} size={70} />
                     <Text className='c-error'>{getStaffPercent(list?.employee_total_entitlement, list?.taken_employee_leaves)}%</Text>
                   </Space>
                 </Fragment>

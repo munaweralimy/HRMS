@@ -3,12 +3,12 @@ import { Button, Row, Col, Typography, Form, message, Upload, Select, Spin } fro
 import { useForm, Controller } from 'react-hook-form';
 import { uniquiFileName, getSingleUpload, getFileName } from '../../../../../../../../features/utility';
 import { InputField } from '../../../../../../../atoms/FormElement';
-import { apiMethod } from '../../../../../../../../configs/constants';
+import { apiMethod, baseUrl } from '../../../../../../../../configs/constants';
 import axios from '../../../../../../../../services/axiosInterceptor';
 import { addSingleApprover, updateApprover, deleteApprover, getApproverDetail } from '../../../../ducks/services';
 import { PlusCircleFilled } from '@ant-design/icons';
 import { LoadingOutlined } from '@ant-design/icons';
-import {allowed} from '../../../../../../../../routing/config/utils';
+import { allowed } from '../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../routing/config/Roles';
 
 const antIcon = <LoadingOutlined spin />;
@@ -23,7 +23,6 @@ export default (props) => {
   const [data, setData] = useState([]);
   const [value1, setValue1] = useState();
   const { control, errors, setValue, handleSubmit, reset } = useForm();
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   const onFinish = async (values) => {
     setLoad(true);
@@ -35,7 +34,6 @@ export default (props) => {
     const payload = {
       approver_id: values?.approver_name,
       signature: res?.file_url ? res?.file_url : image?.imageUrl,
-      company: company,
     };
     approver.name.length == 0
       ? addSingleApprover(payload).then((response) => {
@@ -103,7 +101,7 @@ export default (props) => {
     currentValue = value;
 
     function callingFunc() {
-      let url = `${apiMethod}/hrms.api.search_employee?company=${company}&search=${value}`;
+      let url = `${apiMethod}/hrms.api.search_employee?&search=${value}`;
       axios.get(url).then((d) => {
         if (currentValue === value) {
           const {
@@ -261,7 +259,7 @@ export default (props) => {
                           <img
                             src={
                               image?.imageUrl.length < 100
-                                ? `http://cms2dev.limkokwing.net${image.imageUrl}`
+                                ? `${baseUrl}${image.imageUrl}`
                                 : image.imageUrl
                             }
                             alt={<PlusCircleFilled />}
@@ -298,12 +296,13 @@ export default (props) => {
                     </>
                   ) : (
                     <>
-                    {allowed([Roles.SETUP], 'delete') && 
-                      <Col span={8}>
-                        <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteApprover}>
-                          Delete
-                        </Button>
-                      </Col>}
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={8}>
+                          <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteApprover}>
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={8}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

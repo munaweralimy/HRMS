@@ -170,7 +170,7 @@ export const addRequest = (body, id) => {
   if (id) {
     return axios.put(`${apiresource}/HRMS Form Listing/${id}`, body);
   } else {
-    return axios.post(`${apiresource}/HRMS Form Listing`, body);
+    return axios.post(`${apiMethod}/hrms.setup.add_form_listing`, body);
   }
 };
 export const delRequest = (id) => {
@@ -245,9 +245,9 @@ export const deleteWorkingHourTemp = (id) => {
 export const getWorkingHourTempDetail = (id) => {
   return axios.get(`${apiresource}/Work Hour Template/${id}`);
 };
-export const getDepartmentList = (id, company) => {
+export const getDepartmentList = (id) => {
   return axios.get(
-    `${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}&company=${company}`,
+    `${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}`,
   );
 };
 

@@ -105,18 +105,6 @@ export default (props) => {
       req: true,
       reqmessage: 'Template Name required',
     },
-    {
-      label: 'Company',
-      name: 'company',
-      type: 'select',
-      twocol: true,
-      placeholder: 'Select company',
-      req: true,
-      reqmessage: 'Company Name required',
-      options: [
-        { label: 'Limkokwing University Creative Technology', value: 'Limkokwing University Creative Technology' },
-      ],
-    },
 
     {
       type: 'array',
@@ -211,7 +199,6 @@ export default (props) => {
           time_min: value?.start_time.split(':')[1],
         }));
         setValue('template_name', data.template_name);
-        setValue('company', { label: data?.company, value: data?.company });
         setValue('work_hours', working_hours);
         setUserData(
           data?.user_staff.map((value) => ({
@@ -231,7 +218,6 @@ export default (props) => {
   const onFinish = async (val) => {
     setLoad(true);
     const createWorkingHourTemp = {
-      company: val?.company.value,
       template_name: val?.template_name,
       user_staff: userData.map((value) => ({ employee: value.name })),
       work_hours: val?.work_hours.map((value) => ({

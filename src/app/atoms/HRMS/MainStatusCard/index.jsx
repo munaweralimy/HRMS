@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Typography, Avatar, Card, Space } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
+import { baseUrl } from '../../../../configs/constants';
 
 const { Title, Text } = Typography;
 
@@ -56,7 +57,7 @@ export default (props) => {
         <Row gutter={[20, 30]}>
           <Col span={24}>
             <Space size={17}>
-              <Avatar size="large" size={70} src={`http://cms2dev.limkokwing.net${data?.image}`} />
+              <Avatar size="large" size={70} src={`${baseUrl}${data?.image}`} />
               <Space direction="vertical" size={0}>
                 <Title level={5} className="c-default mb-0">
                   {data?.employee_name}

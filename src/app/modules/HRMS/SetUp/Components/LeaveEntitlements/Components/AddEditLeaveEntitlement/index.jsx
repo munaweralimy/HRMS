@@ -22,7 +22,6 @@ export default (props) => {
   const leaveList = useSelector((state) => state.setup.leaveList);
 
   const onChnageLeaveType = (val) => {
-    console.log({ val });
     if (val.label === 'Annual Leave') {
       leaveType(true);
     } else {
@@ -151,7 +150,6 @@ export default (props) => {
   ];
 
   const onFinish = (values) => {
-    console.log({ values });
     setLoad(true);
     const payload = {
       leave_entitlement_name: values.leave_entitlement_name,
@@ -227,7 +225,7 @@ export default (props) => {
       setValue('apply_before_current_date', leaveEtitlement.apply_before_current_date == 'Yes' ? [1] : []);
       setValue('carries_forward', leaveEtitlement.carries_forward == 'Yes' ? [1] : []);
       setValue('is_prorate', leaveEtitlement.is_prorate == 'Yes' ? [1] : []);
-      setValue('carry_forward_days', leaveEtitlement.carry_forward_days);
+      setValue('carry_forward_days', leaveEtitlement.carry_forward_day);
     } else {
       reset();
     }
@@ -284,12 +282,13 @@ export default (props) => {
                     </>
                   ) : (
                     <>
-                    {allowed([Roles.SETUP], 'delete') && 
-                      <Col span={6}>
-                        <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
-                          Delete
-                        </Button>
-                      </Col>}
+                      {allowed([Roles.SETUP], 'delete') && (
+                        <Col span={6}>
+                          <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
+                            Delete
+                          </Button>
+                        </Col>
+                      )}
                       <Col span={6}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

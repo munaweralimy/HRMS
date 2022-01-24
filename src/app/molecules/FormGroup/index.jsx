@@ -3,6 +3,7 @@ import { InputField, DateField, SelectField, CheckboxGroup, UploadField, TextAre
 import { Row, Col, Typography } from 'antd';
 import moment from 'moment';
 import { getFileName } from '../../../features/utility';
+import { baseUrl } from '../../../configs/constants';
 
 const { Title } = Typography;
 
@@ -121,7 +122,7 @@ export default (props) => {
                       uid: '-1',
                       name: getFileName(elem[item.name]),
                       status: 'done',
-                      url: `http://cms2dev.limkokwing.net${elem[item.name]}`,
+                      url: `${baseUrl}${elem[item.name]}`,
                     },
                   ],
                 }

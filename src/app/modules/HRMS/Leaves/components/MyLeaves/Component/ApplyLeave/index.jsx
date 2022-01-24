@@ -16,9 +16,9 @@ export default (props) => {
 
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
-  const { control, handleSubmit, setValue } = useForm();
+  const { control, handleSubmit, setValue, errors } = useForm();
   const [forming, setForming] = useState([]);
-  const { setAddVisible, id, updateApi, fullName, company } = props;
+  const { setAddVisible, id, updateApi, fullName } = props;
   const leaveTypeData = useSelector(state => state.leaves.leaveTypeData);
   const leaveInfoData = useSelector(state => state.leaves.leaveInfoData);
   const leaveApproversData = useSelector(state => state.leaves.leaveApproversData);
@@ -27,49 +27,56 @@ export default (props) => {
   console.log('leaveApproversData', leaveApproversData)
 
   useEffect(() => {
-    dispatch(getLeaveType(company));
-    dispatch(getHolidaysList(company))
+    dispatch(getLeaveType());
+    dispatch(getHolidaysList())
   }, []);
 
 
   const onLeaveChange = (e) => {
-    dispatch(getLeaveData(e.label, id, company));
-    dispatch(getLeaveApprovers(e.label, id, company));
+    dispatch(getLeaveData(e.label, id));
+    dispatch(getLeaveApprovers(e.label, id));
   }
 
   const onFinish = async (val) => {
     setLoad(true);
     const startDate = moment(val?.leaveStart);
     const endDate = moment(val?.leaveEnd);
-    //const daysDiff = endDate.diff(startDate, 'days') + 1;
+    const daysDiff = endDate.diff(startDate, 'days') + 1;
 
     var leaves_count = parseFloat(0);
-    for (var currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
-      if (currentDate.getDay() == 0) {
-        leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Sunday' == resp?.week_days)?.leave_days);
+    if (holidaysListData?.leaves_criteria?.length > 0) {
+      for (var currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
+        if (currentDate.getDay() == 0) {
+          leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Sunday' == resp?.week_days)?.leave_days);
+        }
+        else if (currentDate.getDay() == 6) {
+          leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Saturday' == resp?.week_days)?.leave_days);
+        }
+        else if (currentDate.getDay() == 1) {
+          leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Monday' == resp?.week_days)?.leave_days);
+        }
+        else if (currentDate.getDay() == 2) {
+          leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Tuesday' == resp?.week_days)?.leave_days);
+        }
+        else if (currentDate.getDay() == 3) {
+          leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Wednesday' == resp?.week_days)?.leave_days);
+        }
+        else if (currentDate.getDay() == 4) {
+          leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Thursday' == resp?.week_days)?.leave_days);
+        }
+        else if (currentDate.getDay() == 5) {
+          leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Friday' == resp?.week_days)?.leave_days);
+        }
+        else {
+          leaves_count = leaves_count + 1;
+        }
       }
-      else if (currentDate.getDay() == 6) {
-        leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Saturday' == resp?.week_days)?.leave_days);
-      }
-      else if (currentDate.getDay() == 1) {
-        leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Monday' == resp?.week_days)?.leave_days);
-      }
-      else if (currentDate.getDay() == 2) {
-        leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Tuesday' == resp?.week_days)?.leave_days);
-      }
-      else if (currentDate.getDay() == 3) {
-        leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Wednesday' == resp?.week_days)?.leave_days);
-      }
-      else if (currentDate.getDay() == 4) {
-        leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Thursday' == resp?.week_days)?.leave_days);
-      }
-      else if (currentDate.getDay() == 5) {
-        leaves_count = leaves_count + parseFloat(holidaysListData?.leaves_criteria?.find(resp => 'Friday' == resp?.week_days)?.leave_days);
-      }
-      else {
-        leaves_count = leaves_count + 1;
-      }
+    } else {
+      leaves_count = daysDiff
     }
+    
+
+    console.log('leaves_count', leaves_count, holidaysListData)
 
     let approvers = [];
     leaveApproversData?.map(resp => {
@@ -90,7 +97,6 @@ export default (props) => {
       role: '',
       job_title: '',
       leave_type_name: val?.leaveType.value,
-      company: company,
       leave_period: val?.leavePeriod.value,
       start_date: val?.leaveStart ? moment(val?.leaveStart).format('YYYY-MM-DD') : '',
       end_date: val?.leaveEnd ? moment(val?.leaveEnd).format('YYYY-MM-DD') : '',
@@ -141,6 +147,12 @@ export default (props) => {
               iProps={{ placeholder: 'Please select' }}
               initValue=''
               onChange={onLeaveChange}
+              isRequired={true}
+              rules={{
+                required: "Leave Type required",
+              }}
+              validate={errors.leaveType && "error"}
+              validMessage={errors.leaveType && errors.leaveType.message}
               selectOption={
                 leaveTypeData &&
                 leaveTypeData?.map((e) => {
@@ -158,6 +170,12 @@ export default (props) => {
               class='mb-0'
               iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY" }}
               initValue=''
+              isRequired={true}
+              rules={{
+                required: "Leave Start required",
+              }}
+              validate={errors.leaveStart && "error"}
+              validMessage={errors.leaveStart && errors.leaveStart.message}
             />
           </Col>
 
@@ -169,6 +187,12 @@ export default (props) => {
               class='mb-0'
               iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY" }}
               initValue=''
+              isRequired={true}
+              rules={{
+                required: "Leave End required",
+              }}
+              validate={errors.leaveEnd && "error"}
+              validMessage={errors.leaveEnd && errors.leaveEnd.message}
             />
           </Col>
 
@@ -186,6 +210,12 @@ export default (props) => {
                   { value: 'Half Day', label: 'Half Day' }
                 ]
               }
+              isRequired={true}
+              rules={{
+                required: "Leave Period required",
+              }}
+              validate={errors.leavePeriod && "error"}
+              validMessage={errors.leavePeriod && errors.leavePeriod.message}
             />
           </Col>
 
@@ -197,6 +227,12 @@ export default (props) => {
               class='mb-0'
               iProps={{ placeholder: 'Please state', size: 'large' }}
               initValue=''
+              isRequired={true}
+              rules={{
+                required: "Reason required",
+              }}
+              validate={errors.reason && "error"}
+              validMessage={errors.reason && errors.reason.message}
             />
           </Col>
           {leaveApproversData?.length > 0 && (

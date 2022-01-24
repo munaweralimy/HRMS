@@ -59,7 +59,5 @@ export const deleteAdvanceSalary = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Salary Advance/${id}`, payload);
 };
 export const getAllAssets = () => {
-  return axios.get(
-    `${apiresource}/HRMS Assets?fields=["name","assets_name","assets_id","status"]&filters={"status":"With Company"}`,
-  );
+  return axios.get(`${apiMethod}/hrms.api.assets_list`);
 };

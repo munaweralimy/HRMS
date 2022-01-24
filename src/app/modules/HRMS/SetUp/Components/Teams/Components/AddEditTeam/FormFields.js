@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 const addNewTeamFields = () => {
   const employeeList = useSelector((state) => state.setup.employeeList);
   const departmentList = useSelector((state) => state.setup.getAllDepartments);
+
   return [
     {
       label: 'Team Name',
@@ -32,7 +33,7 @@ const addNewTeamFields = () => {
       placeholder: 'Select staff',
       req: true,
       reqmessage: 'Staff required',
-      options: employeeList.map((value) => ({ label: value.employee_name, value: value.name })),
+      options: employeeList?.map((value) => ({ label: value.employee_name, value: value.name })),
     },
     {
       label: 'Department',
@@ -42,7 +43,7 @@ const addNewTeamFields = () => {
       placeholder: 'Select department',
       req: true,
       reqmessage: 'department required',
-      options: departmentList.map((value) => ({ label: value.name, value: value.name })),
+      options: departmentList?.map((value) => ({ label: value.department_name, value: value.name })),
     },
   ];
 };

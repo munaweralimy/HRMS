@@ -3,12 +3,12 @@ import { Row, Col, Form, Button, Typography, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
 import FormGroup from '../../../../../molecules/FormGroup';
 import ListCard from '../../../../../molecules/ListCard';
-import { getJobs, getCompany } from '../../../../Application/ducks/actions';
+import { getJobs, getCompany, getJobsAdc } from '../../../../Application/ducks/actions';
 import { getSuitableApplicants, emptyApplicant } from '../../dcuks/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import axios from '../../../../../../services/axiosInterceptor';
-import { apiresource } from '../../../../../../configs/constants';
+import { apiMethod, apiresource } from '../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 import { allowed } from '../../../../../../routing/config/utils';
 import Roles from '../../../../../../routing/config/Roles';
@@ -57,14 +57,12 @@ export default ({ data, updateApi }) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [load, setLoad] = useState(false);
-  const companies = useSelector((state) => state.global.companies);
-  const jobslist = useSelector((state) => state.global.jobslist);
+  const jobslist = useSelector((state) => state.global.jobListAdv);
   const applicantList = useSelector((state) => state.advancement.applicantlist);
   const { control, errors, reset, setValue, handleSubmit } = useForm();
 
   useEffect(() => {
-    dispatch(getJobs());
-    dispatch(getCompany());
+    dispatch(getJobsAdc());
     return () => dispatch(emptyApplicant());
   }, []);
 
@@ -82,16 +80,7 @@ export default ({ data, updateApi }) => {
       label: 'Job Title',
       name: 'job_title',
       placeholder: 'Select Job',
-      options: jobslist?.map((x) => ({ label: x.name, value: x.name })),
-      req: true,
-      reqmessage: 'Select Jobs',
-      twocol: true,
-    },
-    {
-      type: 'select',
-      label: 'Company',
-      name: 'company',
-      options: companies?.map((x) => ({ label: x.name, value: x.name })),
+      options: jobslist?.map((x) => ({ label: x.job_position_name, value: x.name })),
       req: true,
       reqmessage: 'Select Jobs',
       twocol: true,
@@ -101,10 +90,9 @@ export default ({ data, updateApi }) => {
   const onFinish = async (val) => {
     setLoad(true);
     let body = {
-      job_title: val.job_title.label,
-      company: val.company.label,
+      job_title: val.job_title.value,
     };
-    let url = `${apiresource}/HRMS Job Openings`;
+    let url = `${apiMethod}/hrms.advancement_api.update_create_hrms_job_opening`;
     try {
       if (data?.job_title) {
         await axios.post(`url/${data.job_title}`, body);
@@ -164,7 +152,7 @@ export default ({ data, updateApi }) => {
         <Row gutter={[20, 30]} align="bottom">
           <Col span={24}>
             <Title level={4} className="mb-0">
-              {`${data ? data.job_title + ' Position' : 'Add New Job Opening'} `}
+              {`${data ? data.job_position_name + ' Position' : 'Add New Job Opening'} `}
             </Title>
           </Col>
           {addeditJobs.map((item, index) => (
@@ -176,24 +164,26 @@ export default ({ data, updateApi }) => {
             <>
               <Col span={24}>
                 <Row gutter={24} justify="end">
-                {allowed([Roles.ADVANCEMENT], 'delete') && 
-                  <Col>
-                    <Button
-                      size="large"
-                      type="primary"
-                      htmlType="button"
-                      className="red-btn"
-                      onClick={() => onDelete(data.job_title)}
-                    >
-                      Delete Job Openinges
-                    </Button>
-                  </Col>}
-                  {allowed([Roles.ADVANCEMENT], 'write') && 
-                  <Col>
-                    <Button size="large" type="primary" htmlType="submit" className="green-btn">
-                      Save Changes
-                    </Button>
-                  </Col>}
+                  {allowed([Roles.ADVANCEMENT], 'delete') && (
+                    <Col>
+                      <Button
+                        size="large"
+                        type="primary"
+                        htmlType="button"
+                        className="red-btn"
+                        onClick={() => onDelete(data.job_title)}
+                      >
+                        Delete Job Openinges
+                      </Button>
+                    </Col>
+                  )}
+                  {/* {allowed([Roles.ADVANCEMENT], 'write') && (
+                    <Col>
+                      <Button size="large" type="primary" htmlType="submit" className="green-btn">
+                        Save Changes
+                      </Button>
+                    </Col>
+                  )} */}
                 </Row>
               </Col>
               <Col span={24}>

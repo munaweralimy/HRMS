@@ -53,7 +53,7 @@ export default (props) => {
 
     const onFinish = async (data) => {
         props.setLoading(true);
-        getRequest(data.formName.label).then(req => {
+        getRequest(data.formName.value).then(req => {
         getApproverLead(id).then(appr => {
             let approvetemp = [];
             req?.data?.data?.approvers.map(x => {
@@ -91,7 +91,7 @@ export default (props) => {
             // fields.push({field_label: 'Requester ID', field_type: 'text', field_value : id});
             
             const body1 = {
-                form_name: data.formName.label,
+                form_name: data.formName.value,
                 sender: req.data.data.sender,
                 category: data.formName.label == 'Show Cause Letter' ? data.formName.label : '',
                 approvers: approvetemp,

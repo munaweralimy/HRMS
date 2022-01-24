@@ -7,10 +7,11 @@ import { useDispatch } from 'react-redux';
 import { getWHTemplateList } from '../../../../../ducks/action';
 import { getFileName, uniquiFileName, getSingleUpload } from '../../../../../../../../../features/utility';
 import moment from 'moment';
-import { contractApi, employApi } from '../../../../../ducks/services';
+import { contractApi, employApi, leaveApi } from '../../../../../ducks/services';
 import MainForm from './MainForm';
 import Roles from '../../../../../../../../../routing/config/Roles';
 import {allowed} from '../../../../../../../../../routing/config/utils';
+import { baseUrl } from '../../../../../../../../../configs/constants';
 
   const colName = [
     {
@@ -21,8 +22,8 @@ import {allowed} from '../../../../../../../../../routing/config/utils';
     },
     {
       title: 'Job Title',
-      dataIndex: 'job_title',
-      key: 'job_title',
+      dataIndex: 'job_title_name',
+      key: 'job_title_name',
       sorter: true,
     },
     {
@@ -49,8 +50,8 @@ import {allowed} from '../../../../../../../../../routing/config/utils';
 export default (props) => {
 
     const dispatch = useDispatch();
-    const { data, updateApi, id, setLoad, setVisible, mode, controlOut, errorsOut, setValueOut, resetOut } = props;
-    const { control: controlIn, errors: errorsIn, setValue: setValueIn, reset: resetIn, handleSubmit: handleSubmitIn } = useForm();
+    const { data, updateApi, id, setLoad, setVisible, mode, controlOut, errorsOut, setValueOut, resetOut, getValuesOut } = props;
+    const { control: controlIn, errors: errorsIn, setValue: setValueIn, getValues: getValuesIn, reset: resetIn, handleSubmit: handleSubmitIn } = useForm();
     const [formVisible, setFormVisible] = useState(false);
     const [recordData, setRecord] = useState(null);
     const [refresh, doRefresh] = useState(0);
@@ -76,11 +77,24 @@ export default (props) => {
           record?.employee_role.map(x => {
             roletemp.push({
               label: x.role_name,
-              value: x.role_name,
+              value: x.role,
             })
           })
         } else {
           roletemp = null;
+        }
+
+        
+        let progtemp = [];
+          if (record?.programs && record?.programs.length > 0) {
+          record?.programs.map(x => {
+            progtemp.push({
+              label: x.program_name,
+              value: x.program,
+            })
+          })
+        } else {
+          progtemp = [];
         }
 
           let temps = [
@@ -99,7 +113,19 @@ export default (props) => {
             },
             {
               field: 'company',
-              value: record?.company ? {label: record.company,value: record.company}: '' 
+              value: record?.company 
+            },
+            {
+              field: 'campus',
+              value: record?.campus ? {label: record.campus_name,value: record.campus}: '' 
+            },
+            {
+              field: 'faculty',
+              value: record?.faculty ? {label: record.faculty_name,value: record.faculty}: '' 
+            },
+            {
+              field: 'program',
+              value: progtemp
             },
             {
               field: 'employement_type',
@@ -107,7 +133,7 @@ export default (props) => {
             },
             {
               field: 'contract_attachment',
-              value: record?.contract_attachment ? {fileList: [{uid: '-1', name: getFileName(record?.contract_attachment), status: 'done', url: `http://cms2dev.limkokwing.net${record?.contract_attachment}`}]} : '', 
+              value: record?.contract_attachment ? {fileList: [{uid: '-1', name: getFileName(record?.contract_attachment), status: 'done', url: `${baseUrl}${record?.contract_attachment}`}]} : '', 
             },
             
 
@@ -117,7 +143,7 @@ export default (props) => {
             },
             {
               field: 'job_title',
-              value: record?.job_title ? {label: record.job_title,value: record.job_title}: '' 
+              value: record?.job_title ? {label: record.job_title_name,value: record.job_title}: '' 
             },
             {
               field: 'position_level',
@@ -129,7 +155,7 @@ export default (props) => {
             },
             {
               field: 'supervisor',
-              value: record.supervisor ? {label: record.supervisor,value: record.supervisor}: '' 
+              value: record.supervisor ? {label: record.supervisor,value: record.supervisor_id}: '' 
             },
             {
               field: 'alternate_saturdays',
@@ -145,7 +171,7 @@ export default (props) => {
             },
             {
               field: 'work_hour_template',
-              value: record.work_hour_template ? {label: record.work_hour_template,value: record.work_hour_template}: '' 
+              value: record.work_hour_template ? {label: record.work_hour_template_name,value: record.work_hour_template}: '' 
             },
             {
               field: 'start_date',
@@ -213,6 +239,7 @@ export default (props) => {
     const onFinish = async (val) => {
       setLoad(true);
       let empRole = [];
+      let programlisting = [];
       let workhours = [];
       let contactPDF = '';
 
@@ -231,10 +258,21 @@ export default (props) => {
       if (val.employee_role.length > 0) {
         val.employee_role.map(x => {
           empRole.push({
-            role_name: x.value
+            role: x.value,
+            role_name: x.label
           })
         })
       }
+
+      if (val?.program && val?.program.length > 0) {
+        val.program.map(x => {
+          programlisting.push({
+            program: x.value,
+            program_name: x.label
+          })
+        })
+      }
+
       if (val.contract_attachment) {
         if (val.contract_attachment.fileList[0].uid != '-1') {
           let modifiedName = uniquiFileName(val.contract_attachment?.file?.originFileObj.name)
@@ -252,13 +290,16 @@ export default (props) => {
         start_date: val.start_date ? val.start_date : '',
         end_date: val.end_date ? val.end_date : "",
         staff_category: val?.staff_category?.value,
-        company: val?.company?.value,
+        company: val?.company,
+        select_campus: val?.campus ? val?.campus?.value : '',
+        select_faculty: val?.faculty ? val?.faculty?.value : '',
+        program_list: programlisting,
         team: val?.team?.value,
         job_title: val?.job_title?.value,
         position_level: val?.position_level?.value,
-        supervisor: val?.supervisor?.value,
+        supervisor_id: val?.supervisor?.value,
         employee_role: empRole,
-        contract_attachment: contactPDF ? contactPDF.replace('http://cms2dev.limkokwing.net', '') : '',
+        contract_attachment: contactPDF ? contactPDF.replace(`${baseUrl}`, '') : '',
         work_hour_template: val?.work_hour_template?.value != 'Custom Template' ? val?.work_hour_template?.value : '',    
         custom_work_hour_template: val?.work_hour_template?.value == 'Custom Template' ? 1 : 0,
         alternate_saturdays: val.alternate_saturdays ==  true ? 1 : 0,
@@ -274,8 +315,10 @@ export default (props) => {
         getID = recordData[0]?.value;
       }
 
+
       contractApi(body, getID).then(res => {
         employApi({status: 'Active'}, id).then(ax => {
+          leaveApi(id)
           setLoad(false);
           message.success('Details Successfully Saved')
           setFormVisible(false);
@@ -322,10 +365,10 @@ export default (props) => {
             <Col span={24}>
               {mode == 'edit' ?
               <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-                <MainForm control={controlIn} errors={errorsIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} setLoad={setLoad} updateApi={updateApi} />
+                <MainForm control={controlIn} errors={errorsIn} getValues={getValuesIn} setValue={setValueIn} reset={resetIn} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} id={id} setLoad={setLoad} updateApi={updateApi} />
               </Form>
               :
-              <MainForm control={controlOut} errors={errorsOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />}
+              <MainForm control={controlOut} errors={errorsOut}  getValues={getValuesOut} setValue={setValueOut} reset={resetOut} mode={mode} setVisible={setVisible} recordData={recordData} setRecord={setRecord} setFormVisible={setFormVisible} refresh={refresh} />}
             </Col>}
         </Row>
 

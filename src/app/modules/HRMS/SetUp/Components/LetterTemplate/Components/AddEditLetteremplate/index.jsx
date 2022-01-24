@@ -11,10 +11,10 @@ import {
 } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
 import { InputField } from '../../../../../../../atoms/FormElement';
+import { baseUrl } from '../../../../../../../../configs/constants';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
   const { title, onClose, templateData } = props;
   const { Title, Text } = Typography;
   const [load, setLoad] = useState(false);
@@ -100,7 +100,6 @@ export default (props) => {
       template_name: val?.template_name,
       letter_head: letter_head?.file_url ? letter_head?.file_url : val.header,
       letter_footer: letter_footer?.file_url ? letter_footer?.file_url : val.footer,
-      company: company,
     };
     templateData?.name.length == 0
       ? addSingleLetterTemp(payload).then((response) => {
@@ -238,7 +237,7 @@ export default (props) => {
                     <img
                       src={
                         header?.imageUrlHeader.length < 100
-                          ? `http://cms2dev.limkokwing.net${header.imageUrlHeader}`
+                          ? `${baseUrl}${header.imageUrlHeader}`
                           : header.imageUrlHeader
                       }
                       alt={<PlusCircleFilled />}
@@ -289,7 +288,7 @@ export default (props) => {
                     <img
                       src={
                         header?.imageUrlFooter.length < 100
-                          ? `http://cms2dev.limkokwing.net${header.imageUrlFooter}`
+                          ? `${baseUrl}${header.imageUrlFooter}`
                           : header.imageUrlFooter
                       }
                       alt={<PlusCircleFilled />}

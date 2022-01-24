@@ -7,6 +7,7 @@ const initialState = {
   teamAttendanceList: [],
   myAttendance: [],
   singleAttendance: [],
+  getEmpAttendance: [],
   totalAbsent: 0,
 };
 
@@ -27,6 +28,8 @@ export default (state = initialState, action) => {
       return { ...state, singleAttendance: data };
     case action_types.TOTAL_ABSENT:
       return { ...state, totalAbsent: data };
+    case action_types.GET_EMPA_ATTENDANCE:
+      return { ...state, getEmpAttendance: data };
     default:
       return state;
   }

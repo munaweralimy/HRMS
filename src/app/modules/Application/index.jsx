@@ -24,14 +24,14 @@ export default (props) => {
     
     //const id = 'HR-EMP-00006'
     const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
-    const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
+    //const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
     const policyData = useSelector(state => state.global.policyData);
     const timesheetData = useSelector(state => state.global.timesheetData);
     
     
     useEffect(() => {
-        dispatch(getPolicyList(company));
-        dispatch(getTimesheetData(company));
+        dispatch(getPolicyList());
+        dispatch(getTimesheetData());
         //dispatch(getCalenderData());
     }, [])
 

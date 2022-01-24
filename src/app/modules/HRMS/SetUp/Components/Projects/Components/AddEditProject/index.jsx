@@ -20,7 +20,6 @@ export default (props) => {
   const { control, errors, setValue, reset, handleSubmit } = useForm();
   const { Title, Text } = Typography;
   const employeeList = useSelector((state) => state.setup.employeeList);
-  const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
 
   useEffect(() => {
     if (projectData.name.length > 0) {
@@ -53,7 +52,6 @@ export default (props) => {
     const payload = {
       project_code: values.project,
       project: values.project,
-      company: company,
       user_staff: userData.map((value) => ({ employee: value.name })),
     };
     projectData.name.length == 0

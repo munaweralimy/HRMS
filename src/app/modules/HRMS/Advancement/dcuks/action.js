@@ -3,7 +3,7 @@ import axios from '../../../../../services/axiosInterceptor';
 import { apiMethod, apiresource } from '../../../../../configs/constants';
 
 
-export const getJobOpening = (page, limit, order, orderby, company) => {
+export const getJobOpening = (page, limit, order, orderby) => {
   let ordering = '';
     if(order == "ascend") {
         ordering = 'ASC'
@@ -13,7 +13,7 @@ export const getJobOpening = (page, limit, order, orderby, company) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_job_opening_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}${company ? `company=${company}` : ''}` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_job_opening_pagination?page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
       dispatch({
         type: action_types.JOB_OPENING,
         data: message,
@@ -113,7 +113,7 @@ export const getContracts = (id, page, limit, order, orderby) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_employee_contract_list?employee_id=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
+    } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_advancement_employee_contract_list?employee_id=${id}&page_number=${page}&limit=${limit}${order ? `&order=${ordering}&orderby=${orderby}` : ''}`);
     dispatch({
       type: action_types.CONTRACTS_LIST,
       data: message,
@@ -125,7 +125,7 @@ export const getFitFigure = (id) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.api.hrms_advancement_get_single_records?employee_id=${id}`);
+    } = await axios.get(`${apiMethod}/hrms.advancement_api.hrms_advancement_get_single_records?employee_id=${id}`);
     dispatch({
       type: action_types.FITINDEX_DETAILS,
       data: message,
