@@ -39,7 +39,7 @@ export default (props) => {
   useEffect(() => {
     if (Object.entries(singleLeaveValues).length > 0) {
       setLoad(true);
-      setValue('leave_type', singleLeaveValues?.leave_type);
+      setValue('leave_type', { label: singleLeaveValues?.leave_type, value: singleLeaveValues?.leave_type });
       setValue('contract_type', { label: singleLeaveValues?.contract_type, value: singleLeaveValues?.contract_type });
       setValue('gender', { label: singleLeaveValues?.gender, value: singleLeaveValues?.gender });
       setValue('marital_status', {
@@ -57,7 +57,7 @@ export default (props) => {
   const onFinish = (values) => {
     setLoad(true);
     const payload = {
-      leave_type: values?.leave_type,
+      leave_type: values?.leave_type?.value,
       contract_type: values?.contract_type.label,
       gender: values?.gender.label,
       marital_status: values?.marital_status.label,
