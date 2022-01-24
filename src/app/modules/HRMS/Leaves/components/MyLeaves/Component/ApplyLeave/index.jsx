@@ -75,8 +75,10 @@ export default (props) => {
       leaves_count = daysDiff
     }
     
+    if(val?.leavePeriod.value && val?.leavePeriod.value === 'Half Day') {
+      leaves_count = leaves_count - 0.5
+    } 
 
-    console.log('leaves_count', leaves_count, holidaysListData)
 
     let approvers = [];
     leaveApproversData?.map(resp => {

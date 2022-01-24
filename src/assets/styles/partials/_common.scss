@@ -685,3 +685,38 @@ select:-webkit-autofill:focus {
 .ant-pagination-next:hover .ant-pagination-item-link {
   color: #fff;
 }
+
+.ant-message {
+  color: #fff;
+  top: 0;
+  .ant-message-notice {
+    padding: 0;
+    .ant-message-notice-content {
+      background-color: transparent;
+      padding: 0;
+      box-shadow: none;
+      display: block;
+
+      .ant-message-custom-content {
+        display: block;
+        padding: 10px;
+
+        &.ant-message-error {
+          background: rgba(238, 17, 17, 80%);
+
+          .anticon {
+            color: #fff;
+          }
+        }
+  
+        &.ant-message-success {
+          background: rgba(2, 165, 116, 80%);
+
+          .anticon {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
