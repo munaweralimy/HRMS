@@ -63,7 +63,7 @@ export default (props) => {
       marital_status: values?.marital_status.label,
       add_leave_statistics: values?.add_leave_statistics,
       doctype: 'HRMS Leave Type',
-      approvers: values?.approvers.map((value) => ({
+      approvers: values?.approvers?.map((value) => ({
         approver_level: value.approver_level.value,
         doctype: 'HRMS Leave Type Approvers',
       })),
