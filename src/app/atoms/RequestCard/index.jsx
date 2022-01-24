@@ -77,7 +77,7 @@ console.log('data', data)
                 <Space direction="vertical" size={0} className='w-100'>
                   {data?.sender && <Text className="d-block c-white op-6 smallFont12">{data?.sender}</Text>}
                   <Title level={5} className="text-cutout d-block mb-0 lineHeight20">
-                    {data?.form_name}
+                    {data?.form_label}
                   </Title>
                 </Space>
               </Col>

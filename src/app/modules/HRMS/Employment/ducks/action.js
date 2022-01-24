@@ -137,11 +137,11 @@ export const getTeams = (page, limit, order, orderby, search = null) => {
   export const getWarnLetter = () => {
     return async (dispatch) => {
       const {
-        data: { data },
-      } = await axios.get(`${apiresource}/Warning Letter?fields=["name","writing_letter_name"]`);
+        data: { message },
+      } = await axios.get(`${apiMethod}/hrms.api.warning_letter`);
       dispatch({
         type: action_types.WARN_LETTERS,
-        data: data,
+        data: message,
       });
     };
   };
