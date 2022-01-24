@@ -43,7 +43,7 @@ export default (props) => {
       
       let approvetemp = [];
       let appr = await getApproverLead(id);
-      req?.data?.data?.approvers.map(x => {
+      req?.data?.message?.approvers.map(x => {
         let aid = '';
         if (x.approvers == 'Manager') {
           aid = appr.manager_id;
@@ -63,9 +63,9 @@ export default (props) => {
       })
 
       let body1 = {
-          form_name: req.data.data.form_name,
-          sender: req.data.data.sender,
-          category: req.data.data.category,
+          form_name: req.data.message.form_name,
+          sender: req.data.message.sender,
+          category: req.data.message.category,
           approvers: approvetemp,
           status: 'Pending',
           form_fields: [
@@ -159,8 +159,6 @@ export default (props) => {
             setLoad(false);
           })
     }
-
-    const cancelRequest = () => {}
 
     return (
         <Row gutter={[20,30]}>

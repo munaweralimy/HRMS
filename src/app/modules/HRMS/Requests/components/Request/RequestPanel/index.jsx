@@ -69,7 +69,7 @@ export default (props) => {
                 <Descriptions className='reqData' bordered colon={false} column={1}>
                 {item?.approvers.map((fx) => {
                     if (fx.approvers != 'Individual') {
-                        return <Descriptions.Item className={`icon-size20 ${fx?.status == 'Approve' ? 'icon-green' : 'icon-red'}`} key={fx?.approver_id} label={fx?.approvers == 'Job Position' ? fx?.approver_detail : fx?.approvers}>{fx?.status} {fx?.status == 'Approve' ? <CheckCircleFilled /> : <CloseCircleFilled />}</Descriptions.Item>
+                        return <Descriptions.Item className={`icon-size20 ${fx?.status == 'Approve' ? 'icon-green' : 'icon-red'}`} key={fx?.approver_id} label={fx?.approvers == 'Job Position' ? fx?.approver_detail_label : fx?.approvers}>{fx?.status} {fx?.status == 'Approve' ? <CheckCircleFilled /> : <CloseCircleFilled />}</Descriptions.Item>
                     }
                 })}
                 </Descriptions>

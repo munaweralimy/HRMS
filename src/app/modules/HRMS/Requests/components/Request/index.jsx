@@ -22,7 +22,7 @@ export default (props) => {
 
   const panelHeader = (appr, title, status) => {
     let x = '';
-    appr.map(y => x += y.approvers == 'Job Position' ? y.approver_detail : y.approvers + ' ')
+    appr.map(y => x += y.approvers == 'Job Position' ? y.approver_detail_label : y.approvers + ' ')
       return <Space size={30}>
         <SmallStatusCard
           status={status == 'Archive' ? appr.find(x => x.status == 'Reject') ? 'Reject' : 'Approved' : 'Pending'}
@@ -144,7 +144,6 @@ export default (props) => {
       form_fields: field
     };
 
-    console.log('ccc', payload, category)
     updateRequest(item.name, payload)
     .then((response) => {
         if (category == 'Email Activation') {

@@ -55,9 +55,9 @@ export default (props) => {
         props.setLoading(true);
         getApproverLead(id).then(appr => {
             let approvetemp = [];
-            
-            data?.formName.approvers.map(x => {
-              let aid = '';
+            console.log('-------------- i am here', data)
+            data?.formName.approver.map(x => {
+                let aid = '';
               if (x.approvers == 'Manager') {
                 aid = appr?.data?.message[0]?.manager_id;
               } else if (x.approvers == 'Supervisor') {
@@ -75,7 +75,7 @@ export default (props) => {
                   remarks:""
               })
             })
-
+            
             let fields = [];
             Object.entries(data).map(([key, val]) => {
                 if (key != 'formName') {
