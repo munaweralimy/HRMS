@@ -44,7 +44,7 @@ export default (props) => {
           let temp = [];
           letters.map(x => {
             temp.push({
-              value: x.writing_letter_name,
+              value: x.name,
               label: x.writing_letter_name,
             });
           })
@@ -57,7 +57,7 @@ export default (props) => {
             let temp = [];
             formList1.map(x => {
                 if(x?.category != '')  {
-                    if(x?.category == 'Show Cause Letter' && allowed([Roles.REQUESTS_MANAGER])) {
+                    if(x?.category == 'Show Cause Letter' && allowed([Roles.REQUESTS_MANAGER], 'read')) {
                         temp.push(x)
                     }
                 } else {
@@ -71,9 +71,11 @@ export default (props) => {
     useEffect(() => {
         if (formList.length > 0 && dvalue) {
             let e = formList.find(x => x.category == dvalue.category);
-            let x = {label: e.form_name, value: e.name, fields: e.form_field, category: e.category}
-            setValue('formName', x);
-            setForming(x);
+            if (e) {
+                let x = {label: e.form_name, value: e.name, fields: e.form_field, category: e.category, approvers: e.approvers, sender: e.sender}
+                setValue('formName', x);
+                setForming(x);
+            }
         }
     }, [formList]);
 
@@ -99,7 +101,7 @@ export default (props) => {
       </Space>
       </div>
     }
-    
+
     return (
     <Card bordered={false} className="uni-card h-auto">
         <Row gutter={[30, 20]}>
@@ -119,7 +121,7 @@ export default (props) => {
                     control={control}
                     onChange={onChangeForm}
                     rules={{required: 'Please Select Form'}}
-                    selectOption={formList?.map(e => ({label: e.form_name, value: e.name, fields: e.form_field, category: e.category}))}
+                    selectOption={formList?.map(e => ({label: e.form_name, value: e.name, fields: e.form_field, category: e.category, approver: e.approvers, sender: e.sender}))}
                     initValue={''}
                     validate={errors.formName && 'error'}
                     validMessage={errors.formName && errors.formName.message}
@@ -171,8 +173,7 @@ export default (props) => {
                         rules={{required: 'Please state'}}
                         validate={errors['Staff ID'] && 'error'}
                     />
-                    {forming.category == 'Show Cause Letter' &&
-                    <>
+                    
                     <InputField 
                         fieldname={'Request For'}
                         label={'Request For'}
@@ -181,6 +182,8 @@ export default (props) => {
                         iProps={{ placeholder: 'please state' }}
                         initValue={dvalue ? dvalue.name : ''}
                     />
+                    {forming.category == 'Show Cause Letter' &&
+                    <>
                     <InputField 
                         fieldname={'Request For Team'}
                         label={'Request For Team'}

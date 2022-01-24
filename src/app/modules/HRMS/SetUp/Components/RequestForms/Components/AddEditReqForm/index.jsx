@@ -81,7 +81,7 @@ export default (props) => {
     val?.approvers_fields?.map(x => {
       approver.push({
         approvers: x?.approvers?.label,
-        approver_detail: x?.approver_detail?.label ? x.approver_detail.label : x.approver_detail ? x.approver_detail : '' 
+        approver_detail: x?.approver_detail?.value ? x.approver_detail.value : x.approver_detail ? x.approver_detail : '' 
       })
     })
 

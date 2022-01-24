@@ -53,11 +53,11 @@ export default (props) => {
 
     const onFinish = async (data) => {
         props.setLoading(true);
-        getRequest(data.formName.value).then(req => {
         getApproverLead(id).then(appr => {
             let approvetemp = [];
-            req?.data?.data?.approvers.map(x => {
-              let aid = '';
+            console.log('-------------- i am here', data)
+            data?.formName.approver.map(x => {
+                let aid = '';
               if (x.approvers == 'Manager') {
                 aid = appr?.data?.message[0]?.manager_id;
               } else if (x.approvers == 'Supervisor') {
@@ -75,24 +75,24 @@ export default (props) => {
                   remarks:""
               })
             })
-
+            
             let fields = [];
             Object.entries(data).map(([key, val]) => {
                 if (key != 'formName') {
                     if (key == 'Date') {
                         fields.push({field_label: key, field_type: 'date', field_value : moment(val).format('YYYY MM DD')});
                     } else if(key == 'Warning Letter Type') {
-                        fields.push({field_label: key, field_type: 'text', field_value : val.label});
+                        fields.push({field_label: 'Warning Letter Type', field_type: 'text', field_value : val.label});
+                        fields.push({field_label: 'Warning Letter ID', field_type: 'text', field_value : val.value});
                     } else {
                         fields.push({field_label: key, field_type: 'text', field_value : val});
                     }
                 }
             })
             // fields.push({field_label: 'Requester ID', field_type: 'text', field_value : id});
-            
             const body1 = {
                 form_name: data.formName.value,
-                sender: req.data.data.sender,
+                sender: data.formName.sender,
                 category: data.formName.label == 'Show Cause Letter' ? data.formName.label : '',
                 approvers: approvetemp,
                 status: 'Pending',
@@ -110,7 +110,6 @@ export default (props) => {
                 message.error('Request Created Failed')
             })
   
-          })
         }).catch(e => {
             const {response} = e
             console.log("error", response);

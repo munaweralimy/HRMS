@@ -123,7 +123,7 @@ export default (props) => {
       
       let approvetemp = [];
       let appr = await getApproverLead(userdetail.name);
-      req?.data?.data?.approvers.map(x => {
+      req?.data?.message?.approvers.map(x => {
         let aid = '';
         if (x.approvers == 'Manager') {
           aid = appr.manager_id;
@@ -143,9 +143,9 @@ export default (props) => {
       })
 
       let body1 = {
-          form_name: req.data.data.form_name,
-          sender: req.data.data.sender,
-          category: req.data.data.category,
+          form_name: req.data.message.form_name,
+          sender: req.data.message.sender,
+          category: req.data.message.category,
           approvers: approvetemp,
           status:"Pending",
           form_fields: [
@@ -197,6 +197,7 @@ export default (props) => {
           
         ]
       }
+      console.log('------------', body1)
       
           updateCarryForward(userdetail.name).then(ax => {
             console.log('checking body')

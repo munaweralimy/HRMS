@@ -24,6 +24,7 @@ export default (props) => {
   const requestFormsList = useSelector((state) => state.setup.requestFormsListData);
 
   useEffect(() => {
+    // dispatch(getJobs());
     dispatch(getRoles());
     dispatch(getFieldsList());
     if (!visible) {
@@ -64,7 +65,7 @@ export default (props) => {
       align: 'center',
       render: (text, record) =>
         allowed([Roles.SETUP], 'delete') ? (
-          <Button type="link" className="list-links c-gray" onClick={() => deleteRequest(record.form_name)}>
+          <Button type="link" className="list-links c-gray" onClick={() => deleteRequest(record.name)}>
             <CloseCircleFilled />
           </Button>
         ) : null,

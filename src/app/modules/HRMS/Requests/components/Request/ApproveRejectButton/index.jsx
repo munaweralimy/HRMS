@@ -13,8 +13,9 @@ export default ({data, currentID, onAction, getValues}) => {
   
     useEffect(() => {
       if (data) {
+        console.log('check', permit)
         setApproverPermit({
-          pos : data.approvers.find(y => Object.keys(permit).find(z => z == y.approver_detail)),
+          pos : data.approvers.find(y => permit.role_list.find(z => Object.keys(z) == y.approver_detail)),
           // ind : data.approvers.find(y => y.approver_detail == currentID),
           ind : data.approvers.find(y => y.approver_id == currentID),
         })

@@ -13,8 +13,8 @@ const colName = [
   },
   {
     title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
+    dataIndex: 'show_cause_label',
+    key: 'show_cause_label',
   },
 ];
 
