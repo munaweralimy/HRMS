@@ -12,7 +12,9 @@ import { LoadingOutlined } from '@ant-design/icons';
 import Roles from '../../../../../../../../routing/config/Roles';
 import { allowed } from '../../../../../../../../routing/config/utils';
 const antIcon = <LoadingOutlined spin />;
-
+const initQ = {
+  approver_level: '',
+};
 export default (props) => {
   const { title, onClose, leaveType } = props;
   const { Title, Text } = Typography;

@@ -21,7 +21,7 @@ const warningLetterFilds = () => {
       colWidth: '1 0 200px',
       req: true,
       reqMessage: 'warning letter name required',
-      options: letterTemp.map((value) => ({ label: value.name, value: value.name })),
+      options: letterTemp.map((value) => ({ label: value.template_name, value: value.name })),
     },
     {
       label: '',
