@@ -75,8 +75,10 @@ export default (props) => {
       leaves_count = daysDiff
     }
     
+    if(val?.leavePeriod.value && val?.leavePeriod.value === 'Half Day') {
+      leaves_count = leaves_count - 0.5
+    } 
 
-    console.log('leaves_count', leaves_count, holidaysListData)
 
     let approvers = [];
     leaveApproversData?.map(resp => {
@@ -127,6 +129,10 @@ export default (props) => {
       setLoad(false);
     }
   }
+
+  const PPDates = (current) => {
+    return current && current > moment().endOf("day");
+  };
 
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
