@@ -347,6 +347,7 @@ export default (props) => {
         placeholder: 'Please Select',
         twocol: false,
         options: staffList.map(x => ({label: x.employee_name, value: x.name})),
+        req: true
       },
       {
         type: 'select',
