@@ -208,9 +208,11 @@ export default (props) => {
   }
 
   useEffect(() => {
-    dispatch(getTeamsDetail(employeeId));
-    dispatch(getCompany());
-    dispatch(getTeams2())
+    if(allowed([Roles.TASK_TEAMS], 'read') || allowed([Roles.TASK], 'read')) {
+      dispatch(getTeamsDetail(employeeId));
+      dispatch(getCompany());
+      dispatch(getTeams2())
+    }
     return () => dispatch(emptyAllLeaves())
   }, []);
 
@@ -264,12 +266,6 @@ export default (props) => {
     }
   }
 
-  useEffect(() => {
-    if (Object.keys(team).length > 0) {
-      dispatch(getTeamTasks(team[0]?.team_name, 1, 6));
-    }
-  }, [team]);
-
   const onTeamAction = (filter, page, limit, sort, sortby, type, search, team) => {
     if (type == 'list') {
       if (search) {
@@ -290,9 +286,6 @@ export default (props) => {
       }
     }
   }
-
-
-
 
   const tabs = [
     {
