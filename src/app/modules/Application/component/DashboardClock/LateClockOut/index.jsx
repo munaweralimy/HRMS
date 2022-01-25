@@ -45,7 +45,7 @@ const LateclockOut = (props) => {
         onClose();
       })
       .catch((e) => {
-        message.error('Something went worong');
+        message.error('Something went wrong');
         setLoad(false);
         onClose();
       });

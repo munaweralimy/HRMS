@@ -127,7 +127,7 @@ export default (props) => {
 
   const updateApi = () => {
     setRecord(null);
-    dispatch(getMyTasks(id, 1, limit, '', '', search));
+    dispatch(getMyTasks(id, page, limit, '', ''));
   }
 
   const onClickRow = (record) => {
