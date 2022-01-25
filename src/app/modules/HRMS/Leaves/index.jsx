@@ -208,7 +208,7 @@ export default (props) => {
   }
 
   useEffect(() => {
-    if(allowed([Roles.TASK_TEAMS], 'read') || allowed([Roles.TASK], 'read')) {
+    if(allowed([Roles.LEAVES_TEAMS], 'read') || allowed([Roles.LEAVES], 'read')) {
       dispatch(getTeamsDetail(employeeId));
       dispatch(getCompany());
       dispatch(getTeams2())
