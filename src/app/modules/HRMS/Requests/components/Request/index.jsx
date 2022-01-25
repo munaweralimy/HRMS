@@ -22,7 +22,7 @@ export default (props) => {
 
   const panelHeader = (appr, title, status) => {
     let x = '';
-    appr.map(y => x += y.approvers == 'Job Position' ? y.approver_detail : y.approvers + ' ')
+    appr.map(y => x += y.approvers == 'Job Position' ? y.approver_detail_label : y.approvers + ' ')
       return <Space size={30}>
         <SmallStatusCard
           status={status == 'Archive' ? appr.find(x => x.status == 'Reject') ? 'Reject' : 'Approved' : 'Pending'}
@@ -72,7 +72,7 @@ export default (props) => {
       approvers: req,
     };
 
-    updateRequest(payload, name)
+    updateRequest(name, payload)
       .then((response) => {
           message.success('Request Successfully Revert');
           updateReqApi();
@@ -144,7 +144,6 @@ export default (props) => {
       form_fields: field
     };
 
-    console.log('ccc', payload, category)
     updateRequest(item.name, payload)
     .then((response) => {
         if (category == 'Email Activation') {
@@ -169,7 +168,7 @@ export default (props) => {
         } else if(category == 'Warning Letter Approval') {
           const wbody = {
             employee_id: form_fields.find(fx => fx.field_label == 'Staff ID').field_value,
-            warning_letter: form_fields.find(fx => fx.field_label == 'Warning Letter').field_value,
+            warning_letter: form_fields.find(fx => fx.field_label == 'Warning Letter ID').field_value,
             status:"Active"
           }
           if (status === 'Approve')  {
@@ -236,13 +235,13 @@ export default (props) => {
   const sendWarn = (field) => {
     setLoad(true);
     let ids = field.find(x => x.field_label == 'Staff ID');
-    let letter = field.find(x => x.field_label == 'Warning Letter Type');
+    let letter = field.find(x => x.field_label == 'Warning Letter ID');
     const body = {
         employee_id: ids?.field_value,
         show_cause: letter?.field_value
     }
     sendShowCause(body).then(rest => {
-
+      setLoad(false);
     }).catch(e => {
         setLoad(false);
         message.error("Something went worng");
@@ -259,7 +258,7 @@ export default (props) => {
             expandIcon={({isActive}) => panelRight(isActive)}
             expandIconPosition='right'>
               {value && value.map(item => (
-                <Panel className='ch-black' header={panelHeader(item?.approvers, item?.form_name, item?.status)} key={item?.name}>
+                <Panel className='ch-black' header={panelHeader(item?.approvers, item?.form_label, item?.status)} key={item?.name}>
                   <RequestPanel id={id} sendWarn={sendWarn} item={item} activeTab={activeTab} onApproveReject={onApproveReject} onRevert={onRevert} onCancel={onCancel} load={load} />
                 </Panel>
                 ))}

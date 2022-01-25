@@ -38,6 +38,7 @@ export default (props) => {
     <Col className={item.hidden ? 'd-none': ''} flex={`${item.twocol ? '1 0 300px': item.colWidth ? item.colWidth : '100%'}`}>
       {item.type == 'input' && (
         <InputField
+          isRequired={item.req}
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
           control={control}
@@ -64,6 +65,7 @@ export default (props) => {
       )}
       {item.type == 'select' && (
         <SelectField
+          isRequired={item.req}
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
           class={`mb-0 w-100 ${item.hidden ? 'd-none' : ''}`}
@@ -79,11 +81,12 @@ export default (props) => {
       )}
       {item.type == 'date' && (
         <DateField
+          isRequired={item.req}
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
           control={control}
           class="mb-0"
-          iProps={{ picker: item?.dateType ? item?.dateType : 'date', size: 'large', format: item?.format ? item?.format : '' }}
+          iProps={{ picker: item?.dateType ? item?.dateType : 'date', size: 'large', format: item?.format ? item?.format : '', disabledDate: item?.disabledDate }}
           initValue={elem && elem[item.name] ? moment(elem[item.name], 'YYYY-MM-DD') : ''}
           rules={{ 
             required: { value: item.req, message: item.reqmessage },
@@ -109,6 +112,7 @@ export default (props) => {
       )}
       {item.type == 'upload' && (
         <UploadField
+          isRequired={item.req}
           fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
           label={item.label}
           class={`mb-0`}

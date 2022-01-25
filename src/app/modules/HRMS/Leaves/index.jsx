@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslate } from 'Translate';
 import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
@@ -9,7 +9,7 @@ import SearchTeam from './components/SearchTeam';
 import MyLeaves from './components/MyLeaves';
 import moment from 'moment';
 import Roles from '../../../../routing/config/Roles';
-import {allowed} from '../../../../routing/config/utils';
+import { allowed } from '../../../../routing/config/utils';
 import { getCompany, getTeams2, getTeamsDetail } from '../../Application/ducks/actions';
 import TeamStatistics from './components/TeamStatistics';
 import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
@@ -197,21 +197,22 @@ export default (props) => {
   const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
   const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
-  
   let activeTab = ''
 
   if (allowed([Roles.LEAVES])) {
     activeTab = 'overall';
-  } else if(allowed([Roles.LEAVES_TEAMS])) {
+  } else if (allowed([Roles.LEAVES_TEAMS])) {
     activeTab = 'team';
   } else {
     activeTab = 'myleaves';
   }
 
   useEffect(() => {
-    dispatch(getTeamsDetail(employeeId));
-    dispatch(getCompany());
-    dispatch(getTeams2())
+    if(allowed([Roles.LEAVES_TEAMS], 'read') || allowed([Roles.LEAVES], 'read')) {
+      dispatch(getTeamsDetail(employeeId));
+      dispatch(getCompany());
+      dispatch(getTeams2())
+    }
     return () => dispatch(emptyAllLeaves())
   }, []);
 
@@ -220,10 +221,10 @@ export default (props) => {
       let temp = []
       company.map((x, i) => {
         if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.name, value: x.name})
+          temp.push({ label: 'All', value: '' })
+          temp.push({ label: x.name, value: x.name })
         } else {
-          temp.push({label: x.name, value: x.name})
+          temp.push({ label: x.name, value: x.name })
         }
       });
       setAllCompany(temp);
@@ -235,10 +236,10 @@ export default (props) => {
       let temp = []
       team.map((x, i) => {
         if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.team_name, value: x.team_name})
+          temp.push({ label: 'All', value: '' })
+          temp.push({ label: x.team_name, value: x.team_name })
         } else {
-          temp.push({label: x.team_name, value: x.team_name})
+          temp.push({ label: x.team_name, value: x.team_name })
         }
       });
       setAllTeam(temp);
@@ -248,12 +249,12 @@ export default (props) => {
   const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
     if (type == 'list') {
       if (search) {
-      let searchVal = {};
+        let searchVal = {};
         searchVal = {
           employee_id: search?.id ? search?.id : '',
           employee_name: search?.name ? search?.name : '',
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
-          company:  search?.company ? search?.company.value : '',
+          company: search?.company ? search?.company.value : '',
           team_name: search?.team ? search?.team.value : '',
         }
         dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, searchVal, company1))
@@ -274,17 +275,18 @@ export default (props) => {
           employee_name: search?.name ? search?.name : '',
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
         }
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal, company1))
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal))
       } else {
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null, company1))
+        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null))
       }
-      
+
     } else {
-      dispatch(getTeamTasks(team, page, limit, sort, sortby, company1));
+      if (team) {
+        dispatch(getTeamTasks(team, page, limit, sort, sortby));
+      }
     }
   }
 
-  
   const tabs = [
     {
       visible: allowed([Roles.LEAVES], 'read'),
@@ -343,6 +345,6 @@ export default (props) => {
   ]
 
   return (
-      <CardListSwitchLayout tabs={tabs} active={activeTab} />
+    <CardListSwitchLayout tabs={tabs} active={activeTab} />
   )
 }

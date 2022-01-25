@@ -17,12 +17,12 @@ export default (props) => {
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
   const { control, handleSubmit, setValue, errors } = useForm();
-  const [forming, setForming] = useState([]);
   const { setAddVisible, id, updateApi, fullName } = props;
   const leaveTypeData = useSelector(state => state.leaves.leaveTypeData);
   const leaveInfoData = useSelector(state => state.leaves.leaveInfoData);
   const leaveApproversData = useSelector(state => state.leaves.leaveApproversData);
   const holidaysListData = useSelector(state => state.leaves.holidaysListData);
+  const [formDate, setFromDate] = useState(null);
 
   console.log('leaveApproversData', leaveApproversData)
 
@@ -75,8 +75,10 @@ export default (props) => {
       leaves_count = daysDiff
     }
     
+    if(val?.leavePeriod.value && val?.leavePeriod.value === 'Half Day') {
+      leaves_count = leaves_count - 0.5
+    } 
 
-    console.log('leaves_count', leaves_count, holidaysListData)
 
     let approvers = [];
     leaveApproversData?.map(resp => {
@@ -128,6 +130,12 @@ export default (props) => {
     }
   }
 
+  const disableDate = (current) => {
+    if (formDate) {
+      return current && current < moment(formDate, 'YYYY-MM-DD')
+    }
+  };
+
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
       <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
@@ -170,6 +178,7 @@ export default (props) => {
               class='mb-0'
               iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY" }}
               initValue=''
+              onChange={(e) =>  {setFromDate(e); setValue('leaveEnd', null)}}
               isRequired={true}
               rules={{
                 required: "Leave Start required",
@@ -185,7 +194,12 @@ export default (props) => {
               label='Leave End'
               control={control}
               class='mb-0'
-              iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY" }}
+              iProps={{ 
+                placeholder: 'Please Select date', 
+                size: 'large', 
+                format: "DD-MM-YYYY",
+                disabledDate: disableDate
+              }}
               initValue=''
               isRequired={true}
               rules={{

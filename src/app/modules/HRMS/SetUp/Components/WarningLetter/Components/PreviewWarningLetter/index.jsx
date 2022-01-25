@@ -12,7 +12,7 @@ const PreviewWarningLetter = (props) => {
   useEffect(() => {
     getSingleWarningLetter(letterID).then((response) => {
       let letterData = response?.data.data;
-      setLetterContent({ title: letterData.name, description: letterData.detail });
+      setLetterContent({ title: letterData.writing_letter_name, description: letterData.detail });
       setLetterImages({
         header: letterData.letter_head,
         footer: letterData.letter_footer,

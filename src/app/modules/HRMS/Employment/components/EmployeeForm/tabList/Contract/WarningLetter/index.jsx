@@ -20,8 +20,8 @@ const colName = [
   },
   {
     title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
+    dataIndex: 'warning_label',
+    key: 'warning_label',
   },
 ];
 
@@ -64,7 +64,7 @@ export default (props) => {
         let temp = [];
         letters.map(x => {
           temp.push({
-            value: x.writing_letter_name,
+            value: x.name,
             label: x.writing_letter_name,
           });
         })
@@ -84,7 +84,7 @@ export default (props) => {
             },
             {
               field: 'warning_letter',
-              value: record.type ? {label: record.type, value: record.type} : ''
+              value: record.type ? {label: record.warning_label, value: record.type_name} : ''
             },
           ]);
           setVisible({
@@ -127,7 +127,7 @@ export default (props) => {
           console.log('check approver', appr, req.data)
 
           let approvetemp = [];
-          req?.data?.data?.approvers.map(x => {
+          req?.data?.message?.approvers.map(x => {
             let aid = '';
             if (x.approvers == 'Manager') {
               aid = appr?.data?.message[0]?.manager_id;
@@ -147,9 +147,9 @@ export default (props) => {
           })
           
           const body1 = {
-              form_name: req.data.data.form_name,
-              sender: req.data.data.sender,
-              category: req.data.data.category,
+              form_name: req.data.message.form_name,
+              sender: req.data.message.sender,
+              category: req.data.message.category,
               approvers: approvetemp,
               status: 'Pending',
               form_fields: [
@@ -192,6 +192,11 @@ export default (props) => {
                 field_label: "Request For Team",
                 field_type: "Text",
                 field_value:staffData?.team_name[0] || ''
+              },
+              {
+                field_label: "Warning Letter ID",
+                field_type: "Text",
+                field_value:val.warning_letter.value
               },
               {
                 field_label: "Warning Letter",

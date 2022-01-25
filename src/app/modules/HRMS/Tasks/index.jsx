@@ -11,7 +11,7 @@ import SearchTeam from './components/SearchTeam';
 import MyTasks from './components/MyTasks';
 import { useLocation } from 'react-router-dom';
 import Roles from '../../../../routing/config/Roles';
-import {allowed} from '../../../../routing/config/utils';
+import { allowed } from '../../../../routing/config/utils';
 import moment from 'moment';
 
 const filtersOverall = [
@@ -152,13 +152,12 @@ export default (props) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const il8n = useTranslate();
-  
+
   const { t } = il8n;
   const overallData = useSelector(state => state.tasks.overallTaskData);
   const overallDataList = useSelector(state => state.tasks.overallTaskDataWithStatus);
   const teamTaskData = useSelector(state => state.tasks.teamTaskData);
   const teamTaskDataList = useSelector(state => state.tasks.teamTaskDataWithStatus);
-  const teamsDetailData = useSelector(state => state.global.teamsDetailData);
   const projects = useSelector(state => state.global.projects);
   const company = useSelector(state => state.global.companies);
   const team = useSelector(state => state.global.teams2);
@@ -167,13 +166,14 @@ export default (props) => {
   const [allTeam, setAllTeam] = useState([]);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   let activeTab = ''
-  console.log('teamsDetailData', team)
 
   useEffect(() => {
-    allowed([Roles.TASK_TEAMS], 'read') && dispatch(getTeamsDetail(id));
-    dispatch(getAllProjects());
-    dispatch(getCompany());
-    dispatch(getTeams2())
+    if(allowed([Roles.TASK_TEAMS], 'read') || allowed([Roles.TASK], 'read')) {
+      dispatch(getTeamsDetail(id));
+      dispatch(getAllProjects());
+      dispatch(getCompany());
+      dispatch(getTeams2())
+    }
   }, []);
 
   useEffect(() => {
@@ -181,10 +181,10 @@ export default (props) => {
       let temp = []
       projects?.map((x, i) => {
         if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.project_name, value: x.name})
+          temp.push({ label: 'All', value: '' })
+          temp.push({ label: x.project_name, value: x.name })
         } else {
-          temp.push({label: x.project_name, value: x.name})
+          temp.push({ label: x.project_name, value: x.name })
         }
       });
       setAllProj(temp);
@@ -196,10 +196,10 @@ export default (props) => {
       let temp = []
       company.map((x, i) => {
         if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.name, value: x.name})
+          temp.push({ label: 'All', value: '' })
+          temp.push({ label: x.name, value: x.name })
         } else {
-          temp.push({label: x.name, value: x.name})
+          temp.push({ label: x.name, value: x.name })
         }
       });
       setAllCompany(temp);
@@ -211,28 +211,33 @@ export default (props) => {
       let temp = []
       team.map((x, i) => {
         if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.team_name, value: x.team_name})
+          temp.push({ label: 'All', value: '' })
+          temp.push({ label: x.team_name, value: x.team_name })
         } else {
-          temp.push({label: x.team_name, value: x.team_name})
+          temp.push({ label: x.team_name, value: x.team_name })
         }
       });
       setAllTeam(temp);
     }
   }, [team]);
 
-  if(location?.state?.addTimeSheet) {
+  if (location?.state?.addTimeSheet) {
     activeTab = 'mytask';
   } else {
     if (allowed([Roles.TASK], 'read')) {
       activeTab = 'overall';
-    } else if(allowed([Roles.TASK_TEAMS])) {
+    } else if (allowed([Roles.TASK_TEAMS])) {
       activeTab = 'team';
     } else {
       activeTab = 'mytask';
     }
   }
-  
+
+  // useEffect(() => {
+  //   if (Object.keys(team).length > 0) {
+  //     dispatch(getTeamTasks(team[0]?.team_name, 1, 6));
+  //   }
+  // }, [team]);
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
     // dispatch(emptyOverall());
@@ -244,7 +249,7 @@ export default (props) => {
           employee_name: search?.name ? search?.name : '',
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
           project: search?.project ? search?.project.value : '',
-          company:  search?.company ? search?.company.value : '',
+          company: search?.company ? search?.company.value : '',
           team_name: search?.team ? search?.team.value : '',
         }
         dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
@@ -270,36 +275,36 @@ export default (props) => {
       } else {
         dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null))
       }
-      
+
     } else {
-      dispatch(getTeamTasks(team, page, limit, sort, sortby));
-    }    
+        dispatch(getTeamTasks(team, page, limit, sort, sortby));
+    }
   }
 
   const tabs = [
-  {
-    visible: allowed([Roles.TASK], 'read'),
-    title: 'Overall Tasks',
-    key: 'overall',
-    count: overallData?.count || overallDataList?.count || 0,
-    Comp: MultiView,
-    iProps : {
-      carddata: overallData?.rows || [],
-      cardcount: overallData?.count || 0,
-      listdata: overallDataList?.rows || [],
-      listcount: overallDataList?.count || 0,
-      listCol: ListColOverall,
-      link: '/tasks/',
-      filters: filtersOverall,
-      updateApi: onOverallAction,
-      Search: Search,
-      searchDropdowns: {
-        field1: allProj,
-        field2: allCompany,
-        field3: allTeam,
-      },
-      addon: 'Timesheet',
-      statusKey:'status'
+    {
+      visible: allowed([Roles.TASK], 'read'),
+      title: 'Overall Tasks',
+      key: 'overall',
+      count: overallData?.count || overallDataList?.count || 0,
+      Comp: MultiView,
+      iProps: {
+        carddata: overallData?.rows || [],
+        cardcount: overallData?.count || 0,
+        listdata: overallDataList?.rows || [],
+        listcount: overallDataList?.count || 0,
+        listCol: ListColOverall,
+        link: '/tasks/',
+        filters: filtersOverall,
+        updateApi: onOverallAction,
+        Search: Search,
+        searchDropdowns: {
+          field1: allProj,
+          field2: allCompany,
+          field3: allTeam,
+        },
+        addon: 'Timesheet',
+        statusKey: 'status'
       },
     },
     {
@@ -307,7 +312,7 @@ export default (props) => {
       title: 'Team Tasks',
       key: 'team',
       count: teamTaskData?.count || teamTaskDataList?.count || 0,
-      iProps : {
+      iProps: {
         carddata: teamTaskData?.rows || [],
         cardcount: teamTaskData?.count || 0,
         listdata: teamTaskDataList?.rows || [],
@@ -320,7 +325,7 @@ export default (props) => {
         searchDropdowns: {
           field1: allProj
         },
-        statusKey:'status',
+        statusKey: 'status',
         teamDrop: team
       },
       Comp: MultiView,
@@ -330,7 +335,7 @@ export default (props) => {
       title: 'My Tasks',
       key: 'mytask',
       Comp: MyTasks,
-      iProps : {
+      iProps: {
         activeAddTimeSheet: location?.state?.addTimeSheet ? location?.state?.addTimeSheet : false
       }
     }
@@ -339,8 +344,8 @@ export default (props) => {
   return (
     <Row gutter={[24, 30]}>
       <Col span={24}>
-          <CardListSwitchLayout tabs={tabs} active={activeTab} />
+        <CardListSwitchLayout tabs={tabs} active={activeTab} />
       </Col>
     </Row>
-    )
+  )
 }

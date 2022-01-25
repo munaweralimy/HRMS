@@ -14,6 +14,7 @@ import {
 import { emailCheck } from '../../../../../ducks/services';
 import { allowed } from '../../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../../routing/config/Roles';
+import moment from 'moment';
 
 const _ = require('lodash');
 const { Title } = Typography;
@@ -122,6 +123,10 @@ export default (props) => {
     })
   }
 
+  const PPDates = (current) => {
+    return current && current > moment().endOf("day");
+  };
+
   const personalFields = [
     {
       type: 'select',
@@ -152,6 +157,14 @@ export default (props) => {
       colWidth: '1 0 100%',
       req: true,
       reqmessage: 'Please upload image',
+    },
+    {
+      type: 'date',
+      label: 'Joining Date',
+      name: 'date_of_joining',
+      twocol: true,
+      req: true,
+      reqmessage: 'Required',
     },
     {
       type: 'select',
@@ -207,6 +220,7 @@ export default (props) => {
       twocol: true,
       req: true,
       reqmessage: 'Required',
+      disabledDate: PPDates,
     },
     {
       type: 'select',

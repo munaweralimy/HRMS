@@ -109,8 +109,11 @@ export default (props) => {
                   control={control}
                   class={`mb-0 ${!visible ? 'd-none' : ''}`}
                   iProps={{ placeholder: 'Please select' }}
-                  initValue={item?.approver_detail ? { label: item?.approver_detail, value: item?.approver_detail } : ''}
-                  selectOption={position?.map(x => ({label: x.name, value: x.name}))}
+                  initValue={item?.approver_detail ? { 
+                    label: position.find(x => x.name == item?.approver_detail)?.role_name, 
+                    value: position.find(x => x.name == item?.approver_detail)?.name
+                  } : ''}
+                  selectOption={position?.map(x => ({label: x.role_name, value: x.name}))}
                 />
             </Col>}
             {/* {visible2 &&
