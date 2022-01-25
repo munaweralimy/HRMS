@@ -130,6 +130,10 @@ export default (props) => {
     }
   }
 
+  const PPDates = (current) => {
+    return current && current > moment().endOf("day");
+  };
+
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
       <Form layout="vertical" onFinish={handleSubmit(onFinish)}>

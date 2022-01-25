@@ -122,7 +122,7 @@ export default (props) => {
               selectOption={
                 projectName &&
                 projectName?.map((e) => {
-                  return { value: e.name, label: e.name };
+                  return { value: e.name, label: e.project_name };
                 })
               }
             />

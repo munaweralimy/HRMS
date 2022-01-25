@@ -159,6 +159,14 @@ export default (props) => {
       reqmessage: 'Please upload image',
     },
     {
+      type: 'date',
+      label: 'Joining Date',
+      name: 'date_of_joining',
+      twocol: true,
+      req: true,
+      reqmessage: 'Required',
+    },
+    {
       type: 'select',
       label: 'Gender',
       name: 'gender',
