@@ -54,6 +54,7 @@ export default (props) => {
       project: values.project,
       user_staff: userData.map((value) => ({ employee: value.name })),
     };
+    console.log({ userData });
     projectData.name.length == 0
       ? addProject(payload).then((response) => {
           if (response.data.message.success == true) {
@@ -66,7 +67,7 @@ export default (props) => {
         })
       : updateProjecat(projectData.name, {
           project: values.project,
-          user_staff: userData.map((value) => ({ employee: value.id })),
+          user_staff: userData.map((value) => ({ employee: value.name })),
         }).then((response) => {
           if (response.data.message.success == true) {
             message.success(response.data.message.message);

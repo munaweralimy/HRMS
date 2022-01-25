@@ -21,7 +21,10 @@ const AttendanceDetails = (props) => {
   useEffect(() => {
     if (attendanceData) {
       setValue('attendance_date', attendanceData?.date ? moment(attendanceData?.date, 'YYYY-MM-DD') : '');
-      setValue('attendance_date_out', attendanceData?.date ? moment(attendanceData?.date, 'YYYY-MM-DD') : '');
+      setValue(
+        'attendance_date_out',
+        attendanceData?.Attendance_date_out ? moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD') : '',
+      );
       setValue('total_job_hour', attendanceData?.total_work_hour);
       setValue('status', { value: attendanceData?.status, label: attendanceData.status });
       setValue('time_in', attendanceData?.time_in !== '0:00:00' ? moment(attendanceData?.time_in, 'h:mm:ss a') : '');
@@ -78,7 +81,7 @@ const AttendanceDetails = (props) => {
               label="Date Out"
               control={control}
               class="mb-0"
-              iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY', disabled: true }}
+              iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
               initValue=""
               validate={errors.Attendance_date_out && 'error'}
               validMessage={errors.Attendance_date_out && errors.Attendance_date_out.message}
