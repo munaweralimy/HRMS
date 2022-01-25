@@ -206,9 +206,11 @@ export default (props) => {
   }
 
   useEffect(() => {
-    dispatch(getTeamsDetail(id));
-    dispatch(getCompany());
-    dispatch(getTeams());
+    if(allowed([Roles.ATTENDANCE], 'read') || allowed([Roles.ATTENDANCE_TEAMS], 'read')) {
+      dispatch(getTeamsDetail(id));
+      dispatch(getCompany());
+      dispatch(getTeams());
+    }
   }, []);
 
   useEffect(() => {

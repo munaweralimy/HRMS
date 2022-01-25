@@ -158,7 +158,6 @@ export default (props) => {
   const overallDataList = useSelector(state => state.tasks.overallTaskDataWithStatus);
   const teamTaskData = useSelector(state => state.tasks.teamTaskData);
   const teamTaskDataList = useSelector(state => state.tasks.teamTaskDataWithStatus);
-  const teamsDetailData = useSelector(state => state.global.teamsDetailData);
   const projects = useSelector(state => state.global.projects);
   const company = useSelector(state => state.global.companies);
   const team = useSelector(state => state.global.teams2);
@@ -167,13 +166,14 @@ export default (props) => {
   const [allTeam, setAllTeam] = useState([]);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   let activeTab = ''
-  console.log('teamsDetailData', team)
 
   useEffect(() => {
-    allowed([Roles.TASK_TEAMS], 'read') && dispatch(getTeamsDetail(id));
-    dispatch(getAllProjects());
-    dispatch(getCompany());
-    dispatch(getTeams2())
+    if(allowed([Roles.TASK_TEAMS], 'read') || allowed([Roles.TASK], 'read')) {
+      dispatch(getTeamsDetail(id));
+      dispatch(getAllProjects());
+      dispatch(getCompany());
+      dispatch(getTeams2())
+    }
   }, []);
 
   useEffect(() => {
@@ -233,11 +233,11 @@ export default (props) => {
     }
   }
 
-  useEffect(() => {
-    if (Object.keys(team).length > 0) {
-      dispatch(getTeamTasks(team[0]?.team_name, 1, 6));
-    }
-  }, [team]);
+  // useEffect(() => {
+  //   if (Object.keys(team).length > 0) {
+  //     dispatch(getTeamTasks(team[0]?.team_name, 1, 6));
+  //   }
+  // }, [team]);
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
     // dispatch(emptyOverall());
@@ -277,9 +277,7 @@ export default (props) => {
       }
 
     } else {
-      if (team) {
         dispatch(getTeamTasks(team, page, limit, sort, sortby));
-      }
     }
   }
 
