@@ -36,22 +36,32 @@ const AddAsset = (props) => {
     };
     setLoad(true);
     data?.name
-      ? updateAssets(data?.name, payload).then((response) => {
-          if (response.status === 200) {
-            message.success(`Asset ${data?.asset_no} update successfully`);
+      ? updateAssets(data?.name, payload)
+          .then((response) => {
+            if (response.status === 200) {
+              message.success(`Asset ${data?.asset_no} update successfully`);
+              setLoad(false);
+              onUpdateComplete();
+            }
+          })
+          .catch((error) => {
+            message.error('something went wrong');
+            setLoad(false);
+          })
+      : addNewAsset({ employee_id: id, assets: { ...payload } })
+          .then((response) => {
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+            } else {
+              message.error(response.data.message.message);
+            }
             setLoad(false);
             onUpdateComplete();
-          }
-        })
-      : addNewAsset({ employee_id: id, assets: { ...payload } }).then((response) => {
-          if (response.data.message.success == true) {
-            message.success(response.data.message.message);
-          } else {
-            message.error(response.data.message.message);
-          }
-          setLoad(false);
-          onUpdateComplete();
-        });
+          })
+          .catch((error) => {
+            message.error('something went wrong');
+            setLoad(false);
+          });
   };
 
   const onDeleteHandler = () => {
@@ -79,18 +89,20 @@ const AddAsset = (props) => {
             <Row gutter={24} justify="end">
               {data?.asset_no ? (
                 <>
-                {allowed([Roles.FINANCE], 'delete') &&
-                  <Col>
-                    <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
-                      Delete Asset
-                    </Button>
-                  </Col>}
-                  {allowed([Roles.FINANCE], 'write') &&
-                  <Col>
-                    <Button size="large" type="primary" htmlType="submit" className="green-btn">
-                      Save Changes
-                    </Button>
-                  </Col>}
+                  {allowed([Roles.FINANCE], 'delete') && (
+                    <Col>
+                      <Button onClick={onDeleteHandler} size="large" type="primary" className="red-btn">
+                        Delete Asset
+                      </Button>
+                    </Col>
+                  )}
+                  {allowed([Roles.FINANCE], 'write') && (
+                    <Col>
+                      <Button size="large" type="primary" htmlType="submit" className="green-btn">
+                        Save Changes
+                      </Button>
+                    </Col>
+                  )}
                 </>
               ) : (
                 <Col>

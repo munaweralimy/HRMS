@@ -66,7 +66,10 @@ export default (props) => {
             setLoad(false);
             onClose();
           })
-          .catch((error) => message.error('Country exists'))
+          .catch((error) => {
+            message.error('something went woring');
+            setLoad(false);
+          })
       : updateSingleAsset(asset.assets_id, { ...payload, status: asset.status })
           .then((response) => {
             if (response.data.message.success == true) {
