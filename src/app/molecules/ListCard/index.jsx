@@ -24,7 +24,10 @@ export default (props) => {
     extraBtn,
     extraAction,
     btnClass,
-    headclass
+    headclass,
+    rowSelection,
+    selectedRowKeys,
+    onAction4
   } = props;
 
   const searchProps = {
@@ -79,12 +82,41 @@ export default (props) => {
             dataSource={filterData != null ? filterData : ListData}
             pagination={pagination}
             onChange={onChange}
+            rowSelection={rowSelection}
           />
+          {selectedRowKeys?.length > 0 && onAction4 && (
+            <>
+            <Col flex="0 1 200px">
+              <Button
+                type="primary"
+                size="large"
+                htmlType="submit"
+                onClick={() => {
+                  onAction4('Approved');
+                }}
+              >
+                Approve Selected
+              </Button>
+            </Col>
+            <Col flex="0 1 200px">
+              <Button
+                type="primary"
+                size="large"
+                htmlType="submit"
+                onClick={() => {
+                  onAction4('Rejected');
+                }}
+              >
+                Reject Selected
+              </Button>
+            </Col>
+            </>
+          )}
         </Col>
-        {extraBtn && 
-        <Col span={24} className='text-right'>
-          <Button type='primary' size='large' htmlType='button' className={btnClass ? btnClass : ''} onClick={extraAction}>{extraBtn}</Button>
-        </Col>}
+        {extraBtn &&
+          <Col span={24} className='text-right'>
+            <Button type='primary' size='large' htmlType='button' className={btnClass ? btnClass : ''} onClick={extraAction}>{extraBtn}</Button>
+          </Col>}
       </Row>
     </Card>
   );

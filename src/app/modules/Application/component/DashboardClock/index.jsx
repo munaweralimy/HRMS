@@ -72,7 +72,7 @@ export default (props) => {
       })
       .catch((e) => {
         setLoad(false);
-        message.error('Something went worong');
+        message.error('Something went wrong');
       });
   };
 
