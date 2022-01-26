@@ -324,7 +324,7 @@ export const getAllProjects = (search = null) => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_projects_dropdown`);
+    } = await axios.get(`${apiMethod}/hrms.tasks_api.get_employee_projects_for_timesheet`);
     dispatch({
       type: action_types.ALL_PROJECTS,
       data: message,

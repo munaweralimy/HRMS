@@ -81,7 +81,7 @@ export default (props) => {
     if (departmentField.name.length > 0) {
       getSingleDepartment(departmentField.name).then((response) => {
         setUserData(
-          response?.data?.data?.team.map((value) => ({
+          response?.data?.data?.team?.map((value) => ({
             employee_name: value.team_name,
             name: value.team,
           })),
