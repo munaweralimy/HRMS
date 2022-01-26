@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { DatePicker, Form, Input, Checkbox, Typography, TimePicker, Upload, Switch, Radio, Rate, Slider } from 'antd';
+import { Button, DatePicker, Form, Input, Checkbox, Typography, TimePicker, Upload, Switch, Radio, Rate, Slider } from 'antd';
 import { PlusCircleFilled } from '@ant-design/icons';
 import { Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { dummyRequest } from '../../../features/utility';
+import { DownloadIcon } from '../CustomIcons';
+import { useHistory } from 'react-router-dom';
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -290,6 +292,7 @@ export const TimeField = (props) => {
 };
 
 export const UploadField = (props) => {
+  const history = useHistory();
   const {
     fieldname,
     label,
@@ -322,6 +325,7 @@ export const UploadField = (props) => {
         rules={rules}
         defaultValue={initValue ? initValue : ''}
         render={({ value, fileList, onChange }) => (
+          <>
           <Upload
             className="uploadWithbtn"
             showUploadList={false}
@@ -339,6 +343,10 @@ export const UploadField = (props) => {
               addonAfter={<PlusCircleFilled />}
             />
           </Upload>
+          {console.log('checking value', value)}
+          {value && 
+          <Button type="link" htmlType="button" className="download-inputbtn" onClick={() => window.open(value.fileList[0].url)} icon={<DownloadIcon className="c-success" />} />}
+          </>
         )}
       />
     </Form.Item>

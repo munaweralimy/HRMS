@@ -94,6 +94,7 @@ export default (props) => {
         identification_type: val.identification_type ? val.identification_type?.value : '',
         identification_no: val.identification_no,
         date_of_birth: val.date_of_birth,
+        date_of_joining: val.date_of_joining,
         race: val.race ? val.race?.value : '',
         religious: val.religious ? val.religious?.value : '',
         primary_phone_no: val.primary_phone_no,
@@ -236,6 +237,14 @@ export default (props) => {
           let res = await getSingleUpload(modifiedName, 'image',  val.contract_attachment?.file?.originFileObj, 'Employee', id);
           contactPDF = res?.file_url;
       }
+
+      let passportImg = '';
+      if (val?.attach_passport) {
+        let modifiedName = uniquiFileName(val?.attach_passport?.file?.originFileObj.name)
+        let res = await getSingleUpload(modifiedName, 'image',  val.attach_passport?.file?.originFileObj, 'Employee', id);
+        passportImg = res?.file_url;
+      }
+
       let body3 = {
         party_name: id,
         default_contract: 1,
@@ -270,6 +279,7 @@ export default (props) => {
           let body2 = {
             image: profileImg ? profileImg.replace(`${baseUrl}`, "") : "",
             education: educate,
+            attach_passport: passportImg,
             status: 'Active'
           }
           employApi(body2, id);

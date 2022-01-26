@@ -29,7 +29,7 @@ const initialState = {
   staff: [],
   jobListAdv: [],
   menu: false,
-  projects: {},
+  projects: [],
 };
 
 export default (state = initialState, action) => {

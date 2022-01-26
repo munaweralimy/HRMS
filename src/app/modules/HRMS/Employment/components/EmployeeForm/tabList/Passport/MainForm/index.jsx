@@ -64,6 +64,13 @@ export default (props) => {
       req: false,
       format: 'Do MMMM YYYY'
     },
+    {
+      type: 'upload',
+      name: 'attach_passport',
+      label: 'Attach Passport',
+      placeholder: 'Upload Passport',
+      twocol: false,
+    },
   ];
 
   return (
