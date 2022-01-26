@@ -2,28 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Row, Col, Form, Button, message, Spin } from 'antd';
 import { DateField, InputField, SelectField, TextAreaField, TimeField } from '../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
 import { updateAttendance } from '../../ducks/services';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
-import { allowed } from '../../../../../../routing/config/utils';
-import Roles from '../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 const AttendanceDetails = (props) => {
   const { attendanceData, onViewForm } = props;
-  console.log({ attendanceData });
   const { Title } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
-  const history = useHistory();
 
   useEffect(() => {
     if (attendanceData) {
       setValue('attendance_date', attendanceData?.date ? moment(attendanceData?.date, 'YYYY-MM-DD') : '');
       setValue(
         'attendance_date_out',
-        attendanceData?.Attendance_date_out ? moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD') : '',
+        attendanceData?.date ? moment(attendanceData?.date, 'YYYY-MM-DD') : '',
       );
       setValue('total_job_hour', attendanceData?.total_work_hour);
       setValue('status', { value: attendanceData?.status, label: attendanceData.status });
@@ -81,10 +76,10 @@ const AttendanceDetails = (props) => {
               label="Date Out"
               control={control}
               class="mb-0"
-              iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
+              iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY', disabled: true }}
               initValue=""
-              validate={errors.Attendance_date_out && 'error'}
-              validMessage={errors.Attendance_date_out && errors.Attendance_date_out.message}
+              validate={errors.attendance_date_out && 'error'}
+              validMessage={errors.attendance_date_out && errors.attendance_date_out.message}
             />
           </Col>
           <Col span={12}>

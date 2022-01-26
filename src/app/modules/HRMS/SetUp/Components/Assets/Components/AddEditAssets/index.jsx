@@ -3,7 +3,7 @@ import { Space, Button, Row, Col, Typography, Form, message, Spin } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { addSingleAsset, updateSingleAsset, deleteSingleAsset } from '../../../../ducks/services';
+import { addSingleAsset, updateSingleAsset, deleteSingleAsset, deleteAssetFinance } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
 import Roles from '../../../../../../../../routing/config/Roles';
 import { allowed } from '../../../../../../../../routing/config/utils';
@@ -87,13 +87,16 @@ export default (props) => {
     setLoad(true);
     deleteSingleAsset(asset.name)
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
-          message.success(response.data.message.message);
+          deleteAssetFinance(asset.name).then(x => {
+            message.success(response.data.message.message);
+            onClose();
+          })
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
+        
       })
       .catch((error) => {
         message.error('Asset Deleted Unsccessfully');
