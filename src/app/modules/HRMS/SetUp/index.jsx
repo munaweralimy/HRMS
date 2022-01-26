@@ -23,6 +23,7 @@ import {
   Assets,
   RequestForms,
   Departments,
+  Skills,
 } from './Components';
 import AddEditWarningLetter from './Components/WarningLetter/Components/AddEditWarningLetter';
 export default (props) => {
@@ -31,7 +32,7 @@ export default (props) => {
   const dispatch = useDispatch();
   const warningLetterData = useSelector((state) => state.setup.viewWarninLette);
   const company = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company;
-  
+
   dispatch(getEmployeeList(company));
   const data = [
     {
@@ -127,6 +128,11 @@ export default (props) => {
     {
       tabTitle: 'Departments',
       comp: <Departments />,
+      permission: true,
+    },
+    {
+      tabTitle: 'Skills',
+      comp: <Skills />,
       permission: true,
     },
   ];

@@ -21,10 +21,7 @@ const AttendanceDetails = (props) => {
   useEffect(() => {
     if (attendanceData) {
       setValue('attendance_date', attendanceData?.date ? moment(attendanceData?.date, 'YYYY-MM-DD') : '');
-      setValue(
-        'attendance_date_out',
-        attendanceData?.Attendance_date_out ? moment(attendanceData?.Attendance_date_out, 'YYYY-MM-DD') : '',
-      );
+      setValue('attendance_date_out', attendanceData?.date ? moment(attendanceData?.date, 'YYYY-MM-DD') : '');
       setValue('total_job_hour', attendanceData?.total_work_hour);
       setValue('status', { value: attendanceData?.status, label: attendanceData.status });
       setValue('time_in', attendanceData?.time_in !== '0:00:00' ? moment(attendanceData?.time_in, 'h:mm:ss a') : '');
@@ -37,7 +34,7 @@ const AttendanceDetails = (props) => {
     const payload = {
       employee: attendanceData.employee_id,
       attendance_date: moment(values.attendance_date).format('YYYY-MM-DD'),
-      attendance_date_out: moment(values.Attendance_date_out).format('YYYY-MM-DD'),
+      attendance_date_out: moment(values.attendance_date_out).format('YYYY-MM-DD'),
       time_in: moment(values.time_in).format('HH:mm:ss'),
       time_out: values.time_out ? moment(values.time_out).format('HH:mm:ss') : '00:00:00',
       remarks: values.remarks,
@@ -81,10 +78,10 @@ const AttendanceDetails = (props) => {
               label="Date Out"
               control={control}
               class="mb-0"
-              iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY' }}
+              iProps={{ placeholder: 'Please Select date', size: 'large', format: 'DD-MM-YYYY', disabled: true }}
               initValue=""
-              validate={errors.Attendance_date_out && 'error'}
-              validMessage={errors.Attendance_date_out && errors.Attendance_date_out.message}
+              validate={errors.attendance_date_out && 'error'}
+              validMessage={errors.attendance_date_out && errors.attendance_date_out.message}
             />
           </Col>
           <Col span={12}>
