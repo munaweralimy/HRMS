@@ -5,14 +5,15 @@ import moment from 'moment';
 import { allowed } from '../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../routing/config/Roles';
 
-export default ({details, updateApi}) => {
+export default ({ details, updateApi, rowSelection }) => {
 
-  const { title, key, heading, data, column, nodetail, detailTitle, onAction1,onAction2 } = details;
+  const { title, key, heading, data, column, nodetail, detailTitle, onAction1, onAction2 } = details;
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [approverID, setApproverID] = useState('');
+
 
   // const btnList = [
   //   {
@@ -51,7 +52,7 @@ export default ({details, updateApi}) => {
           {
             label: 'Status',
             value: record?.status,
-            classi: record?.status =='Pending' ? 'c-pending' : record?.status == 'Approved' ? 'c-success' : 'c-error' 
+            classi: record?.status == 'Pending' ? 'c-pending' : record?.status == 'Approved' ? 'c-success' : 'c-error'
           },
         ];
         setRowData(temp)
@@ -69,39 +70,39 @@ export default ({details, updateApi}) => {
     }
   }
 
-return (
+  return (
     <>
-    {!rowDetails ?
-      <ListCard 
-        title={heading}
-        onRow={!nodetail ? onClickRow : null}
-        ListCol={column} 
-        ListData={data?.rows} 
-        pagination={{
-          total: data?.count,
-          current: page,
-          pageSize: limit
-        }}
-        onChange={onTableChange}
-        classes={`${!nodetail ? 'clickRow' : ''}`}
-        scrolling={500}
-        listClass="nospace-card"
-        headclass='mt-1'
-      />
-      :
-      <DetailsComponent 
-        setRowDetail={setRowDetail} 
-        mainTitle={detailTitle}
-        backbtnTitle={heading}
-        data={rowData}
-        btn1title={'Approve'}
-        btn2title={'Reject'}
-        ApproverID={approverID}
-        onAction1={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction1 : null}
-        onAction2={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction2 : null}
-        btnClass1='green-btn'
-        btnClass2='red-btn'
-      />
+      {!rowDetails ?
+        <ListCard
+          title={heading}
+          onRow={!nodetail ? onClickRow : null}
+          ListCol={column}
+          ListData={data?.rows}
+          pagination={{
+            total: data?.count,
+            current: page,
+            pageSize: limit
+          }}
+          onChange={onTableChange}
+          classes={`${!nodetail ? 'clickRow' : ''}`}
+          scrolling={500}
+          listClass="nospace-card"
+          headclass='mt-1'
+        />
+        :
+        <DetailsComponent
+          setRowDetail={setRowDetail}
+          mainTitle={detailTitle}
+          backbtnTitle={heading}
+          data={rowData}
+          btn1title={'Approve'}
+          btn2title={'Reject'}
+          ApproverID={approverID}
+          onAction1={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction1 : null}
+          onAction2={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction2 : null}
+          btnClass1='green-btn'
+          btnClass2='red-btn'
+        />
       }
     </>
   )

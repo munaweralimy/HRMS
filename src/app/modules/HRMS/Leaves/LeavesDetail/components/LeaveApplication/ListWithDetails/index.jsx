@@ -3,6 +3,8 @@ import ListCard from '../../../../../../../molecules/ListCard';
 import DetailsComponent from '../../../../../../../molecules/HRMS/DetailsComponent';
 import moment from 'moment';
 import { Row, Col, Card, Progress } from 'antd';
+import { allowed } from '../../../../../../../../routing/config/utils';
+import Roles from '../../../../../../../../routing/config/Roles';
 
 export default ({ details, updateApi, progressData }) => {
 
@@ -161,10 +163,10 @@ export default ({ details, updateApi, progressData }) => {
           mainTitle={detailTitle}
           backbtnTitle={heading}
           data={rowData}
-          btn1title={allowBtn() ? 'Approve' : null}
-          btn2title={allowBtn() ? 'Reject' : null}
-          onAction1={allowBtn() ? onAction1 : null}
-          onAction2={allowBtn() ? onAction2 : null}
+          btn1title={allowBtn() || allowed([Roles.LEAVES_TEAMS, Roles.LEAVES], 'write') ? 'Approve' : null}
+          btn2title={allowBtn() || allowed([Roles.LEAVES_TEAMS, Roles.LEAVES], 'write') ? 'Reject' : null}
+          onAction1={allowBtn() || allowed([Roles.LEAVES_TEAMS, Roles.LEAVES], 'write') ? onAction1 : null}
+          onAction2={allowBtn() || allowed([Roles.LEAVES_TEAMS, Roles.LEAVES], 'write') ? onAction2 : null}
           btnClass1='green-btn'
           btnClass2='red-btn'
         />

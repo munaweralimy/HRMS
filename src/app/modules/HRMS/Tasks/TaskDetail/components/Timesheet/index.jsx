@@ -16,6 +16,7 @@ export default (props) => {
     const [load, setLoad] = useState(false);
     const [update, setUpdate] = useState(false);
     const [activeTab, setActiveTab] = useState(tabSelected ? tabSelected : 'Pending');
+    const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
     const ListCol = [
         {
@@ -155,6 +156,27 @@ export default (props) => {
         }
     }
 
+    const onApproveRejectAll = async () => {
+      setLoad(true);
+      let url = ''
+      if(allowed([Roles.TASK], 'write')) {
+        url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=Admin`
+      } else {
+        url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=`
+      }
+      try {
+          await axios.get(url);
+          setLoad(false)
+          message.success('Timesheet Successfully Approved');
+          setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
+          
+      } catch(e) {
+          const { response } = e;
+          message.error('Something went wrong');
+          setLoad(false)
+      }
+    }
+
     const tabs = [
         {
             title: 'Pending',
@@ -191,13 +213,29 @@ export default (props) => {
       updateApi(e, 1, 10, '', '');
       setUpdate(true);
     }
+
+    const onSelectChange = selectedRowKeys => {
+      console.log('selectedRowKeys changed: ', selectedRowKeys);
+      setSelectedRowKeys(selectedRowKeys);
+    };
+  
+    const onRowSelect = (record, selected) => {
+      console.log('record ', record, selected);
+    }
+    
+  
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: onSelectChange,
+      onSelect: onRowSelect
+    };
  
     return (
         <Spin indicator={antIcon} size="large" spinning={load}>
             <Tabs activeKey={activeTab} type="card" className="gray-tabs" onChange={changeTab}>
                 {tabs.map((item) => (
                     <TabPane tab={item.title} key={item.key}>
-                        <ListWithDetails details={item} updateApi={updateApi} update={update} />
+                        <ListWithDetails rowSelection={rowSelection} details={item} updateApi={updateApi} update={update} />
                     </TabPane>
                 ))}
             </Tabs>

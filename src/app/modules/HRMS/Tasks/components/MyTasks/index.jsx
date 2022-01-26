@@ -105,19 +105,19 @@ export default (props) => {
   ];
 
   useEffect(() => {
-    if (projects.length > 0) {
+    if (myProjects.length > 0) {
       let temp = []
-      projects.map((x, i) => {
+      myProjects.map((x, i) => {
         if (i == 0) {
           temp.push({label: 'All', value: ''})
-          temp.push({label: x.project_name, value: x.name})
+          temp.push({label: x.project, value: x.name})
         } else {
-          temp.push({label: x.project_name, value: x.name})
+          temp.push({label: x.project, value: x.name})
         }
       });
       setAllProj(temp);
     }
-  }, [projects]);  
+  }, [myProjects]);  
 
   useEffect(() => {
     if(iProps?.activeAddTimeSheet) {
@@ -221,7 +221,7 @@ export default (props) => {
                 pageSize: limit
               }}
               />}
-              {addVisible && allowed([Roles.TASK_INDIVIDUAL], 'write') && <AddNewTimeSheet id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
+              {addVisible && allowed([Roles.TASK_INDIVIDUAL], 'write') && <AddNewTimeSheet projectName={myProjects} id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
               {rowDetails && (
                 <DetailsComponent 
                   setRecord={setRecord}
