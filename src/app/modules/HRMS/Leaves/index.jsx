@@ -10,7 +10,7 @@ import MyLeaves from './components/MyLeaves';
 import moment from 'moment';
 import Roles from '../../../../routing/config/Roles';
 import { allowed } from '../../../../routing/config/utils';
-import { getCompany, getTeams2, getTeamsDetail } from '../../Application/ducks/actions';
+import { getTeams2, getTeamsDetail } from '../../Application/ducks/actions';
 import TeamStatistics from './components/TeamStatistics';
 import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 
@@ -192,9 +192,7 @@ export default (props) => {
   const teamTaskDataList = useSelector(state => state.leaves.teamTaskDataWithStatus);
   const teamsDetailData = useSelector(state => state.global.teamsDetailData);
   const employeeId = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
-  const company = useSelector(state => state.global.companies);
   const team = useSelector(state => state.global.teams2);
-  const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
   const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   let activeTab = ''
@@ -210,26 +208,10 @@ export default (props) => {
   useEffect(() => {
     if(allowed([Roles.LEAVES_TEAMS], 'read') || allowed([Roles.LEAVES], 'read')) {
       dispatch(getTeamsDetail(employeeId));
-      dispatch(getCompany());
       dispatch(getTeams2())
     }
     return () => dispatch(emptyAllLeaves())
   }, []);
-
-  useEffect(() => {
-    if (Object.keys(company).length > 0) {
-      let temp = []
-      company.map((x, i) => {
-        if (i == 0) {
-          temp.push({ label: 'All', value: '' })
-          temp.push({ label: x.name, value: x.name })
-        } else {
-          temp.push({ label: x.name, value: x.name })
-        }
-      });
-      setAllCompany(temp);
-    }
-  }, [company]);
 
   useEffect(() => {
     if (Object.keys(team).length > 0) {
@@ -254,7 +236,6 @@ export default (props) => {
           employee_id: search?.id ? search?.id : '',
           employee_name: search?.name ? search?.name : '',
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
-          company: search?.company ? search?.company.value : '',
           team_name: search?.team ? search?.team.value : '',
         }
         dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, searchVal, company1))
@@ -305,8 +286,7 @@ export default (props) => {
         filters: filtersOverall,
         updateApi: onOverallAction,
         searchDropdowns: {
-          field1: allCompany,
-          field2: allTeam,
+          field1: allTeam,
         },
         addon: 'Leave Application',
         statusKey: 'application_status',

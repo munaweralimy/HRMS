@@ -13,15 +13,3 @@ export const getPolicyList = () => {
     });
   };
 };
-
-export const getRolesList = () => {
-  return async (dispatch) => {
-    const {
-      data: { data },
-    } = await axios.get(`${apiresource}/Role`);
-    dispatch({
-      type: action_types.ROLES_LIST,
-      data: data,
-    });
-  };
-};

@@ -254,3 +254,7 @@ export const getDepartmentList = (id) => {
 export const getSingleWarningLetter = (id) => {
   return axios.get(`${apiresource}/Warning Letter/${id}`);
 };
+
+export const deleteAssetFinance = (id) => {
+  return axios.get(`${apiMethod}/hrms.tasks_api.delete_assets_from_finance_assets?asset_no=${id}`);
+};
