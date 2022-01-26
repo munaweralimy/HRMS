@@ -25,8 +25,8 @@ const colName = [
   },
   {
     title: 'Job Title',
-    dataIndex: 'job_title',
-    key: 'job_title',
+    dataIndex: 'job_title_name',
+    key: 'job_title_name',
     sorter: true,
   },
   {
@@ -109,9 +109,9 @@ const Finance = () => {
       team.map((x, i) => {
         if (i == 0) {
           temp.push({ label: 'All Teams', value: '' });
-          temp.push({ label: x.employee_name, value: x.employee_name });
+          temp.push({ label: x.team_name, value: x.team_name });
         } else {
-          temp.push({ label: x.employee_name, value: x.employee_name });
+          temp.push({ label: x.team_name, value: x.team_name });
         }
       });
       setAllTeam(temp);

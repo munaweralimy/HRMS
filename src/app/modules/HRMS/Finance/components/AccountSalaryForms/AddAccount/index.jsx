@@ -39,15 +39,14 @@ const AddAccount = (props) => {
           onCloseForm('', '');
         })
       : addNewAccount({ employee_id: id, account: { ...payload, status: 'Active' } }).then((response) => {
+        setLoad(false);
           if (response.data.message.success === true) {
             message.success(`${response.data.message.message}`);
-            setLoad(false);
+            onCloseForm('', '');
           } else {
-            message.success(`${response.data.message.message}`);
-            setLoad(false);
+            message.error(`${response.data.message.message}`);
           }
 
-          onCloseForm('', '');
         });
   };
 

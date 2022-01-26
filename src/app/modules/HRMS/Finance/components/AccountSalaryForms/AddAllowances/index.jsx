@@ -65,14 +65,14 @@ const AddAllowences = (props) => {
           onCloseForm('', '');
         })
       : addNewAllowance({ employee_id: id, allowance: { ...payload } }).then((response) => {
+          setLoad(false);
           if (response.data.message.success === true) {
             message.success(`${response.data.message.message}`);
-            setLoad(false);
+            onCloseForm('', '');
           } else {
-            message.success(`${response.data.message.message}`);
-            setLoad(false);
+            message.error(`${response.data.message.message}`);
           }
-          onCloseForm('', '');
+          
         });
   };
 

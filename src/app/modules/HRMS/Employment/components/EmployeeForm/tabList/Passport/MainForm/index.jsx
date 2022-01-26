@@ -67,7 +67,7 @@ export default (props) => {
     {
       type: 'upload',
       name: 'attach_passport',
-      label: 'Attach Passport',
+      label: 'Attach Passport (PDF 10MB max)',
       placeholder: 'Upload Passport',
       twocol: false,
     },
