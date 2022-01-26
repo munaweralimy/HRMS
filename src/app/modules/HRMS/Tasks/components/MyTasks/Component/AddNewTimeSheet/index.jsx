@@ -14,12 +14,9 @@ const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
 
-  const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
   const { control, handleSubmit, setValue, errors } = useForm();
   const { setAddVisible, id, updateApi, mode, data, projectName } = props;
-
-  console.log('data', projectName)
 
   useEffect(() => {
     if (mode != 'add') {

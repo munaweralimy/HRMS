@@ -88,7 +88,6 @@ export default (props) => {
   const [allProj, setAllProj] = useState([]);
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
-  const projects = useSelector(state => state.global.projects);
   const [searchVal, setSearchVal] = useState(null);
 
   useEffect(() => {
@@ -105,9 +104,9 @@ export default (props) => {
   ];
 
   useEffect(() => {
-    if (myProjects.length > 0) {
+    if (Object.keys(myProjects).length > 0) {
       let temp = []
-      myProjects.map((x, i) => {
+      myProjects?.rows.map((x, i) => {
         if (i == 0) {
           temp.push({label: 'All', value: ''})
           temp.push({label: x.project, value: x.name})
@@ -229,7 +228,7 @@ export default (props) => {
                   mainTitle='Timesheet Details'
                   backbtnTitle='My Timesheet'
                   data={rowData}
-                  onAction3={allowed([Roles.TASK_INDIVIDUAL], 'write') ? onEdit : null}
+                  onAction3={allowed([Roles.TASK_INDIVIDUAL], 'write') && rowData.find(x => x.label == 'Status')?.value == 'Pending' ? onEdit : null}
                   btn3title={'Edit Timesheet'}
                   />
               )}
