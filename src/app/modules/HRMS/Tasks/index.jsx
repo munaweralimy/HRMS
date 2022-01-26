@@ -5,7 +5,7 @@ import CardListSwitchLayout from '../../../molecules/HRMS/CardListSwitchLayout';
 import MultiView from '../../../molecules/HRMS/MultiView';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOverallTasks, getOverallTasksWithStatus, getTeamTasksWithStatus, getTeamTasks, emptyOverall } from './ducks/actions';
-import { getCompany, getTeams2, getTeamsDetail, getAllProjects } from '../../Application/ducks/actions';
+import { getTeams2, getTeamsDetail, getAllProjects } from '../../Application/ducks/actions';
 import Search from './components/Search';
 import SearchTeam from './components/SearchTeam';
 import MyTasks from './components/MyTasks';
@@ -159,10 +159,8 @@ export default (props) => {
   const teamTaskData = useSelector(state => state.tasks.teamTaskData);
   const teamTaskDataList = useSelector(state => state.tasks.teamTaskDataWithStatus);
   const projects = useSelector(state => state.global.projects);
-  const company = useSelector(state => state.global.companies);
   const team = useSelector(state => state.global.teams2);
   const [allProj, setAllProj] = useState([]);
-  const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   let activeTab = ''
@@ -171,7 +169,6 @@ export default (props) => {
     if(allowed([Roles.TASK_TEAMS], 'read') || allowed([Roles.TASK], 'read')) {
       dispatch(getTeamsDetail(id));
       dispatch(getAllProjects());
-      dispatch(getCompany());
       dispatch(getTeams2())
     }
   }, []);
@@ -190,21 +187,6 @@ export default (props) => {
       setAllProj(temp);
     }
   }, [projects]);
-
-  useEffect(() => {
-    if (Object.keys(company).length > 0) {
-      let temp = []
-      company.map((x, i) => {
-        if (i == 0) {
-          temp.push({ label: 'All', value: '' })
-          temp.push({ label: x.name, value: x.name })
-        } else {
-          temp.push({ label: x.name, value: x.name })
-        }
-      });
-      setAllCompany(temp);
-    }
-  }, [company]);
 
   useEffect(() => {
     if (Object.keys(team).length > 0) {
@@ -249,7 +231,6 @@ export default (props) => {
           employee_name: search?.name ? search?.name : '',
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
           project: search?.project ? search?.project.value : '',
-          company: search?.company ? search?.company.value : '',
           team_name: search?.team ? search?.team.value : '',
         }
         dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
@@ -300,8 +281,7 @@ export default (props) => {
         Search: Search,
         searchDropdowns: {
           field1: allProj,
-          field2: allCompany,
-          field3: allTeam,
+          field2: allTeam,
         },
         addon: 'Timesheet',
         statusKey: 'status'

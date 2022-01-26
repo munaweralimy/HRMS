@@ -51,22 +51,13 @@ export default (props) => {
                 selectOption={props?.field1}
                 />
                 <SelectField
-                fieldname='company'
+                fieldname='team'
                 label=''
                 class='mb-0 w-100'
                 initValue={props?.field2?.length > 0 ? props.field2[0] : ''}
                 control={control}
                 iProps={{ placeholder: 'Company'}}
                 selectOption={props?.field2}
-                />
-                <SelectField
-                fieldname='team'
-                label=''
-                class='mb-0 w-100'
-                initValue={props?.field3?.length > 0 ? props.field3[0] : ''}
-                control={control}
-                iProps={{ placeholder: 'Company'}}
-                selectOption={props?.field3}
                 />
                 <Button size='large' type='primary' htmlType='submit'>Search</Button>
             </Form>
