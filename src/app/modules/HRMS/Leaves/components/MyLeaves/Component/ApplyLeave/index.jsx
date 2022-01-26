@@ -38,11 +38,10 @@ export default (props) => {
   }
 
   const onFinish = async (val) => {
-    setLoad(true);
+    //setLoad(true);
     const startDate = moment(val?.leaveStart);
     const endDate = moment(val?.leaveEnd);
     const daysDiff = endDate.diff(startDate, 'days') + 1;
-
     var leaves_count = parseFloat(0);
     if (holidaysListData?.leaves_criteria?.length > 0) {
       for (var currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
@@ -74,12 +73,19 @@ export default (props) => {
     } else {
       leaves_count = daysDiff
     }
-    
+    console.log('leaves_count------111', leaves_count)
+    if (holidaysListData?.holidays_list?.length > 0) {
+      holidaysListData?.holidays_list?.map(e => {
+        var dateChecking = moment(e).isBetween(startDate, endDate);
+        if (dateChecking) {
+          leaves_count = leaves_count - 1
+        }
+      })
+    }
+
     if(val?.leavePeriod.value && val?.leavePeriod.value === 'Half Day') {
       leaves_count = leaves_count - 0.5
     } 
-
-
     let approvers = [];
     leaveApproversData?.map(resp => {
       approvers.push({

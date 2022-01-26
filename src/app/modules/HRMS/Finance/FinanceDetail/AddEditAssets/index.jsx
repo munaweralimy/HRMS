@@ -14,8 +14,8 @@ import Roles from '../../../../../../routing/config/Roles';
 const assetsCol = [
   {
     title: 'Asset No',
-    dataIndex: 'asset_no',
-    key: 'asset_no',
+    dataIndex: 'asset_id',
+    key: 'asset_id',
     sorter: (a, b) => a.asset_no.length - b.asset_no.length,
   },
   {

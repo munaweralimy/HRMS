@@ -2,21 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Row, Col, Form, Button, message, Spin } from 'antd';
 import { DateField, InputField, SelectField, TextAreaField, TimeField } from '../../../../../atoms/FormElement';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
 import { updateAttendance } from '../../ducks/services';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
-import { allowed } from '../../../../../../routing/config/utils';
-import Roles from '../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 const AttendanceDetails = (props) => {
   const { attendanceData, onViewForm } = props;
-  console.log({ attendanceData });
   const { Title } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
-  const history = useHistory();
 
   useEffect(() => {
     if (attendanceData) {

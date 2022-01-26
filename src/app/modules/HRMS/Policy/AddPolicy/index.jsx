@@ -2,12 +2,12 @@ import React, {useState, useEffect, Fragment} from 'react';
 import {Space, Button, Row, Col, Typography, Form, message, Spin } from 'antd';
 import FormGroup from '../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
-import {getRolesList} from '../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiMethod } from '../../../../../configs/constants';
 import axios from '../../../../../services/axiosInterceptor';
 import { uniquiFileName, getSingleUpload } from '../../../../../features/utility';
 import { LoadingOutlined } from "@ant-design/icons";
+import { getRoles } from '../../../Application/ducks/actions';
 
 const { Title, Text } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -19,7 +19,7 @@ export default (props) => {
     const { title, onClose, onUpdate } = props;
     const dispatch = useDispatch();
     const [load, setLoad] = useState(false);
-    const rolesListData = useSelector((state) => state.policy.rolesListData);
+    const rolesListData = useSelector((state) => state.global.roles);
 
     const formFields = [
         {
@@ -40,11 +40,11 @@ export default (props) => {
           twocol: false,
           reqmessage: 'Please Select',
           multi: true,
-          options: _.map(rolesListData, (e) => ({ label: e.name, value: e.name })),
+          options: _.map(rolesListData, (e) => ({ label: e.role_name, value: e.name })),
         },
         {
           name: 'attachment',
-          label: 'Attachment',
+          label: 'Attachment (PDF 10MB MAX)',
           req: true,
           placeholder: 'Upload',
           type: 'upload',
@@ -54,7 +54,7 @@ export default (props) => {
     ];
 
     useEffect(() => {
-        dispatch(getRolesList());
+        dispatch(getRoles());
     }, []);
 
     const onFinish = async (val) => {

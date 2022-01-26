@@ -45,7 +45,7 @@ const addAllowences = [
   },
   {
     type: 'upload',
-    label: 'Upload Document',
+    label: 'Upload Document (PDF 10MB max)',
     name: 'document',
     placeholder: 'Upload',
     req: true,

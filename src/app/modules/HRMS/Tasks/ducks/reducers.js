@@ -6,7 +6,7 @@ const initialState = {
     teamTaskData: {},
     teamTaskDataWithStatus: [],
     myTaskData: {},
-    myProject: [],
+    myProject: {},
     myProjectData: [],
     myAddProjectData: [],
     singleTaskData: [],

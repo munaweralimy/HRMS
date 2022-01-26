@@ -16,7 +16,7 @@ import MyAttendance from './components/MyAttendance';
 import moment from 'moment';
 import Roles from '../../../../routing/config/Roles';
 import { allowed } from '../../../../routing/config/utils';
-import { getCompany, getTeams, getTeamsDetail } from '../../Application/ducks/actions';
+import { getTeams, getTeamsDetail } from '../../Application/ducks/actions';
 
 const ListColOverall = [
   {
@@ -192,7 +192,6 @@ export default (props) => {
   const teamsDetailData = useSelector((state) => state.global.teamsDetailData);
   const team = useSelector((state) => state.global.teams);
   const [allTeam, setAllTeam] = useState([]);
-  const company1 = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
 
   let activeTab = '';
@@ -208,7 +207,6 @@ export default (props) => {
   useEffect(() => {
     if(allowed([Roles.ATTENDANCE], 'read') || allowed([Roles.ATTENDANCE_TEAMS], 'read')) {
       dispatch(getTeamsDetail(id));
-      dispatch(getCompany());
       dispatch(getTeams());
     }
   }, []);
@@ -216,12 +214,12 @@ export default (props) => {
   useEffect(() => {
     if (Object.keys(team).length > 0) {
       let temp = [];
-      team.map((x, i) => {
+      team?.map((x, i) => {
         if (i == 0) {
           temp.push({ label: 'All Teams', value: '' });
-          temp.push({ label: x.employee_name, value: x.employee_name });
+          temp.push({ label: x.team_name, value: x.team_name });
         } else {
-          temp.push({ label: x.employee_name, value: x.employee_name });
+          temp.push({ label: x.team_name, value: x.team_name });
         }
       });
       setAllTeam(temp);
@@ -236,16 +234,15 @@ export default (props) => {
           name: search?.id ? search?.id : '',
           employee_name: search?.name ? search?.name : '',
           attendance_date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
-          company: search?.company ? search?.company.value : '',
           team: search?.team ? search?.team.value : '',
           m_status: search?.status ? search?.status.value : '',
         };
-        dispatch(getOverallAttendanceList(page, limit, sort, sortby, searchVal, company1));
+        dispatch(getOverallAttendanceList(page, limit, sort, sortby, searchVal));
       } else {
-        dispatch(getOverallAttendanceList(page, limit, sort, sortby, null, company1));
+        dispatch(getOverallAttendanceList(page, limit, sort, sortby, null));
       }
     } else {
-      dispatch(getOverallAttendance(page, limit, sort, sortby, company1));
+      dispatch(getOverallAttendance(page, limit, sort, sortby));
     }
   };
 
@@ -259,12 +256,12 @@ export default (props) => {
           date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
           m_status: search?.status ? search?.status.value : '',
         };
-        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, searchVal, company1));
+        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, searchVal));
       } else {
-        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, null, company1));
+        dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, null));
       }
     } else {
-      dispatch(getTeamAttendance(team, page, limit, sort, sortby, company1));
+      dispatch(getTeamAttendance(team, page, limit, sort, sortby));
     }
   };
 

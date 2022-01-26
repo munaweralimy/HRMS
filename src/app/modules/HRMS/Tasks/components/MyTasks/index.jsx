@@ -88,7 +88,6 @@ export default (props) => {
   const [allProj, setAllProj] = useState([]);
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
-  const projects = useSelector(state => state.global.projects);
   const [searchVal, setSearchVal] = useState(null);
 
   useEffect(() => {
@@ -105,19 +104,19 @@ export default (props) => {
   ];
 
   useEffect(() => {
-    if (projects.length > 0) {
+    if (Object.keys(myProjects).length > 0) {
       let temp = []
-      projects.map((x, i) => {
+      myProjects?.rows.map((x, i) => {
         if (i == 0) {
           temp.push({label: 'All', value: ''})
-          temp.push({label: x.project_name, value: x.name})
+          temp.push({label: x.project, value: x.name})
         } else {
-          temp.push({label: x.project_name, value: x.name})
+          temp.push({label: x.project, value: x.name})
         }
       });
       setAllProj(temp);
     }
-  }, [projects]);  
+  }, [myProjects]);  
 
   useEffect(() => {
     if(iProps?.activeAddTimeSheet) {
@@ -127,7 +126,7 @@ export default (props) => {
 
   const updateApi = () => {
     setRecord(null);
-    dispatch(getMyTasks(id, 1, limit, '', '', search));
+    dispatch(getMyTasks(id, page, limit, '', ''));
   }
 
   const onClickRow = (record) => {
@@ -221,7 +220,7 @@ export default (props) => {
                 pageSize: limit
               }}
               />}
-              {addVisible && allowed([Roles.TASK_INDIVIDUAL], 'write') && <AddNewTimeSheet id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
+              {addVisible && allowed([Roles.TASK_INDIVIDUAL], 'write') && <AddNewTimeSheet projectName={myProjects} id={id} updateApi={updateApi} mode={mode} data={selectedRecord} setAddVisible={setAddVisible} />}
               {rowDetails && (
                 <DetailsComponent 
                   setRecord={setRecord}
@@ -229,7 +228,7 @@ export default (props) => {
                   mainTitle='Timesheet Details'
                   backbtnTitle='My Timesheet'
                   data={rowData}
-                  onAction3={allowed([Roles.TASK_INDIVIDUAL], 'write') ? onEdit : null}
+                  onAction3={allowed([Roles.TASK_INDIVIDUAL], 'write') && rowData.find(x => x.label == 'Status')?.value == 'Pending' ? onEdit : null}
                   btn3title={'Edit Timesheet'}
                   />
               )}

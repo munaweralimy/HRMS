@@ -384,6 +384,14 @@ select:-webkit-autofill:focus {
   }
 }
 
+.download-inputbtn {
+  position: absolute;
+  right: 30px;
+  padding:0;
+  top: 6px;
+  z-index: 1;
+}
+
 .black-btn {
   background: #000;
   border-color: #000;

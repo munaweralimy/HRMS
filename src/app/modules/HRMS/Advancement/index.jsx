@@ -106,12 +106,12 @@ export default (props) => {
   useEffect(() => {
     if (Object.keys(team).length > 0) {
       let temp = [];
-      team.map((x, i) => {
+      team?.map((x, i) => {
         if (i == 0) {
           temp.push({ label: 'All Teams', value: '' });
-          temp.push({ label: x.employee_name, value: x.employee_name });
+          temp.push({ label: x.team_name, value: x.team_name });
         } else {
-          temp.push({ label: x.employee_name, value: x.employee_name });
+          temp.push({ label: x.team_name, value: x.team_name });
         }
       });
       setAllTeam(temp);

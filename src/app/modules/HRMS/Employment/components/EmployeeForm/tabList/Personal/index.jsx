@@ -38,6 +38,7 @@ export default (props) => {
       setValueIn('identification_type', data?.identification_type ? {label: data?.identification_type, value: data?.identification_type} : '');
       setValueIn('identification_no', data?.identification_no);
       setValueIn('date_of_birth', data?.date_of_birth ? moment(data?.date_of_birth, 'YYYY MM DD') : '');
+      setValueIn('date_of_joining', data?.date_of_joining ? moment(data?.date_of_joining, 'YYYY MM DD') : '');
       setValueIn('race', data?.race ? {label: data?.race_name, value: data?.race} : '');
       setValueIn('religious', data?.religious ? {label: data?.religion_name, value: data?.religious} : '');
       
@@ -67,7 +68,7 @@ export default (props) => {
       setValueIn('spouse_identification_no', data?.spouse_identification_no);
       setValueIn('spouse_dob', data?.spouse_dob ? moment(data?.spouse_dob, 'YYYY MM DD') : '');
       setValueIn('spouse_race', data?.spouse_race ? {label: data?.spouse_race_name, value: data?.spouse_race} : '');
-      setValueIn('spouse_religious', data?.spouse_religious ? {label: data?.religion_name, value: data?.spouse_religious} : '');
+      setValueIn('spouse_religious', data?.spouse_religious ? {label: data?.spouse_religious_name, value: data?.spouse_religious} : '');
       setValueIn('spouse_employee_name', data?.spouse_employee_name);
       setValueIn('spouse_employee_email', data?.spouse_employee_email);
       setValueIn('spouse_phone_no', data?.spouse_phone_no);
@@ -181,6 +182,7 @@ export default (props) => {
       identification_type: val.identification_type?.value,
       identification_no: val.identification_no,
       date_of_birth: val.date_of_birth,
+      date_of_joining: val.date_of_joining,
       race: val.race?.value,
       religious: val.religious?.value,
       primary_phone_no: val.primary_phone_no,

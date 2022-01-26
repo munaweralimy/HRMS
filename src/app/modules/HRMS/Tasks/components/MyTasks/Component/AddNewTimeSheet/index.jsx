@@ -14,11 +14,9 @@ const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
 
-  const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
   const { control, handleSubmit, setValue, errors } = useForm();
-  const projectName = useSelector(state => state.global.projects);
-  const { setAddVisible, id, updateApi, mode, data } = props;
+  const { setAddVisible, id, updateApi, mode, data, projectName } = props;
 
   useEffect(() => {
     if (mode != 'add') {
@@ -121,8 +119,8 @@ export default (props) => {
               initValue=''
               selectOption={
                 projectName &&
-                projectName?.map((e) => {
-                  return { value: e.name, label: e.project_name };
+                projectName?.rows?.map((e) => {
+                  return { value: e.name, label: e.project };
                 })
               }
             />

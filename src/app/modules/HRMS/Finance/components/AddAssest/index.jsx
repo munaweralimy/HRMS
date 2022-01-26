@@ -3,8 +3,7 @@ import { Row, Col, Typography, Form, Button, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import FormGroup from '../../../../../molecules/FormGroup';
-import { addAsset } from './FormFields';
-import { updateAssets, addNewAsset, deleteAsset } from '../../ducks/services';
+import { updateAssets, addNewAsset, deleteAsset, getAllAssets, addinSetup } from '../../ducks/services';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
 import { allowed } from '../../../../../../routing/config/utils';
@@ -17,9 +16,53 @@ const AddAsset = (props) => {
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, handleSubmit } = useForm();
   const { Title } = Typography;
+  const [assetList, setAssetList] = useState([]);
+
+  const formAsset = [
+    {
+      type: 'select',
+      label: 'Asset No.',
+      name: 'asset_no',
+      disabled: data?.asset_no,
+      req: true,
+      reqmessage: 'Asset Number required',
+      twocol: false,
+      options: assetList?.map((value) => ({ label: value.assets_id, value: value.name })),
+    },
+    {
+      type: 'date',
+      label: 'Start Date',
+      name: 'start_date',
+      req: true,
+      reqmessage: 'date required',
+      twocol: true,
+    },
+    {
+      type: 'date',
+      label: 'End Date',
+      name: 'end_date',
+      req: true,
+      reqmessage: 'date required',
+      twocol: true,
+    },
+    {
+      type: 'input',
+      label: 'Description',
+      name: 'description',
+      placeholder: 'Description',
+      req: true,
+      reqmessage: 'Description required',
+      twocol: false,
+    },
+  ]
+
+  useEffect(() => {
+    getAllAssets().then((response) => setAssetList(response?.data.message));
+  }, []);
+
   useEffect(() => {
     if (data?.asset_no) {
-      setValue('asset_no', { label: data?.asset_no, value: data?.asset_no });
+      setValue('asset_no', { label: data?.asset_id, value: data?.asset_no });
       setValue('description', data?.description);
       setValue('start_date', data.start_date ? moment(data.start_date, 'YYYY-MM-DD') : '');
       setValue('end_date', data.end_date ? moment(data.end_date, 'YYYY-MM-DD') : '');
@@ -51,7 +94,12 @@ const AddAsset = (props) => {
       : addNewAsset({ employee_id: id, assets: { ...payload } })
           .then((response) => {
             if (response.data.message.success == true) {
-              message.success(response.data.message.message);
+              addinSetup(values?.asset_no.value).then(res => {
+                message.success(response.data.message.message);
+              }).catch((error) => {
+                message.error('something went wrong');
+                setLoad(false);
+              });
             } else {
               message.error(response.data.message.message);
             }
@@ -82,7 +130,7 @@ const AddAsset = (props) => {
               Asset Details
             </Title>
           </Col>
-          {addAsset().map((value, key) => (
+          {formAsset.map((value, key) => (
             <FormGroup key={key} item={value} control={control} errors={errors} />
           ))}
           <Col span={24}>

@@ -29,6 +29,9 @@ export const addNewAccount = (payload) => {
 export const addNewAsset = (payload) => {
   return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
 };
+export const addinSetup = (id) => {
+  return axios.get(`${apiMethod}/hrms.api.update_asset_in_add?asset_no=${id}`);
+};
 
 export const addNewLoan = (payload) => {
   return axios.post(`${apiMethod}/hrms.api.add_emp_finance_detail`, payload);
