@@ -7,13 +7,12 @@ import Roles from '../../../../../../../../routing/config/Roles';
 
 export default ({ details, updateApi, rowSelection }) => {
 
-  const { title, key, heading, data, column, nodetail, detailTitle, onAction1, onAction2 } = details;
+  const { title, key, heading, data, column, nodetail, detailTitle, onAction1, onAction2, onAction4, selectedRowKeys } = details;
   const [rowDetails, setRowDetail] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [approverID, setApproverID] = useState('');
-
 
   // const btnList = [
   //   {
@@ -88,6 +87,9 @@ export default ({ details, updateApi, rowSelection }) => {
           scrolling={500}
           listClass="nospace-card"
           headclass='mt-1'
+          rowSelection={rowSelection}
+          selectedRowKeys={selectedRowKeys}
+          onAction4={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction4 : null}
         />
         :
         <DetailsComponent
