@@ -9,7 +9,7 @@ import Search from './components/Search';
 import { getOverallFit, getOverallFitCard } from './dcuks/action';
 import { allowed } from '../../../../routing/config/utils';
 import Roles from '../../../../routing/config/Roles';
-import { getCompany, getTeams } from '../../Application/ducks/actions';
+import { getTeams } from '../../Application/ducks/actions';
 
 const colName = [
   {
@@ -78,30 +78,12 @@ export default (props) => {
   const { t } = il8n;
   const data = useSelector((state) => state.advancement.fitindexcard);
   const datalist = useSelector((state) => state.advancement.fitindexlist);
-  const company = useSelector((state) => state.global.companies);
   const team = useSelector((state) => state.global.teams);
-  const [allCompany, setAllCompany] = useState([]);
   const [allTeam, setAllTeam] = useState([]);
 
   useEffect(() => {
-    dispatch(getCompany());
     dispatch(getTeams());
   }, []);
-
-  useEffect(() => {
-    if (Object.keys(company).length > 0) {
-      let temp = [];
-      company.map((x, i) => {
-        if (i == 0) {
-          temp.push({ label: 'All', value: '' });
-          temp.push({ label: x.name, value: x.name });
-        } else {
-          temp.push({ label: x.name, value: x.name });
-        }
-      });
-      setAllCompany(temp);
-    }
-  }, [company]);
 
   useEffect(() => {
     if (Object.keys(team).length > 0) {
@@ -124,7 +106,6 @@ export default (props) => {
         let searchVal = {};
         searchVal = {
           employee_name: search?.name ? search?.name : '',
-          company: search?.company ? search?.company.value : '',
           team: search?.team ? search?.team.value : '',
           contract_type: search?.contract ? search?.contract.value : '',
         };
@@ -155,9 +136,8 @@ export default (props) => {
         filters: filters,
         updateApi: onOverallAction,
         searchDropdowns: {
-          field1: allCompany,
-          field2: allTeam,
-          field3: [
+          field1: allTeam,
+          field2: [
             { label: 'All', value: '' },
             { label: 'Permanent', value: 'Permanent' },
             { label: 'Contract', value: 'Contract' },

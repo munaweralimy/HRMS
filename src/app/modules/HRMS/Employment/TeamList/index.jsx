@@ -49,28 +49,11 @@ export default (props) => {
   const dispatch = useDispatch();
   const [searching, setSearching] = useState(null);
   const data = useSelector(state => state.employment.teamList);
-  const company = useSelector(state => state.global.companies);
-  const [allCompany, setAllCompany] = useState([]);
 
   useEffect(() => {
     dispatch(getTeams(1, 5, '', ''))
   }, []);
   
-  useEffect(() => {
-    if (Object.keys(company).length > 0) {
-      let temp = []
-      company.map((x, i) => {
-        if (i == 0) {
-          temp.push({label: 'All', value: ''})
-          temp.push({label: x.name, value: x.name})
-        } else {
-          temp.push({label: x.name, value: x.name})
-        }
-      });
-      setAllCompany(temp);
-    }
-  }, [company]);
-
   const onSearch = (val) => {
     if (val.team) {
       setSearching(val.team);

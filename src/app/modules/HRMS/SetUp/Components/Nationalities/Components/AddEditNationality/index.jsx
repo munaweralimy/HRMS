@@ -36,15 +36,19 @@ export default (props) => {
           .catch((error) => message.error('Country exists'))
       : updateSingleCountry(countryName.name, payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
+              onClose();
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
+            
           })
-          .catch((error) => message.error('Update Failed'));
+          .catch((error) => {
+            setLoad(false);
+            message.error('Update Failed')
+          })
   };
   const onDeleteNationality = () => {
     setLoad(true);
@@ -100,13 +104,13 @@ export default (props) => {
                 </>
               ) : (
                 <>
-                {allowed([Roles.SETUP], 'delete') && 
+                {/* {allowed([Roles.SETUP], 'delete') && 
                   <Col span={12}>
                     <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteNationality}>
                       Delete
                     </Button>
-                  </Col>}
-                  <Col span={12}>
+                  </Col>} */}
+                  <Col span={24}>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                       Save
                     </Button>

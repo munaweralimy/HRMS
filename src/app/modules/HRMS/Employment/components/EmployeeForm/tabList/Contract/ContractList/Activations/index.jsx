@@ -136,7 +136,7 @@ export default (props) => {
               contractApi({email_activation_status: 'Pending'}, data[0]?.value).then(xs => {
                 updateApi();
                 setLoad(false);
-                PopupSuccess(popup1);
+                PopupSuccess(popup);
                 onBack();
               }).catch(e => {
                 message.error('Something went wrong');

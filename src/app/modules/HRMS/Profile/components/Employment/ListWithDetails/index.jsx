@@ -92,7 +92,7 @@ export default ({ details, updateApi }) => {
               <Descriptions className='reqData' bordered colon={false} column={1}>
                 <Descriptions.Item label="Staff Category">{rowData?.staff_category}</Descriptions.Item>
                 <Descriptions.Item label="Company">{rowData?.company}</Descriptions.Item>
-                <Descriptions.Item label="Team">{rowData?.team}</Descriptions.Item>
+                <Descriptions.Item label="Team">{rowData?.team_name}</Descriptions.Item>
                 <Descriptions.Item label="Job Title">{rowData?.job_title}</Descriptions.Item>
                 <Descriptions.Item label="Position Level">{rowData?.position_level}</Descriptions.Item>
                 <Descriptions.Item label="Supervisor">{rowData?.supervisor}</Descriptions.Item>
