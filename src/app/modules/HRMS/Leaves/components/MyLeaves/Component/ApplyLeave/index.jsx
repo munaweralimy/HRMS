@@ -73,7 +73,7 @@ export default (props) => {
     } else {
       leaves_count = daysDiff
     }
-    console.log('leaves_count------111', leaves_count)
+
     if (holidaysListData?.holidays_list?.length > 0) {
       holidaysListData?.holidays_list?.map(e => {
         var dateChecking = moment(e).isBetween(startDate, endDate);
@@ -83,9 +83,11 @@ export default (props) => {
       })
     }
 
-    if(val?.leavePeriod.value && val?.leavePeriod.value === 'Half Day') {
+    console.log('leaves_count------111', leaves_count)
+
+    if (val?.leavePeriod.value && val?.leavePeriod.value === 'Half Day') {
       leaves_count = leaves_count - 0.5
-    } 
+    }
     let approvers = [];
     leaveApproversData?.map(resp => {
       approvers.push({
@@ -184,7 +186,7 @@ export default (props) => {
               class='mb-0'
               iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY" }}
               initValue=''
-              onChange={(e) =>  {setFromDate(e); setValue('leaveEnd', null)}}
+              onChange={(e) => { setFromDate(e); setValue('leaveEnd', null) }}
               isRequired={true}
               rules={{
                 required: "Leave Start required",
@@ -200,9 +202,9 @@ export default (props) => {
               label='Leave End'
               control={control}
               class='mb-0'
-              iProps={{ 
-                placeholder: 'Please Select date', 
-                size: 'large', 
+              iProps={{
+                placeholder: 'Please Select date',
+                size: 'large',
                 format: "DD-MM-YYYY",
                 disabledDate: disableDate
               }}
