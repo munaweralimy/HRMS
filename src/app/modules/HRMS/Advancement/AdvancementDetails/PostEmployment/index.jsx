@@ -27,8 +27,8 @@ const colName = [
   },
   {
     title: 'Job Title',
-    dataIndex: 'job_title',
-    key: 'job_title',
+    dataIndex: 'job_title_name',
+    key: 'job_title_name',
     sorter: true,
   },
   {

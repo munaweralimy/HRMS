@@ -48,15 +48,14 @@ const AddLoan = (props) => {
           onUpdateComplete();
         })
       : addNewLoan({ employee_id: id, loan: { ...payload } }).then((response) => {
+        setLoad(false);
           if (response.data.message.success === true) {
             message.success(`${response.data.message.message}`);
-            setLoad(false);
+            onUpdateComplete();
           } else {
-            message.success(`${response.data.message.message}`);
-            setLoad(false);
+            message.error(`${response.data.message.message}`);
           }
 
-          onUpdateComplete();
         });
   };
 

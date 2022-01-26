@@ -19,8 +19,8 @@ const antIcon = <LoadingOutlined spin />;
 const listCol = [
   {
     title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'employee_name',
+    key: 'employee_name',
     sorter: true,
   },
   {
@@ -68,8 +68,8 @@ export default ({ data, updateApi }) => {
 
   useEffect(() => {
     if (data) {
-      setValue('job_title', { label: data?.job_title, value: data?.job_title });
-      setValue('company', { label: data?.company, value: data?.company });
+      setValue('job_title', { label: data?.job_position_name, value: data?.job_title });
+      // setValue('company', { label: data?.company, value: data?.company });
       dispatch(getSuitableApplicants(data?.job_title, 1, 10, '', ''));
     }
   }, [data]);
