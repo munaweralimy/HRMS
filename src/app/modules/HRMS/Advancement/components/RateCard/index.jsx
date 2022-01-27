@@ -38,8 +38,8 @@ export default (props) => {
           message.forEach((r) => {
             console.log('kkk', r);
             data.push({
-              value: r,
-              text: r,
+              value: r.name,
+              text: r.skill_name,
             });
           });
           callback(data);
