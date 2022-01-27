@@ -134,12 +134,12 @@ export default (props) => {
     },
     {
       title: 'Entitlement',
-      dataIndex: 'till_date',
-      key: 'till_date',
+      dataIndex: 'total_leaves',
+      key: 'total_leaves',
       sorter: true,
       align: 'center',
       render: (text) => {
-        return <>{text} Days</>
+        return <> {text < 0 ? 0 : text + ' Days'}</>
       }
     },
     {
