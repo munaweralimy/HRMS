@@ -308,7 +308,7 @@ export default (props) => {
           field1: allProj
         },
         statusKey: 'status',
-        teamDrop: team
+        teamDrop: team && team.length ? team : []
       },
       Comp: MultiView,
     },

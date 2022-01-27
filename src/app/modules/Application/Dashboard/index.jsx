@@ -15,8 +15,8 @@ export default (props) => {
                 <DashboardClock />
             </Col>
             <Col flex='1 0 398px'>
-                {policyData?.rows?.length > 0 && <PolicyRequestCard
-                    data={policyData?.rows[0]}
+                {policyData && policyData?.rows?.length > 0 && <PolicyRequestCard
+                    data={policyData ? policyData?.rows[0] : []}
                     title={'Policy'}
                     level={4}
                     spacing={10}

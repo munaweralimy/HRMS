@@ -151,6 +151,10 @@ export const deleteProject = (id) => {
   return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Projects&name=${id}`);
 };
 
+export const deleteRequestForm = (id) => {
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=HRMS Form Listing&name=${id}`);
+};
+
 export const addjobPosition = (payload) => {
   return axios.post(`${apiMethod}/hrms.setup.create_job_position`, payload);
 };

@@ -59,7 +59,7 @@ export default (props) => {
 
   return (
     <Card bordered={false} className="small-card12 b-black">
-      <Row gutter={[20, 20]}>
+      <Row gutter={[20, 20]} align='middle'>
         <Col flex="auto">
           <InputField
             fieldname={`${array}[${index}].name`}
@@ -74,6 +74,14 @@ export default (props) => {
             label=""
             class="readonly-transparent d-none"
             initValue={item.skill_name ? item.skill_name : ''}
+            control={control}
+            iProps={{ readOnly: true }}
+          />
+          <InputField
+            fieldname={`${array}[${index}].skill`}
+            label=""
+            class="readonly-transparent d-none"
+            initValue={item.skill ? item.skill : ''}
             control={control}
             iProps={{ readOnly: true }}
           />
@@ -116,6 +124,20 @@ export default (props) => {
             </Form.Item>
           )}
         </Col>
+        <Col flex="0 1 285px">
+          <Row gutter={[20, 20]} justify="space-between">
+            <Col flex="1 0 200px">
+              <RateField
+                class="ratingField blue-rate mb-0"
+                fieldname={`${array}[${index}].self_staff_assessment`}
+                label=""
+                control={control}
+                initValue={item.self_staff_assessment ? item.self_staff_assessment : 0}
+                iProps={{ character: ({ index }) => RatingStars[index + 1] }}
+              />
+            </Col>
+          </Row>
+        </Col>
         <Col flex="20px">
           <Button
             type="link"
@@ -124,20 +146,6 @@ export default (props) => {
             icon={<CloseCircleFilled />}
             onClick={() => onRemove(index, item)}
           />
-        </Col>
-        <Col span={24}>
-          <Row gutter={[20, 20]} justify="space-between">
-            <Col flex="0 1 285px">
-              <RateField
-                class="ratingField blue-rate mb-0"
-                fieldname={`${array}[${index}].self_staff_assessment`}
-                label="Staff Self Assessment"
-                control={control}
-                initValue={item.self_staff_assessment ? item.self_staff_assessment : 0}
-                iProps={{ character: ({ index }) => RatingStars[index + 1] }}
-              />
-            </Col>
-          </Row>
         </Col>
       </Row>
     </Card>

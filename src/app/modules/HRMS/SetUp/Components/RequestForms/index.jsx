@@ -8,7 +8,7 @@ import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { getRequestFormsList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { delRequest } from '../../ducks/services';
+import { deleteProject, deleteRequestForm, delRequest } from '../../ducks/services';
 import { getRoles } from '../../../../Application/ducks/actions';
 import { getFieldsList } from '../../../Requests/ducks/actions';
 import Roles from '../../../../../../routing/config/Roles';
@@ -108,16 +108,20 @@ export default (props) => {
 
   const deleteRequest = async (name) => {
     props.setLoading(true);
-    delRequest(name)
-      .then((res) => {
-        message.success('Request Deleted');
-        onUpdate();
+    deleteRequestForm(name)
+      .then((response) => {
         props.setLoading(false);
+        if (response.data.message.success == true) {
+          message.success(response.data.message.message);
+          onUpdate();
+        } else {
+          message.error(response.data.message.message);
+        }
       })
-      .catch((e) => {
+      .catch((error) => {
         props.setLoading(false);
-        message.error('Something went wrong');
-      });
+        message.error('Something went wrong')
+      })
   };
 
   const onClickRow = (record) => {
