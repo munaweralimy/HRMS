@@ -246,9 +246,7 @@ export const getWorkingHourTempDetail = (id) => {
   return axios.get(`${apiresource}/Work Hour Template/${id}`);
 };
 export const getDepartmentList = (id) => {
-  return axios.get(
-    `${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}`,
-  );
+  return axios.get(`${apiMethod}/hrms.setup.employee_dropdown_hrms_dpt_team?name_id=${id}`);
 };
 
 export const getSingleWarningLetter = (id) => {
@@ -257,4 +255,15 @@ export const getSingleWarningLetter = (id) => {
 
 export const deleteAssetFinance = (id) => {
   return axios.get(`${apiMethod}/hrms.tasks_api.delete_assets_from_finance_assets?asset_no=${id}`);
+};
+
+export const addSingleSkill = (payload) => {
+  return axios.post(`${apiMethod}/hrms.setup.create_skills`, payload);
+};
+
+export const updateSingleSkill = (id, payload) => {
+  return axios.post(`${apiMethod}/hrms.setup.create_skills`, { ...payload, name: id });
+};
+export const deleteSingleSkill = (id) => {
+  return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=Skill&name=${id}`);
 };
