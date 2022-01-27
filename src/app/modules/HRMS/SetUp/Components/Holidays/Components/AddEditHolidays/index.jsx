@@ -27,48 +27,54 @@ export default (props) => {
     holidayFields.holiday.length == 0
       ? addSingleHoliday(payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
+              onClose();
               message.success(response.data.message.message);
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Holiday exists'))
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong')
+          })
       : updateSingleHoliday(holidayFields.name, {
           holiday_name: values.holiday_name,
           holiday_date: moment(values.holiday_date).format('YYYY-MM-DD'),
           note: values.note,
         })
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
+              onClose();
               message.success(response.data.message.message);
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Update Failed'));
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong')
+          })
   };
 
   const onDeleteHoliday = () => {
     setLoad(true);
     deleteSingleHoliday(holidayFields.name)
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
           message.success(response.data.message.message);
+          onClose();
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
       .catch((error) => {
-        message.error('Holiday Deleted Unsccessfully');
-        onClose();
-      });
+        setLoad(false);
+        message.error('Something went wrong')
+      })
   };
 
   useEffect(() => {

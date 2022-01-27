@@ -175,6 +175,7 @@ export default (props) => {
             sendWarning(wbody).then(res => {
               message.success('Request Approve Successfully')
               setLoad(false);
+              updateReqApi();
             }).catch(e => {
               console.log(e);
               setLoad(false);
@@ -184,6 +185,7 @@ export default (props) => {
           } else {
             message.success('Request Reject Successfully');
             setLoad(false);
+            updateReqApi();
           }
         } else if(category == 'Show Cause Letter') {
           const wbody2 = {
@@ -195,7 +197,7 @@ export default (props) => {
             sendShowCause(wbody2).then(res => {
               message.success('Request Approve Successfully')
               setLoad(false);
-              
+              updateReqApi();
             }).catch(e => {
               console.log(e);
               setLoad(false);
@@ -205,6 +207,7 @@ export default (props) => {
           } else {
             message.success('Request Reject Successfully');
             setLoad(false);
+            updateReqApi();
           }
         } else if(category == 'Carry Forward Leave Extension') {
           if (status == 'Approve')  {

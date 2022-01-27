@@ -23,43 +23,49 @@ export default (props) => {
     religion.religion.length == 0
       ? addSingleReligion(payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
+              onClose();
               message.success(response.data.message.message);
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Country exists'))
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong')
+          })
       : updateSingleReligion(religion.name, payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
+              onClose();
               message.success(response.data.message.message);
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Update Failed'));
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong')
+          })
   };
   const onDeleteNationality = () => {
     setLoad(true);
     deleteSingleReligion(religion.name)
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
+          onClose();
           message.success(response.data.message.message);
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
       .catch((error) => {
-        message.error('Country Deleted Unsccessfully');
-        onClose();
-      });
+        setLoad(false);
+        message.error('Something went wrong')
+      })
   };
 
   useEffect(() => {

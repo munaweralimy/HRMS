@@ -24,37 +24,42 @@ export default (props) => {
     };
     institutionName.Institution.length == 0
       ? addInstitution(payload).then((response) => {
+        setLoad(false);
           if (response.data.message.success == true) {
             message.success(response.data.message.message);
+            onClose();
           } else {
             message.error(response.data.message.message);
           }
+        }).catch((error) => {
           setLoad(false);
-          onClose();
+          message.error('Something went wrong')
         })
       : updateSingleInstitution(institutionName.name, { name1: values.institution, doctype: 'Institutions' }).then(
           (response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
+              onClose();
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
-          },
-        );
+          }).catch((error) => {
+          setLoad(false);
+          message.error('Something went wrong')
+        });
   };
   const onDeleteEducationField = () => {
     setLoad(true);
     deleteSingleInstitution(institutionName.name)
-      .then((response) => {
-        message.success('Institution Deleted Successfully');
-        setLoad(false);
+    .then((response) => {
+      message.success('Institution Deleted Successfully');
+      setLoad(false);
         onClose();
       })
       .catch((error) => {
         message.error('Institution Deleted Unsccessfully');
-        onClose();
+        setLoad(false)
       });
   };
   useEffect(() => {

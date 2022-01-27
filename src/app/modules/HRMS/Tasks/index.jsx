@@ -233,7 +233,7 @@ export default (props) => {
           project: search?.project ? search?.project.value : '',
           team_name: search?.team ? search?.team.value : '',
         }
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
+          dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
       } else {
         dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, null))
       }
@@ -243,22 +243,24 @@ export default (props) => {
   }
 
   const onTeamAction = (filter, page, limit, sort, sortby, type, search, team) => {
-    if (type == 'list') {
-      if (search) {
-        let searchVal = {};
-        searchVal = {
-          employee_id: search?.id ? search?.id : '',
-          employee_name: search?.name ? search?.name : '',
-          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
-          project: search?.project ? search?.project.value : '',
+    if (team) {
+      if (type == 'list') {
+        if (search) {
+          let searchVal = {};
+          searchVal = {
+            employee_id: search?.id ? search?.id : '',
+            employee_name: search?.name ? search?.name : '',
+            date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+            project: search?.project ? search?.project.value : '',
+          }
+          dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal))
+        } else {
+          dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null))
         }
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, searchVal))
-      } else {
-        dispatch(getTeamTasksWithStatus(team, filter, page, limit, sort, sortby, null))
-      }
 
-    } else {
-        dispatch(getTeamTasks(team, page, limit, sort, sortby));
+      } else {
+          dispatch(getTeamTasks(team, page, limit, sort, sortby));
+      }
     }
   }
 
