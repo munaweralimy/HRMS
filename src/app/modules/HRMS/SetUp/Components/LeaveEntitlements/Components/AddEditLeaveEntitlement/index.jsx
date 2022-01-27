@@ -7,6 +7,7 @@ import {
   addSingleLeaveEntitlement,
   updateSingleLeaveEntitlement,
   deleteSingleLeaveEntitlement,
+  leaveEntititlementSec,
 } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
 import { allowed } from '../../../../../../../../routing/config/utils';
@@ -168,7 +169,9 @@ export default (props) => {
       ? addSingleLeaveEntitlement(payload)
           .then((response) => {
             if (response.data.message.success == true) {
-              message.success(response.data.message.message);
+              leaveEntititlementSec(response.data.message.name).then((res) => {
+                message.success(response.data.message.message);
+              });
             } else {
               message.error(response.data.message.message);
             }
