@@ -4,31 +4,37 @@ import * as TabCards from './tabList';
 
 const { TabPane } = Tabs;
 
-const tabs = [
-  {
-    name: 'Personal',
-    Comp: 'Personal',
-  },
-  {
-    name: 'Contract',
-    Comp: 'Contract',
-  },
-  {
-    name: 'Passport',
-    Comp: 'Passport',
-  },
-  {
-    name: 'Medical',
-    Comp: 'Medical',
-  },
-];
+
 
 export default (props) => {
 
   const [activeTab, setActiveTab] = useState(props?.dTab?.tab || "1");
+  const [idState, setidState]= useState(false)
   const onTabChange = (e) => {
     setActiveTab(e);
   }
+
+  const tabs = [
+    {
+      name: 'Personal',
+      Comp: 'Personal',
+      setidState: setidState, 
+      idState: idState
+    },
+    {
+      name: 'Contract',
+      Comp: 'Contract',
+    },
+    {
+      name: 'Passport',
+      Comp: 'Passport',
+      idState: idState
+    },
+    {
+      name: 'Medical',
+      Comp: 'Medical',
+    },
+  ];
 
   return (
       <Tabs activeKey={activeTab} onChange={onTabChange} type="card" className="custom-tabs">
@@ -36,7 +42,7 @@ export default (props) => {
           const Cardi = TabCards[item.Comp];
           return (
             <TabPane tab={item.name} key={index + 1} forceRender>
-              <Cardi title={item.title} {...props} />
+              <Cardi title={item.title} {...props} setidState={item.setidState ? item.setidState : null} idState={item.idState ? item.idState : null} />
             </TabPane>
           )
         })}

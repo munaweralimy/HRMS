@@ -11,7 +11,7 @@ import { baseUrl } from '../../../../../../../../configs/constants';
 
 export default (props) => {
 
-  const { mode, data, updateApi, id, setLoad, controlOut, errorsOut, setValueOut, getValuesOut } = props;
+  const { mode, data, updateApi, id, setLoad, controlOut, errorsOut, setValueOut, getValuesOut, idState, setidState } = props;
   const dispatch = useDispatch();
   const { control: controlIn, errors: errorsIn, setValue: setValueIn, getValues: getValuesIn, handleSubmit: handleSubmitIn } = useForm();
 
@@ -35,7 +35,10 @@ export default (props) => {
       setValueIn('gender', data?.gender ? {label: data?.gender, value: data?.gender} : '');
       setValueIn('marital_status', data?.marital_status ? {label: data?.marital_status, value: data?.marital_status} : '');
       setValueIn('nationality', data?.nationality ? {label: data?.nationality, value: data?.nationality} : '');
-      setValueIn('identification_type', data?.identification_type ? {label: data?.identification_type, value: data?.identification_type} : '');
+      if (data?.identification_type) {
+        setValueIn('identification_type', data?.identification_type ? {label: data?.identification_type, value: data?.identification_type} : '');
+        data?.identification_type == 'IC' ? setidState(false) : setidState(true);
+      }
       setValueIn('identification_no', data?.identification_no);
       setValueIn('date_of_birth', data?.date_of_birth ? moment(data?.date_of_birth, 'YYYY MM DD') : '');
       setValueIn('date_of_joining', data?.date_of_joining ? moment(data?.date_of_joining, 'YYYY MM DD') : '');
@@ -244,10 +247,10 @@ export default (props) => {
     <>
     {mode == 'edit' ?
     <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-      <MainForm control={controlIn} errors={errorsIn} mode={mode} setValue={setValueIn} getValues={getValuesIn}  />
+      <MainForm control={controlIn} errors={errorsIn} mode={mode} setValue={setValueIn} getValues={getValuesIn} idState={idState} setidState={setidState} />
     </Form>
     : 
-    <MainForm control={controlOut} errors={errorsOut} mode={mode} setValue={setValueOut} getValues={getValuesOut} />}
+    <MainForm control={controlOut} errors={errorsOut} mode={mode} setValue={setValueOut} getValues={getValuesOut} idState={idState} setidState={setidState} />}
     </>
   );
 };
