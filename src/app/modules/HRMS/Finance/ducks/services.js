@@ -52,7 +52,7 @@ export const deleteAllowance = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Allowance/${id}`, payload);
 };
 export const deleteAsset = (id, payload) => {
-  return axios.put(`${apiresource}/HRMS EMP Assets/${id}`, payload);
+  return axios.delete(`${apiresource}/HRMS EMP Assets/${id}`, payload);
 };
 export const deleteLoan = (id, payload) => {
   return axios.put(`${apiresource}/HRMS EMP Loan/${id}`, payload);
@@ -63,4 +63,8 @@ export const deleteAdvanceSalary = (id, payload) => {
 };
 export const getAllAssets = () => {
   return axios.get(`${apiMethod}/hrms.api.assets_list`);
+};
+
+export const deleteAssetSetup = (id) => {
+  return axios.get(`${apiMethod}/hrms.tasks_api.delete_assets_from_setup?asset_no=${id}`);
 };

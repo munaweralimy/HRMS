@@ -1,5 +1,18 @@
 import React, { useEffect } from 'react';
-import { Button, DatePicker, Form, Input, Checkbox, Typography, TimePicker, Upload, Switch, Radio, Rate, Slider } from 'antd';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Checkbox,
+  Typography,
+  TimePicker,
+  Upload,
+  Switch,
+  Radio,
+  Rate,
+  Slider,
+} from 'antd';
 import { PlusCircleFilled } from '@ant-design/icons';
 import { Controller } from 'react-hook-form';
 import Select from 'react-select';
@@ -326,26 +339,33 @@ export const UploadField = (props) => {
         defaultValue={initValue ? initValue : ''}
         render={({ value, fileList, onChange }) => (
           <>
-          <Upload
-            className="uploadWithbtn"
-            showUploadList={false}
-            accept="image/*,.pdf"
-            maxCount={1}
-            fileList={fileList}
-            customRequest={dummyRequest}
-            onChange={(e) => onChange(e)}
-            {...iProps}
-          >
-            <Input
-              size="large"
-              className="ag-upload-btn"
-              value={value ? value.fileList[0].name : 'Please Upload File'}
-              addonAfter={<PlusCircleFilled />}
-            />
-          </Upload>
-          {console.log('checking value', value)}
-          {value && 
-          <Button type="link" htmlType="button" className="download-inputbtn" onClick={() => window.open(value.fileList[0].url)} icon={<DownloadIcon className="c-success" />} />}
+            <Upload
+              className="uploadWithbtn"
+              showUploadList={false}
+              accept="image/*,.pdf"
+              maxCount={1}
+              fileList={fileList}
+              customRequest={dummyRequest}
+              onChange={(e) => onChange(e)}
+              {...iProps}
+            >
+              <Input
+                size="large"
+                className="ag-upload-btn"
+                value={value ? value.fileList[0].name : 'Please Upload File'}
+                addonAfter={<PlusCircleFilled />}
+              />
+            </Upload>
+            {console.log('checking value', value)}
+            {value && (
+              <Button
+                type="link"
+                htmlType="button"
+                className="download-inputbtn"
+                onClick={() => window.open(value.fileList[0].url)}
+                icon={<DownloadIcon className="c-success" />}
+              />
+            )}
           </>
         )}
       />
