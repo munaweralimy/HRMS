@@ -12,6 +12,7 @@ import { apiMethod, apiresource } from '../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 import { allowed } from '../../../../../../routing/config/utils';
 import Roles from '../../../../../../routing/config/Roles';
+import { addEditJobOpen } from '../../dcuks/services';
 
 const { Title } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -92,23 +93,21 @@ export default ({ data, updateApi }) => {
     let body = {
       job_title: val.job_title.value,
     };
-    let url = `${apiMethod}/hrms.advancement_api.update_create_hrms_job_opening`;
-    try {
-      if (data?.job_title) {
-        await axios.post(`url/${data.job_title}`, body);
+    addEditJobOpen(data?.job_title, body).then(response => {
+      setLoad(false);
+      if (response.data.message.success == true) {
+        message.success(response.data.message.message);
+        updateApi();
+        reset();
       } else {
-        await axios.post(url, body);
+        message.error(response.data.message.message);
       }
-      message.success(`Job ${data ? 'Updated' : 'Added'} Successfully`);
+    }).catch(e => {
+      const {response} = e;
       setLoad(false);
-      updateApi();
-      reset();
-    } catch (e) {
-      const { response } = e;
-      console.log('error', response);
-      setLoad(false);
+      console.log('error', e);
       message.error('Something went wrong');
-    }
+    })
   };
 
   const onClickRow = (record) => {

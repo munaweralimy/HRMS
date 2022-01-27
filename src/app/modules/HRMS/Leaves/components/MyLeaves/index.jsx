@@ -79,16 +79,11 @@ export default (props) => {
   const [activeKey, setActiveKey] = useState('1');
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const [load, setLoad] = useState(false);
-  // const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
- console.log('myAvailableLeaves', myAvailableLeaves)
   
   const userdetail = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0];
   
-
   useEffect(() => {
-    dispatch(getMyLeaves(userdetail?.name,'Pending', 1, 10, '', ''));
-    dispatch(getMyAvailableLeaves(userdetail?.name));
-    dispatch(getCarryForwardStatus(userdetail?.name))
+    updateTimesheet('Pending', 1, 10, '', '')
   }, []);
 
 
@@ -209,7 +204,7 @@ export default (props) => {
               })
               createRequest(body1).then(resi => {
                 setLoad(false);
-                updateTimesheet();
+                updateTimesheet('Pending', 1, 10, '', '');
                 message.success('Carry Forward Request Generated')
               })
             } else {

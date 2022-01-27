@@ -23,44 +23,50 @@ export default (props) => {
     race.race.length == 0
       ? addSingleRace(payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
+              onClose();
               message.success(response.data.message.message);
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Race exists'))
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong')
+          })
       : updateSingleRace(race.name, payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
+              onClose();
               message.success(response.data.message.message);
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Update Failed'));
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong')
+          })
   };
 
   const onDeleteNationality = () => {
     setLoad(true);
     deleteSingleRace(race.name)
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
+          onClose();
           message.success(response.data.message.message);
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
       .catch((error) => {
-        message.error('Race Deleted Unsccessfully');
-        onClose();
-      });
+        setLoad(false);
+        message.error('Something went wrong')
+      })
   };
   
   useEffect(() => {

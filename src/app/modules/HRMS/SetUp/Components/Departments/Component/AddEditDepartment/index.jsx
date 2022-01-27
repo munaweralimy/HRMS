@@ -37,43 +37,49 @@ export default (props) => {
     departmentField.name.length == 0
       ? addSingleDepartment(payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
+              onClose();
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Holiday exists'))
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong')
+          })
       : updateDepartment(departmentField.name, payload)
-          .then((response) => {
+      .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
+              onClose();
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Update Failed'));
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong')
+          });
   };
 
   const onDeleteHoliday = () => {
     setLoad(true);
     deleteDepartment(departmentField.name, { status: 'Inactive' })
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
           message.success(response.data.message.message);
+          onClose();
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
       .catch((error) => {
-        message.error('Holiday Deleted Unsccessfully');
-        onClose();
+        setLoad(false);
+        message.error('Something went wrong');
       });
   };
 

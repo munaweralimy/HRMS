@@ -282,13 +282,13 @@ export default (props) => {
                     </>
                   ) : (
                     <>
-                      {allowed([Roles.SETUP], 'delete') && (
+                      {/* {allowed([Roles.SETUP], 'delete') && (
                         <Col span={6}>
                           <Button size="large" type="primary" className="red-btn w-100" onClick={onDeleteHoliday}>
                             Delete
                           </Button>
                         </Col>
-                      )}
+                      )} */}
                       <Col span={6}>
                         <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                           Save

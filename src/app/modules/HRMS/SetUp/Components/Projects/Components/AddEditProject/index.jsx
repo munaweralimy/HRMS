@@ -57,40 +57,49 @@ export default (props) => {
     console.log({ userData });
     projectData.name.length == 0
       ? addProject(payload).then((response) => {
+        setLoad(false);
           if (response.data.message.success == true) {
+            onClose();
             message.success(response.data.message.message);
           } else {
             message.error(response.data.message.message);
           }
+        }).catch((error) => {
           setLoad(false);
-          onClose();
+          message.error('Something went wrong')
         })
       : updateProjecat(projectData.name, {
           project: values.project,
           user_staff: userData.map((value) => ({ employee: value.name })),
         }).then((response) => {
+          setLoad(false);
           if (response.data.message.success == true) {
             message.success(response.data.message.message);
+            onClose();
           } else {
             message.error(response.data.message.message);
           }
+        }).catch((error) => {
           setLoad(false);
-          onClose();
-        });
+          message.error('Something went wrong')
+        })
   };
   const onDeleteTeam = () => {
     setLoad(true);
     deleteProject(projectData.name)
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
           message.success(response.data.message.message);
+          onClose();
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
-      .catch((error) => message.error('Cant delte a project'));
+      .catch((error) => {
+        setLoad(false);
+        message.error('Something went wrong')
+      })
   };
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>

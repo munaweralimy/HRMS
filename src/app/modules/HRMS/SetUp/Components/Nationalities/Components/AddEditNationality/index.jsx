@@ -25,42 +25,48 @@ export default (props) => {
     countryName.name.length == 0
       ? addCountry(payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
+              onClose();
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Country exists'))
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong');
+          })
       : updateSingleCountry(countryName.name, payload)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
+              onClose();
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
-          .catch((error) => message.error('Update Failed'));
+          .catch((error) => {
+            setLoad(false);
+            message.error('Update Failed');
+          });
   };
   const onDeleteNationality = () => {
     setLoad(true);
     deleteSingleCountry(countryName.name)
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
+          onClose();
           message.success(response.data.message.message);
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
       .catch((error) => {
-        message.error('Country Deleted Unsccessfully');
-        onClose();
+        setLoad(false);
+        message.error('Update Failed');
       });
   };
   useEffect(() => {
@@ -106,7 +112,7 @@ export default (props) => {
                       Delete
                     </Button>
                   </Col>} */}
-                  <Col span={12}>
+                  <Col span={24}>
                     <Button size="large" type="primary" htmlType="submit" className="green-btn w-100">
                       Save
                     </Button>

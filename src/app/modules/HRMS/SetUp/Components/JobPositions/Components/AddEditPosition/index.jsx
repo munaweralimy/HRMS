@@ -73,22 +73,28 @@ export default (props) => {
     };
     jobPosition.name.length == 0
       ? addjobPosition(payload).then((response) => {
+        setLoad(false);
           if (response.data.message.success == true) {
             message.success(response.data.message.message);
+            onClose();
           } else {
             message.error(response.data.message.message);
           }
+        }).catch((error) => {
           setLoad(false);
-          onClose();
+          message.error('Something went wrong')
         })
       : updatejobPosition(jobPosition.name, payload).then((response) => {
+        setLoad(false);
           if (response.data.message.success == true) {
             message.success(response.data.message.message);
+            onClose();
           } else {
             message.error(response.data.message.message);
           }
+        }).catch((error) => {
           setLoad(false);
-          onClose();
+          message.error('Something went wrong')
         });
   };
 
@@ -96,15 +102,18 @@ export default (props) => {
     setLoad(true);
     deletejobPosition(jobPosition.name)
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
           message.success(response.data.message.message);
+          onClose();
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
-      .catch((error) => message.error('Cant delete a Job'));
+      .catch((error) => {
+        setLoad(false)
+        message.error('Cant delete a Job')
+      });
   };
 
   return (

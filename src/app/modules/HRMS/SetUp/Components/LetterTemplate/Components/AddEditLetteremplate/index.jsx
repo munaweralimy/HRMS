@@ -38,7 +38,7 @@ export default (props) => {
       image.addEventListener('load', () => {
         const { width, height } = image;
         console.log({ width, height });
-        if (width > 210 || height > 32) {
+        if (width > 595 || height > 91) {
           message.error('Image size must 210mm x 32mm');
         } else {
           if (fileType === 'header') {

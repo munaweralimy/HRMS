@@ -27,7 +27,11 @@ export default (props) => {
     headclass,
     rowSelection,
     selectedRowKeys,
-    onAction4
+    onAction4,
+    btnClass1,
+    btnClass2,
+    btn1title,
+    btn2title
   } = props;
 
   const searchProps = {
@@ -84,35 +88,41 @@ export default (props) => {
             onChange={onChange}
             rowSelection={rowSelection}
           />
-          {selectedRowKeys?.length > 0 && onAction4 && (
-            <>
-            <Col flex="0 1 200px">
-              <Button
-                type="primary"
-                size="large"
-                htmlType="submit"
-                onClick={() => {
-                  onAction4('Approved');
-                }}
-              >
-                Approve Selected
-              </Button>
-            </Col>
-            <Col flex="0 1 200px">
-              <Button
-                type="primary"
-                size="large"
-                htmlType="submit"
-                onClick={() => {
-                  onAction4('Rejected');
-                }}
-              >
-                Reject Selected
-              </Button>
-            </Col>
-            </>
-          )}
         </Col>
+        {selectedRowKeys?.length > 0 && onAction4 && (
+          <Col span={24}>
+            <Row gutter={[20, 20]} justify="end">
+
+              <Col flex="0 1 200px">
+                <Button
+                  type="primary"
+                  size="large"
+                  htmlType="button"
+                  className={`w-100 ${btnClass1 ? btnClass1 : ''}`}
+                  onClick={() => {
+                    onAction4('Approved');
+                  }}
+                >
+                  {btn1title}
+                </Button>
+              </Col>
+              <Col flex="0 1 200px">
+                <Button
+                  type="primary"
+                  size="large"
+                  htmlType="submit"
+                  className={`w-100 ${btnClass2 ? btnClass2 : ''}`}
+                  onClick={() => {
+                    onAction4('Rejected');
+                  }}
+                >
+                  {btn2title}
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        )}
+
         {extraBtn &&
           <Col span={24} className='text-right'>
             <Button type='primary' size='large' htmlType='button' className={btnClass ? btnClass : ''} onClick={extraAction}>{extraBtn}</Button>
