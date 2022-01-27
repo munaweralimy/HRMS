@@ -2,10 +2,14 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Typography, Col, Button, Row, Descriptions, Space } from 'antd';
 import moment from 'moment';
 const {Title} = Typography;
+import { DownloadIcon } from '../../../../../atoms/CustomIcons';
+import { baseUrl } from '../../../../../../configs/constants';
 
 export default (props) => {
   const { data } = props;
-  console.log('data', data)
+  const onView = async (data) => {
+    data && window.open(`${baseUrl}${data}`, "_blank");
+  }
     return (
         <>
           <Row gutter={[20, 30]} className="personalData">
@@ -169,7 +173,7 @@ export default (props) => {
                         <Descriptions.Item label="CGPA">{resp?.cgpa}</Descriptions.Item>
                         <Descriptions.Item label="Education Type">{resp?.level}</Descriptions.Item>
                         <Descriptions.Item label="Country of Graduation">{resp?.country}</Descriptions.Item>
-                        {/* <Descriptions.Item label="Transcript">{resp?.transcript}</Descriptions.Item> */}
+                        <Descriptions.Item label="Transcript"><Button type="link" onClick={() => onView(resp?.transcript)} htmlType="button" className="p-0" icon={<DownloadIcon className="c-success" />} /></Descriptions.Item>
                       </Descriptions>
                     </Col>
                   </Fragment>

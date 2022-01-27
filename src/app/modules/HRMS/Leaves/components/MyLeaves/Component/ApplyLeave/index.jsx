@@ -24,8 +24,6 @@ export default (props) => {
   const holidaysListData = useSelector(state => state.leaves.holidaysListData);
   const [formDate, setFromDate] = useState(null);
 
-  console.log('leaveApproversData', leaveApproversData)
-
   useEffect(() => {
     dispatch(getLeaveType());
     dispatch(getHolidaysList())
@@ -43,6 +41,7 @@ export default (props) => {
     const endDate = moment(val?.leaveEnd);
     const daysDiff = endDate.diff(startDate, 'days') + 1;
     var leaves_count = parseFloat(0);
+    
     if (holidaysListData?.leaves_criteria?.length > 0) {
       for (var currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
         if (currentDate.getDay() == 0) {
@@ -73,19 +72,19 @@ export default (props) => {
     } else {
       leaves_count = daysDiff
     }
-    console.log('leaves_count------111', leaves_count)
+    
     if (holidaysListData?.holidays_list?.length > 0) {
       holidaysListData?.holidays_list?.map(e => {
-        var dateChecking = moment(e).isBetween(startDate, endDate);
+        var dateChecking = moment(e).isBetween(startDate, endDate, 'days', '[]');
         if (dateChecking) {
           leaves_count = leaves_count - 1
         }
       })
     }
 
-    if(val?.leavePeriod.value && val?.leavePeriod.value === 'Half Day') {
+    if (val?.leavePeriod.value && val?.leavePeriod.value === 'Half Day') {
       leaves_count = leaves_count - 0.5
-    } 
+    }
     let approvers = [];
     leaveApproversData?.map(resp => {
       approvers.push({
@@ -184,7 +183,7 @@ export default (props) => {
               class='mb-0'
               iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY" }}
               initValue=''
-              onChange={(e) =>  {setFromDate(e); setValue('leaveEnd', null)}}
+              onChange={(e) => { setFromDate(e); setValue('leaveEnd', null) }}
               isRequired={true}
               rules={{
                 required: "Leave Start required",
@@ -200,9 +199,9 @@ export default (props) => {
               label='Leave End'
               control={control}
               class='mb-0'
-              iProps={{ 
-                placeholder: 'Please Select date', 
-                size: 'large', 
+              iProps={{
+                placeholder: 'Please Select date',
+                size: 'large',
                 format: "DD-MM-YYYY",
                 disabledDate: disableDate
               }}

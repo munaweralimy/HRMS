@@ -90,6 +90,10 @@ export default ({ details, updateApi, rowSelection }) => {
           rowSelection={rowSelection}
           selectedRowKeys={selectedRowKeys}
           onAction4={allowed([Roles.TASK_TEAMS, Roles.TASK], 'write') ? onAction4 : null}
+          btnClass1='green-btn'
+          btnClass2='red-btn'
+          btn1title={'Approve'}
+          btn2title={'Reject'}
         />
         :
         <DetailsComponent
