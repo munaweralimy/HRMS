@@ -230,44 +230,47 @@ export default (props) => {
     };
     workingHourTemp.name.length == 0
       ? addWorkingHourTemp(createWorkingHourTemp)
-          .then((response) => {
+      .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
+              onClose();
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
           .catch((error) => {
             setLoad(false);
-            onClose();
+            message.error('Something went wront')
           })
       : updateWorkingHourTemp(workingHourTemp.name, createWorkingHourTemp)
           .then((response) => {
+            setLoad(false);
             if (response.data.message.success == true) {
               message.success(response.data.message.message);
+              onClose();
             } else {
               message.error(response.data.message.message);
             }
-            setLoad(false);
-            onClose();
           })
           .catch((error) => {
             setLoad(false);
-            onClose();
+            message.error('Something went wront')
           });
   };
   const onDeleteWorkingHourTemp = () => {
     setLoad(true);
     deleteWorkingHourTemp(workingHourTemp.name).then((response) => {
+      setLoad(false);
       if (response.data.message.success == true) {
+        onClose();
         message.success(response.data.message.message);
       } else {
         message.error(response.data.message.message);
       }
+    }).catch((error) => {
       setLoad(false);
-      onClose();
+      message.error('Something went wront')
     });
   };
 

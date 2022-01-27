@@ -37,40 +37,47 @@ export default (props) => {
     };
     approver.name.length == 0
       ? addSingleApprover(payload).then((response) => {
+        setLoad(false);
           if (response.data.message.success == true) {
+            onClose();
             message.success(response.data.message.message);
           } else {
             message.error(response.data.message.message);
           }
+        }).catch((error) => {
           setLoad(false);
-          onClose();
+          message.error('Something went wrong');
         })
       : updateApprover(approver.name, payload).then((response) => {
+        setLoad(false);
           if (response.data.message.success == true) {
             message.success(response.data.message.message);
+            onClose();
           } else {
             message.error(response.data.message.message);
           }
+        }).catch((error) => {
           setLoad(false);
-          onClose();
+          message.error('Something went wrong');
         });
   };
 
   const onDeleteApprover = () => {
     setLoad(true);
     deleteApprover(approver.name)
-      .then((response) => {
+    .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
+          onClose();
           message.success(response.data.message.message);
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
       .catch((error) => {
-        onClose();
-      });
+        setLoad(false);
+        message.error('Something went wrong');
+      })
   };
 
   function getBase64(img, callback) {
@@ -133,7 +140,7 @@ export default (props) => {
       image.addEventListener('load', () => {
         const { width, height } = image;
         console.log({ width }, { height });
-        if (width > 50 || height > 25) {
+        if (width > 591 || height > 295) {
           message.error('Image size must 50mm x 25mm');
         } else {
           setImage({
