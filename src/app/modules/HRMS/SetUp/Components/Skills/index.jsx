@@ -6,31 +6,31 @@ import ListCard from '../../../../../molecules/ListCard';
 import AddEditSkils from './Components/AddEditSkills';
 import Search from './Components/Search';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { getRacesList } from '../../ducks/actions';
+import { getAllSkillList } from '../../ducks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import Roles from '../../../../../../routing/config/Roles';
 import { allowed } from '../../../../../../routing/config/utils';
 
 export default (props) => {
-  const [raceField, setRaceField] = useState('');
+  const [skillField, setSkillField] = useState('');
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [searchValue, setSearchVal] = useState(null);
   const dispatch = useDispatch();
-  const racesListData = useSelector((state) => state.setup.racesListData);
+  const skillListData = useSelector((state) => state.setup.allSkills);
 
   useEffect(() => {
     if (!visible) {
-      // dispatch(getRacesList(page, limit, '', ''));
+      dispatch(getAllSkillList(page, limit, '', ''));
     }
   }, [visible]);
 
   const ListCol = [
     {
       title: 'Skill',
-      dataIndex: 'skill',
-      key: 'skill',
+      dataIndex: 'skill_name',
+      key: 'skill_name',
       sorter: true,
     },
     {
@@ -52,7 +52,7 @@ export default (props) => {
       text: '+ New Skill',
       classes: 'green-btn',
       action: () => {
-        setRaceField({ name: '', race: '' });
+        setSkillField({ name: '', skill_name: '' });
         setVisible(true);
       },
     },
@@ -64,8 +64,8 @@ export default (props) => {
     class: 'black-modal',
     content: (
       <AddEditSkils
-        race={raceField}
-        title={`${raceField.name ? 'Edit' : 'Add New'} Skill`}
+        skill={skillField}
+        title={`${skillField.name ? 'Edit' : 'Add New'} Skill`}
         onClose={() => setVisible(false)}
       />
     ),
@@ -77,7 +77,7 @@ export default (props) => {
     return {
       onClick: () => {
         if (allowed([Roles.SETUP], 'write')) {
-          setRaceField(record);
+          setSkillField(record);
           setVisible(true);
         }
       },
@@ -86,23 +86,23 @@ export default (props) => {
   const onSearch = (value) => {
     if (value) {
       let searchVal = {
-        name1: value?.race ? value?.race : '',
+        skill_name: value?.skill ? value?.skill : '',
       };
       setSearchVal(searchVal);
       setPage(1);
-      // dispatch(getRacesList(1, 10, '', '', searchVal));
+      dispatch(getAllSkillList(1, 10, '', '', searchVal));
     }
   };
 
   const onTableChange = (pagination, filters, sorter) => {
     console.log('heloo', pagination);
-    // setPage(pagination.current);
-    // setLimit(pagination.pageSize);
-    // if (sorter.order) {
-    //   dispatch(getRacesList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
-    // } else {
-    //   dispatch(getRacesList(pagination.current, pagination.pageSize, '', '', searchValue));
-    // }
+    setPage(pagination.current);
+    setLimit(pagination.pageSize);
+    if (sorter.order) {
+      dispatch(getAllSkillList(pagination.current, pagination.pageSize, sorter.order, sorter.columnKey, searchValue));
+    } else {
+      dispatch(getAllSkillList(pagination.current, pagination.pageSize, '', '', searchValue));
+    }
   };
 
   return (
@@ -117,9 +117,9 @@ export default (props) => {
             Search={Search}
             onSearch={onSearch}
             ListCol={ListCol}
-            ListData={racesListData?.rows}
+            ListData={skillListData?.rows}
             pagination={{
-              total: racesListData?.count,
+              total: skillListData?.count,
               current: page,
               pageSize: limit,
             }}

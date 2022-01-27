@@ -3,73 +3,80 @@ import { Space, Button, Row, Col, Typography, Form, message, Spin } from 'antd';
 import FormGroup from '../../../../../../../molecules/FormGroup';
 import { useForm } from 'react-hook-form';
 import { raceFields } from './FormFields';
-import { addSingleRace, updateSingleRace, deleteSingleRace } from '../../../../ducks/services';
+import { addSingleSkill, updateSingleSkill, deleteSingleSkill } from '../../../../ducks/services';
 import { LoadingOutlined } from '@ant-design/icons';
 import { allowed } from '../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 
 export default (props) => {
-  const { title, onClose, race } = props;
+  const { title, onClose, skill } = props;
   const { Title, Text } = Typography;
   const [load, setLoad] = useState(false);
   const { control, errors, setValue, reset, handleSubmit } = useForm();
 
   const onFinish = (values) => {
-    // setLoad(true);
-    // const payload = {
-    //   name1: values.race_name,
-    // };
-    // race.race.length == 0
-    //   ? addSingleRace(payload)
-    //       .then((response) => {
-    //         if (response.data.message.success == true) {
-    //           message.success(response.data.message.message);
-    //         } else {
-    //           message.error(response.data.message.message);
-    //         }
-    //         setLoad(false);
-    //         onClose();
-    //       })
-    //       .catch((error) => message.error('Race exists'))
-    //   : updateSingleRace(race.name, payload)
-    //       .then((response) => {
-    //         if (response.data.message.success == true) {
-    //           message.success(response.data.message.message);
-    //         } else {
-    //           message.error(response.data.message.message);
-    //         }
-    //         setLoad(false);
-    //         onClose();
-    //       })
-    //       .catch((error) => message.error('Update Failed'));
+    setLoad(true);
+    const payload = {
+      skill_name: values.skill_name,
+    };
+    skill.skill_name.length == 0
+      ? addSingleSkill(payload)
+          .then((response) => {
+            setLoad(false);
+
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+              onClose();
+            } else {
+              message.error(response.data.message.message);
+            }
+          })
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong');
+          })
+      : updateSingleSkill(skill.name, payload)
+          .then((response) => {
+            setLoad(false);
+            if (response.data.message.success == true) {
+              message.success(response.data.message.message);
+              onClose();
+            } else {
+              message.error(response.data.message.message);
+            }
+          })
+          .catch((error) => {
+            setLoad(false);
+            message.error('Something went wrong');
+          });
   };
 
   const onDeleteNationality = () => {
     setLoad(true);
-    deleteSingleRace(race.name)
+    deleteSingleSkill(skill.name)
       .then((response) => {
+        setLoad(false);
         if (response.data.message.success == true) {
           message.success(response.data.message.message);
+          onClose();
         } else {
           message.error(response.data.message.message);
         }
-        setLoad(false);
-        onClose();
       })
       .catch((error) => {
-        message.error('Race Deleted Unsccessfully');
-        onClose();
+        setLoad(false);
+        message.error('Something went wrong');
       });
   };
 
   useEffect(() => {
-    if (race.race.length > 0) {
-      setValue('race_name', race.race);
+    if (skill.skill_name.length > 0) {
+      setValue('skill_name', skill.skill_name);
     } else {
       reset();
     }
-  }, [race]);
+  }, [skill]);
 
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
@@ -86,7 +93,7 @@ export default (props) => {
                   <FormGroup item={item} control={control} errors={errors} />
                 </Fragment>
               ))}
-              {race.race.length == 0 ? (
+              {skill.skill_name.length == 0 ? (
                 <>
                   <Col span={12}>
                     <Button size="large" type="primary" htmlType="button" className="black-btn w-100" onClick={onClose}>
