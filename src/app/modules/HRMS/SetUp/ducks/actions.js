@@ -563,3 +563,25 @@ export const filterLeaveEntitlementName = (company) => async (dispatch) => {
     data: data,
   });
 };
+
+export const getAllSkillList = (page, limit, order, orderby, search = null) => {
+  let ordering = '';
+  if (order == 'ascend') {
+    ordering = 'ASC';
+  } else if (order == 'descend') {
+    ordering = 'DESC';
+  }
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(
+      `${apiMethod}/hrms.setup.hrms_skills_pagination?page_number=${page}&limit=${limit}${
+        order ? `&order=${ordering}&orderby=${orderby}` : ''
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
+    );
+    dispatch({
+      type: action_types.SKILL_LIST,
+      data: message,
+    });
+  };
+};

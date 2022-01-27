@@ -17,3 +17,4 @@ export { default as Approvers } from './Approvers';
 export { default as Assets } from './Assets';
 export { default as RequestForms } from './RequestForms';
 export { default as Departments } from './Departments';
+export { default as Skills } from './Skills';
