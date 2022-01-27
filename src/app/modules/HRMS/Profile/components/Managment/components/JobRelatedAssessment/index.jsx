@@ -82,14 +82,16 @@ export default ({ data, id, updateApi }) => {
     setLoad(true);
 
     let job_related = [];
-    val.job_related_skills.map((x) => {
-      job_related.push({
-        name: x.name,
-        skill_name: x.skill_name,
-        //supervisor_assessment: 0,
-        self_staff_assessment: x.self_staff_assessment,
+    if (val.job_related_skills) {
+      val.job_related_skills.map((x) => {
+        job_related.push({
+          name: x.name,
+          skill_name: x.skill_name,
+          //supervisor_assessment: 0,
+          self_staff_assessment: x.self_staff_assessment,
+        });
       });
-    });
+    }
 
     tags.map((x) => {
       job_related.push({
@@ -123,6 +125,7 @@ export default ({ data, id, updateApi }) => {
     append({
       name: item?.name,
       skill_name: item?.skill_name,
+      skill: item.skill,
       //supervisor_assessment: item?.supervisor_assessment,
       self_staff_assessment: item?.self_staff_assessment,
     });
@@ -135,6 +138,7 @@ export default ({ data, id, updateApi }) => {
     tags.push({
       name: item.name,
       skill_name: item.skill_name,
+      skill: item.skill,
       //supervisor_assessment: 0,
       self_staff_assessment: 0,
     });
@@ -178,7 +182,7 @@ export default ({ data, id, updateApi }) => {
                 <Col key={i}>
                   <Tag className="info-tag info-black" onClick={() => onAdd(y)}>
                     <Space size={15}>
-                      <span>{y.skill_name}</span>
+                      <span>{y.skill}</span>
                       <PlusCircleFilled />
                     </Space>
                   </Tag>

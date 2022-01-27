@@ -20,7 +20,7 @@ const _ = require('lodash');
 const { Title } = Typography;
 
 export default (props) => {
-  const { control, errors, mode, setValue, getValues } = props;
+  const { control, errors, mode, setValue, getValues, idState, setidState } = props;
 
   const genderList = useSelector((state) => state.global.genderData);
   const raceList = useSelector((state) => state.global.raceData);
@@ -127,6 +127,14 @@ export default (props) => {
     return current && current > moment().endOf("day");
   };
 
+  const ontypeChange = (e) => {
+    if (e.label == 'IC') {
+      setidState(false)
+    } else {
+      setidState(true)
+    }
+  }
+
   const personalFields = [
     {
       type: 'select',
@@ -201,9 +209,10 @@ export default (props) => {
       label: 'Identification Type',
       name: 'identification_type',
       twocol: true,
+      onChange: ontypeChange,
       placeholder: 'Please select',
       options: identificationList,
-      req: false,
+      req: true,
     },
     {
       type: 'input',
@@ -211,7 +220,7 @@ export default (props) => {
       name: 'identification_no',
       placeholder: 'Please state',
       twocol: true,
-      req: false,
+      req: !idState,
     },
     {
       type: 'date',

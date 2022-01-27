@@ -13,44 +13,6 @@ const antIcon = <LoadingOutlined spin />;
 const { Title, Text } = Typography;
 
 export default ({ data, id, updateApi }) => {
-  const dataDummy = [
-    {
-      name: 'AE92033',
-      skill_name: 'Adobe Phototshop',
-      supervisor_assessment: 2,
-      self_staff_assessment: 0,
-    },
-    {
-      name: 'AE92034',
-      skill_name: 'Adobe Illustrator',
-      supervisor_assessment: 3,
-      self_staff_assessment: 3,
-    },
-    {
-      name: 'AE92035',
-      skill_name: 'Adobe XD',
-      supervisor_assessment: 4,
-      self_staff_assessment: 5,
-    },
-    {
-      name: 'AE92036',
-      skill_name: 'Adobe In Design',
-      supervisor_assessment: 0,
-      self_staff_assessment: 0,
-    },
-    {
-      name: 'AE92038',
-      skill_name: 'Figma',
-      supervisor_assessment: 0,
-      self_staff_assessment: 0,
-    },
-    {
-      name: 'AE92039',
-      skill_name: 'Animator',
-      supervisor_assessment: 0,
-      self_staff_assessment: 0,
-    },
-  ];
 
   const [tags, setTags] = useState([]);
   const [load, setLoad] = useState(false);
@@ -84,14 +46,16 @@ export default ({ data, id, updateApi }) => {
     setLoad(true);
 
     let job_related = [];
-    val.job_related_skills.map((x) => {
-      job_related.push({
-        name: x.name,
-        skill_name: x.skill_name,
-        supervisor_assessment: x.supervisor_assessment,
-        self_staff_assessment: x.self_staff_assessment,
+    if (val?.job_related_skills) {
+      val?.job_related_skills.map((x) => {
+        job_related.push({
+          name: x.name,
+          skill_name: x.skill_name,
+          supervisor_assessment: x.supervisor_assessment,
+          self_staff_assessment: x.self_staff_assessment,
+        });
       });
-    });
+    }
 
     tags.map((x) => {
       job_related.push({
@@ -183,7 +147,7 @@ export default ({ data, id, updateApi }) => {
                     onClick={() => (allowed([Roles.ADVANCEMENT], 'write') ? onAdd(y) : null)}
                   >
                     <Space size={15}>
-                      <span>{y.skill_name}</span>
+                      <span>{y.skill}</span>
                       <PlusCircleFilled />
                     </Space>
                   </Tag>

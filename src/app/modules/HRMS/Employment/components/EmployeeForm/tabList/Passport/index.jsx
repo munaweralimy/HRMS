@@ -9,7 +9,7 @@ import { baseUrl } from '../../../../../../../../configs/constants';
 
 export default (props) => {
 
-  const { mode, data, updateApi, id, setLoad, controlOut, errorsOut } = props;
+  const { mode, data, updateApi, id, setLoad, controlOut, errorsOut, idState } = props;
   const { control: controlIn, errors: errorsIn, setValue: setValueIn, handleSubmit: handleSubmitIn } = useForm();
 
   useEffect(() => {
@@ -61,10 +61,10 @@ export default (props) => {
     <>
     {mode == 'edit' ?
     <Form layout='vertical' onFinish={handleSubmitIn(onFinish)} scrollToFirstError>
-      <MainForm control={controlIn} errors={errorsIn} mode={mode}  />
+      <MainForm control={controlIn} errors={errorsIn} mode={mode} idState={idState} />
     </Form>
     : 
-    <MainForm control={controlOut} errors={errorsOut} mode={mode}  />}
+    <MainForm control={controlOut} errors={errorsOut} mode={mode} idState={idState} />}
     </>
   );
 };

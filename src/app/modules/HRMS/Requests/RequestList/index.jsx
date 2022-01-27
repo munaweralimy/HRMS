@@ -66,8 +66,8 @@ export default (props) => {
       Comp: RequestSection,
       iProps : {
         key: 'pending',
-        data: dataPending?.rows || [],
-        count: dataPending?.count || 0,
+        data: dataPending && dataPending?.rows || [],
+        count: dataPending && dataPending?.count || 0,
         link: '/requests/',
         innerKey: 'employee_id',
         activeTab: activeKey,
@@ -83,8 +83,8 @@ export default (props) => {
       Comp: RequestSection,
       iProps : {
         key: 'yourrequests',
-        data: dataYour?.rows || [],
-        count: dataYour?.count || 0,
+        data: dataYour && dataYour?.rows || [],
+        count: dataYour && dataYour?.count || 0,
         link: '/requests/',
         innerKey: 'employee_id',
         activeTab: activeKey,
@@ -102,8 +102,8 @@ export default (props) => {
       Comp: RequestSection,
       iProps : {
         key: 'archive',
-        data: dataArchive?.rows || [],
-        count: dataArchive?.count || 0,
+        data: dataArchive && dataArchive?.rows || [],
+        count: dataArchive && dataArchive?.count || 0,
         link: '/requests/',
         innerKey: 'employee_id',
         activeTab: activeKey,

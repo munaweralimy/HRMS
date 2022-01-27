@@ -50,7 +50,7 @@ const defaultImage =
     }
  
     useEffect(() => {
-        if (feed) {
+        if (feed && feed.length) {
             let arr = [];
             feed.map((res) => {
                 let obj = null;
@@ -126,7 +126,7 @@ const defaultImage =
     }, [feed])
 
     useEffect(() => {
-        if (feedForYou) {
+        if (feedForYou && feedForYou.length) {
             let arr = [];
             feedForYou.map((res) => {
                 let obj = null;

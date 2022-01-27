@@ -9,7 +9,7 @@ const { Title } = Typography;
 
 export default (props) => {
 
-  const { control, errors, mode } = props;
+  const { control, errors, mode, idState } = props;
 
   const passportFields = [
     {
@@ -18,7 +18,7 @@ export default (props) => {
       name: 'passport_number',
       twocol: true,
       placeholder: 'Passport Number',
-      req: true,
+      req: idState,
       reqmessage: 'Please enter passport no',
     },
     {
@@ -35,7 +35,7 @@ export default (props) => {
       label: 'Issued Date',
       name: 'date_of_issue',
       twocol: true,
-      req: true,
+      req: idState,
       format: 'Do MMMM YYYY',
       reqmessage: 'Please enter issue date',
     },
@@ -44,7 +44,7 @@ export default (props) => {
       label: 'Expiration Date',
       name: 'valid_upto',
       twocol: true,
-      req: true,
+      req: idState,
       reqmessage: 'Please enter expiration date',
       format: 'Do MMMM YYYY'
     },
@@ -70,6 +70,7 @@ export default (props) => {
       label: 'Attach Passport (PDF 10MB max)',
       placeholder: 'Upload Passport',
       twocol: false,
+      req: idState
     },
   ];
 
