@@ -3,7 +3,14 @@ import { Row, Col, Typography, Form, Button, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import FormGroup from '../../../../../molecules/FormGroup';
-import { updateAssets, addNewAsset, deleteAsset, getAllAssets, addinSetup } from '../../ducks/services';
+import {
+  updateAssets,
+  addNewAsset,
+  deleteAsset,
+  getAllAssets,
+  addinSetup,
+  deleteAssetSetup,
+} from '../../ducks/services';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
 import { allowed } from '../../../../../../routing/config/utils';
@@ -17,7 +24,12 @@ const AddAsset = (props) => {
   const { control, errors, setValue, handleSubmit } = useForm();
   const { Title } = Typography;
   const [assetList, setAssetList] = useState([]);
-
+  const [formDate, setFromDate] = useState(null);
+  const disableDate = (current) => {
+    if (formDate) {
+      return current && current < moment(formDate, 'YYYY-MM-DD');
+    }
+  };
   const formAsset = [
     {
       type: 'select',
@@ -36,6 +48,11 @@ const AddAsset = (props) => {
       req: true,
       reqmessage: 'date required',
       twocol: true,
+      onChange: (e) => {
+        console.log({ e });
+        setFromDate(e);
+        setValue('end_date', null);
+      },
     },
     {
       type: 'date',
@@ -44,6 +61,7 @@ const AddAsset = (props) => {
       req: true,
       reqmessage: 'date required',
       twocol: true,
+      disabledDate: disableDate,
     },
     {
       type: 'input',
@@ -54,7 +72,7 @@ const AddAsset = (props) => {
       reqmessage: 'Description required',
       twocol: false,
     },
-  ]
+  ];
 
   useEffect(() => {
     getAllAssets().then((response) => setAssetList(response?.data.message));
@@ -66,6 +84,7 @@ const AddAsset = (props) => {
       setValue('description', data?.description);
       setValue('start_date', data.start_date ? moment(data.start_date, 'YYYY-MM-DD') : '');
       setValue('end_date', data.end_date ? moment(data.end_date, 'YYYY-MM-DD') : '');
+      setFromDate(data.start_date);
     }
   }, [data]);
 
@@ -94,12 +113,14 @@ const AddAsset = (props) => {
       : addNewAsset({ employee_id: id, assets: { ...payload } })
           .then((response) => {
             if (response.data.message.success == true) {
-              addinSetup(values?.asset_no.value).then(res => {
-                message.success(response.data.message.message);
-              }).catch((error) => {
-                message.error('something went wrong');
-                setLoad(false);
-              });
+              addinSetup(values?.asset_no.value)
+                .then((res) => {
+                  message.success(response.data.message.message);
+                })
+                .catch((error) => {
+                  message.error('something went wrong');
+                  setLoad(false);
+                });
             } else {
               message.error(response.data.message.message);
             }
@@ -115,6 +136,9 @@ const AddAsset = (props) => {
   const onDeleteHandler = () => {
     setLoad(true);
     deleteAsset(data.name, { status: '', possession_status: 'With Company' }).then((response) => {
+      deleteAssetSetup(data?.asset_no).then((response) => {
+        message.success(response.data.message.message);
+      });
       message.success(`Asset ${data.name} Deleted Seccussfully`);
       setLoad(false);
       onUpdateComplete();

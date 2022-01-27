@@ -1,5 +1,14 @@
 import React from 'react';
-import { InputField, DateField, SelectField, CheckboxGroup, UploadField, TextAreaField, SwitchField, Button } from '../../atoms/FormElement';
+import {
+  InputField,
+  DateField,
+  SelectField,
+  CheckboxGroup,
+  UploadField,
+  TextAreaField,
+  SwitchField,
+  Button,
+} from '../../atoms/FormElement';
 import { Row, Col, Typography } from 'antd';
 import moment from 'moment';
 import { getFileName } from '../../../features/utility';
@@ -35,7 +44,10 @@ export default (props) => {
   };
 
   return (
-    <Col className={item.hidden ? 'd-none': ''} flex={`${item.twocol ? '1 0 300px': item.colWidth ? item.colWidth : '100%'}`}>
+    <Col
+      className={item.hidden ? 'd-none' : ''}
+      flex={`${item.twocol ? '1 0 300px' : item.colWidth ? item.colWidth : '100%'}`}
+    >
       {item.type == 'input' && (
         <InputField
           isRequired={item.req}
@@ -72,7 +84,11 @@ export default (props) => {
           initValue={elem ? { label: elem[item.name], value: elem[item.name] } : ''}
           control={control}
           onChange={item.onChange && item.onChange}
-          iProps={{ placeholder: item.placeholder, isMulti: item.multiple ? item.multiple : false , isDisabled: item.disabled ? item.disabled : props.static ? props.static : item.static ? item.static : false}}
+          iProps={{
+            placeholder: item.placeholder,
+            isMulti: item.multiple ? item.multiple : false,
+            isDisabled: item.disabled ? item.disabled : props.static ? props.static : item.static ? item.static : false,
+          }}
           selectOption={item.options}
           rules={{ required: { value: item.req, message: item.reqmessage } }}
           validate={setValidate(false)}
@@ -86,12 +102,23 @@ export default (props) => {
           label={item.label}
           control={control}
           class="mb-0"
-          iProps={{ picker: item?.dateType ? item?.dateType : 'date', size: 'large', format: item?.format ? item?.format : '', disabledDate: item?.disabledDate }}
+          onChange={item.onChange && item.onChange}
+          iProps={{
+            picker: item?.dateType ? item?.dateType : 'date',
+            size: 'large',
+            format: item?.format ? item?.format : '',
+            disabledDate: item?.disabledDate,
+          }}
           initValue={elem && elem[item.name] ? moment(elem[item.name], 'YYYY-MM-DD') : ''}
-          rules={{ 
+          rules={{
             required: { value: item.req, message: item.reqmessage },
-            setValueAs: (value) => value ? item.dateType == 'year' ? moment(value).format('YYYY') : moment(value).format('YYYY-MM-DD') : '',
-           }}
+            setValueAs: (value) =>
+              value
+                ? item.dateType == 'year'
+                  ? moment(value).format('YYYY')
+                  : moment(value).format('YYYY-MM-DD')
+                : '',
+          }}
           validate={setValidate(false)}
           validMessage={setValidate(true)}
         />
@@ -160,7 +187,6 @@ export default (props) => {
           initValue={elem && elem[item.name] ? elem[item.name] : ''}
         />
       )}
-      
     </Col>
   );
 };
