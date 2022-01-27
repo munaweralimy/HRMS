@@ -3,6 +3,8 @@ import ListCard from '../../../../../../molecules/ListCard';
 import { Typography, Col, Button, Row, Descriptions, Space } from 'antd';
 import moment from 'moment';
 import { LeftOutlined } from '@ant-design/icons';
+import { DownloadIcon } from '../../../../../../atoms/CustomIcons';
+import { baseUrl } from '../../../../../../../configs/constants';
 
 const { Title } = Typography;
 
@@ -23,6 +25,10 @@ export default ({ details, updateApi }) => {
         setRowData(record)
       },
     };
+  }
+
+  const onView = async (data) => {
+    data && window.open(`${baseUrl}${data}`, "_blank");
   }
 
   return (
@@ -96,7 +102,7 @@ export default ({ details, updateApi }) => {
                 <Descriptions.Item label="Job Title">{rowData?.job_title}</Descriptions.Item>
                 <Descriptions.Item label="Position Level">{rowData?.position_level}</Descriptions.Item>
                 <Descriptions.Item label="Supervisor">{rowData?.supervisor}</Descriptions.Item>
-                <Descriptions.Item label="Download Contract">{rowData?.contract_attachment}</Descriptions.Item>
+                <Descriptions.Item label="Download Contract"><Button type="link" onClick={() => onView(rowData?.contract_attachment)} htmlType="button" className="p-0" icon={<DownloadIcon className="c-success" />} /></Descriptions.Item>
               </Descriptions>
             </Col>
 
