@@ -55,8 +55,14 @@ export default (props) => {
         props.setLoading(true);
         getApproverLead(id).then(appr => {
             let approvetemp = [];
-            
-            data?.formName?.approvers.map(x => {
+            console.log('checkin app', data)
+            let approverVar = [];
+            if (data.formName.category != '') {
+                approverVar = data?.formName?.approvers
+            } else {
+                approverVar = data?.formName?.approver
+            }
+            approverVar.map(x => {
                 let aid = '';
               if (x.approvers == 'Manager') {
                 aid = appr?.data?.message[0]?.manager_id;
