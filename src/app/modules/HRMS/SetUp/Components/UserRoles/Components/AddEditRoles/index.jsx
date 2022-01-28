@@ -69,7 +69,7 @@ export default (props) => {
 
   const onFinish = (values) => {
     console.log({ values });
-    // setLoad(true);
+    setLoad(true);
     let permissions = [];
     totalRoles.map((value) => {
       permissions.push({
