@@ -35,7 +35,7 @@ authInterceptors.interceptors.response.use(
       const postData = getQueryString({
         refresh_token: refreshToken,
         grant_type: 'refresh_token',
-        client_id: '684e559103',
+        client_id: '19f1b08394',
         redirect_url: 'https://getpostman.com/oauth2/callback',
       });
       return axios.post(`${auth}`, postData).then((res) => {
