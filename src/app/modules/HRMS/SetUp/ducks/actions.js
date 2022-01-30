@@ -555,12 +555,12 @@ export const filterLeaveType = (company) => async (dispatch) => {
 };
 export const filterLeaveEntitlementName = (company) => async (dispatch) => {
   const {
-    data: { data },
+    data: { message },
   } = await axios.get(`${apiMethod}/hrms.setup.get_hrms_leave_entitlement_dropdown
   `);
   dispatch({
     type: action_types.FILTER_ENTITLEMENT,
-    data: data,
+    data: message,
   });
 };
 

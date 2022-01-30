@@ -271,3 +271,7 @@ export const updateSingleSkill = (id, payload) => {
 export const deleteSingleSkill = (id) => {
   return axios.post(`${apiMethod}/hrms.setup.delete_records?doctype=Skill&name=${id}`);
 };
+
+export const leaveEntititlementSec = (id) => {
+  return axios.get(`${apiMethod}/hrms.leaves_api.leave_availibilities_on_entitlements?entitlment_name=${id}`);
+};
