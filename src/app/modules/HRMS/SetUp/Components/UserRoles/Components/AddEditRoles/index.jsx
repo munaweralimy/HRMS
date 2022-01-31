@@ -10,7 +10,12 @@ import { CheckboxGroup, InputField } from '../../../../../../../atoms/FormElemen
 import { allowed } from '../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
-
+const disableRole = {
+  'CMS-Faculty': 'CMS-Faculty',
+  'CMS-AQA': 'CMS-AQA',
+  'CMS-Registry': 'CMS-Registry',
+  'CMS-Marketing': 'CMS-Marketing',
+};
 export default (props) => {
   const { title, onClose, roleData } = props;
   const { Title, Text } = Typography;
@@ -74,7 +79,7 @@ export default (props) => {
         delete: values[`${value}-delete`].length ? 1 : 0,
       });
     });
-
+    console.log({ permissions });
     const payload = {
       role_name: values.role_name,
       grand_permissions: permissions,
@@ -209,9 +214,12 @@ export default (props) => {
                   }}
                 >
                   <Collapse
+                    className="custom-collapse"
                     bordered={false}
-                    collapsible="header"
-                    expandIcon={({ isActive }) => (!isActive ? <PlusOutlined /> : <MinusOutlined />)}
+                    collapsible={disableRole[value] == value ? 'disabled' : 'header'}
+                    expandIcon={({ isActive }) =>
+                      disableRole[value] !== value ? !isActive ? <PlusOutlined /> : <MinusOutlined /> : null
+                    }
                   >
                     <Panel
                       forceRender={true}
