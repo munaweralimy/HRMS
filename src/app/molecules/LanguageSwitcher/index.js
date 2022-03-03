@@ -6,7 +6,7 @@ import {
   useTranslateState
 } from 'Translate';
 import MalaysiaFlag from '../../../assets/img/malaysia.svg';
-import USAFlag from '../../../assets/img/united-states.svg';
+import USAFlag from '../../../assets/img/uk.svg';
 
 
 function LanguageSwitcher() {
