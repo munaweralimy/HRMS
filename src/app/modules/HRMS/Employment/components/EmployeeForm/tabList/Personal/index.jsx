@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import MainForm from './MainForm';
 import { getFileName, uniquiFileName, getSingleUpload} from '../../../../../../../../features/utility';
-import { employApi } from '../../../../ducks/services';
+import { employApi, employUpdateImage } from '../../../../ducks/services';
 import { baseUrl } from '../../../../../../../../configs/constants';
 
 export default (props) => {
@@ -232,6 +232,9 @@ export default (props) => {
       education: educate,
       external_work_history: work,
     }
+      await employUpdateImage(val.primary_email, {
+        user_image: profileImg ? profileImg.replace(`${baseUrl}`, "") : "",
+    })
       employApi(body, id).then(res => {
         setLoad(false);
         updateApi();

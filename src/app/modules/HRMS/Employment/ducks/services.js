@@ -4,6 +4,9 @@ import { apiMethod, apiresource } from '../../../../../configs/constants';
 export const employAddApi = (payload) => {
     return axios.post(`${apiresource}/Employee`, payload);
 };
+export const employUpdateImage = (email, payload) => {
+  return axios.put(`${apiresource}/User/${email}`, payload);
+};
 
 export const sendWarning = (payload) => {
   return axios.post(`${apiMethod}/hrms.api.add_employee_warning`, payload);
