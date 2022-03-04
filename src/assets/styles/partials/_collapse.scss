@@ -1,0 +1,6 @@
+.custom-collapse {
+  &.ant-collapse .ant-collapse-item-disabled > .ant-collapse-header {
+    color: white;
+    cursor: pointer;
+  }
+}
