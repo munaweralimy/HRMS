@@ -36,9 +36,24 @@ export default (props) => {
   dispatch(getEmployeeList(company));
   const data = [
     {
+      tabTitle: 'User Roles',
+      comp: <UserRoles />,
+      permission: true,
+    },
+    {
+      tabTitle: 'Departments',
+      comp: <Departments />,
+      permission: true,
+    },
+    {
       tabTitle: 'Teams',
       comp: <Teams />,
       permission: false,
+    },
+    {
+      tabTitle: 'Skills',
+      comp: <Skills />,
+      permission: true,
     },
     {
       tabTitle: 'Leave Types',
@@ -51,8 +66,23 @@ export default (props) => {
       permission: true,
     },
     {
-      tabTitle: 'User Roles',
-      comp: <UserRoles />,
+      tabTitle: 'Projects',
+      comp: <Projects />,
+      permission: true,
+    },
+    {
+      tabTitle: 'Races',
+      comp: <Races />,
+      permission: true,
+    },
+    {
+      tabTitle: 'Nationalities',
+      comp: <Nationalities />,
+      permission: true,
+    },
+    {
+      tabTitle: 'Job Positions',
+      comp: <JobPositions />,
       permission: true,
     },
     {
@@ -61,8 +91,8 @@ export default (props) => {
       permission: true,
     },
     {
-      tabTitle: 'Job Positions',
-      comp: <JobPositions />,
+      tabTitle: 'Holidays',
+      comp: <Holidays />,
       permission: true,
     },
     {
@@ -76,30 +106,11 @@ export default (props) => {
       permission: true,
     },
     {
-      tabTitle: 'Nationalities',
-      comp: <Nationalities />,
-      permission: true,
-    },
-    {
-      tabTitle: 'Holidays',
-      comp: <Holidays />,
-      permission: true,
-    },
-    {
       tabTitle: 'Religions',
       comp: <Religions />,
       permission: true,
     },
-    {
-      tabTitle: 'Races',
-      comp: <Races />,
-      permission: true,
-    },
-    {
-      tabTitle: 'Projects',
-      comp: <Projects />,
-      permission: true,
-    },
+    
     {
       tabTitle: 'Warning Letter',
       comp: <WarningLetter />,
@@ -125,16 +136,8 @@ export default (props) => {
       comp: <RequestForms setLoading={props.setLoading} />,
       permission: true,
     },
-    {
-      tabTitle: 'Departments',
-      comp: <Departments />,
-      permission: true,
-    },
-    {
-      tabTitle: 'Skills',
-      comp: <Skills />,
-      permission: true,
-    },
+    
+    
   ];
 
   const loadComp = (data, id) => {
