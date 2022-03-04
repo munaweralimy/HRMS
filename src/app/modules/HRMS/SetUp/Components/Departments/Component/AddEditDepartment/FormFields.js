@@ -15,7 +15,7 @@ const departmentFields = () => {
     {
       name: 'employee_name',
       label: 'Employee Name',
-      req: true,
+      req: false,
       placeholder: 'Select employee name',
       type: 'select',
       twocol: false,

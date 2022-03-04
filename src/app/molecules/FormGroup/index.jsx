@@ -7,6 +7,7 @@ import {
   UploadField,
   TextAreaField,
   SwitchField,
+  TimeField,
   Button,
 } from '../../atoms/FormElement';
 import { Row, Col, Typography } from 'antd';
@@ -117,6 +118,30 @@ export default (props) => {
                 ? item.dateType == 'year'
                   ? moment(value).format('YYYY')
                   : moment(value).format('YYYY-MM-DD')
+                : '',
+          }}
+          validate={setValidate(false)}
+          validMessage={setValidate(true)}
+        />
+      )}
+      {item.type == 'time' && (
+        <TimeField
+          isRequired={item.req}
+          fieldname={parent ? `${parent.name}[${index}].${item.name}` : item.name}
+          label={item.label}
+          control={control}
+          class="mb-0"
+          onChange={item.onChange && item.onChange}
+          iProps={{
+            size: 'large',
+            format: item?.format ? item?.format : '',
+          }}
+          initValue={elem && elem[item.name] ? moment(elem[item.name], 'hh:mm a') : ''}
+          rules={{
+            required: { value: item.req, message: item.reqmessage },
+            setValueAs: (value) =>
+              value
+                ? moment(value).format('HH:mm:ss')
                 : '',
           }}
           validate={setValidate(false)}

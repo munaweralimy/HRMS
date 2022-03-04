@@ -19,7 +19,7 @@ const init = {
   time_min: 0,
   time_type: '',
   work_hour_type: '',
-  work_hours: 0,
+  total_work_hours: '',
 };
 const custom = [
   {
@@ -28,7 +28,7 @@ const custom = [
     time_hour: 0,
     time_min: 0,
     time_type: 'am',
-    work_hours: 0,
+    total_work_hours: '',
   },
   {
     day: 'Tuesday',
@@ -36,7 +36,7 @@ const custom = [
     time_hour: 0,
     time_min: 0,
     time_type: 'am',
-    work_hours: 0,
+    total_work_hours: '',
   },
   {
     day: 'Wednesday',
@@ -44,7 +44,7 @@ const custom = [
     time_hour: 0,
     time_min: 0,
     time_type: 'am',
-    work_hours: 0,
+    total_work_hours: '',
   },
   {
     day: 'Thursday',
@@ -52,7 +52,7 @@ const custom = [
     time_hour: 0,
     time_min: 0,
     time_type: 'am',
-    work_hours: 0,
+    total_work_hours: '',
   },
   {
     day: 'Friday',
@@ -60,7 +60,7 @@ const custom = [
     time_hour: 0,
     time_min: 0,
     time_type: 'am',
-    work_hours: 0,
+    total_work_hours: '',
   },
   {
     day: 'Saturday',
@@ -68,7 +68,7 @@ const custom = [
     time_hour: 0,
     time_min: 0,
     time_type: 'am',
-    work_hours: 0,
+    total_work_hours: '',
   },
   {
     day: 'Sunday',
@@ -76,7 +76,7 @@ const custom = [
     time_hour: 0,
     time_min: 0,
     time_type: 'am',
-    work_hours: 0,
+    total_work_hours: '',
   },
 ];
 
@@ -140,8 +140,8 @@ export default (props) => {
           label: '',
           req: true,
           number: true,
-          // min: 1,
-          // max: 12,
+          min: 0,
+          max: 12,
           arrow: false,
           twocol: false,
           colWidth: '0 1 70px',
@@ -153,8 +153,8 @@ export default (props) => {
           number: true,
           arrow: false,
           req: true,
-          // min: 0,
-          // max: 59,
+          min: 0,
+          max: 59,
           twocol: false,
           colWidth: '0 1 70px',
         },
@@ -169,15 +169,12 @@ export default (props) => {
           colWidth: '0 1 100px',
         },
         {
-          type: 'input',
-          name: 'work_hours',
+          type: 'time',
+          name: 'total_work_hours',
           label: '',
+          format: 'hh:mm a',
           req: true,
-          number: true,
-          arrow: false,
-          // min: 0,
-          // max: 12,
-          placeholder: 'Please state',
+          placeholder: 'select hours',
           twocol: false,
           colWidth: '1 0 70px',
         },
@@ -194,7 +191,8 @@ export default (props) => {
           day: value?.day,
           work_hour_type: value?.work_hour_type,
           time_type: value?.time_type,
-          work_hours: value?.work_hours,
+          // work_hours: value?.work_hours,
+          total_work_hours: value?.total_work_hours,
           time_hour: value?.start_time.split(':')[0],
           time_min: value?.start_time.split(':')[1],
         }));
@@ -224,7 +222,8 @@ export default (props) => {
         day: value.day,
         time_type: value.time_type.value,
         work_hour_type: value.work_hour_type.value,
-        work_hours: parseInt(value?.work_hours),
+        // work_hours: parseInt(value?.work_hours),
+        total_work_hours: value?.total_work_hours ? value?.total_work_hours : '',
         start_time: value?.time_hour.toString().concat(':', value?.time_min.toString(), ':00'),
       })),
     };
