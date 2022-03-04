@@ -11,10 +11,12 @@ import { allowed } from '../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
 const disableRole = {
+  'CMS-Portal': 'CMS-Portal',
   'CMS-Faculty': 'CMS-Faculty',
   'CMS-AQA': 'CMS-AQA',
   'CMS-Registry': 'CMS-Registry',
   'CMS-Marketing': 'CMS-Marketing',
+  'CMS-Eligibility': 'CMS-Eligibility',
 };
 export default (props) => {
   const { title, onClose, roleData } = props;
