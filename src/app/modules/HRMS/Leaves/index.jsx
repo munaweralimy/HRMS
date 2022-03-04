@@ -10,7 +10,7 @@ import MyLeaves from './components/MyLeaves';
 import moment from 'moment';
 import Roles from '../../../../routing/config/Roles';
 import { allowed } from '../../../../routing/config/utils';
-import { getTeams2, getTeamsDetail } from '../../Application/ducks/actions';
+import { getTeams2 } from '../../Application/ducks/actions';
 import TeamStatistics from './components/TeamStatistics';
 import LeaveCalendar from '../../../molecules/HRMS/LeaveCalendar';
 
@@ -190,7 +190,7 @@ export default (props) => {
   const overallDataList = useSelector(state => state.leaves.overallTaskDataWithStatus);
   const teamTaskData = useSelector(state => state.leaves.teamTaskData);
   const teamTaskDataList = useSelector(state => state.leaves.teamTaskDataWithStatus);
-  const teamsDetailData = useSelector(state => state.global.teamsDetailData);
+  //const teamsDetailData = useSelector(state => state.global.teamsDetailData);
   const employeeId = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   const team = useSelector(state => state.global.teams2);
   const [allTeam, setAllTeam] = useState([]);
@@ -207,7 +207,7 @@ export default (props) => {
 
   useEffect(() => {
     if(allowed([Roles.LEAVES_TEAMS], 'read') || allowed([Roles.LEAVES], 'read')) {
-      dispatch(getTeamsDetail(employeeId));
+      //dispatch(getTeamsDetail(employeeId));
       dispatch(getTeams2())
     }
     return () => dispatch(emptyAllLeaves())

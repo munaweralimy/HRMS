@@ -48,8 +48,7 @@ export default (props) => {
       })
       .catch((error) => {
         props.setLoading(false);
-        message.error('Email or Password is incorrect');
-        console.log({ error });
+        message.error(error?.response?.data?.message);
       });
   };
   return (

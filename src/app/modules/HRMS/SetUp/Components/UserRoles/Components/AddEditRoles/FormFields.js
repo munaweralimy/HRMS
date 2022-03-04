@@ -233,6 +233,16 @@ const rolesFields = () => {
       options: [{ label: 'Setup', value: 1 }],
     },
     {
+      name: 'cms_portal',
+      label: '',
+      req: false,
+      placeholder: '',
+      type: 'checkbox',
+      colWidth: '0 1 375px',
+      reqmessage: '',
+      options: [{ label: 'CMS-Portal', value: 1 }],
+    },
+    {
       name: 'cms_registry',
       label: '',
       req: false,
@@ -272,6 +282,16 @@ const rolesFields = () => {
       reqmessage: '',
       options: [{ label: 'CMS-Marketing', value: 1 }],
     },
+    {
+      name: 'cms_eligibility',
+      label: '',
+      req: false,
+      placeholder: '',
+      type: 'checkbox',
+      colWidth: '0 1 375px',
+      reqmessage: '',
+      options: [{ label: 'CMS-Eligibility', value: 1 }],
+    },
   ];
 };
 const totalRoles = [
@@ -293,9 +313,11 @@ const totalRoles = [
   'Leaves-Individual',
   'Policy',
   'Setup',
+  'CMS-Portal',
   'CMS-Registry',
   'CMS-AQA',
   'CMS-Faculty',
   'CMS-Marketing',
+  'CMS-Eligibility',
 ];
 export { rolesFields, totalRoles };

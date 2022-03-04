@@ -17,7 +17,7 @@ export default [
     component: 'Application',
     path: '/dashboard',
     title: titles.DASHBOARD,
-    menu: 'Dashbaord',
+    menu: 'Dashboard',
     icon: 'DashboardIcon2',
     parent: true,
   },
