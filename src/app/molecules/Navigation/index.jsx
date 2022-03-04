@@ -99,7 +99,7 @@ export default (props) => {
                                     <Menu.Item key={val.path} className="menu-item" icon={mainIcon(val.icon)}>
                                         <Link to={val.path}>{val.menu}</Link>
                                     </Menu.Item>
-                                    {val.menu == 'Dashbaord' && 
+                                    {val.menu == 'Dashboard' && 
                                     <Menu.Item disabled key="hrms" className='static-menu'>HUMAN RESOURCE</Menu.Item>}
                                     </>
                                 }
