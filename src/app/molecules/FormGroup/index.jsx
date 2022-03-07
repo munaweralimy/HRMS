@@ -136,7 +136,7 @@ export default (props) => {
             size: 'large',
             format: item?.format ? item?.format : '',
           }}
-          initValue={elem && elem[item.name] ? moment(elem[item.name], 'hh:mm a') : ''}
+          initValue={elem && elem[item.name] ? moment(elem[item.name], 'HH:mm:ss') : ''}
           rules={{
             required: { value: item.req, message: item.reqmessage },
             setValueAs: (value) =>

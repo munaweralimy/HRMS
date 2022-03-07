@@ -6,8 +6,8 @@ import AddUser from '../../../Teams/Components/AddUser';
 import { getWorkingHourTempDetail } from '../../../../ducks/services';
 import ArrayForm from '../../../../../Employment/components/EmployeeForm/tabList/Personal/ArrayForm';
 import { workType, timelap } from '../../../../../../../../configs/constantData';
-import { LoadingOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { LoadingOutlined, CloseCircleFilled } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 import { addWorkingHourTemp, updateWorkingHourTemp, deleteWorkingHourTemp } from '../../../../ducks/services';
 import { allowed } from '../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../routing/config/Roles';
@@ -76,7 +76,7 @@ const custom = [
     time_hour: 0,
     time_min: 0,
     time_type: 'am',
-    total_work_hours: '',
+    total_work_hours: '00:00:00',
   },
 ];
 
@@ -172,7 +172,7 @@ export default (props) => {
           type: 'time',
           name: 'total_work_hours',
           label: '',
-          format: 'hh:mm a',
+          format: 'HH:mm:ss',
           req: true,
           placeholder: 'select hours',
           twocol: false,
@@ -224,7 +224,8 @@ export default (props) => {
         work_hour_type: value.work_hour_type.value,
         // work_hours: parseInt(value?.work_hours),
         total_work_hours: value?.total_work_hours ? value?.total_work_hours : '',
-        start_time: value?.time_hour.toString().concat(':', value?.time_min.toString(), ':00'),
+        start_time: `${value?.time_hour < 10 ? `0${value?.time_hour}`: value?.time_hour}:${value?.time_min < 10 ? `0${value?.time_min}`: value?.time_min}:00`, 
+        // start_time: value?.time_hour.toString().concat(':', value?.time_min.toString(), ':00'),
       })),
     };
     workingHourTemp.name.length == 0
@@ -274,6 +275,8 @@ export default (props) => {
   };
 
   return (
+    <>
+      <Button type='link' className='right-fixed c-gray' icon={<CloseCircleFilled />} onClick={() => {reset(); setUserData([]); onClose()}} />
     <Spin indicator={antIcon} size="large" spinning={load}>
       <Form scrollToFirstError layout="vertical" onFinish={handleSubmit(onFinish)}>
         <Row gutter={[24, 30]}>
@@ -349,7 +352,7 @@ export default (props) => {
                           type="primary"
                           htmlType="button"
                           className="black-btn w-100"
-                          onClick={onClose}
+                          onClick={() => {reset(); setUserData([]); onClose();}}
                         >
                           Close
                         </Button>
@@ -368,5 +371,6 @@ export default (props) => {
         </Row>
       </Form>
     </Spin>
+    </>
   );
 };

@@ -291,12 +291,13 @@ export const TimeField = (props) => {
 
   return (
     <>
-      <Form.Item required={isRequired ? isRequired : false} label={label} validateStatus={validate} help={validMessage}>
+      <Form.Item required={isRequired ? isRequired : false} label={label} validateStatus={validate} help={validMessage} className={props.class}>
         <Controller
           name={fieldname}
           control={control}
           defaultValue={initValue ? initValue : ''}
           rules={rules}
+          
           as={<TimePicker style={{ width: '100%' }} {...iProps} />}
         />
       </Form.Item>
