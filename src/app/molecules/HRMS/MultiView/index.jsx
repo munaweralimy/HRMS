@@ -172,12 +172,11 @@ export default (props) => {
       <SwitchView />
       <Row gutter={[20, 30]}>
         <Col span={24}>
-          {teamDrop && teamDrop.length > 0 && (
+          {teamDrop && teamDrop?.length > 0 && (
             <Select
-              className="customSelect"
+              className="customSelect mb-1"
               value={teamSelected}
               onChange={onTeamChange}
-              className="mb-1"
               size="large"
               style={{ width: 200 }}
             >

@@ -29,7 +29,7 @@ export default (props) => {
                 </Card>
               </Col>
               <Col span={24}>
-                <Paragraph className="copyright font-300 text-center">2021 {t('Footer.copy')}</Paragraph>
+                <Paragraph className="copyright font-300 text-center">2022 {t('Footer.copy')}</Paragraph>
               </Col>
             </Row>
           </Col>

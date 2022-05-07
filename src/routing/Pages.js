@@ -39,6 +39,7 @@ const Pages = () => {
       <Route exact path="/" render={(props) => <Login Comp={'Login'} {...props} />} />
       <Route exact path="/login" render={(props) => <Login Comp={'Login'} {...props} />} />
       <Route exact path="/forgot-password" render={(props) => <Login Comp={'ForgotPassword'} {...props} />} />
+      <Route exact path="/update-password" render={(props) => <Login Comp={'OPTPCode'} {...props} />} />
       {routeComponents}
       <Route component={NoPage} />
     </Switch>
