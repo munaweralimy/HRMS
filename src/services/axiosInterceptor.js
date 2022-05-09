@@ -26,7 +26,7 @@ authInterceptors.interceptors.response.use(
   (response) => {
     return response;
   },
-  function (error) {
+  async function (error) {
     const originalRequest = error.config;
     if (error.response.status === 403 && !originalRequest._dretry) {
       originalRequest._retry = true;
@@ -39,18 +39,17 @@ authInterceptors.interceptors.response.use(
         client_id: 'b9092f2e04',
         redirect_url: 'https://getpostman.com/oauth2/callback',
       });
-      return axios.post(`${auth}`, postData).then((res) => {
-        if (res.data.access_token) {
-          let val = {
-            access_token: res.data.access_token,
-            expires_in: res.data.expires_in,
-            refresh_token: res.data.refresh_token,
-          };
-          localStorage.setItem('token', JSON.stringify(val));
-          originalRequest.headers['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token')).access_token;
-          return axios(originalRequest);
-        }
-      });
+      const res = await axios.post(`${auth}`, postData);
+      if (res.data.access_token) {
+        let val = {
+          access_token: res.data.access_token,
+          expires_in: res.data.expires_in,
+          refresh_token: res.data.refresh_token,
+        };
+        localStorage.setItem('token', JSON.stringify(val));
+        originalRequest.headers['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token')).access_token;
+        return axios(originalRequest);
+      }
     }
     return Promise.reject(error);
   },
