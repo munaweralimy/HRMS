@@ -21,7 +21,7 @@ export default (props) => {
         <Col span={24}>
           <Descriptions className='reqData' bordered colon={false} column={1}>
             <Descriptions.Item label="Title">{data?.salutation}</Descriptions.Item>
-            <Descriptions.Item label="Name as per IC/Passport">{data?.first_name}</Descriptions.Item>
+            <Descriptions.Item label="Name as per IC/Passport"><div style={{textTransform:'capitalize'}}>{data?.first_name}</div></Descriptions.Item>
             <Descriptions.Item label="Profile Picture">Change</Descriptions.Item>
             <Descriptions.Item label="Gender">{data?.gender}</Descriptions.Item>
             <Descriptions.Item label="Marital Status">{data?.marital_status}</Descriptions.Item>
