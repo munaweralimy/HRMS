@@ -13,7 +13,7 @@ import { apiMethod } from '../../../../configs/constants';
 import Roles from '../../../../routing/config/Roles';
 import { allowed } from '../../../../routing/config/utils';
 import { baseUrl } from '../../../../configs/constants';
-
+import { Empty } from 'antd';
 export default (props) => {
 
   const il8n = useTranslate();
@@ -110,6 +110,8 @@ export default (props) => {
             </Col>
           </Fragment>
         ))}
+
+        {policyListData?.rows?.length > 0 && policyListData?.rows[0]?.length == 0 && (<Col span={24}><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></Col>)}
       </Row>
       <Popup {...popup} />
     </>

@@ -242,6 +242,7 @@ export default (props) => {
         dispatch(getOverallAttendanceList(page, limit, sort, sortby, null));
       }
     } else {
+      dispatch(getOverallAttendanceList(page, limit, sort, sortby, null));
       dispatch(getOverallAttendance(page, limit, sort, sortby));
     }
   };
@@ -261,6 +262,7 @@ export default (props) => {
         dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, null));
       }
     } else {
+      dispatch(getTeamAttendanceList(team, page, limit, sort, sortby, null));
       dispatch(getTeamAttendance(team, page, limit, sort, sortby));
     }
   };
@@ -270,11 +272,11 @@ export default (props) => {
       visible: allowed([Roles.ATTENDANCE], 'read'),
       title: 'Overall Attendance',
       key: 'overall',
-      count: overallAttendanceData?.count || overallAttendanceDataList?.count || 0,
+      count: overallAttendanceDataList?.count || 0,
       Comp: MultiView,
       iProps: {
-        carddata: overallAttendanceData?.rows || [],
-        cardcount: overallAttendanceData?.count || 0,
+        carddata: overallAttendanceDataList?.rows || [],
+        cardcount: overallAttendanceDataList?.count || 0,
         listdata: overallAttendanceDataList?.rows || [],
         listcount: overallAttendanceDataList?.count || 0,
         listCol: ListColOverall,
@@ -286,16 +288,20 @@ export default (props) => {
           field2: allTeam,
           field3: statusList,
         },
+        issueComponent: true,
+        issueComponentData: overallAttendanceData?.rows || [],
+        issueComponentCount: overallAttendanceData?.count,
+        issueStatusKey:'status',
       },
     },
     {
       visible: allowed([Roles.ATTENDANCE_TEAMS], 'read'),
       title: 'Team Attendance',
       key: 'team',
-      count: teamAttendance?.count || teamAttendanceList?.count || 0,
+      count: teamAttendanceList?.count || 0,
       iProps: {
-        carddata: teamAttendance?.rows || [],
-        cardcount: teamAttendance?.count || 0,
+        carddata: teamAttendanceList?.rows || [],
+        cardcount: teamAttendanceList?.count || 0,
         listdata: teamAttendanceList?.rows || [],
         listcount: teamAttendanceList?.count || 0,
         listCol: ListColTeams,
@@ -307,6 +313,10 @@ export default (props) => {
         searchDropdowns: {
           field1: statusList,
         },
+        issueComponent: true,
+        issueComponentData: teamAttendance?.rows || [],
+        issueComponentCount: teamAttendance?.count,
+        issueStatusKey:'status',
       },
       Comp: MultiView,
     },

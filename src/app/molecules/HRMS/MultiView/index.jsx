@@ -6,6 +6,7 @@ import { AppstoreFilled, DatabaseFilled } from '@ant-design/icons';
 import MainStatusCard from '../../../atoms/HRMS/MainStatusCard';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+import { Empty } from 'antd';
 
 const _ = require('lodash');
 const { Title } = Typography;
@@ -34,9 +35,14 @@ export default (props) => {
     teamDrop,
     extraComp1,
     extraComp2,
+    issueComponent,
+    issueComponentData,
+    issueComponentCount,
+    issueStatusKey
   } = iProps;
   const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
   const [page, setPage] = useState(1);
+  const [issuePage, setIssuePage] = useState(1);
   const [limit, setLimit] = useState(6);
   const [view, setView] = useState('card');
   const [sorting, setSorting] = useState('');
@@ -59,6 +65,11 @@ export default (props) => {
   // Card Pagination
   const onPageChange = (pg) => {
     setPage(pg);
+    updateApi(filterVal, pg, 6, sorting, '', view, null, teamSelected);
+  };
+
+  const onIssuePageChange = (pg) => {
+    setIssuePage(pg);
     updateApi(filterVal, pg, 6, sorting, '', view, null, teamSelected);
   };
 
@@ -208,11 +219,47 @@ export default (props) => {
             />
           ) : (
             <>
+              {carddata?.length > 0 ? (
+                <>
+                  <div className="flexibleRow">
+                    {carddata.map((item, index) => (
+                      <Fragment key={index}>
+                        <div className="requestPanel">
+                          <MainStatusCard data={item} link={link} addon={addon || item[addonkey]} statusKey={statusKey} />
+                        </div>
+                      </Fragment>
+                    ))}
+                  </div>
+                  <div className="w-100 text-right mt-2">
+                    <Pagination
+                      pageSize={6}
+                      current={page}
+                      hideOnSinglePage={true}
+                      showSizeChanger={false}
+                      onChange={onPageChange}
+                      total={cardcount}
+                    />
+                  </div>
+                </>
+              ) : carddata && (
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+              )}
+            </>
+          )}
+        </Col>
+        {extraComp1 && <Col span={24}>{extraComp1}</Col>}
+        {extraComp2 && <Col span={24}>{extraComp2}</Col>}
+        {issueComponent && issueComponentData?.length && (
+          <>
+            <Col span={24}>
+              <Title className="tab-header mb-0" level={3}>Issues</Title>
+            </Col>
+            <Col span={24}>
               <div className="flexibleRow">
-                {carddata.map((item, index) => (
+                {issueComponentData.map((item, index) => (
                   <Fragment key={index}>
                     <div className="requestPanel">
-                      <MainStatusCard data={item} link={link} addon={addon || item[addonkey]} statusKey={statusKey} />
+                      <MainStatusCard data={item} link={link} addon={addon || item[addonkey]} statusKey={issueStatusKey} />
                     </div>
                   </Fragment>
                 ))}
@@ -220,18 +267,16 @@ export default (props) => {
               <div className="w-100 text-right mt-2">
                 <Pagination
                   pageSize={6}
-                  current={page}
+                  current={issuePage}
                   hideOnSinglePage={true}
                   showSizeChanger={false}
-                  onChange={onPageChange}
-                  total={cardcount}
+                  onChange={onIssuePageChange}
+                  total={issueComponentCount}
                 />
               </div>
-            </>
-          )}
-        </Col>
-        {extraComp1 && <Col span={24}>{extraComp1}</Col>}
-        {extraComp2 && <Col span={24}>{extraComp2}</Col>}
+            </Col>
+          </>
+        )}
       </Row>
     </>
   );
