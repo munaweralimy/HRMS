@@ -84,7 +84,7 @@ export default (props) => {
             {/* <LanguageSwitcher></LanguageSwitcher> */}
             <Dropdown className="userDropdown" overlay={menu} placement="bottomRight">
               <Space size={20}>
-                <Text style={{ textTransform: 'capitalize' }}>{window.localStorage.getItem('user')}</Text>
+                <Text style={{ textTransform: 'capitalize' }}>{JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].full_name}</Text>
                 <Avatar
                   className="userImage"
                   size={60}

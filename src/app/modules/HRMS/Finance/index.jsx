@@ -133,6 +133,7 @@ const Finance = () => {
         dispatch(getOverallFinanceList(filter, page, limit, sort, sortby, null));
       }
     } else {
+      dispatch(getOverallFinanceList(filter, page, limit, sort, sortby, null));
       dispatch(getOverallFinance(page, limit, sort, sortby));
     }
   };
@@ -142,18 +143,18 @@ const Finance = () => {
       visible: allowed([Roles.FINANCE], 'read'),
       title: 'Overall Finance',
       key: 'overall',
-      count: overallFinance?.count,
+      count: overallFinanceList?.count,
       Comp: MultiView,
       iProps: {
-        carddata: overallFinance?.rows || [],
-        cardcount: overallFinance?.count || 0,
+        carddata: overallFinanceList?.rows || [],
+        cardcount: overallFinanceList?.count || 0,
         listdata: overallFinanceList?.rows || [],
         listcount: overallFinanceList?.count || 0,
         listCol: colName,
         filters: filters,
         Search: Search,
         link: '/finance/',
-        statusKey: 'status',
+        statusKey: 'contract_type',
         updateApi: onOverallAction,
         searchDropdowns: {
           field1: allCompany,
@@ -165,6 +166,10 @@ const Finance = () => {
             { label: 'Probation', value: 'Probation' },
           ],
         },
+        issueComponent: true,
+        issueComponentData: overallFinance?.rows || [],
+        issueComponentCount: overallFinance?.count,
+        issueStatusKey:'status',
       },
     },
   ];

@@ -114,7 +114,8 @@ export default (props) => {
         dispatch(getOverallFit(filter, page, limit, sort, sortby, null));
       }
     } else {
-      dispatch(getOverallFitCard(page, limit, sort, sortby));
+      dispatch(getOverallFit(filter, page, limit, sort, sortby, null));
+      //dispatch(getOverallFitCard(page, limit, sort, sortby));
     }
   };
 
@@ -123,11 +124,11 @@ export default (props) => {
       visible: allowed([Roles.ADVANCEMENT], 'read'),
       title: 'Overall Fit Index',
       key: 'overall',
-      count: data?.count,
+      count: datalist?.count,
       Comp: MultiView,
       iProps: {
-        carddata: data.rows || [],
-        cardcount: data.count,
+        carddata: datalist.rows || [],
+        cardcount: datalist.count,
         listdata: datalist.rows,
         listcount: datalist.count,
         listCol: colName,
@@ -144,7 +145,11 @@ export default (props) => {
             { label: 'Probation', value: 'Probation' },
           ],
         },
-        statusKey: 'index_status',
+        statusKey: 'contract_type',
+        issueComponent: true,
+        issueComponentData: data?.rows || [],
+        issueComponentCount: data?.count,
+        issueStatusKey:'index_status',
       },
     },
   ];

@@ -119,6 +119,7 @@ export default (props) => {
           dispatch(getOverallList(filter, page, limit, sort, sortby, null))
         }
     } else {
+      dispatch(getOverallList(filter, page, limit, sort, sortby, null))
       dispatch(getOverallCard(page, limit, sort, sortby));
     }
   }
@@ -128,11 +129,11 @@ export default (props) => {
       visible: allowed([Roles.EMPLOYMENT], 'read'),
       title: 'Overall Employment',
       key: 'overall',
-      count: data?.count,
+      count: datalist?.count,
       Comp: MultiView,
       iProps: {
-        carddata: data?.rows || [],
-        cardcount: data?.count,
+        carddata: datalist?.rows || [],
+        cardcount: datalist?.count,
         listdata: datalist?.rows,
         listcount: datalist?.count,
         listCol: colName,
@@ -145,12 +146,16 @@ export default (props) => {
           field1: allTeam,
           field2: [{label:'All', value: ''},{label:'Permanent', value: 'Permanent'},{label:'Contract', value: 'Contract'},{label:'Probation', value: 'Probation'},],
         },
-        statusKey:'status',
+        statusKey:'contract_type',
         addonkey: 'exp_type',
         topbtn: {
           topAction: () => history.push('/employment/add'),
           title: allowed([Roles.EMPLOYMENT], 'write') ? '+ Add New Employee' : null
-        }
+        },
+        issueComponent: true,
+        issueComponentData: data?.rows || [],
+        issueComponentCount: data?.count,
+        issueStatusKey:'status',
       },
     },
   ];
