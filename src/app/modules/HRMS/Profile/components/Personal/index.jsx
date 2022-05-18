@@ -1,15 +1,42 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Typography, Col, Button, Row, Descriptions, Space } from 'antd';
-import moment from 'moment';
-const {Title} = Typography;
-import { DownloadIcon } from '../../../../../atoms/CustomIcons';
+import { Typography, Col, Button, Row, Descriptions, Space, Upload, message } from 'antd';
+import { DownloadIcon } from 'Atoms/CustomIcons';
 import { baseUrl } from '../../../../../../configs/constants';
+import { uniquiFileName, getSingleUpload, dummyRequest, getFileName } from '../../../../../../features/utility';
+import { employApi } from '../../../Employment/ducks/services';
+import { getEmployeeProfile } from '../../ducks/actions';
+import { useDispatch } from 'react-redux';
+
+const {Title, Text} = Typography;
 
 export default (props) => {
+  const dispatch = useDispatch();
   const { data } = props;
+  const [fileList, setFileList] = useState([])
   const onView = async (data) => {
     data && window.open(`${baseUrl}${data}`, "_blank");
   }
+
+  useEffect(() => {
+    if(data) {
+      setFileList([{uid: '-1', name: getFileName(data?.image), status: 'done', url: `${baseUrl}${data?.image}`}])
+    }
+  }, [data]);
+
+  const handleUpload = async (e) => {
+    const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+    let modifiedName = uniquiFileName(e.file?.name)
+    let res  = await getSingleUpload(modifiedName, 'image', e.file.originFileObj, 'Employee', id);
+    let profileImg = res?.file_url;
+    let body = {
+      image: profileImg.replace(`${baseUrl}`, ""),
+    }
+    employApi(body, id).then(res => {
+      message.success('Profile Image Updated');
+      dispatch(getEmployeeProfile(id));
+    });
+  };
+
   return (
     <>
       <Row gutter={[20, 30]} className="personalData">
@@ -22,7 +49,22 @@ export default (props) => {
           <Descriptions className='reqData' bordered colon={false} column={1}>
             <Descriptions.Item label="Title">{data?.salutation}</Descriptions.Item>
             <Descriptions.Item label="Name as per IC/Passport"><div style={{textTransform:'capitalize'}}>{data?.first_name}</div></Descriptions.Item>
-            <Descriptions.Item label="Profile Picture">Change</Descriptions.Item>
+            <Descriptions.Item label="Profile Picture">
+            <Upload
+              className="uploadWithbtn"
+              showUploadList={false}
+              accept="image/*"
+              maxCount={1}
+              fileList={fileList}
+              customRequest={dummyRequest}
+              onChange={(e) => handleUpload(e)}
+            >
+              <Space size={4}>
+                {fileList.length > 0 ? <Text>{fileList[0].name}</Text> : null}
+                <Button type='link' className='p-0'>Change</Button>
+              </Space>
+            </Upload>
+            </Descriptions.Item>
             <Descriptions.Item label="Gender">{data?.gender}</Descriptions.Item>
             <Descriptions.Item label="Marital Status">{data?.marital_status}</Descriptions.Item>
             <Descriptions.Item label="Nationality">{data?.nationality}</Descriptions.Item>
