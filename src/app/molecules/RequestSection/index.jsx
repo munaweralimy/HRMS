@@ -3,13 +3,13 @@ import { Space, Typography, Pagination, Button } from 'antd';
 import RequestCard from '../../atoms/RequestCard';
 import { useMediaQuery } from 'react-responsive';
 import { BreakingPoint } from '../../../configs/constantData';
-
+import { Empty } from 'antd';
 const { Title } = Typography;
 
 export default (props) => {
     const { iProps } = props;
     const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
-    const { data, link, updateApi, count, innerKey, key, addbtn, btnAction, btnclass, limit  } = iProps;
+    const { data, link, updateApi, count, innerKey, key, addbtn, btnAction, btnclass, limit } = iProps;
     const [page, setPage] = useState(1);
     const [sorting, setSorting] = useState('');
 
@@ -23,7 +23,7 @@ export default (props) => {
     }
 
     const onSorting = () => {
-        if(sorting == 'ASC') {
+        if (sorting == 'ASC') {
             setSorting('DESC')
             updateApi(key, page, 'DESC', limit);
         } else {
@@ -33,7 +33,7 @@ export default (props) => {
     }
 
     const SideOption = () => {
-    
+
         return (
             <Space size={30} className={`optionsTabs ${!isHDScreen ? 'optionsTabsRes' : ''}`}>
                 <Space>
@@ -48,26 +48,33 @@ export default (props) => {
     return (
         <>
             <SideOption />
-            <div className='flexibleRow'>
-                {data.map((item, index) => (
-                    <Fragment key={index}>
-                        <div className='flexibleRow'>
-                            <div className='requestPanel'>
-                                <RequestCard data={item} link={item[innerKey] ? `${link}${item[innerKey]}` : ''} stateKey={key} />
-                            </div>
-                        </div>
-                    </Fragment>
-                ))}
-            </div>
-            <div className='w-100 text-right mt-2'>
-                <Pagination
-                pageSize={limit}
-                current={page}
-                hideOnSinglePage={true}
-                onChange={onPageChange}
-                total={count}
-                />
-            </div>
+            {data && data?.length > 0 ? (
+                <>
+                    <div className='flexibleRow'>
+                        {data.map((item, index) => (
+                            <Fragment key={index}>
+                                <div className='flexibleRow'>
+                                    <div className='requestPanel'>
+                                        <RequestCard data={item} link={item[innerKey] ? `${link}${item[innerKey]}` : ''} stateKey={key} />
+                                    </div>
+                                </div>
+                            </Fragment>
+                        ))}
+                    </div>
+                    <div className='w-100 text-right mt-2'>
+                        <Pagination
+                            pageSize={limit}
+                            current={page}
+                            hideOnSinglePage={true}
+                            onChange={onPageChange}
+                            total={count}
+                        />
+                    </div>
+                </>
+            ) : data && (
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            )}
+
         </>
     )
 }

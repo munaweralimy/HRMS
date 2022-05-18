@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Row, Col, Typography, Form, Button, message, Spin } from 'antd';
 import { useForm } from 'react-hook-form';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { InputField } from '../../atoms/FormElement';
 import { useTranslate } from 'Translate';
 import axios from '../../../services/axiosInterceptor';
-import { apiMethod } from '../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined spin />;
+
 const { Title } = Typography;
 
 export default (props) => {
@@ -20,21 +20,28 @@ export default (props) => {
 
   const onFinish = (values) => {
     setLoading(true);
-    console.log('values', values);
+    const payload = {
+      pin: values.code,
+      old_password: '',
+      logout_all_sessions: 1,
+      cmd: 'frappe.core.doctype.user.user.update_password_pincode',
+    };
     axios
-      .post(`${apiMethod}/frappe.core.doctype.user.user.reset_password?user=${values.email}`)
+      .post(`${process.env.REACT_APP_BASE_URL}`, payload)
       .then((response) => {
-        if (response?.data?.exc_type == 'DoesNotExistError') {
-          message.error('User Not Found');
+        console.log({ response });
+        if (response?.data?.home_page) {
+          message.success(response?.data?.message);
+          history.push('/login');
           setLoading(false);
         } else {
-          message.success('Password reset instructions have been sent to your email');
+          message.error(response?.message);
           setLoading(false);
-          history.push(`/Update-password`);
         }
       })
       .catch((e) => {
-        message.error('Something went wrong');
+        console.log({ e });
+        message.error(e?.response?.data?.message);
         setLoading(false);
       });
   };
@@ -43,36 +50,29 @@ export default (props) => {
       <Row gutter={[30, 24]}>
         <Col span={24}>
           <Title level={3} className="text-center mb-0">
-            {t('Forget.title')}
+            Enter an OTP-Code.
           </Title>
         </Col>
         <Col span={24}>
           <Form name="normal_forget" onFinish={handleSubmit(onFinish)}>
             <InputField
-              fieldname="email"
+              fieldname="code"
               control={control}
               initValue=""
               iProps={{
                 size: 'large',
-                placeholder: t('Forget.email'),
+                placeholder: 'Enter Code',
               }}
               rules={{
-                required: 'Please input email',
-                pattern: {
-                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                  message: 'Input email without space!',
-                },
+                required: 'Code required',
               }}
-              validate={errors.email && 'error'}
-              validMessage={errors.email && errors.email.message}
+              validate={errors.code && 'error'}
+              validMessage={errors.code && errors.code.message}
             />
             <Button type="primary" htmlType="submit" className="w-100" size="large">
-              {t('Forget.button')}
+              Send Code
             </Button>
           </Form>
-        </Col>
-        <Col span={24} className="text-center">
-          <Link to="/login">{t('Forget.back')}</Link>
         </Col>
       </Row>
     </Spin>

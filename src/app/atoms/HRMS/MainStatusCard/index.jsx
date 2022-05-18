@@ -43,6 +43,11 @@ export default (props) => {
         return 'b-success';
       case 'Early Clock Out':
         return 'b-pending';
+
+      case 'Permanent':
+        return 'b-success';
+      case 'Contract':
+        return 'b-pending';
     }
   };
 
@@ -57,7 +62,7 @@ export default (props) => {
         <Row gutter={[20, 30]}>
           <Col span={24}>
             <Space size={17}>
-              <Avatar size="large" size={70} src={`${baseUrl}${data?.image}`} />
+              <Avatar size={70} src={`${baseUrl}${data?.image}`} />
               <Space direction="vertical" size={0}>
                 <Title level={5} className="c-default mb-0">
                   {data?.employee_name}

@@ -18,6 +18,7 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import RoutingList from '../../../routing/config/RoutingList';
 import { allowedRoutes } from '../../../routing/config/utils';
+import { baseUrl } from '../../../configs/constants';
 
 const { SubMenu } = Menu;
 const IconList = {
@@ -40,7 +41,7 @@ export default (props) => {
   const location = useLocation().pathname;
   const subkey = location.split('/')[1];
   const selected = location.split('/').length > 1 ? `/${location.split('/')[1]}` : location;
-
+  const appLogo = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].company_logo
     useEffect(() => {
         ModifyJson(allowedRoutes(RoutingList));
     }, []);
@@ -71,7 +72,7 @@ export default (props) => {
         <Card bordered={false} className='navBar'>
         <Row gutter={[30, 24]}>
             <Col span={24} className='text-center'>
-                <Image style={{width: 160, height: 'auto'}} preview={false} src={loginLogo} alt="Logo" />
+                <Image style={{width: 160, height: 'auto'}} preview={false} src={appLogo ? baseUrl + appLogo : loginLogo}  alt="Logo" />
             </Col>
             <Col span={24}>
                 <Card bordered={false} className='transparent-card' style={{ height: 'calc(100vh - 220px)'}}>
