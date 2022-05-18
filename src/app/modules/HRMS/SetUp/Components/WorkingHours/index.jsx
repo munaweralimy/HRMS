@@ -71,7 +71,7 @@ export default (props) => {
   ];
 
   const popup = {
-    closable: true,
+    closable: false,
     visibility: visible,
     content: (
       <AddEditWorkingHour
