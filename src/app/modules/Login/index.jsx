@@ -35,6 +35,7 @@ export default (props) => {
       if (res) {
         console.log('response data1', response.data.message)
         localStorage.setItem('userdetails', JSON.stringify(response.data.message.user_detail_role[0]));
+        localStorage.setItem('userImage', response.data.user_detail_role[0].user_image);
         localStorage.setItem('access', JSON.stringify(response.data.message.user_screen_acces_role_list_test));
         localStorage.setItem('user', value?.profileObj?.name);
         localStorage.setItem('token', JSON.stringify(res));
@@ -72,6 +73,7 @@ export default (props) => {
 
         if (res) {
           localStorage.setItem('userdetails', JSON.stringify(response.data.user_detail_role[0]));
+          localStorage.setItem('userImage', response.data.user_detail_role[0].user_image);
           localStorage.setItem('access', JSON.stringify(response.data.user_screen_acces_role_list_test));
           localStorage.setItem('user', values.username);
           localStorage.setItem('token', JSON.stringify(res));
