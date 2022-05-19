@@ -16,7 +16,7 @@ export default (props) => {
   const [visible, setVisisble] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
-  const userProfile = JSON.parse(localStorage.getItem('userdetails')).user_image;
+  const userProfile = localStorage.getItem('userImage');
 
   const i18n = useTranslate();
   const { t } = i18n;
