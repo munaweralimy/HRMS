@@ -10,6 +10,7 @@ import { CheckboxGroup, InputField } from '../../../../../../../atoms/FormElemen
 import { allowed } from '../../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../../routing/config/Roles';
 const antIcon = <LoadingOutlined spin />;
+const { Title, Text } = Typography;
 const disableRole = {
   'CMS-Portal': 'CMS-Portal',
   'CMS-Faculty': 'CMS-Faculty',
@@ -17,10 +18,10 @@ const disableRole = {
   'CMS-Registry': 'CMS-Registry',
   'CMS-Marketing': 'CMS-Marketing',
   'CMS-Eligibility': 'CMS-Eligibility',
+  'CMS-Finance': 'CMS-Finance',
 };
 export default (props) => {
   const { title, onClose, roleData } = props;
-  const { Title, Text } = Typography;
   const { Panel } = Collapse;
   const [teamData, setTeamData] = useState('');
   const [load, setLoad] = useState(false);
