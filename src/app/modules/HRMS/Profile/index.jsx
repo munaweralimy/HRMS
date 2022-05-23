@@ -42,43 +42,47 @@ export default (props) => {
     }
   }, [dataRequest]);
 
+  console.log('requests', requests)
+
   const updateReqApi = () => {
-      dispatch(getRequestDetails(id, id));
+    dispatch(getRequestDetails(id, id));
   }
 
 
   return (
     <StaffDetails id={id} section='HRMS Tasks' title={'Tasks'}>
       <Row gutter={[20, 20]}>
+        {dataRequest?.length > 0 && (
+          <Col span={24}>
+            <Card bordered={false} className="uni-card">
+              <Row gutter={[20, 20]}>
+                <Col span={24}><Title level={4} className='mb-0 c-default'>Requests</Title></Col>
+                <Col span={24}>
+                  <Request id={id} updateReqApi={updateReqApi} data={requests} selectedTab={'yourrequests'} selectedPanel={''} />
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+        )}
         <Col span={24}>
-      <Card bordered={false} className="uni-card">
-        <Row gutter={[20, 20]}>
-          <Col span={24}><Title level={4} className='mb-0 c-default'>Requests</Title></Col>
-          <Col span={24}>
-              <Request id={id} updateReqApi={updateReqApi} data={requests} selectedTab={'yourrequests'} selectedPanel={''} />
-          </Col>
-        </Row>
-      </Card>
-      </Col>
-      <Col span={24}>
-      <Card bordered={false} className="uni-card h-auto w-100">
-        <Row gutter={[20, 20]}>
-          <Col span={24}>
-            <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
-              <TabPane tab="Employment" key="1">
-                <Employment id={id} data={employeeProfileData} />
-              </TabPane>
-              <TabPane tab="Personal" key="2">
-                <Personal data={employeeProfileData} />
-              </TabPane>
-              <TabPane tab="Fit Index" key="3">
-                <Management id={id} />
-              </TabPane>
-            </Tabs>
-          </Col>
-        </Row>
-      </Card>
-      </Col>
+          <Card bordered={false} className="uni-card h-auto w-100">
+            <Row gutter={[20, 20]}>
+              <Col span={24}>
+                <Tabs defaultActiveKey="1" type="card" className='custom-tabs'>
+                  <TabPane tab="Employment" key="1">
+                    <Employment id={id} data={employeeProfileData} />
+                  </TabPane>
+                  <TabPane tab="Personal" key="2">
+                    <Personal data={employeeProfileData} />
+                  </TabPane>
+                  <TabPane tab="Fit Index" key="3">
+                    <Management id={id} />
+                  </TabPane>
+                </Tabs>
+              </Col>
+            </Row>
+          </Card>
+        </Col>
       </Row>
     </StaffDetails>
   );
