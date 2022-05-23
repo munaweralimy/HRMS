@@ -10,7 +10,7 @@ import { useTranslate } from 'Translate';
 import { GoogleLogin } from 'react-google-login';
 
 import axios from '../../../services/axiosInterceptor';
-import { apiMethod } from '../../../configs/constants';
+import { apiMethod, loginID } from '../../../configs/constants';
 import googleLoginImage from '../../../assets/img/google-login.svg';
 
 const { Title } = Typography;
@@ -25,8 +25,7 @@ export default (props) => {
   const { t } = i18n;
 
   const responseGoogle = (value) => {
-    console.log('value', value.profileObj)
-    axios.get(`${apiMethod}/frappe.www.login.login_via_gooogle?email=${value?.profileObj?.email}&client_id=b9092f2e04`).then((response) => {      
+    axios.get(`${apiMethod}/frappe.www.login.login_via_gooogle?email=${value?.profileObj?.email}&client_id=${loginID}`).then((response) => {      
       let res = {
         access_token: response.data.message.access_token,
         expires_in: response.data.message.expires_in,

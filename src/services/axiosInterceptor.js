@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { baseUrl } from '../configs/constants';
-import { apiMethod } from '../configs/constants';
+import { apiMethod, loginID, baseUrl } from '../configs/constants';
 import { refreshAuth } from '../services/services';
 const auth = apiMethod + '/frappe.integrations.oauth2.get_token';
 
@@ -35,8 +34,7 @@ authInterceptors.interceptors.response.use(
       const postData = getQueryString({
         refresh_token: refreshToken,
         grant_type: 'refresh_token',
-        //client_id: '19f1b08394',
-        client_id: 'b9092f2e04',
+        client_id: loginID,
         redirect_url: 'https://getpostman.com/oauth2/callback',
       });
       const res = await axios.post(`${auth}`, postData);

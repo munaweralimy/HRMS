@@ -250,9 +250,6 @@ export default (props) => {
           </Fragment>
         ))}
 
-
-
-
         <Col span={24}>
           {/* <Row gutter={[20, 20]} justify="end">
                       {onAction1 && <Col flex='0 1 200px'><Button type='primary' size='large' htmlType='button' className={`w-100 ${btnClass1 ? btnClass1 : ''}`} onClick={() => {onAction1(data[0].value); setRowDetail(false)}}>{btn1title}</Button></Col>}
