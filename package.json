@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --env.TARGET_ENV=dev",
-    "buildStag": "webpack --env.TARGET_ENV=staging",
+    "buildDev": "webpack --env.TARGET_ENV=dev",
     "buildProd": "webpack --env.TARGET_ENV=production",
     "start": "webpack-dev-server --env.TARGET_ENV=local ",
-    "startStag": "webpack-dev-server --env.TARGET_ENV=staging",
+    "startProd": "webpack-dev-server --env.TARGET_ENV=production",
     "startDev": "webpack-dev-server --env.TARGET_ENV=dev"
   },
   "author": "",

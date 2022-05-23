@@ -319,5 +319,6 @@ const totalRoles = [
   'CMS-Faculty',
   'CMS-Marketing',
   'CMS-Eligibility',
+  'CMS-Finance',
 ];
 export { rolesFields, totalRoles };
