@@ -30,7 +30,7 @@ export const getTimesheetData = () => {
   return async (dispatch) => {
     const {
       data: { message },
-    } = await axios.get(`${apiMethod}/hrms.leaves_api.get_current_month_timesheet`);
+    } = await axios.get(`${apiMethod}/hrms.task_api.get_current_month_timesheet`);
     dispatch({
       type: action_types.TIMESHEET_DATA,
       data: message,

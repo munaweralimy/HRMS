@@ -6,8 +6,6 @@ import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { apiMethod } from '../../../../../../../../configs/constants';
 import axios from '../../../../../../../../services/axiosInterceptor';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllProjects } from '../../../../../../Application/ducks/actions';
 
 const { Title } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -37,13 +35,8 @@ export default (props) => {
     setLoad(true);
 
     let temp = [{
-      parent: id,
-      parentfield: "timesheet",
-      parenttype: "HRMS Tasks",
       status: "Pending",
-      doctype: "HRMS Timesheet",
       name_of_project: val?.projectName?.value,
-      project: val?.projectName?.label,
       hours: val?.totalHours,
       date: val?.timesheetDate ? moment(val?.timesheetDate).format('YYYY-MM-DD') : '',
       tasks: val?.task,
@@ -56,7 +49,7 @@ export default (props) => {
     const json = {
       timesheet: temp
     }
-    let url = `${apiMethod}/hrms.tasks_api.add_single_timesheet`;
+    let url = `${apiMethod}/hrms.task_api.add_single_timesheet`;
     try {
       const res = await axios.post(url, json);
       setLoad(false);

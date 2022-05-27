@@ -35,6 +35,7 @@ export default (props) => {
         //dispatch(getCalenderData());
     }, [])
 
+    console.log('wowo', process.env.REACT_APP_BASE_IP)
     return (
        <Row gutter={[20, 50]}>
            <Col span={24}>

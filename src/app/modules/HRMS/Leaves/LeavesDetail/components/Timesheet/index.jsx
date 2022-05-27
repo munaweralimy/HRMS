@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Button, Spin, message } from 'antd';
 import ListWithDetails from './ListWithDetails';
-import { apiMethod } from '../../../../../../../configs/constants';
 import { LoadingOutlined } from '@ant-design/icons';
-import axios from '../../../../../../../services/axiosInterceptor';
+import { ApproveRejectTimesheet } from '../../../../Tasks/ducks/services';
 
 const { TabPane } = Tabs;
 const antIcon = <LoadingOutlined spin />;
@@ -98,38 +97,31 @@ export default (props) => {
       ]
 
     const onApprove = async (name) => {
-        setLoad(true)
-        let url = `${apiMethod}/hrms.api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved`
-        try {
-            await axios.get(url);
-            setLoad(false)
-            message.success('Timesheet Successfully Approved');
-            setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
-            
-        } catch(e) {
-            const { response } = e;
-            message.error('Something went wrong');
-            setLoad(false)
-        }
-        
+      setLoad(true);
+      ApproveRejectTimesheet(id, name, 'Approved').then(res => {
+        setLoad(false);
+        message.success('Timesheet Successfully Approved');
+        setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
+      }).catch(e => {
+        const { response } = e;
+        message.error('Something went wrong');
+        setLoad(false)
+      })
     }
 
     const onReject = async (name) => {
-        setLoad(true)
-        let url = `${apiMethod}/hrms.api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected`
-        try {
-            await axios.get(url);
-            setLoad(false)
-            message.success('Timesheet Successfully Rejected');
-            setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
-            
-        } catch(e) {
-            const { response } = e;
-            message.error('Something went wrong');
-            setLoad(false)
-        }
+      setLoad(true)
+      ApproveRejectTimesheet(id, name, 'Rejected').then(res => {
+        setLoad(false);
+        message.success('Timesheet Successfully Rejected');
+        setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
+      }).catch(e => {
+        const { response } = e;
+        message.error('Something went wrong');
+        setLoad(false)
+      })
     }
-
+  
     const tabs = [
         {
             title: 'Pending',
