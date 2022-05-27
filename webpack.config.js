@@ -63,7 +63,7 @@ module.exports = function (_env, argv) {
         {
           test: /\.less$/,
           use: [
-            { loader: "style-loader" },
+            isProduction ? MiniCssExtractPlugin.loader : "style-loader",
             { loader: "css-loader" },
             {
               loader: "less-loader",
