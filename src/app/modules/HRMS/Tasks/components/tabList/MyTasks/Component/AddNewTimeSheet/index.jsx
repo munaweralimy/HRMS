@@ -28,22 +28,16 @@ export default (props) => {
   }, []);
 
   const onFinish = async (val) => {
-    console.log('val', val)
-
     const json = {
       timesheet: [{
-        parent: "HR-EMP-00002",
-        parentfield: "timesheet",
-        parenttype: "HRMS Tasks",
         status: "Pending",
-        doctype: "HRMS Timesheet",
-        project: val?.projectName?.value,
+        name_of_project: val?.projectName?.value,
         hours: val?.totalHours,
         date: val?.timesheetDate ? moment(val?.timesheetDate).format('YYYY-MM-DD'): '',
         tasks: val?.task,
       }]
     }
-    let url = `${apiMethod}/hrms.tasks_api.add_single_timesheet`;
+    let url = `${apiMethod}/hrms.task_api.add_single_timesheet`;
     try {
         await axios.post(url, json);
         message.success('TimeSheet Added Successfully');

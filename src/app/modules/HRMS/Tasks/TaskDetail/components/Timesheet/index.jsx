@@ -6,6 +6,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import axios from '../../../../../../../services/axiosInterceptor';
 import { allowed } from '../../../../../../../routing/config/utils';
 import Roles from '../../../../../../../routing/config/Roles';
+import { ApproveRejectTimesheet } from '../../../ducks/services';
 
 const { TabPane } = Tabs;
 const antIcon = <LoadingOutlined spin />;
@@ -116,44 +117,32 @@ export default (props) => {
 
   const onApprove = async (name) => {
     setLoad(true);
-    let url = ''
-    if (allowed([Roles.TASK], 'write')) {
-      url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=Admin`
-    } else {
-      url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Approved&role=`
-    }
-    try {
-      await axios.get(url);
-      setLoad(false)
+    let role = '';
+    allowed([Roles.TASK], 'write') ? role = 'Admin' : role = '';
+    ApproveRejectTimesheet(id, name, 'Approved', role).then(res => {
+      setLoad(false);
       message.success('Timesheet Successfully Approved');
       setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
-
-    } catch (e) {
+    }).catch(e => {
       const { response } = e;
       message.error('Something went wrong');
       setLoad(false)
-    }
+    })
   }
 
   const onReject = async (name) => {
     setLoad(true)
-    let url = ''
-    if (allowed([Roles.TASK], 'write')) {
-      url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected&role=Admin`
-    } else {
-      url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheet?employee_id=${id}&name=${name}&status=Rejected&role=`
-    }
-    try {
-      await axios.get(url);
-      setLoad(false)
+    let role = '';
+    allowed([Roles.TASK], 'write') ? role = 'Admin' : role = '';
+    ApproveRejectTimesheet(id, name, 'Rejected', role).then(res => {
+      setLoad(false);
       message.success('Timesheet Successfully Rejected');
       setTimeout(() => updateApi('Pending', 1, 10, '', ''), 2000);
-
-    } catch (e) {
+    }).catch(e => {
       const { response } = e;
       message.error('Something went wrong');
       setLoad(false)
-    }
+    })
   }
 
   const onApproveRejectAll = async (statusBtn) => {
@@ -164,7 +153,7 @@ export default (props) => {
       }
     })
     console.log('statusBtn',statusBtn)
-    let url = `${apiMethod}/hrms.tasks_api.approve_reject_timesheets_list`
+    let url = `${apiMethod}/hrms.task_api.approve_reject_timesheets_list`
     const json = {
       names: selectedData,
       status: statusBtn
