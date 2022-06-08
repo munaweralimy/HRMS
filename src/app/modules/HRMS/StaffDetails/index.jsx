@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Space, Button } from 'antd';
+import { Row, Col, Card, Space, Button, Image } from 'antd';
 import HeadingChip from '../../../molecules/HeadingChip';
 import UpdateSection from '../../../molecules/UpdateSection';
 import { useHistory } from 'react-router-dom';
@@ -15,7 +15,10 @@ import ListCard from '../../../molecules/ListCard';
 import { DownloadIcon } from '../../../atoms/CustomIcons';
 import { allowed } from '../../../../routing/config/utils';
 import Roles from '../../../../routing/config/Roles';
-import { baseUrl } from '../../../../configs/constants';
+import { baseUrl, apiMethod } from '../../../../configs/constants';
+import { Popup } from '../../../atoms/Popup';
+import UploadDocuments from './UploadDocuments';
+import { getImageResponse } from '../Employment/ducks/services';
 
 const ListData = [
   {
@@ -51,16 +54,18 @@ const ListData = [
 ];
 
 export default (props) => {
+  const { employeeDocuments, updateApi, uploadBtn } = props;
   const i18n = useTranslate();
   const { t } = i18n;
   const { section, id, onChangePos } = props;
   const [pos, setPos] = useState('');
+  const [visible, setVisible] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
   const isHDScreen = useMediaQuery({ query: BreakingPoint.HDPLUS });
   const commentsApi = useSelector((state) => state.global.comments);
   const data = useSelector((state) => state.advancement.advData);
-
+  const token = JSON.parse(localStorage.getItem('token')).access_token;
   const ListCol = [
     {
       title: 'Type',
@@ -68,34 +73,59 @@ export default (props) => {
       key: 'type',
       sorter: true,
     },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      sorter: true,
-    },
-    {
-      title: 'Applied',
-      dataIndex: 'applied',
-      key: 'applied',
-      sorter: true,
-    },
-    {
-      title: 'Expiry',
-      dataIndex: 'expiry',
-      key: 'expiry',
-      sorter: true,
-    },
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'description',
+    //   key: 'description',
+    //   sorter: true,
+    // },
+    // {
+    //   title: 'Applied',
+    //   dataIndex: 'applied',
+    //   key: 'applied',
+    //   sorter: true,
+    // },
+    // {
+    //   title: 'Expiry',
+    //   dataIndex: 'expiry',
+    //   key: 'expiry',
+    //   sorter: true,
+    // },
     {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
       align: 'center',
-      render: () => (
-        <Button type="link" htmlType="button" className="p-0" icon={<DownloadIcon className="c-success" />} />
+      render: (text, record) => (
+        <Button type="link" htmlType="button" onClick={() => downloadDocument(record)} className="p-0" icon={<DownloadIcon className="c-success" />} />
       ),
     },
   ];
+
+  const downloadDocument = (record) => {
+    const docName = record?.name
+    const url = `${apiMethod}/hrms.api.view_attachment?file_name=${docName}&token=${token}`;
+    window.open(url, "_blank");
+
+    //getImageResponse(docName).then(res => {
+      //console.log('res', res)
+
+      // let base64ToString = Buffer.from(res?.data, "base64").toString();
+
+      // console.log('base64ToString1111', base64ToString)
+      //     base64ToString = JSON.parse(base64ToString);
+
+      //     console.log('base64ToString', base64ToString)
+      // const file = res?.data
+      // const reader = new FileReader();
+      // reader.readAsDataURL(file)
+      // reader.addEventListener('load', (event) => {
+      //   const _loadedImageUrl = event.target.result;
+      //   const image = document.createElement('img');
+      //   console.log('image', image)
+      // });
+    //});
+  }
 
   useEffect(() => {
     updateComment();
@@ -171,66 +201,77 @@ export default (props) => {
   ];
 
   const uploadDocs = () => {
-    console.log('----');
+    setVisible(true);
   };
 
   const updateComment = () => {
     dispatch(getComments(section, id));
   };
 
+  const popup = {
+    closable: false,
+    visibility: visible,
+    content: <UploadDocuments title="Upload Documents" onClose={() => setVisible(false)} updateApi={updateApi} setVisible={setVisible} />,
+    width: 536,
+    onCancel: () => setVisible(false),
+  };
+
   return (
-    <Row gutter={[20, 30]}>
-      <Col span={24}>
-        <Space direction="vertical" size={18}>
-          <Button type="link" className="c-gray-linkbtn p-0" onClick={() => history.goBack()} htmlType="button">
-            <LeftOutlined /> Back
-          </Button>
-          <HeadingChip title="Staff Details" />
-        </Space>
-      </Col>
-      <Col span={24}>
-        <div className="twocol-3070">
-          <div className="side-detail">
-            {isHDScreen ? (
-              <SideDetails
-                data={sideData}
-                type="button"
-                bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null}
-              />
-            ) : (
-              <SideDetailResponsive
-                data={sideData}
-                type="button"
-                bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null}
-              />
-            )}
+    <>
+      <Row gutter={[20, 30]}>
+        <Col span={24}>
+          <Space direction="vertical" size={18}>
+            <Button type="link" className="c-gray-linkbtn p-0" onClick={() => history.goBack()} htmlType="button">
+              <LeftOutlined /> Back
+            </Button>
+            <HeadingChip title="Staff Details" />
+          </Space>
+        </Col>
+        <Col span={24}>
+          <div className="twocol-3070">
+            <div className="side-detail">
+              {isHDScreen ? (
+                <SideDetails
+                  data={sideData}
+                  type="button"
+                  bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null}
+                />
+              ) : (
+                <SideDetailResponsive
+                  data={sideData}
+                  type="button"
+                  bottom={allowed([Roles.EMPLOYMENT], 'write') ? bottomList : null}
+                />
+              )}
+            </div>
+            <div className="side-form">
+              <Card bordered={false} className={`transparent-card ${isHDScreen ? 'scrolling-card' : ''}`}>
+                <Row gutter={[20, 20]}>
+                  <Col span={24}>
+                    <Space direction="vertical" className="w-100"></Space>
+                    {props.children}
+                  </Col>
+                  <Col span={24}>
+                    <ListCard
+                      scrolling={500}
+                      title="Documents"
+                      ListCol={ListCol}
+                      ListData={employeeDocuments}
+                      pagination={false}
+                      extraBtn={uploadBtn && '+ Upload Documents'}
+                      extraAction={uploadBtn && uploadDocs}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <UpdateSection data={commentsApi} code={id} module={section} updateComment={updateComment} />
+                  </Col>
+                </Row>
+              </Card>
+            </div>
           </div>
-          <div className="side-form">
-            <Card bordered={false} className={`transparent-card ${isHDScreen ? 'scrolling-card' : ''}`}>
-              <Row gutter={[20, 20]}>
-                <Col span={24}>
-                  <Space direction="vertical" className="w-100"></Space>
-                  {props.children}
-                </Col>
-                <Col span={24}>
-                  <ListCard
-                    scrolling={500}
-                    title="Documents"
-                    ListCol={ListCol}
-                    ListData={ListData}
-                    pagination={false}
-                    extraBtn={'+ Upload Documents'}
-                    extraAction={uploadDocs}
-                  />
-                </Col>
-                <Col span={24}>
-                  <UpdateSection data={commentsApi} code={id} module={section} updateComment={updateComment} />
-                </Col>
-              </Row>
-            </Card>
-          </div>
-        </div>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+      <Popup {...popup} />
+    </>
   );
 };

@@ -8,6 +8,7 @@ import { useParams, useHistory, useLocation } from 'react-router-dom';
 import EmployeeForm from '../components/EmployeeForm';
 import {emptyStaff, getEmployeeDetail} from '../ducks/action';
 import { LoadingOutlined } from '@ant-design/icons';
+import { getEmployeeDocuments } from '../../Profile/ducks/actions';
 
 const { Title } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -20,10 +21,12 @@ export default (props) => {
   const dispatch = useDispatch();
   const [ load, setLoad] = useState(false);
   const details = useSelector(state => state.employment.empDetails);
+  const employeeDocuments = useSelector((state) => state.employeeProfile.employeeDocuments);
 
   useEffect(() => {
     dispatch(getAdvancementdetails(id));
     dispatch(getEmployeeDetail(id));
+    dispatch(getEmployeeDocuments(id))
     return () => {
       dispatch(emptyStaff())
       dispatch(emptyStaffDetails())
@@ -34,8 +37,12 @@ export default (props) => {
     dispatch(getEmployeeDetail(id));
   }
 
+  const actionUpload = () => {
+    dispatch(getEmployeeDocuments(id));
+  }
+
 return (
-    <StaffDetails id={id} section='Employee'>
+    <StaffDetails id={id} section='Employee' uploadBtn={true} updateApi={actionUpload} employeeDocuments={employeeDocuments}>
       
       <Card bordered={false} className="uni-card h-auto w-100">
         <Row gutter={[20, 30]}>

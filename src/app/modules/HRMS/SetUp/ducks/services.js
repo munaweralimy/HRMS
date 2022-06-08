@@ -275,3 +275,11 @@ export const deleteSingleSkill = (id) => {
 export const leaveEntititlementSec = (id) => {
   return axios.get(`${apiMethod}/hrms.leaves_api.leave_availibilities_on_entitlements?entitlment_name=${id}`);
 };
+
+export const addTerminatedEmployee = (id) => {
+  return axios.post(`${apiMethod}/hrms.setup.add_terminate_notification_employee?employee_id=${id}`);
+};
+
+export const deleteTerminatedEmployee = (id) => {
+  return axios.post(`${apiMethod}/hrms.setup.delete_terminate_notification_employee?employee_id=${id}`);
+};

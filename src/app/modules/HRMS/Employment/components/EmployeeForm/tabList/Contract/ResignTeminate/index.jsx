@@ -1,7 +1,8 @@
 import React from 'react';
-import {Row, Col} from 'antd';
+import {Row, Col, message} from 'antd';
 import ListCard from '../../../../../../../../molecules/ListCard';
 import moment from 'moment';
+import {deleteTerminateEmployeeMail} from '../../../../../ducks/services'
 
 const colName = [
     {
@@ -40,6 +41,20 @@ const colName = [
 export default (props) => {
 
     const { data, updateApi, id, setLoad, setVisible, mode } = props;
+    console.log('i0d',id)
+
+    const onTerminateEmployee = () => {
+      setLoad(true);
+      deleteTerminateEmployeeMail(id)
+        .then((response) => {
+          setLoad(false);
+          message.success('Employee Terminated Successfully');
+        })
+        .catch((error) => {
+          setLoad(false);
+          message.error('Something went wrong');
+        });
+    };
 
     return (
       <Row gutter={[20,20]}>
@@ -51,7 +66,7 @@ export default (props) => {
           ListData={data?.term_Resign}
           pagination={false}
           extraBtn={'Terminate Employee'}
-          extraAction={() => console.log('---')}
+          extraAction={() => onTerminateEmployee()}
           btnClass='red-btn'
           listClass="nospace-card"
           />

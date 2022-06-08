@@ -54,3 +54,27 @@ export const dummyRequest = (response) => {
       return false;
     }
   };
+
+
+  let uploadUrlPrivate = `${apiMethod}/marketing.api.uploadImageToken?is_private=1`
+
+  export const getSingleUploadPrivate = async (name, type, file, doctype, code) => {
+    const fileObj = await readeFile(file)
+    const postJson = {
+      doctype: doctype,
+      docname: code,
+      filename: name, // filename
+      is_private: 1,
+      docfield: type, // document or image
+      cmd: 'uploadfile',
+      from_form: 1,
+      filedata: fileObj // file object
+    };
+    try {
+      let res = await axios.post(uploadUrlPrivate, postJson)
+        return res.data.message;
+    } catch (e) {
+      console.log("Err", e);
+      return false;
+    }
+  };

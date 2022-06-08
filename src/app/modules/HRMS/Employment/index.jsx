@@ -87,6 +87,7 @@ export default (props) => {
 
   useEffect(() => {
     dispatch(getTeams())
+    dispatch(getOverallCard(1, 9))
   }, []);
 
   useEffect(() => {
@@ -120,8 +121,12 @@ export default (props) => {
         }
     } else {
       dispatch(getOverallList(filter, page, limit, sort, sortby, null))
-      dispatch(getOverallCard(page, limit, sort, sortby));
     }
+  }
+
+
+  const onOverallIssuwAction = (filter, page, limit, sort, sortby, type, search) => {
+    dispatch(getOverallCard(page, limit, sort, sortby));
   }
 
   const tabs = [
@@ -156,6 +161,7 @@ export default (props) => {
         issueComponentData: data?.rows || [],
         issueComponentCount: data?.count,
         issueStatusKey:'status',
+        updateIssueApi: onOverallIssuwAction
       },
     },
   ];

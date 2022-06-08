@@ -206,7 +206,7 @@ export default (props) => {
   }
 
   useEffect(() => {
-    if(allowed([Roles.LEAVES_TEAMS], 'read') || allowed([Roles.LEAVES], 'read')) {
+    if (allowed([Roles.LEAVES_TEAMS], 'read') || allowed([Roles.LEAVES], 'read')) {
       //dispatch(getTeamsDetail(employeeId));
       dispatch(getTeams2())
     }
@@ -229,22 +229,14 @@ export default (props) => {
   }, [team]);
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
-    if (type == 'list') {
-      if (search) {
-        let searchVal = {};
-        searchVal = {
-          employee_id: search?.id ? search?.id : '',
-          employee_name: search?.name ? search?.name : '',
-          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
-          team_name: search?.team ? search?.team.value : '',
-        }
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, searchVal, company1))
-      } else {
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, null, company1))
-      }
-    } else {
-      dispatch(getOverallTasks(page, limit, sort, employeeId, sortby, company1));
+    let searchVal = {};
+    searchVal = {
+      employee_id: search?.id ? search?.id : '',
+      employee_name: search?.name ? search?.name : '',
+      date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+      team_name: search?.team ? search?.team.value : '',
     }
+    dispatch(getOverallTasksWithStatus(filter, page, limit, sort, employeeId, sortby, searchVal, company1))
   }
 
   const onTeamAction = (filter, page, limit, sort, sortby, type, search, team) => {
@@ -273,11 +265,11 @@ export default (props) => {
       visible: allowed([Roles.LEAVES], 'read'),
       title: 'Overall Leaves',
       key: 'overall',
-      count: overallData?.count || overallDataList?.count || 0,
+      count: overallDataList?.count || overallDataList?.count || 0,
       Comp: MultiView,
       iProps: {
-        carddata: overallData?.rows || [],
-        cardcount: overallData?.count || 0,
+        carddata: overallDataList?.rows || [],
+        cardcount: overallDataList?.count || 0,
         listdata: overallDataList?.rows || [],
         listcount: overallDataList?.count || 0,
         listCol: ListColOverall,

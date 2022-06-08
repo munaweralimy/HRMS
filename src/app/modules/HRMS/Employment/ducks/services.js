@@ -55,3 +55,16 @@ export const leaveApi = (id) => {
 export const employDraftApi = (body) => {
   return axios.post(`${apiMethod}/hrms.api.add_employee_draft`, body);
 };
+
+export const employDocumentUpload = (body) => {
+  return axios.post(`${apiMethod}/hrms.api.add_employee_document`, body);
+};
+
+export const getImageResponse = (body) => {
+  return axios.get(`${apiMethod}/hrms.api.view_attachment?file_name=${body}`);
+};
+
+
+export const deleteTerminateEmployeeMail = (id) => {
+  return axios.post(`${apiMethod}/hrms.setup.send_terminate_notifications_mails?employee_id=${id}`);
+};

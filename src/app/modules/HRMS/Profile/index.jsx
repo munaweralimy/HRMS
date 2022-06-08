@@ -5,7 +5,7 @@ import StaffDetails from '../StaffDetails';
 import Employment from './components/Employment';
 import Management from './components/Managment';
 import { emptyStaffDetails, getAdvancementdetails } from '../Advancement/dcuks/action';
-import { getEmployeeProfile } from './ducks/actions';
+import { getEmployeeProfile, getEmployeeDocuments } from './ducks/actions';
 import Personal from './components/Personal';
 import { getRequestDetails, emptyRequestDetails } from '../Requests/ducks/actions';
 import Request from '../Requests/components/Request';
@@ -17,6 +17,7 @@ export default (props) => {
   const dispatch = useDispatch();
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
   const employeeProfileData = useSelector((state) => state.employeeProfile.employeeProfileData);
+  const employeeDocuments = useSelector((state) => state.employeeProfile.employeeDocuments);
   const dataRequest = useSelector(state => state.hrmsrequests.requestData);
   const [requests, setRequests] = useState({});
 
@@ -24,6 +25,7 @@ export default (props) => {
     dispatch(getEmployeeProfile(id))
     dispatch(getAdvancementdetails(id))
     dispatch(getRequestDetails(id, id));
+    dispatch(getEmployeeDocuments(id))
     return () => {
       dispatch(emptyStaffDetails());
       dispatch(emptyRequestDetails())
@@ -48,9 +50,10 @@ export default (props) => {
     dispatch(getRequestDetails(id, id));
   }
 
+  
 
   return (
-    <StaffDetails id={id} section='HRMS Tasks' title={'Tasks'}>
+    <StaffDetails id={id} section='HRMS Tasks' title={'Tasks'} employeeDocuments={employeeDocuments}>
       <Row gutter={[20, 20]}>
         {dataRequest?.length > 0 && (
           <Col span={24}>

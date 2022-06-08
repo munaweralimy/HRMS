@@ -585,3 +585,27 @@ export const getAllSkillList = (page, limit, order, orderby, search = null) => {
     });
   };
 };
+
+
+
+export const getAllTerminateEmployeeList = (page, limit, order, orderby, search = null) => {
+  let ordering = '';
+  if (order == 'ascend') {
+    ordering = 'ASC';
+  } else if (order == 'descend') {
+    ordering = 'DESC';
+  }
+  return async (dispatch) => {
+    const {
+      data: { message },
+    } = await axios.get(
+      `${apiMethod}/hrms.setup.terminate_notification_list?page_number=${page}&limit=${limit}${
+        order ? `&order=${ordering}&orderby=${orderby}` : ''
+      }${search ? '&filters=' + JSON.stringify(search) : ''}`,
+    );
+    dispatch({
+      type: action_types.TERMINATED_EMPLOYEE,
+      data: message,
+    });
+  };
+};
