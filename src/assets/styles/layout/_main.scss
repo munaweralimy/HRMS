@@ -1,5 +1,6 @@
 .site-page-header {
     padding: 0;
+
     .ant-page-header-heading-left {
         margin: 0;
     }
@@ -29,7 +30,7 @@
     @media (min-width: 1650px) {
         padding: 0 60px;
     }
-    
+
 }
 
 .ant-layout-sider {
@@ -39,11 +40,13 @@
 .flexibleRow {
     display: grid;
     grid-gap: 20px;
-    grid-template-columns: repeat( auto-fill, minmax(300px, 1fr) );;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    ;
 }
 
 .twocol-3070 {
     display: flex;
+
     @media (max-width: 1500px) {
         flex-wrap: wrap;
     }
@@ -54,9 +57,11 @@
     max-width: 380px;
     min-width: 300px;
     padding-right: 20px;
+
     @media (min-width: 1920px) {
         min-width: 380px;
     }
+
     @media (max-width: 1500px) {
         width: 100%;
         min-width: unset;
@@ -69,10 +74,18 @@
 .side-form {
     width: 780px;
     max-width: 100%;
+
     @media (min-width: 1921px) {
         width: 100%;
     }
+
     @media (max-width: 1500px) {
         width: 100%;
+    }
+}
+
+.react-select__menu {
+    .react-select__menu-list {
+        max-height: 180px;
     }
 }

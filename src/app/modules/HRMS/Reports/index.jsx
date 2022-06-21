@@ -1,111 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Typography, Table, Card, Button } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Row, Col, Card } from 'antd';
 import HeadingChip from '../../../molecules/HeadingChip';
-import { useHistory } from 'react-router';
-import { useTranslate } from 'Translate';
 import { useDispatch, useSelector } from 'react-redux';
-import Line from './components/LineChart';
-import Pie from './components/PieChart';
-
-const { Title } = Typography;
-
-const dataSource = [
-  {
-    code: '00000',
-    name: 'Student Name',
-    Faculty: 'AAAAA',
-    Programme: 'BBBBB',
-    Graduation: '1st January 1999',
-  },
-  {
-    code: '00000',
-    name: 'Student Name',
-    Faculty: 'AAAAA',
-    Programme: 'BBBBB',
-    Graduation: '1st January 1999',
-  },
-];
-
-const columns = [
-  {
-    title: 'Code',
-    dataIndex: 'code',
-    key: 'code',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Faculty',
-    dataIndex: 'Faculty',
-    key: 'Faculty',
-  },
-  {
-    title: 'Programme',
-    dataIndex: 'Programme',
-    key: 'Programme',
-  },
-  {
-    title: 'Graduation',
-    dataIndex: 'Graduation',
-    key: 'Graduation',
-  },
-];
-
+import {
+  Tasks,
+  Employment
+} from './Components';
 export default (props) => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const i18n = useTranslate();
-  const { t } = i18n;
-  const addNew = () => history.push('/registry/reports/addnew');
-  const btnList = [
+  const [activeID, setActiveID] = useState(null);
+  const [tabComp, setTabComp] = useState(null);
+
+  const data = [
     {
-      text: '+ New Report Template',
-      action: () => addNew(),
+      tabTitle: 'Tasks',
+      comp: <Tasks />,
+      permission: true,
     },
+    {
+      tabTitle: 'Employment',
+      comp: <Employment />,
+      permission: true,
+    },
+
   ];
 
-  const onFilter = (e) => {
-    setFilterVal(e.target.value);
+  const loadComp = (data, id) => {
+    setTabComp(data?.comp);
+    setActiveID(id);
   };
 
   return (
-    <Row gutter={[30, 24]}>
-      <Col span={24}>
-        <HeadingChip title="Reports" btnList={btnList} />
-      </Col>
-      <Col span={24}>
-        <Card>
+    <>
+      <Row gutter={[20, 50]}>
+        <Col span={24}>
           <Row gutter={[20, 30]}>
-            <Col flex="auto">
-              <Title level={4} className="mb-0 mt-0">
-                Graduating Students
-              </Title>
-            </Col>
-            <Col>
-              <Button className="gray-btn c-white">Edit Report</Button>
-            </Col>
-            <Col>
-              <Button className="green-btn c-white">Download PDF</Button>
-            </Col>
             <Col span={24}>
-              <Card className="black">
-                <Table dataSource={dataSource} columns={columns} />
-              </Card>
+              <HeadingChip title="Download Reports" />
             </Col>
+            {data && (
+              data?.map((resp, i) => (
+                <Fragment key={i}>
+                  <Col span={6}>
+                    <Card
+                      className={activeID === i ? 'uni-card-small-active' : 'uni-card-small'}
+                      bordered={false}
+                      onClick={() => loadComp(resp, i)}
+                    >
+                      {resp?.tabTitle}
+                    </Card>
+                  </Col>
+                </Fragment>
+              ))
+            )}
           </Row>
-        </Card>
-      </Col>
-
-      <Col span={24}>
-        <Line />
-      </Col>
-
-      {/* <Col span={24}>
-                <Pie />
-            </Col> */}
-    </Row>
+        </Col>
+        <Col span={24}>{tabComp}</Col>
+      </Row>
+    </>
   );
 };

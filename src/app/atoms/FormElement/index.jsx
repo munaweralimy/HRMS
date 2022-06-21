@@ -101,6 +101,7 @@ export const SelectField = (props) => {
           <Select
             value={value}
             className="customSelect"
+            classNamePrefix={'react-select'}
             styles={{
               control: (val) => ({ ...val, minHeight: 32 }),
               valueContainer: (vcontain) => ({
