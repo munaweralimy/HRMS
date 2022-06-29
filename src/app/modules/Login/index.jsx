@@ -37,7 +37,7 @@ export default (props) => {
         localStorage.setItem('access', JSON.stringify(response.data.message.user_screen_acces_role_list_test));
         localStorage.setItem('user', value?.profileObj?.name);
         localStorage.setItem('token', JSON.stringify(res));
-        response.data.message.switch_accounts && localStorage.setItem('switch_accounts', JSON.stringify(switch_accounts));
+        response.data.message.switch_accounts && localStorage.setItem('switch_accounts', JSON.stringify(response.data.message.switch_accounts));
         dispatch(
           login({
             username: value?.profileObj?.email,
