@@ -1,12 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Button, Form, Typography, Card, Spin, message } from 'antd';
+import { Row, Col, Button, Form, Typography, Card, Spin, message, Table } from 'antd';
 import { useForm } from 'react-hook-form';
 import { LoadingOutlined } from '@ant-design/icons';
 import Base64Downloader from 'common-base64-downloader-react';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { DateField, InputField, SelectField } from '../../../../../atoms/FormElement';
 import { downloadTasks } from '../../ducks/services';
+import { getsearchTasks } from '../../ducks/actions';
 
 const { Title } = Typography;
 const antIcon = <LoadingOutlined spin />;
@@ -16,22 +18,25 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const [pdfDownload, setPdfDownload] = useState();
   const [pdfName, setPdfName] = useState();
+  const dispatch = useDispatch();
+  const tasksData = useSelector(state => state.downloadReports.overallTaskData);
+
+  console.log('tasksData', tasksData)
 
   const onSubmit = (val) => {
     setLoad(true);
 
     const payload = {
       formatting: val.reportFormat.value,
-      filters: {
-        employee_id: val.id,
-        employee_name: val.name,
-        project: val.project,
-        hours: val.totalHours,
-        status: "",
-        start_date: val.startDate ? moment(val.startDate).format('YYYY-MM-DD') : '',
-        end_date: val.endDate ? moment(val.endDate).format('YYYY-MM-DD') : '',
-      }
+      employee_id: val.id,
+      employee_name: val.name,
+      project: val.project,
+      hours: val.totalHours,
+      start_date: val.startDate ? moment(val.startDate).format('YYYY-MM-DD') : '',
+      end_date: val.endDate ? moment(val.endDate).format('YYYY-MM-DD') : '',
     }
+
+    dispatch(getsearchTasks(payload));
 
     downloadTasks(payload)
       .then((response) => {
@@ -45,6 +50,44 @@ export default (props) => {
       })
   }
 
+  const columns = [
+    {
+      key: 'employee_name',
+      title: 'employee_name',
+      dataIndex: 'employee_name',
+    },
+    {
+      key: 'project',
+      title: 'project',
+      dataIndex: 'project',
+    },
+    {
+      key: 'hours',
+      title: 'hours',
+      dataIndex: 'hours',
+    },
+    {
+      key: 'date',
+      title: 'date',
+      dataIndex: 'date',
+    },
+    {
+      key: 'tasks',
+      title: 'tasks',
+      dataIndex: 'tasks',
+    },
+    {
+      key: 'hours',
+      title: 'hours',
+      dataIndex: 'hours',
+    },
+    {
+      key: 'approver_name',
+      title: 'approver_name',
+      dataIndex: 'approver_name',
+    },
+  ];
+
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
       <Card bordered={false} className="uni-card">
@@ -56,16 +99,16 @@ export default (props) => {
 
             <Col span={8}>
               <InputField
-                //isRequired={true}
+                isRequired={true}
                 fieldname='id'
                 label='Staff ID'
                 control={control}
                 class='mb-0'
                 iProps={{ placeholder: 'Please state', size: 'large' }}
-                //rules={{ required: 'Enter Staff ID' }}
+                rules={{ required: 'Enter Staff ID' }}
                 initValue=''
-              //validate={errors.id && 'error'}
-              //validMessage={errors.id && errors.id.message}
+                validate={errors.id && 'error'}
+                validMessage={errors.id && errors.id.message}
               />
             </Col>
 
@@ -158,11 +201,17 @@ export default (props) => {
                   <Button size='large' type='primary' htmlType='submit' className='w-100'>Search</Button>
                 </Col>
                 {pdfDownload && (
-                  <Col span={8}>
-                    <Base64Downloader base64={pdfDownload} downloadName={pdfName} className="ant-btn ant-btn-primary ant-btn-lg w-100">
-                      Click to download
-                    </Base64Downloader>
-                  </Col>
+                  <>
+                    <Col span={8}>
+                      <Base64Downloader base64={pdfDownload} downloadName={pdfName} className="ant-btn ant-btn-primary ant-btn-lg w-100">
+                        Click to download
+                      </Base64Downloader>
+                    </Col>
+
+                    <Col span={24}>
+                      <Table dataSource={tasksData?.rows} columns={columns} />
+                    </Col>
+                  </>
                 )}
               </Row>
             </Col>

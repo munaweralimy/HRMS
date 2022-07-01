@@ -1,11 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Row, Col, Button, Form, Spin, Typography, Card, message } from 'antd';
+import { Row, Col, Button, Form, Spin, Typography, Card, message, Table } from 'antd';
 import { useForm } from 'react-hook-form';
 import { LoadingOutlined } from '@ant-design/icons';
 import Base64Downloader from 'common-base64-downloader-react';
+import { useDispatch, useSelector } from 'react-redux';
 import HeadingChip from '../../../../../molecules/HeadingChip';
 import { DateField, InputField, SelectField } from '../../../../../atoms/FormElement';
 import { downloadEmployee } from '../../ducks/services';
+import { getEmployeeTasks } from '../../ducks/actions';
+
 import moment from 'moment';
 
 const { Title } = Typography;
@@ -16,6 +19,9 @@ export default (props) => {
   const [load, setLoad] = useState(false);
   const [pdfDownload, setPdfDownload] = useState();
   const [pdfName, setPdfName] = useState();
+  const dispatch = useDispatch();
+  const employeeData = useSelector(state => state.downloadReports.overallEmployeeData);
+
   const onSubmit = (val) => {
     setLoad(true);
     const payload = {
@@ -29,7 +35,7 @@ export default (props) => {
         end_date: val.endDate ? moment(val.endDate).format('YYYY-MM-DD') : '',
       }
     }
-
+    dispatch(getEmployeeTasks(payload));
     downloadEmployee(payload)
       .then((response) => {
         setLoad(false);
@@ -41,6 +47,39 @@ export default (props) => {
         message.error('Something went wrong');
       })
   }
+
+  const columns = [
+    {
+      key: 'employee_name',
+      title: 'employee_name',
+      dataIndex: 'employee_name',
+    },
+    {
+      key: 'employee_id',
+      title: 'employee_id',
+      dataIndex: 'employee_id',
+    },
+    {
+      key: 'job_title',
+      title: 'job_title',
+      dataIndex: 'job_title',
+    },
+    {
+      key: 'company',
+      title: 'company',
+      dataIndex: 'company',
+    },
+    {
+      key: 'team_name',
+      title: 'team_name',
+      dataIndex: 'team_name',
+    },
+    {
+      key: 'contract_type',
+      title: 'contract_type',
+      dataIndex: 'contract_type',
+    },
+  ];
 
   return (
     <Spin indicator={antIcon} size="large" spinning={load}>
@@ -165,11 +204,16 @@ export default (props) => {
                   <Button size='large' type='primary' htmlType='submit' className='w-100'>Search</Button>
                 </Col>
                 {pdfDownload && (
-                  <Col span={8}>
-                    <Base64Downloader base64={pdfDownload} downloadName={pdfName} className="ant-btn ant-btn-primary ant-btn-lg w-100">
-                      Click to download
-                    </Base64Downloader>
-                  </Col>
+                  <>
+                    <Col span={8}>
+                      <Base64Downloader base64={pdfDownload} downloadName={pdfName} className="ant-btn ant-btn-primary ant-btn-lg w-100">
+                        Click to download
+                      </Base64Downloader>
+                    </Col>
+                    <Col span={24}>
+                      <Table dataSource={employeeData?.rows} columns={columns} />
+                    </Col>
+                  </>
                 )}
               </Row>
             </Col>
