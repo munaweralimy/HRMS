@@ -10,13 +10,16 @@ import LanguageSwitcher from '../../molecules/LanguageSwitcher';
 import { Popup } from '../../atoms/Popup';
 import PopupPassword from '../../modules/Application/component/PopupPassword';
 import { baseUrl } from '../../../configs/constants';
+import SwitchAccount from '../../modules/Application/component/SwitchAccount';
 
 const { Text } = Typography;
 export default (props) => {
   const [visible, setVisisble] = useState(false);
+  const [visible2, setVisisble2] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
   const userProfile = localStorage.getItem('userImage');
+  const switchAccount = JSON.parse(localStorage.getItem('switch_accounts'));
 
   const i18n = useTranslate();
   const { t } = i18n;
@@ -27,6 +30,14 @@ export default (props) => {
     content: <PopupPassword title="Change Password" onClose={() => setVisisble(false)} />,
     width: 410,
     onCancel: () => setVisisble(false),
+  };
+
+  const popup2 = {
+    closable: true,
+    visibility: visible2,
+    content: <SwitchAccount title="Switch accounts to" data={switchAccount} onClose={() => setVisisble2(false)} />,
+    width: 600,
+    onCancel: () => setVisisble2(false),
   };
 
   const logoutHandler = () => {
@@ -48,6 +59,14 @@ export default (props) => {
           Change Password
         </Button>
       </Menu.Item>
+
+      {switchAccount && switchAccount?.length > 0 && (
+        <Menu.Item>
+          <Button onClick={() => setVisisble2(true)} type="link" className="btn-link" icon={<UserIcon />}>
+            Switch Account
+          </Button>
+        </Menu.Item>
+      )}
 
       <Menu.Item>
         <Button onClick={logoutHandler} type="link" className="btn-link" icon={<LogOutIcon />}>
@@ -96,6 +115,7 @@ export default (props) => {
         </Row>
       </Card>
       <Popup {...popup} />
+      <Popup {...popup2} />
     </>
   );
 };

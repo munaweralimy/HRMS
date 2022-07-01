@@ -18,3 +18,4 @@ export { default as Assets } from './Assets';
 export { default as RequestForms } from './RequestForms';
 export { default as Departments } from './Departments';
 export { default as Skills } from './Skills';
+export { default as TerminatedEmployes } from './TerminatedEmployes';

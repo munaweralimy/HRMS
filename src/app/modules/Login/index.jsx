@@ -32,12 +32,12 @@ export default (props) => {
         refresh_token: response.data.message.refresh_token,
       };
       if (res) {
-        console.log('response data1', response.data.message)
         localStorage.setItem('userdetails', JSON.stringify(response.data.message.user_detail_role[0]));
-        localStorage.setItem('userImage', response.data.user_detail_role[0].user_image);
+        localStorage.setItem('userImage', response.data.message.user_detail_role[0].user_image);
         localStorage.setItem('access', JSON.stringify(response.data.message.user_screen_acces_role_list_test));
         localStorage.setItem('user', value?.profileObj?.name);
         localStorage.setItem('token', JSON.stringify(res));
+        response.data.message.switch_accounts && localStorage.setItem('switch_accounts', JSON.stringify(response.data.message.switch_accounts));
         dispatch(
           login({
             username: value?.profileObj?.email,
@@ -63,7 +63,7 @@ export default (props) => {
     props.setLoading(true);
     authentications(values.username, values.password)
       .then((response) => {
-        console.log('respon', response.data)
+        console.log('respon', response.data.switch_accounts)
         let res = {
           access_token: response.data.access_token,
           expires_in: response.data.expires_in,
@@ -76,6 +76,7 @@ export default (props) => {
           localStorage.setItem('access', JSON.stringify(response.data.user_screen_acces_role_list_test));
           localStorage.setItem('user', values.username);
           localStorage.setItem('token', JSON.stringify(res));
+          response.data.switch_accounts && localStorage.setItem('switch_accounts', JSON.stringify(response.data.switch_accounts));
           dispatch(
             login({
               username: values.username,

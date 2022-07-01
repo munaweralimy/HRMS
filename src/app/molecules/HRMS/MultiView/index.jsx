@@ -38,12 +38,13 @@ export default (props) => {
     issueComponent,
     issueComponentData,
     issueComponentCount,
-    issueStatusKey
+    issueStatusKey,
+    updateIssueApi
   } = iProps;
   const [filterVal, setFilterVal] = useState(filters && filters[0]?.value);
   const [page, setPage] = useState(1);
   const [issuePage, setIssuePage] = useState(1);
-  const [limit, setLimit] = useState(6);
+  const [limit, setLimit] = useState(9);
   const [view, setView] = useState('card');
   const [sorting, setSorting] = useState('');
   const [searchVal, setSearchVal] = useState(null);
@@ -65,12 +66,12 @@ export default (props) => {
   // Card Pagination
   const onPageChange = (pg) => {
     setPage(pg);
-    updateApi(filterVal, pg, 6, sorting, '', view, null, teamSelected);
+    updateApi(filterVal, pg, 9, sorting, '', view, null, teamSelected);
   };
 
   const onIssuePageChange = (pg) => {
     setIssuePage(pg);
-    updateApi(filterVal, pg, 6, sorting, '', view, null, teamSelected);
+    updateIssueApi(filterVal, pg, 9, sorting, '', view, null, teamSelected);
   };
 
   const onSorting = () => {
@@ -87,13 +88,16 @@ export default (props) => {
 
   const onViewChange = (e) => {
     setView(e.target.value);
-    setPage(1);
+    //setPage(1);
+
+    //setLimit(9);
+    //updateApi(filterVal, 1, 9, '', '', e.target.value, null, teamSelected);
     if (e.target.value == 'list') {
-      setLimit(10);
-      updateApi(filterVal, 1, 10, '', '', e.target.value, null, teamSelected);
+      //setLimit(9);
+      //updateApi(filterVal, 1, 9, '', '', e.target.value, null, teamSelected);
     } else {
-      setLimit(6);
-      updateApi(filterVal, 1, 6, '', '', e.target.value, null, teamSelected);
+      //setLimit(9);
+      //updateApi(filterVal, 1, 9, '', '', e.target.value, null, teamSelected);
     }
   };
 
@@ -136,13 +140,13 @@ export default (props) => {
 
   const onFilter = (e) => {
     setFilterVal(e.target.value);
-    updateApi(e.target.value, 1, 10, '', '', view, null, teamSelected);
+    updateApi(e.target.value, 1, 9, '', '', view, null, teamSelected);
   };
 
   const onSearch = (val) => {
     setSearchVal(val);
     setPage(1);
-    updateApi(filterVal, 1, 10, '', '', view, val, teamSelected);
+    updateApi(filterVal, 1, 9, '', '', view, val, teamSelected);
   };
 
   const onClickRow = (record) => {
@@ -232,7 +236,7 @@ export default (props) => {
                   </div>
                   <div className="w-100 text-right mt-2">
                     <Pagination
-                      pageSize={6}
+                      pageSize={9}
                       current={page}
                       hideOnSinglePage={true}
                       showSizeChanger={false}
@@ -266,7 +270,7 @@ export default (props) => {
               </div>
               <div className="w-100 text-right mt-2">
                 <Pagination
-                  pageSize={6}
+                  pageSize={9}
                   current={issuePage}
                   hideOnSinglePage={true}
                   showSizeChanger={false}

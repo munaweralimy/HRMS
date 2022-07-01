@@ -1,6 +1,7 @@
 import axiosInterceptor from './axiosInterceptor';
 import { apiMethod, apiresource } from '../configs/constants';
 const auth = apiMethod + '/frappe.integrations.oauth2.get_token';
+const switchAuth = apiMethod + '/frappe.integrations.oauth2.get_switch_token';
 import { loginID } from '../configs/constants';
 
 const getQueryString = (data = {}) => {
@@ -19,6 +20,10 @@ export const authentications = (username, password) => {
   };
   const postData = getQueryString(data);
   return axiosInterceptor.post(auth, postData);
+};
+
+export const switchAuthentications = (payload) => {
+  return axiosInterceptor.post(switchAuth, payload);
 };
 
 export const refreshAuth = (refresh) => {

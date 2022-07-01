@@ -27,6 +27,21 @@ export const getEmployeeProfile = (employeeID) => {
   };
 };
 
+export const getEmployeeDocuments = (employeeID) => {
+  return async (dispatch) => {
+    const data = {
+      employee_id: employeeID
+    }
+    const {
+      data: { message },
+    } = await axios.post(`${apiMethod}/hrms.api.employee_document_list`, data);
+    dispatch({
+      type: action_types.EMPLOYEE_DOCUMENTS,
+      data: message,
+    });
+  };
+};
+
 export const getSingleSkills = (employeeID) => {
   return async (dispatch) => {
     const {

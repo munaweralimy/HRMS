@@ -20,11 +20,11 @@ export const getOverallList = (status, page, limit, order, orderby, search = nul
     };
 };
 
-export const getOverallCard = (page, limit, order, orderby) => {
+export const getOverallCard = (page, limit) => {
     return async (dispatch) => {
       const {
         data: { message },
-      } = await axios.get(`${apiMethod}/hrms.api.get_overall_employment_cards?page_number=${page}&limit=${limit}${order ? `&order=${order}&orderby=creation` : ''}`);
+      } = await axios.get(`${apiMethod}/hrms.api.get_overall_employment_cards?page_number=${page}&limit=${limit}`);
       dispatch({
         type: action_types.EMPLOYEE_CARD,
         data: message,

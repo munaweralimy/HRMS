@@ -166,7 +166,7 @@ export default (props) => {
   let activeTab = ''
 
   useEffect(() => {
-    if(allowed([Roles.TASK_TEAMS], 'read') || allowed([Roles.TASK], 'read')) {
+    if (allowed([Roles.TASK_TEAMS], 'read') || allowed([Roles.TASK], 'read')) {
       dispatch(getTeamsDetail(id));
       dispatch(getAllProjects());
       dispatch(getTeams2())
@@ -222,24 +222,15 @@ export default (props) => {
   // }, [team]);
 
   const onOverallAction = (filter, page, limit, sort, sortby, type, search) => {
-    // dispatch(emptyOverall());
-    if (type == 'list') {
-      if (search) {
-        let searchVal = {};
-        searchVal = {
-          employee_id: search?.id ? search?.id : '',
-          employee_name: search?.name ? search?.name : '',
-          date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
-          project: search?.project ? search?.project.value : '',
-          team_name: search?.team ? search?.team.value : '',
-        }
-          dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
-      } else {
-        dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, null))
-      }
-    } else {
-      dispatch(getOverallTasks(page, limit, sort, sortby));
+    let searchVal = {};
+    searchVal = {
+      employee_id: search?.id ? search?.id : '',
+      employee_name: search?.name ? search?.name : '',
+      date: search?.date ? moment(search?.date).format('YYYY-MM-DD') : '',
+      project: search?.project ? search?.project.value : '',
+      team_name: search?.team ? search?.team.value : '',
     }
+    dispatch(getOverallTasksWithStatus(filter, page, limit, sort, sortby, searchVal))
   }
 
   const onTeamAction = (filter, page, limit, sort, sortby, type, search, team) => {
@@ -259,7 +250,7 @@ export default (props) => {
         }
 
       } else {
-          dispatch(getTeamTasks(team, page, limit, sort, sortby));
+        dispatch(getTeamTasks(team, page, limit, sort, sortby));
       }
     }
   }
@@ -269,11 +260,11 @@ export default (props) => {
       visible: allowed([Roles.TASK], 'read'),
       title: 'Overall Tasks',
       key: 'overall',
-      count: overallData?.count || overallDataList?.count || 0,
+      count: overallDataList?.count || overallDataList?.count || 0,
       Comp: MultiView,
       iProps: {
-        carddata: overallData?.rows || [],
-        cardcount: overallData?.count || 0,
+        carddata: overallDataList?.rows || [],
+        cardcount: overallDataList?.count || 0,
         listdata: overallDataList?.rows || [],
         listcount: overallDataList?.count || 0,
         listCol: ListColOverall,

@@ -1,0 +1,2 @@
+export const SEARCH_TASK = "SEARCH_TASK";
+export const SEARCH_EMPLOYEE = "SEARCH_EMPLOYEE";

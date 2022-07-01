@@ -24,6 +24,7 @@ import {
   RequestForms,
   Departments,
   Skills,
+  TerminatedEmployes
 } from './Components';
 import AddEditWarningLetter from './Components/WarningLetter/Components/AddEditWarningLetter';
 export default (props) => {
@@ -136,7 +137,11 @@ export default (props) => {
       comp: <RequestForms setLoading={props.setLoading} />,
       permission: true,
     },
-    
+    {
+      tabTitle: 'Notification Terminate',
+      comp: <TerminatedEmployes />,
+      permission: true,
+    },
     
   ];
 

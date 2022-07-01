@@ -36,6 +36,7 @@ const initialState = {
   allSkills: [],
   selectedLeave: { manager: false, supervisor: false, teamLead: false },
   viewWarninLette: { name: '', warning_letter_template: '', visible: false },
+  allTerminatedEmployee: [],
 };
 
 export default (state = initialState, action) => {
@@ -111,6 +112,9 @@ export default (state = initialState, action) => {
       return { ...state, filterEntitlmentName: data };
     case action_types.SKILL_LIST:
       return { ...state, allSkills: data };
+
+    case action_types.TERMINATED_EMPLOYEE:
+      return { ...state, allTerminatedEmployee: data };
     default:
       return state;
   }
