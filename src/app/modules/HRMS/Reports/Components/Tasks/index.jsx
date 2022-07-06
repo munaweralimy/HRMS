@@ -28,10 +28,10 @@ export default (props) => {
 
     const payload = {
       formatting: val.reportFormat.value,
-      employee_id: val.id,
-      employee_name: val.name,
-      project: val.project,
-      hours: val.totalHours,
+      employee_id: val.id ? val.id : '',
+      employee_name: val.name ? val.name : '',
+      //project: val.project?.value ? val.project?.value : '',
+      hours: val.totalHours ? val.totalHours : '',
       start_date: val.startDate ? moment(val.startDate).format('YYYY-MM-DD') : '',
       end_date: val.endDate ? moment(val.endDate).format('YYYY-MM-DD') : '',
     }
@@ -53,7 +53,7 @@ export default (props) => {
   const columns = [
     {
       key: 'employee_name',
-      title: 'employee_name',
+      title: 'Employee Name',
       dataIndex: 'employee_name',
     },
     {
@@ -99,16 +99,16 @@ export default (props) => {
 
             <Col span={8}>
               <InputField
-                isRequired={true}
+                //isRequired={true}
                 fieldname='id'
                 label='Staff ID'
                 control={control}
                 class='mb-0'
                 iProps={{ placeholder: 'Please state', size: 'large' }}
-                rules={{ required: 'Enter Staff ID' }}
+                //rules={{ required: 'Enter Staff ID' }}
                 initValue=''
-                validate={errors.id && 'error'}
-                validMessage={errors.id && errors.id.message}
+                //validate={errors.id && 'error'}
+                //validMessage={errors.id && errors.id.message}
               />
             </Col>
 
@@ -162,6 +162,10 @@ export default (props) => {
                 class='mb-0'
                 iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY" }}
                 initValue=''
+                isRequired={true}
+                rules={{ required: 'Select Start Date' }}
+                validate={errors.startDate && 'error'}
+                validMessage={errors.team && errors.startDate.message}
               />
             </Col>
 
@@ -173,6 +177,10 @@ export default (props) => {
                 class='mb-0'
                 iProps={{ placeholder: 'Please Select date', size: 'large', format: "DD-MM-YYYY" }}
                 initValue=''
+                isRequired={true}
+                rules={{ required: 'Select End Date' }}
+                validate={errors.endDate && 'error'}
+                validMessage={errors.team && errors.endDate.message}
               />
             </Col>
 

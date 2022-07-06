@@ -7,6 +7,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { getFileName, uniquiFileName, getSingleUploadPrivate } from '../../../../../features/utility';
 import { employDocumentUpload } from '../../Employment/ducks/services';
+import { useParams } from "react-router-dom";
 
 const antIcon = <LoadingOutlined spin />;
 import moment from 'moment';
@@ -19,6 +20,7 @@ const UploadDocuments = (props) => {
   const dispatch = useDispatch();
   const company = JSON.parse(localStorage.getItem('userdetails'))?.user_employee_detail[0].company;
   const id = JSON.parse(localStorage.getItem('userdetails')).user_employee_detail[0].name;
+  const employeId = useParams()
 
   const onFormSubmitHandler = async (val) => {
     setLoad(true);
@@ -26,11 +28,11 @@ const UploadDocuments = (props) => {
     let res = ''
     if (val.document) {
       let modifiedName = uniquiFileName(val.document?.file?.originFileObj.name)
-      res = await getSingleUploadPrivate(modifiedName, 'image', val.document?.file?.originFileObj, 'Employee', id);
+      res = await getSingleUploadPrivate(modifiedName, 'image', val.document?.file?.originFileObj, 'Employee', employeId?.id);
     }
 
     const body = {
-      employee_id: id,
+      employee_id: employeId?.id,
       type: val?.type?.value,
       document: res?.file_url,
       name1: res?.name

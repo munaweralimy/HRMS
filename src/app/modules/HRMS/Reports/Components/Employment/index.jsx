@@ -26,14 +26,12 @@ export default (props) => {
     setLoad(true);
     const payload = {
       formatting: val.reportFormat.value,
-      filters: {
-        employee_id: val.id,
-        employee_name: val.name,
-        team_name: "",
-        contract_type: val.contractType.value,
-        start_date: val.startDate ? moment(val.startDate).format('YYYY-MM-DD') : '',
-        end_date: val.endDate ? moment(val.endDate).format('YYYY-MM-DD') : '',
-      }
+      employee_id: val.id ? val.id : '',
+      employee_name: val?.name ? val?.name : '',
+      team_name: val?.team?.value ? val?.team?.value : '',
+      contract_type: val.contractType.value ? val.contractType.value : '',
+      start_date: val.startDate ? moment(val.startDate).format('YYYY-MM-DD') : '',
+      end_date: val.endDate ? moment(val.endDate).format('YYYY-MM-DD') : '',
     }
     dispatch(getEmployeeTasks(payload));
     downloadEmployee(payload)
@@ -51,32 +49,32 @@ export default (props) => {
   const columns = [
     {
       key: 'employee_name',
-      title: 'employee_name',
+      title: 'Employee Name',
       dataIndex: 'employee_name',
     },
     {
       key: 'employee_id',
-      title: 'employee_id',
+      title: 'Employee ID',
       dataIndex: 'employee_id',
     },
     {
       key: 'job_title',
-      title: 'job_title',
+      title: 'Job Title',
       dataIndex: 'job_title',
     },
     {
       key: 'company',
-      title: 'company',
+      title: 'Company',
       dataIndex: 'company',
     },
     {
       key: 'team_name',
-      title: 'team_name',
+      title: 'Team Name',
       dataIndex: 'team_name',
     },
     {
       key: 'contract_type',
-      title: 'contract_type',
+      title: 'Contract Type',
       dataIndex: 'contract_type',
     },
   ];
@@ -100,8 +98,8 @@ export default (props) => {
                 iProps={{ placeholder: 'Please state', size: 'large' }}
                 //rules={{ required: 'Enter Staff ID' }}
                 initValue=''
-              //validate={errors.id && 'error'}
-              //validMessage={errors.id && errors.id.message}
+                //validate={errors.id && 'error'}
+                //validMessage={errors.id && errors.id.message}
               />
             </Col>
 

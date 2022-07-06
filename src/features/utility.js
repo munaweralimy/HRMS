@@ -56,7 +56,7 @@ export const dummyRequest = (response) => {
   };
 
 
-  let uploadUrlPrivate = `${apiMethod}/marketing.api.uploadImageToken?is_private=1`
+  let uploadUrlPrivate = `${apiMethod}/marketing.api.uploadImageToken?is_private=0`
 
   export const getSingleUploadPrivate = async (name, type, file, doctype, code) => {
     const fileObj = await readeFile(file)
@@ -64,7 +64,7 @@ export const dummyRequest = (response) => {
       doctype: doctype,
       docname: code,
       filename: name, // filename
-      is_private: 1,
+      is_private: 0,
       docfield: type, // document or image
       cmd: 'uploadfile',
       from_form: 1,

@@ -3,6 +3,7 @@ import { Row, Col, Card, Space, Button, Image } from 'antd';
 import HeadingChip from '../../../molecules/HeadingChip';
 import UpdateSection from '../../../molecules/UpdateSection';
 import { useHistory } from 'react-router-dom';
+import Base64Downloader from 'common-base64-downloader-react';
 import { useTranslate } from 'Translate';
 import { useDispatch, useSelector } from 'react-redux';
 import { getComments, emptyComments } from '../../Application/ducks/actions';
@@ -18,6 +19,7 @@ import Roles from '../../../../routing/config/Roles';
 import { baseUrl, apiMethod } from '../../../../configs/constants';
 import { Popup } from '../../../atoms/Popup';
 import UploadDocuments from './UploadDocuments';
+import {CloseCircleFilled} from '@ant-design/icons';
 import { getImageResponse } from '../Employment/ducks/services';
 
 const ListData = [
@@ -66,6 +68,7 @@ export default (props) => {
   const commentsApi = useSelector((state) => state.global.comments);
   const data = useSelector((state) => state.advancement.advData);
   const token = JSON.parse(localStorage.getItem('token')).access_token;
+
   const ListCol = [
     {
       title: 'Type',
@@ -97,10 +100,24 @@ export default (props) => {
       key: 'action',
       align: 'center',
       render: (text, record) => (
-        <Button type="link" htmlType="button" onClick={() => downloadDocument(record)} className="p-0" icon={<DownloadIcon className="c-success" />} />
+        // <Button type="link" htmlType="button" onClick={() => downloadDocument(record)} className="p-0" icon={<DownloadIcon className="c-success" />} />
+        <Base64Downloader base64={record?.document} downloadName={record?.type + record?.name} className="p-0" style={{cursor: 'pointer', background: 'transparent', border: 0}}>
+          <DownloadIcon className="c-success" />
+        </Base64Downloader>
       ),
     },
+    // {
+    //   title: 'Delete',
+    //   dataIndex: 'delete',
+    //   key: 'delete',
+    //   align: 'center',
+    //   render: (text, record) => (
+    //     <Button type="link" htmlType="button" onClick={() => downloadDocument(record)} className="p-0" icon={<CloseCircleFilled  className='c-error'/>} />
+    //   ),
+    // },
   ];
+
+  console.log('employeeDocuments', employeeDocuments)
 
   const downloadDocument = (record) => {
     const docName = record?.name
@@ -108,22 +125,22 @@ export default (props) => {
     window.open(url, "_blank");
 
     //getImageResponse(docName).then(res => {
-      //console.log('res', res)
+    //console.log('res', res)
 
-      // let base64ToString = Buffer.from(res?.data, "base64").toString();
+    // let base64ToString = Buffer.from(res?.data, "base64").toString();
 
-      // console.log('base64ToString1111', base64ToString)
-      //     base64ToString = JSON.parse(base64ToString);
+    // console.log('base64ToString1111', base64ToString)
+    //     base64ToString = JSON.parse(base64ToString);
 
-      //     console.log('base64ToString', base64ToString)
-      // const file = res?.data
-      // const reader = new FileReader();
-      // reader.readAsDataURL(file)
-      // reader.addEventListener('load', (event) => {
-      //   const _loadedImageUrl = event.target.result;
-      //   const image = document.createElement('img');
-      //   console.log('image', image)
-      // });
+    //     console.log('base64ToString', base64ToString)
+    // const file = res?.data
+    // const reader = new FileReader();
+    // reader.readAsDataURL(file)
+    // reader.addEventListener('load', (event) => {
+    //   const _loadedImageUrl = event.target.result;
+    //   const image = document.createElement('img');
+    //   console.log('image', image)
+    // });
     //});
   }
 
