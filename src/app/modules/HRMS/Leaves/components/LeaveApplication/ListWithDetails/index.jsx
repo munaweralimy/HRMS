@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ListCard from '../../../../../../molecules/ListCard';
 import DetailsComponent from '../../../../../../molecules/HRMS/DetailsComponent';
-import { Row, Col, Card, Progress } from 'antd';
+import { baseUrl } from "../../../../../../../configs/constants";
+import { DownloadIcon } from '../../../../../../atoms/CustomIcons';
+import { Row, Col, Card, Progress, Button } from 'antd';
 import moment from 'moment';
 
 export default ({details, updateApi, progressData}) => {
@@ -60,10 +62,12 @@ export default ({details, updateApi, progressData}) => {
             label: 'Reason',
             value: record?.reason
           },
-          // {
-          //   label: 'Attachment',
-          //   value: record?.tasks
-          // },
+          {
+            label: 'Attachment',
+            value: record?.attachment ? (
+              <Button type="link" onClick={() => window.open(`${baseUrl}${record?.attachment}`, "_blank")} htmlType="button" className="p-0" icon={<DownloadIcon className="c-success" />} />
+             ) : ''
+          },
           {
             label: 'Status',
             value: record?.application_status,

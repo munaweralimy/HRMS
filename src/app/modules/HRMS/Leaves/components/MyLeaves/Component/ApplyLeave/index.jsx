@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Col, Button, Form, Row, message, Space, Spin, Tag } from 'antd';
+import { Typography, Col, Button, Form, Row, message, Space, Spin, Tag, Upload, Input } from 'antd';
 import { TextAreaField, SelectField, DateField, InputField } from '../../../../../../../atoms/FormElement';
-import { useForm } from 'react-hook-form';
-import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
+import { useForm, Controller } from 'react-hook-form';
+import { LeftOutlined, LoadingOutlined, PlusCircleFilled } from '@ant-design/icons';
+import { uniquiFileName, getSingleUpload, dummyRequest, getFileName } from '../../../../../../../../features/utility';
 import moment from 'moment';
 import { apiMethod } from '../../../../../../../../configs/constants';
 import axios from '../../../../../../../../services/axiosInterceptor';
@@ -16,6 +17,7 @@ export default (props) => {
 
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
+  const [medicalLeave, setMedicalLeave] = useState(false);
   const { control, handleSubmit, setValue, errors } = useForm();
   const { setAddVisible, id, updateApi, fullName } = props;
   const leaveTypeData = useSelector(state => state.leaves.leaveTypeData);
@@ -33,15 +35,28 @@ export default (props) => {
   const onLeaveChange = (e) => {
     dispatch(getLeaveData(e.label, id));
     dispatch(getLeaveApprovers(e.label, id));
+    
+    if (e?.label == 'Medical Leave') {
+      setMedicalLeave(true)
+    } else {
+      setMedicalLeave(false)
+    }
   }
 
   const onFinish = async (val) => {
-    //setLoad(true);
+    let attachment = ''
+    if(val.attachment?.file) {
+      let modifiedName = uniquiFileName(val.attachment?.file?.originFileObj.name)
+      let res = await getSingleUpload(modifiedName, 'image', val.attachment?.file?.originFileObj, 'HRMS Leave Application', id);
+      attachment = res?.file_url;
+    }
+    console.log('val.attachment?.file?.originFileObj.name', attachment)
+
     const startDate = moment(val?.leaveStart);
     const endDate = moment(val?.leaveEnd);
     const daysDiff = endDate.diff(startDate, 'days') + 1;
     var leaves_count = parseFloat(0);
-    
+
     if (holidaysListData?.leaves_criteria?.length > 0) {
       for (var currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
         if (currentDate.getDay() == 0) {
@@ -72,7 +87,7 @@ export default (props) => {
     } else {
       leaves_count = daysDiff
     }
-    
+
     if (holidaysListData?.holidays_list?.length > 0) {
       holidaysListData?.holidays_list?.map(e => {
         var dateChecking = moment(e).isBetween(startDate, endDate, 'days', '[]');
@@ -110,12 +125,14 @@ export default (props) => {
       total_leave_days: leaves_count,
       application_status: "Pending",
       reason: val?.reason,
-      //attachment: "/private/files/CMS2_03_AQA_Flowchart.pdf",
+      attachment: attachment ? attachment : '',
       doctype: "HRMS Leave Application",
       employee_name: fullName,
       //date_of_joining: "2020-03-01",
       leave_approvers: approvers,
     }
+
+    console.log('temp', temp)
 
     let url = `${apiMethod}/hrms.leaves_api.leave_create_with_validation`;
     try {
@@ -174,6 +191,43 @@ export default (props) => {
               }
             />
           </Col>
+
+          {medicalLeave && (
+            <Col span={8}>
+              <Form.Item
+                label="Medical Certificate"
+                required={true}
+                validateStatus={errors.attachment && "error"}
+                help={errors.attachment && errors.attachment.message}
+              >
+                <Controller
+                  name='attachment'
+                  control={control}
+                  defaultValue=""
+                  rules={{
+                    required: "Leave Type required",
+                  }}
+                  render={({ value, onChange }) => (
+                    <Upload
+                      className="uploadWithbtn"
+                      showUploadList={false}
+                      accept="image/*,.pdf"
+                      maxCount={1}
+                      customRequest={dummyRequest}
+                      onChange={(e) => onChange(e)}
+                    >
+                      <Input
+                        size="large"
+                        className="ag-upload-btn"
+                        value={value ? value.fileList[0].name : "Please Upload File"}
+                        addonAfter={<PlusCircleFilled />}
+                      />
+                    </Upload>
+                  )}
+                />
+              </Form.Item>
+            </Col>
+          )}
 
           <Col span={8}>
             <DateField
